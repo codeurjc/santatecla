@@ -15,19 +15,19 @@ public class Relation{
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private enum Type {
+    private enum RelationType {
         HERITAGE, COMPOSITION, ASSOCIATION, USE;
     };
 
-    private Type type;
+    private RelationType relationType;
 
     @OneToOne
     private Unit relatedTo;
 
     public Relation(){}
 
-    public Relation(Type t){
-        this.type = t;
+    public Relation(RelationType t){
+        this.relationType = t;
     }
 
     public long getId() {
@@ -38,12 +38,12 @@ public class Relation{
         this.id = id;
     }
 
-    public Type getType() {
-        return type;
+    public RelationType getType() {
+        return relationType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(RelationType type) {
+        this.relationType = type;
     }
 
     public Unit getRelatedTo() {
