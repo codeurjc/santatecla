@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import com.unit.Unit;
 
@@ -20,6 +21,7 @@ public class Relation{
 
     private Type type;
 
+    @OneToOne
     private Unit relatedTo;
 
     public Relation(){}
