@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DatabaseInitializer {
 
-	@Autowired
+	  @Autowired
     private CardRepository cardRepository;
     
     @Autowired
@@ -28,10 +28,12 @@ public class DatabaseInitializer {
 
     @Autowired
     private ViewRepository viewRepository;
+  
+     @Autowired
+	  private UserRepository userRepository;
 
-	@PostConstruct
-	public void init() {
-
+	  @PostConstruct
+	  public void init() {
         //Units
         Unit unit1 = new Unit("Programming language");
         Unit unit2 = new Unit("Java");
@@ -49,6 +51,9 @@ public class DatabaseInitializer {
         unit1.getFiles().add(card1);
         unit2.getFiles().add(card2);
         unit3.getFiles().add(card3);
+  
+        userRepository.save(new User("alumno", "alumno"));
+        userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"))
 
 	}
 
