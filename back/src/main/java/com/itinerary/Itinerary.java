@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.definition_question.DefinitionQuestion;
+import com.list_question.ListQuestion;
 import com.unit.Unit;
 import com.view.View;
 
@@ -29,10 +31,18 @@ public class Itinerary{
     @OneToMany
     private List<View> views;
 
+    @OneToMany
+    private List<DefinitionQuestion> definitionQuestions;
+
+    @OneToMany
+    private List<ListQuestion> listQuestions;
+
     public Itinerary(){
         this.units = new ArrayList<>();
         this.itineraries = new ArrayList<>();
         this.views = new ArrayList<>();
+        this.definitionQuestions = new ArrayList<>();
+        this.listQuestions = new ArrayList<>();
     }
 
     public long getId() {

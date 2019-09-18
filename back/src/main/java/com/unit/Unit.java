@@ -11,7 +11,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.card.Card;
+import com.definition_question.DefinitionQuestion;
+import com.item.Item;
 import com.itinerary.Itinerary;
+import com.list_question.ListQuestion;
 import com.relation.Relation;
 
 @Entity
@@ -32,6 +35,15 @@ public class Unit{
     @OneToMany
     private List<Relation> relations;
 
+    @OneToMany
+    private List<DefinitionQuestion> definitionQuestions;
+
+    @OneToMany
+    private List<ListQuestion> listQuestions;
+
+    @OneToMany
+    private List<Item> items;
+
     public Unit(){}
 
     public Unit(String name){
@@ -39,6 +51,9 @@ public class Unit{
         this.files = new ArrayList<>();
         this.itineraries = new ArrayList<>();
         this.relations = new ArrayList<>();
+        this.definitionQuestions = new ArrayList<>();
+        this.listQuestions = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
     public long getId() {
@@ -81,6 +96,29 @@ public class Unit{
         this.relations = relations;
     }
 
+    public List<DefinitionQuestion> getDefinitionQuestions() {
+        return definitionQuestions;
+    }
+
+    public void setDefinitionQuestions(List<DefinitionQuestion> definitionQuestions) {
+        this.definitionQuestions = definitionQuestions;
+    }
+
+    public List<ListQuestion> getListQuestions() {
+        return listQuestions;
+    }
+
+    public void setListQuestions(List<ListQuestion> listQuestions) {
+        this.listQuestions = listQuestions;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
     
 
 }
