@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.definition_justification.DefinitionJustification;
+import com.user.User;
 
 @Entity
 public class DefinitionAnswer{
@@ -25,7 +26,7 @@ public class DefinitionAnswer{
     @OneToMany
     private List<DefinitionJustification> justifications;
 
-    // private User user;
+    private User user;
 
     public DefinitionAnswer(){}
 
