@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import com.user.User;
 
@@ -18,7 +19,7 @@ public class ListAnswer{
 
     private boolean correct;
 
-
+    @OneToOne
     private User user;
 
     public ListAnswer(){}

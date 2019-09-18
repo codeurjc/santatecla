@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.definition_justification.DefinitionJustification;
 import com.user.User;
@@ -26,6 +27,7 @@ public class DefinitionAnswer{
     @OneToMany
     private List<DefinitionJustification> justifications;
 
+    @OneToOne
     private User user;
 
     public DefinitionAnswer(){}
