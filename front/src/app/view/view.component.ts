@@ -2,7 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
 @Component({
-  templateUrl: './view.component.html'
+  templateUrl: './view.component.html',
+  styleUrls: ['./view.component.css']
 })
 
 export class ViewComponent {
