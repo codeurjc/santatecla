@@ -50,6 +50,8 @@ import { AppComponent } from './app.component';
 import { LoginService } from './auth/login.service';
 import { ViewComponent } from './view/view.component';
 
+import { NgJsonEditorModule } from 'ang-jsoneditor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -97,7 +99,8 @@ import { ViewComponent } from './view/view.component';
     MatTooltipModule,
     MatTreeModule,
     FormsModule,
-    routing
+    routing,
+    NgJsonEditorModule
   ],
   providers: [LoginService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
