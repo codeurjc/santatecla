@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-const loginURL = 'api/login';
-const logoutURL = 'api/logout';
-const currentUserItem = 'currentUser';
-const roleAdmin = 'ROLE_ADMIN';
+const LOGIN_URL = 'api/login';
+const LOGOUT_URL = 'api/logout';
+const CURRENT_USER_ITEM = 'currentUser';
+const ROLE_ADMIN = 'ROLE_ADMIN';
 
 export interface User {
   id?: number;
@@ -23,7 +23,7 @@ export class LoginService {
   auth: string;
 
   constructor(private http: HttpClient) {
-    let user = JSON.parse(localStorage.getItem(currentUserItem));
+    let user = JSON.parse(localStorage.getItem(CURRENT_USER_ITEM));
     if (user) {
       this.setCurrentUser(user);
     }
@@ -35,11 +35,11 @@ export class LoginService {
       Authorization: 'Basic ' + auth,
       'X-Requested-With': 'XMLHttpRequest',
     });
-    return this.http.get<User>(loginURL, { headers }).pipe(map(user => {
+    return this.http.get<User>(LOGIN_URL, { headers }).pipe(map(user => {
       if (user) {
         this.setCurrentUser(user);
         user.authdata = auth;
-        localStorage.setItem(currentUserItem, JSON.stringify(user));
+        localStorage.setItem(CURRENT_USER_ITEM, JSON.stringify(user));
       }
       return user;
     }));
@@ -48,18 +48,18 @@ export class LoginService {
   private setCurrentUser(user: User) {
       this.isLogged = true;
       this.user = user;
-      this.isAdmin = this.user.roles.indexOf(roleAdmin) !== -1;
+      this.isAdmin = this.user.roles.indexOf(ROLE_ADMIN) !== -1;
   }
 
   logout() {
-    return this.http.get(logoutURL).pipe(map(response => {
+    return this.http.get(LOGOUT_URL).pipe(map(response => {
       this.removeCurrentUser();
       return response;
     }));
   }
 
   removeCurrentUser() {
-      localStorage.removeItem(currentUserItem);
+      localStorage.removeItem(CURRENT_USER_ITEM);
       this.isLogged = false;
       this.isAdmin = false;
   }

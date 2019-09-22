@@ -1,3 +1,22 @@
+#title {
+  text-align: center;
+}
+
+#login-container {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  margin-left: -14rem;
+  padding: 2rem;
+  width: 24rem;
+  border-radius: 1rem;
+  background-color: rgba(21, 21, 255, 0.05);
+}
+
+#login-user, #login-password, #login-button {
+  margin: 2rem;
+}
+
 #logged-user {
   position: absolute;
   top: 1rem;
