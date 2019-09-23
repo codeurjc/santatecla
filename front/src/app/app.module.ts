@@ -23,13 +23,16 @@ import { LoginService } from './auth/login.service';
 import { ViewComponent } from './view/view.component';
 import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
+import { DefinitionQuestionService } from './definition/definitionQuestion.service';
+import { DefinitionQuestionComponent } from './definition/definitionQuestion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ViewComponent,
     CardComponent,
-    ItineraryComponent
+    ItineraryComponent,
+    DefinitionQuestionComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -76,7 +79,7 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
     routing,
     NgJsonEditorModule
   ],
-  providers: [LoginService,
+  providers: [LoginService, DefinitionQuestionService, 
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
