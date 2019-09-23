@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
 @Component({
@@ -6,26 +6,39 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
   styleUrls: ['./view.component.css']
 })
 
-export class ViewComponent {
+export class ViewComponent implements OnInit {
   public editorOptions: JsonEditorOptions;
   public data: any;
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
 
-  constructor() {
-    this.editorOptions = new JsonEditorOptions()
-    this.editorOptions.modes = ['code', 'text', 'tree', 'view']; // set all allowed modes
-    //this.options.mode = 'code'; //set only one mode
-    this.data = {'products':
-                  [{'name':'car','product':
-                    [{'name':'honda','model':
-                      [{'id':'civic','name':'civic'},
-                        {'id':'accord','name':'accord'},
-                        {'id':'crv','name':'crv'},
-                        {'id':'pilot','name':'pilot'},
-                        {'id':'odyssey','name':'odyssey'}
-                      ]
-                    }]
-                  }]
-                }
+  constructor() {}
+
+  ngOnInit() {
+    this.editorOptions = new JsonEditorOptions();
+    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
+    this.editorOptions.mode = 'code';
+    this.data = {
+      "Unidad 1": {
+        "relations": [
+          {
+            "r1": "r1"
+          },
+          {
+            "r2": "r2"
+          }
+        ]
+      },
+      "Unidad 2": {
+        "relations": [
+          {
+            "r1": "r1"
+          },
+          {
+            "r2": "r2"
+          }
+        ]
+      }
+    };
   }
+
 }

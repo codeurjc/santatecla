@@ -17,8 +17,25 @@
   margin: 2rem;
 }
 
-#logged-user {
+#header {
+  height: 2.25rem;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-color: #2361c5;
+  color: white;
+  font-size: 0.8rem;
+}
+
+#logout-button {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0;
+  right: 0;
+  margin-top: -0.15rem;
+}
+
+.mat-icon {
+  padding: 0;
+  margin: 0;
+  margin-top: -0.1rem;
 }

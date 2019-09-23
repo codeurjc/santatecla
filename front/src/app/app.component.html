@@ -6,13 +6,15 @@
 
   <body>
 
-    <div *ngIf="loginService.isLogged" id="logged-user">
-      <span>
-        {{loginService.user.name}}
-      </span>
-      <button mat-icon-button color="warn" title="LogOut" (click)="logout()">
+    <div *ngIf="loginService.isLogged" id="header">
+      <button mat-icon-button id="logout-button" (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
       </button>
+
+      <button style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/']">Vista</button>
+      <button style="position:absolute; left:15rem; margin-top: 0.4rem;" [routerLink]="['/unit/x/cards']">Fichas</button>
+      <button style="position:absolute; left:25rem; margin-top: 0.4rem;" [routerLink]="['/unit/x/itinerary/y']">Itinerario 1</button>
+
     </div>
 
     <div *ngIf="!loginService.isLogged">

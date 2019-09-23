@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import com.card.Card;
 
 @Entity
-public class View{
+public class View {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +28,7 @@ public class View{
     // UML representation not decided yet
     private String uml;
 
-    public View(){
+    public View() {
         this.cards = new ArrayList<>();
     }
 
@@ -79,7 +79,5 @@ public class View{
     public void setUml(String uml) {
         this.uml = uml;
     }
-
-    
 
 }
