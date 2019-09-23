@@ -1,6 +1,7 @@
 package com.definition;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.GeneralRestController;
 import com.definition.definition_answer.DefinitionAnswerService;
@@ -11,8 +12,11 @@ import com.definition.definition_question.DefinitionQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,7 +37,7 @@ public class DefinitionRestController extends GeneralRestController{
 
     @GetMapping("/question/")
     public ResponseEntity<List<DefinitionQuestion>> getQuestions(){
-        return new ResponseEntity<List<DefinitionQuestion>>(this.questionService.getQuestions(), HttpStatus.OK);
+        return new ResponseEntity<List<DefinitionQuestion>>(this.questionService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping("/question/")
@@ -42,5 +46,32 @@ public class DefinitionRestController extends GeneralRestController{
         this.questionService.save(question);
     
         return question;
+    }
+
+    @DeleteMapping(value="/question/{id}")
+    public ResponseEntity<DefinitionQuestion> deleteQuestion(@PathVariable long id){
+        
+        Optional<DefinitionQuestion> q = this.questionService.findOne(id);
+        
+        if(q.isPresent()){
+            this.questionService.delete(id);
+            return new ResponseEntity<>(q.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping(value="/question/{id}")
+    public ResponseEntity<DefinitionQuestion> updateQuestion(@PathVariable long id, @RequestBody DefinitionQuestion newQuestion){
+        
+        Optional<DefinitionQuestion> oldQuestion = this.questionService.findOne(id);
+        
+        if(oldQuestion.isPresent()){
+            oldQuestion.get().update(newQuestion);
+            this.questionService.save(oldQuestion.get());
+            return new ResponseEntity<>(oldQuestion.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

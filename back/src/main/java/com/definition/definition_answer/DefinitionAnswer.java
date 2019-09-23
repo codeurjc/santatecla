@@ -30,7 +30,9 @@ public class DefinitionAnswer{
     @OneToOne
     private User user;
 
-    public DefinitionAnswer(){}
+    public DefinitionAnswer(){
+        this.justifications = new ArrayList<>();
+    }
 
     public DefinitionAnswer(String answerText, boolean correct){
         this.answerText = answerText;

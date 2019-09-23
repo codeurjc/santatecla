@@ -1,6 +1,7 @@
 package com.definition.definition_question;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,16 @@ public class DefinitionQuestionService {
         return this.questionRepository.save(q);
     }
 
-    public List<DefinitionQuestion> getQuestions() {
+    public List<DefinitionQuestion> findAll() {
         return this.questionRepository.findAll();
+    }
+
+    public Optional<DefinitionQuestion> findOne(long id) {
+        return this.questionRepository.findById(id);
+    }
+
+    public void delete(long id) {
+        this.questionRepository.deleteById(id);
     }
 
 }

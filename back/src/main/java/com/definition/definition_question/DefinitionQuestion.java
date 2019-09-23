@@ -25,7 +25,9 @@ public class DefinitionQuestion{
     @OneToMany
     private List<DefinitionAnswer> answers;
 
-    public DefinitionQuestion(){}
+    public DefinitionQuestion(){
+        this.answers = new ArrayList<>();
+    }
 
     public DefinitionQuestion(String questionText, int type){
         this.questionText = questionText;
@@ -63,6 +65,15 @@ public class DefinitionQuestion{
 
     public void setAnswers(List<DefinitionAnswer> answers) {
         this.answers = answers;
+    }
+
+    public void update(DefinitionQuestion q) {
+        if(q.getQuestionText() !=null){
+            this.questionText = q.getQuestionText();
+        }
+        if(q.getType() != this.type){
+            this.type = q.getType();
+        }
     }
     
     
