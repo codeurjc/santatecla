@@ -1,4 +1,4 @@
-package com.definition_question;
+package com.definition.definition_question;
 
 import java.util.List;
 

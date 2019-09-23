@@ -3,6 +3,8 @@ package com;
 import javax.annotation.PostConstruct;
 
 import com.card.*;
+import com.definition.definition_question.DefinitionQuestion;
+import com.definition.definition_question.DefinitionQuestionRepository;
 import com.itinerary.*;
 import com.relation.*;
 import com.unit.*;
@@ -33,6 +35,9 @@ public class DatabaseInitializer {
         @Autowired
         private UserRepository userRepository;
 
+        @Autowired
+        private DefinitionQuestionRepository definitionRepository;
+
 	@PostConstruct
 	public void init() {
                 //Units
@@ -52,6 +57,12 @@ public class DatabaseInitializer {
                 unit1.getFiles().add(card1);
                 unit2.getFiles().add(card2);
                 unit3.getFiles().add(card3);
+
+                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?", 0);
+                DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?", 0);
+
+                definitionRepository.save(definition1);
+                definitionRepository.save(definition2);
         
                 userRepository.save(new User("alumno", "alumno"));
                 userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"));

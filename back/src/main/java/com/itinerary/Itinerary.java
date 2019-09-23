@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.definition_question.DefinitionQuestion;
+import com.definition.definition_question.DefinitionQuestion;
 import com.list_question.ListQuestion;
 import com.unit.Unit;
 import com.view.View;
