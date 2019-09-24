@@ -48,11 +48,11 @@ public class DefinitionAnswer{
         this.id = id;
     }
 
-    public String answerText() {
+    public String getAnswerText() {
         return answerText;
     }
 
-    public void answerText(String answerText) {
+    public void setAnswerText(String answerText) {
         this.answerText = answerText;
     }
 
