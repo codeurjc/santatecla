@@ -1,9 +1,15 @@
 <!DOCTYPE HTML>
 <html>
   <body>
-    <span *ngFor = "let question of questions">
-      <p>{{question.questionText}}</p>
-      <input type="text">
+    <p>{{questionTest.questionText}}</p>
+    <span *ngIf="!questionDone">
+      <form #textForm="ngForm">
+        <input placeholder="Texto" [(ngModel)]="questionAnswer.answerText" name="answer" required>
+      </form>
+      <button class="button" color="primary" (click)="sendAnswer()">Guardar</button>
+    </span>
+    <span *ngIf="questionDone">
+      <p>REALIZADO</p>
     </span>
   </body>
 </html>

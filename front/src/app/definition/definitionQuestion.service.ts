@@ -11,8 +11,14 @@ export class DefinitionQuestionService {
     return this.http.get('/api/definition/question/');
   }
 
-  addDefinitionAnswer(id: number, answer: DefinitionAnswer){
-    return this.http.post<DefinitionAnswer>('/api/definition/question/' + id, null);
+  addDefinitionAnswer(id: number, answer: DefinitionAnswer):Observable<DefinitionAnswer>{
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<DefinitionAnswer>('/api/definition/question/' + id, body, {headers});
   }
 
   getDefinitionAnswers(id: number) {
