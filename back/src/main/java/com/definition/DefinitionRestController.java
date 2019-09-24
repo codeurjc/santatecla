@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
+import com.definition.definition_answer.DefinitionAnswer;
 import com.definition.definition_answer.DefinitionAnswerService;
 import com.definition.definition_justification.DefinitionJustificationService;
 import com.definition.definition_question.DefinitionQuestion;
@@ -70,6 +71,31 @@ public class DefinitionRestController extends GeneralRestController{
             oldQuestion.get().update(newQuestion);
             this.questionService.save(oldQuestion.get());
             return new ResponseEntity<>(oldQuestion.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/question/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<DefinitionQuestion> addAnswer(@PathVariable long id, @RequestBody DefinitionAnswer answer){
+        Optional<DefinitionQuestion> question = this.questionService.findOne(id);
+        
+        if(question.isPresent()){
+            question.get().getAnswers().add(answer);
+            this.questionService.save(question.get());
+            return new ResponseEntity<>(question.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value="/question/{id}/answer")
+    public ResponseEntity<List<DefinitionAnswer>> getAnswers(@PathVariable long id){
+        Optional<DefinitionQuestion> question = this.questionService.findOne(id);
+
+        if(question.isPresent()){
+            return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

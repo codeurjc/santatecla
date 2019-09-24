@@ -34,9 +34,9 @@ public class DefinitionAnswer{
         this.justifications = new ArrayList<>();
     }
 
-    public DefinitionAnswer(String answerText, boolean correct){
+    public DefinitionAnswer(String answerText, User u){
         this.answerText = answerText;
-        this.correct = correct;
+        this.user = u;
         this.justifications = new ArrayList<>();
     }
 
