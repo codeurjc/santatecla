@@ -43,10 +43,10 @@ public class DefinitionRestController extends GeneralRestController{
 
     @PostMapping("/question/")
     @ResponseStatus(HttpStatus.CREATED)
-    public DefinitionQuestion addQuestion(@RequestBody DefinitionQuestion question){
+    public ResponseEntity<DefinitionQuestion> addQuestion(@RequestBody DefinitionQuestion question){
         this.questionService.save(question);
     
-        return question;
+        return new ResponseEntity<>(question, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value="/question/{id}")
@@ -78,13 +78,13 @@ public class DefinitionRestController extends GeneralRestController{
 
     @PostMapping("/question/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<DefinitionQuestion> addAnswer(@PathVariable long id, @RequestBody DefinitionAnswer answer){
+    public ResponseEntity<DefinitionAnswer> addAnswer(@PathVariable long id, @RequestBody DefinitionAnswer answer){
         Optional<DefinitionQuestion> question = this.questionService.findOne(id);
         
         if(question.isPresent()){
             question.get().getAnswers().add(answer);
             this.questionService.save(question.get());
-            return new ResponseEntity<>(question.get(), HttpStatus.OK);
+            return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
