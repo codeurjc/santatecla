@@ -3,6 +3,7 @@ package com.unit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +28,7 @@ public class Unit{
     private String name;
 
     @OneToMany
-    private List<Card> files;
+    private List<Card> cards;
 
     @ManyToMany
     private List<Itinerary> itineraries;
@@ -48,7 +49,7 @@ public class Unit{
 
     public Unit(String name){
         this.name = name;
-        this.files = new ArrayList<>();
+        this.cards = new ArrayList<>();
         this.itineraries = new ArrayList<>();
         this.relations = new ArrayList<>();
         this.definitionQuestions = new ArrayList<>();
@@ -70,14 +71,6 @@ public class Unit{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Card> getFiles() {
-        return files;
-    }
-
-    public void setFiles(List<Card> files) {
-        this.files = files;
     }
 
     public List<Itinerary> getItineraries() {
@@ -118,6 +111,14 @@ public class Unit{
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
     
 

@@ -1,7 +1,9 @@
-package com.view;
+package com.slide;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +13,7 @@ import javax.persistence.OneToMany;
 import com.card.Card;
 
 @Entity
-public class View {
+public class Slide {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +22,7 @@ public class View {
     @OneToMany
     private List<Card> cards;
 
-    // A view has ONE text, image etc or could have more?
+    // A slide has ONE text, image etc or could have more?
     private String text;
     private long imagePath;
     private String code;
@@ -28,9 +30,11 @@ public class View {
     // UML representation not decided yet
     private String uml;
 
-    public View() {
+    public Slide() {
         this.cards = new ArrayList<>();
     }
+
+    public void update(Slide slide) {}
 
     public long getId() {
         return id;

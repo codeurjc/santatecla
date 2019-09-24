@@ -15,7 +15,9 @@ public class Card{
     private String name;
 
     private String text;
+
     private long imagePath;
+    
     private String code;
 
     // UML representation not decided yet
