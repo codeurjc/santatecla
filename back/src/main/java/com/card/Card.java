@@ -16,12 +16,12 @@ public class Card{
 
     private String text;
 
-    private long imagePath;
+    // private long imagePath;
     
-    private String code;
+    // private String code;
 
     // UML representation not decided yet
-    private String uml;
+    // private String uml;
 
     public Card(){}
 
@@ -53,6 +53,7 @@ public class Card{
         this.text = text;
     }
 
+    /*
     public long getImagePath() {
         return imagePath;
     }
@@ -76,6 +77,7 @@ public class Card{
     public void setUml(String uml) {
         this.uml = uml;
     }
+    */
 
 
 }

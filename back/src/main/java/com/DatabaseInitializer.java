@@ -64,26 +64,26 @@ public class DatabaseInitializer {
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
 
-                //Slide
-                Slide slide1 = new Slide();
+                //Slides
+                TheorySlide slide1 = new TheorySlide();
+                PracticeSlide slide2 = new PracticeSlide();
 
                 slide1.getCards().add(card1);
                 slide1.getCards().add(card4);
 
                 slideRepository.save(slide1);
+                slideRepository.save(slide2);
 
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
                 Itinerary itinerary2 = new Itinerary("Distintos");
 
-                itinerary1.getUnits().add(unit1);
-                itinerary2.getUnits().add(unit1);
-                itinerary2.getUnits().add(unit2);
-
                 itineraryRepository.save(itinerary2);
+
                 itinerary1.getItineraries().add(itinerary2);
 
                 itinerary1.getSlides().add(slide1);
+                itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
 

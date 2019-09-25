@@ -1,6 +1,8 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
+import { ItineraryService } from './itinerary.service';
+
 @Component({
   templateUrl: './itinerary.component.html',
   styleUrls: ['./itinerary.component.css']
@@ -11,46 +13,15 @@ export class ItineraryComponent implements OnInit {
   public data: any;
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
 
-  constructor() {}
+  constructor( private itineraryService: ItineraryService ) {}
 
   ngOnInit() {
+
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
-    this.data = {
-      "products": [
-        {
-          "name": "car",
-          "product": [
-            {
-              "name": "honda",
-              "model": [
-                {
-                  "id": "civic",
-                  "name": "civic"
-                },
-                {
-                  "id": "accord",
-                  "name": "accord"
-                },
-                {
-                  "id": "crv",
-                  "name": "crv"
-                },
-                {
-                  "id": "pilot",
-                  "name": "pilot"
-                },
-                {
-                  "id": "odyssey",
-                  "name": "odyssey"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    };
+    this.itineraryService.getItinerary(11).subscribe(d => this.data = d);
+
   }
 
 }

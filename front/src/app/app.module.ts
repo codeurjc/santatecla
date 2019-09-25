@@ -20,9 +20,11 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { AppComponent } from './app.component';
 import { LoginService } from './auth/login.service';
+import { ItineraryService } from './itinerary/itinerary.service';
 import { ViewComponent } from './view/view.component';
 import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
+import { from } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,7 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
     routing,
     NgJsonEditorModule
   ],
-  providers: [LoginService,
+  providers: [LoginService, ItineraryService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
