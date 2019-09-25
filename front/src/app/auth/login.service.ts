@@ -59,6 +59,10 @@ export class LoginService {
     }));
   }
 
+  getCurrentUser(){
+    return this.user;
+  }
+
   removeCurrentUser() {
       localStorage.removeItem(CURRENT_USER_ITEM);
       this.isLogged = false;

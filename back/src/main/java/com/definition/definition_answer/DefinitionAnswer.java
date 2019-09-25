@@ -3,6 +3,7 @@ package com.definition.definition_answer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +28,7 @@ public class DefinitionAnswer{
     @OneToMany
     private List<DefinitionJustification> justifications;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
     public DefinitionAnswer(){
@@ -70,6 +71,14 @@ public class DefinitionAnswer{
 
     public void setJustifications(List<DefinitionJustification> justifications) {
         this.justifications = justifications;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     
     

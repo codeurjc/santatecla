@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DefinitionQuestionService } from './definitionQuestion.service';
 import { DefinitionQuestion } from './definitionQuestion.model';
 import { DefinitionAnswer } from './definitionAnswer.model';
+import { LoginService } from '../auth/login.service';
 
 @Component({
   templateUrl: './definitionQuestion.component.html',
@@ -20,7 +21,8 @@ export class DefinitionQuestionComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private questionService:DefinitionQuestionService){
+    private questionService:DefinitionQuestionService,
+    private loginService: LoginService){
       this.questionDone = false;
   }
 
@@ -35,6 +37,7 @@ export class DefinitionQuestionComponent implements OnInit {
   }
 
   sendAnswer(){
+    this.questionAnswer.user = this.loginService.getCurrentUser();
     this.questionService.addDefinitionAnswer(this.questionTest.id, this.questionAnswer).subscribe(
       (_) => {this.router.navigate(['/']);
               this.questionDone = true},

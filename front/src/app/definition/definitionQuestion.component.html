@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
   <body>
-    <p>{{questionTest.questionText}}</p>
+    <p>{{questionTest?.questionText}}</p>
     <span *ngIf="!questionDone">
       <form #textForm="ngForm">
         <input placeholder="Texto" [(ngModel)]="questionAnswer.answerText" name="answer" required>
@@ -9,7 +9,7 @@
       <button class="button" color="primary" (click)="sendAnswer()">Guardar</button>
     </span>
     <span *ngIf="questionDone">
-      <p>REALIZADO</p>
+      <p style="color: greenyellow">REALIZADO</p>
     </span>
   </body>
 </html>
