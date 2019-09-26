@@ -15,9 +15,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DatabaseInitializer {
+    
         @Autowired
         private CardRepository cardRepository;
-    
+
         @Autowired
         private ItineraryRepository itineraryRepository;
     
@@ -35,26 +36,34 @@ public class DatabaseInitializer {
 
 	@PostConstruct
 	public void init() {
-                //Units
+                
+                // Cards
+                Card card1 = new Card("¿Qué?");
+                card1.setText("Que1");
+                Card card2 = new Card("¿Por qué?");
+                Card card3 = new Card("¿Para qué?");
+
+                cardRepository.save(card1);
+                cardRepository.save(card2);
+                cardRepository.save(card3);
+
+                // Units
                 Unit unit1 = new Unit("Programming language");
                 Unit unit2 = new Unit("Java");
                 Unit unit3 = new Unit("Python");
 
+                unit1.addCard(card1);
+                unit1.addCard(card2);
+                unit1.addCard(card3);
+
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
-
-                //Cards
-                Card card1 = new Card("Programming languaje1");
-                Card card2 = new Card("Java1");
-                Card card3 = new Card("Python1");
-
-                unit1.getFiles().add(card1);
-                unit2.getFiles().add(card2);
-                unit3.getFiles().add(card3);
         
+                // Users
                 userRepository.save(new User("alumno", "alumno"));
                 userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"));
+
 	}
 
 }

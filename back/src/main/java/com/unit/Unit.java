@@ -1,7 +1,9 @@
 package com.unit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,16 +20,16 @@ import com.list_question.ListQuestion;
 import com.relation.Relation;
 
 @Entity
-public class Unit{
+public class Unit {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
     private String name;
-
+    
     @OneToMany
-    private List<Card> files;
+    private Map<Long, Card> cards;
 
     @ManyToMany
     private List<Itinerary> itineraries;
@@ -44,11 +46,8 @@ public class Unit{
     @OneToMany
     private List<Item> items;
 
-    public Unit(){}
-
-    public Unit(String name){
-        this.name = name;
-        this.files = new ArrayList<>();
+    public Unit() {
+        this.cards = new HashMap<>();
         this.itineraries = new ArrayList<>();
         this.relations = new ArrayList<>();
         this.definitionQuestions = new ArrayList<>();
@@ -56,8 +55,13 @@ public class Unit{
         this.items = new ArrayList<>();
     }
 
+    public Unit(String name) {
+        this();
+        this.name = name;
+    }
+
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -65,23 +69,27 @@ public class Unit{
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public List<Card> getFiles() {
-        return files;
+    public Iterable<Card> getCards() {
+        return this.cards.values();
     }
 
-    public void setFiles(List<Card> files) {
-        this.files = files;
+    public Card getCard(long id) {
+        return this.cards.get(id);
+    }
+
+    public void addCard(Card card) {
+        this.cards.put(card.getId(), card);
     }
 
     public List<Itinerary> getItineraries() {
-        return itineraries;
+        return this.itineraries;
     }
 
     public void setItineraries(List<Itinerary> itineraries) {
@@ -89,7 +97,7 @@ public class Unit{
     }
 
     public List<Relation> getRelations() {
-        return relations;
+        return this.relations;
     }
 
     public void setRelations(List<Relation> relations) {
@@ -97,7 +105,7 @@ public class Unit{
     }
 
     public List<DefinitionQuestion> getDefinitionQuestions() {
-        return definitionQuestions;
+        return this.definitionQuestions;
     }
 
     public void setDefinitionQuestions(List<DefinitionQuestion> definitionQuestions) {
@@ -105,7 +113,7 @@ public class Unit{
     }
 
     public List<ListQuestion> getListQuestions() {
-        return listQuestions;
+        return this.listQuestions;
     }
 
     public void setListQuestions(List<ListQuestion> listQuestions) {
@@ -113,12 +121,11 @@ public class Unit{
     }
 
     public List<Item> getItems() {
-        return items;
+        return this.items;
     }
 
     public void setItems(List<Item> items) {
         this.items = items;
     }
-    
 
 }

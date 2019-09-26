@@ -2,5 +2,16 @@
 <html>
   <body>
 
+    <mat-card class="card" *ngFor = "let card of this.cards">
+      <div>{{card.name}}</div>
+      <textarea [(ngModel)]="card.text"></textarea>
+      <div id="image-container">
+        <img *ngIf="card.image" [src]="card.image">
+        <button *ngIf="!card.image">add image</button>
+      </div>
+    </mat-card>
+
+    <button (click)="save()">guardar</button>
+
   </body>
 </html>

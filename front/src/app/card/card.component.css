@@ -1,0 +1,5 @@
+#image-container {
+  width: 10rem;
+  display: flex;
+  float: right;
+}
