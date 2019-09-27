@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/itinerarys")
+@RequestMapping("/api/itineraries")
 public class ItineraryRestController extends GeneralRestController {
 
     @GetMapping(value="/")

@@ -6,12 +6,12 @@ import { Observable } from 'rxjs';
 export class ItineraryService {
   constructor(private http: HttpClient) { }
 
-  getItinerarys() {
-    return this.http.get('/api/itinerarys/');
+  getItineraries() {
+    return this.http.get('/api/itineraries/');
   }
 
   getItinerary(id: number) {
-    return this.http.get('/api/itinerarys/' + id);
+    return this.http.get('/api/itineraries/' + id);
   }
 
 }

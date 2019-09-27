@@ -1,8 +1,42 @@
-#json-editor-container {
+#editor-container {
   float: left;
-  width: 30%;
-  min-width: 30%;
+  width: 40%;
+  min-width: 40%;
   max-width: 60%;
-  resize: horizontal;
   overflow: auto;
+}
+
+#html-itinerary-representation {
+  float: right;
+  width: 60%;
+  overflow: auto;
+}
+
+.delete-card {
+  float: right;
+}
+
+.delete-slide {
+  float: right;
+}
+
+.delete-exercise {
+  float: right;
+}
+
+.delete-sub-itinerary {
+  float: right;
+}
+
+.slide-itinerary-adder {
+  float: left;
+  position: fixed;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+
+.example-button-row button {
+  margin-right: 8px;
 }

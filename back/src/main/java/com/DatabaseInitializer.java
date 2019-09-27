@@ -39,11 +39,13 @@ public class DatabaseInitializer {
                 //Cards
                 Card card1 = new Card("¿Que?");
                 Card card2 = new Card("¿Que?");
-                Card card3 = new Card("¿Que?");
+                Card card3 = new Card("¿Cuándo?");
                 Card card4 = new Card("¿Cuándo?");
 
                 card1.setText("Un lenguaje de programación es un lenguaje formal que proporciona una serie de instrucciones...");
                 card4.setText("A finales de 1953, John Backus sometió una propuesta a sus superiores en IBM...");
+                card2.setText("Java es un lenguaje de programación y una plataforma informática...");
+                card3.setText("Comercializada por primera vez en 1995 por Sun Microsystems...");
 
                 cardRepository.save(card1);
                 cardRepository.save(card2);
@@ -56,9 +58,9 @@ public class DatabaseInitializer {
                 Unit unit3 = new Unit("Python");
  
                 unit1.getCards().add(card1);
-                unit2.getCards().add(card2);
-                unit3.getCards().add(card3);
                 unit1.getCards().add(card4);
+                unit2.getCards().add(card2);
+                unit2.getCards().add(card3);
                 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
@@ -67,16 +69,22 @@ public class DatabaseInitializer {
                 //Slides
                 TheorySlide slide1 = new TheorySlide();
                 PracticeSlide slide2 = new PracticeSlide();
+                TheorySlide slide3 = new TheorySlide();
 
                 slide1.getCards().add(card1);
                 slide1.getCards().add(card4);
+                slide3.getCards().add(card2);
+                slide3.getCards().add(card3);
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
+                slideRepository.save(slide3);
 
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
-                Itinerary itinerary2 = new Itinerary("Distintos");
+                Itinerary itinerary2 = new Itinerary("Introducción Java");
+
+                itinerary2.getSlides().add(slide3);
 
                 itineraryRepository.save(itinerary2);
 

@@ -2,8 +2,128 @@
 <html>
   <body>
 
-    <div id="json-editor-container">
-      <json-editor [options]="editorOptions" [data]="data" (change)="getData($event)"></json-editor>
+    <!-- EDITOR -->
+    <div id="editor-container">
+      <div class="example-button-row">
+        <button mat-stroked-button color="primary" (click)="changeEditorType()">{{editorType}}</button>
+      </div>
+
+      <div *ngIf= "editorTypeJSON == false">
+        <mat-card class="slide-itinerary-adder">
+          <mat-radio-group>
+            <mat-radio-button value="1">Vista</mat-radio-button>
+            <mat-radio-button value="2">Itinerario</mat-radio-button>
+          </mat-radio-group>
+        </mat-card>
+      </div>
+      <!-- JSON editor -->
+      <div *ngIf= "editorTypeJSON == true">
+        <json-editor [options]="editorOptions" [data]="data" (change)="getData($event)"></json-editor>
+      </div>
+
+      <!-- Buttons editor -->
+      <div *ngIf= "editorTypeJSON == false">
+        <h1>{{itinerary.name}}</h1>
+        <div *ngFor="let slide of slides">
+          <div *ngIf= "slide.type == 'TheorySlide'">
+            <mat-card>
+              <button title="Eliminar vista" mat-mini-fab color="warn" class="delete-slide">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <h2> Vista {{slide.id}} </h2>
+              <div *ngFor="let card of slide.cards">
+                <mat-card>
+                  <button title="Eliminar ficha de vista" mat-mini-fab color="warn" class="delete-card">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <h3>{{card.name}}</h3>
+                  <p>{{card.text}}</p>
+                </mat-card>
+              </div>
+            </mat-card>
+          </div>
+          <div *ngIf= "slide.type == 'PracticeSlide'">
+            <mat-card>
+              <button title="Eliminar vista" mat-mini-fab color="warn" class="delete-slide">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <h2>Ejercicios 1</h2>
+              <mat-card>
+                <button title="Eliminar ficha de vista" mat-mini-fab color="warn" class="delete-exercise">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <p>¿Que es un lenguaje de programación?</p>
+              </mat-card>
+            </mat-card>
+          </div>
+        </div>
+
+        <div *ngFor="let itinerary of itineraries">
+          <button title="Eliminar vista" mat-mini-fab color="warn" class="delete-sub-itinerary">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <h1>{{itinerary.name}}</h1>
+          <div *ngFor="let slide of itinerary.slides">
+            <div *ngIf= "slide.type == 'TheorySlide'">
+              <mat-card>
+                <button title="Eliminar vista" mat-mini-fab color="warn" class="delete-slide">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <h2> Vista {{slide.id}} </h2>
+                <div *ngFor="let card of slide.cards">
+                  <mat-card>
+                    <button title="Eliminar ficha de vista" mat-mini-fab color="warn" class="delete-card">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                    <h3>{{card.name}}</h3>
+                    <p>{{card.text}}</p>
+                  </mat-card>
+                </div>
+              </mat-card>
+            </div>
+              <div *ngIf= "slide.type == 'PracticeSlide'">
+                <mat-card>
+                  <button title="Eliminar vista" mat-mini-fab color="warn" class="delete-slide">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <h2>Ejercicio</h2>
+                </mat-card>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML REPRESENTATION -->
+    <div id="html-itinerary-representation">
+      <h1>{{itinerary.name}}</h1>
+      <div *ngFor="let slide of slides">
+        <div *ngIf= "slide.type == 'TheorySlide'">
+          <div *ngFor="let card of slide.cards">
+            <h2>{{card.name}}</h2>
+            <p>{{card.text}}</p>
+          </div>
+        </div>
+        <div *ngIf= "slide.type == 'PracticeSlide'">
+          <h2>Ejercicios 1</h2>
+          <p>¿Que es un lenguaje de programación?</p>
+        </div>
+      </div>
+
+      <div *ngFor="let itinerary of itineraries">
+        <h1>{{itinerary.name}}</h1>
+        <div *ngFor="let slide of itinerary.slides">
+            <div *ngIf= "slide.type == 'TheorySlide'">
+              <div *ngFor="let card of slide.cards">
+                <h2>{{card.name}}</h2>
+                <p>{{card.text}}</p>
+              </div>
+            </div>
+            <div *ngIf= "slide.type == 'PracticeSlide'">
+                <h2>Ejercicio</h2>
+            </div>
+          </div>
+      </div>
     </div>
 
   </body>
