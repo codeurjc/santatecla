@@ -15,9 +15,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DatabaseInitializer {
+    
         @Autowired
         private CardRepository cardRepository;
-    
+
         @Autowired
         private ItineraryRepository itineraryRepository;
     
@@ -57,10 +58,10 @@ public class DatabaseInitializer {
                 Unit unit2 = new Unit("Java");
                 Unit unit3 = new Unit("Python");
  
-                unit1.getCards().add(card1);
-                unit1.getCards().add(card4);
-                unit2.getCards().add(card2);
-                unit2.getCards().add(card3);
+                unit1.addCard(card1);
+                unit1.addCard(card4);
+                unit2.addCard(card2);
+                unit2.addCard(card3);
                 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
@@ -98,6 +99,7 @@ public class DatabaseInitializer {
                 //Users
                 userRepository.save(new User("alumno", "alumno"));
                 userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"));
+
 	}
 
 }

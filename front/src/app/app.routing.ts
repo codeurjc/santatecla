@@ -5,8 +5,8 @@ import { ViewComponent } from './view/view.component';
 
 const appRoutes = [
   { path: '' , component: ViewComponent },
-  { path: 'unit/x/cards', component: CardComponent },
-  { path: 'unit/x/itinerary/y', component: ItineraryComponent }
+  { path: 'units/:unitId/cards', component: CardComponent },
+  { path: 'units/x/itinerary/y', component: ItineraryComponent }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

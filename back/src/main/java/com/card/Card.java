@@ -4,9 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+
+import org.apache.commons.lang3.StringUtils;
 
 @Entity
-public class Card{
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,16 +19,13 @@ public class Card{
 
     private String text;
 
-    // private long imagePath;
-    
-    // private String code;
+    @Lob
+    private Byte[] image;
 
-    // UML representation not decided yet
-    // private String uml;
+    public Card() {}
 
-    public Card(){}
-
-    public Card(String name){
+    public Card(String name) {
+        this();
         this.name = name;
     }
 
@@ -38,7 +38,7 @@ public class Card{
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -46,38 +46,28 @@ public class Card{
     }
 
     public String getText() {
-        return text;
+        return this.text;
     }
 
     public void setText(String text) {
         this.text = text;
     }
 
-    /*
-    public long getImagePath() {
-        return imagePath;
+    public Byte[] getImage() {
+        return this.image;
     }
 
-    public void setImagePath(long imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(Byte[] image) {
+        this.image = image;
     }
 
-    public String getCode() {
-        return code;
+    public void update(Card card) {
+        if (StringUtils.isNotBlank(card.getName())) {
+            this.name = card.getName();
+        }
+        if (StringUtils.isNotBlank(card.getText())) {
+            this.text = card.getText();
+        }
     }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getUml() {
-        return uml;
-    }
-
-    public void setUml(String uml) {
-        this.uml = uml;
-    }
-    */
-
 
 }
