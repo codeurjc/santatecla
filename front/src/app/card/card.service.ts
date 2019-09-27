@@ -23,4 +23,10 @@ export class CardService {
     return this.http.put<Card>('/api/units/' + unitId + '/cards/' + card.id, body, { headers });
   }
 
+  putImage(unitId: number, cardId: number, image: any) {
+    const formData = new FormData();
+    formData.append('image', image);
+    return this.http.post('/api/units/' + unitId + '/cards/' + cardId + '/image', formData);
+  }
+
 }
