@@ -100,4 +100,9 @@ public class DefinitionRestController extends GeneralRestController{
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping(value="/question/type/{type}")
+    public ResponseEntity<List<DefinitionQuestion>> getTypeQuestions(@PathVariable int type){
+        return new ResponseEntity<List<DefinitionQuestion>>(questionService.findByType(type), HttpStatus.OK);
+    }
 }

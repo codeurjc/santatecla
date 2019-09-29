@@ -28,4 +28,8 @@ public class DefinitionQuestionService {
         this.questionRepository.deleteById(id);
     }
 
+    public List<DefinitionQuestion> findByType(int type){
+        return this.questionRepository.findByType(type);
+    }
+
 }

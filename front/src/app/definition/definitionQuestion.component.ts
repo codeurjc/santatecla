@@ -15,15 +15,21 @@ import { LoginService } from '../auth/login.service';
 export class DefinitionQuestionComponent implements OnInit {
 
   questions: DefinitionQuestion[];
+  questionsType1: DefinitionQuestion[];
   questionTest: DefinitionQuestion;
+  question1Test: DefinitionQuestion;
   questionAnswer : DefinitionAnswer;
+  choosenAnswer: string;
   questionDone: boolean;
+  question1Done: boolean;
+  correct:boolean;
 
   constructor(
     private router: Router,
     private questionService:DefinitionQuestionService,
     private loginService: LoginService){
       this.questionDone = false;
+      this.question1Done = false;
   }
 
   ngOnInit() {
@@ -34,6 +40,12 @@ export class DefinitionQuestionComponent implements OnInit {
       }, error => {
 
       });
+    this.questionService.getDefinitionQuestionsType1().subscribe((data:DefinitionQuestion[])=> {
+      this.questionsType1 = data;
+      this.question1Test = this.questionsType1[0];
+    }, error => {
+
+    })
   }
 
   sendAnswer(){
@@ -43,6 +55,16 @@ export class DefinitionQuestionComponent implements OnInit {
               this.questionDone = true},
       (error) => console.log(error)
     )
+  }
+
+  correctType1Answer(){
+    if(this.choosenAnswer == this.question1Test.correctAnswer){
+      this.correct = true;
+    }
+    else{
+      this.correct = false;
+    }
+    this.question1Done = true;
   }
 
 }

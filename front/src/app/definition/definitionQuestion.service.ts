@@ -24,4 +24,8 @@ export class DefinitionQuestionService {
   getDefinitionAnswers(id: number) {
     return this.http.get('/api/definition/question/'+id);
   }
+
+  getDefinitionQuestionsType1(){
+    return this.http.get('/api/definition/question/type/1')
+  }
 }

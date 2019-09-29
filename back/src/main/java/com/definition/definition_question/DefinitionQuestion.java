@@ -23,6 +23,9 @@ public class DefinitionQuestion{
 
     private int type;
 
+    //ONLY FOR TRUE/FALSE YES/NO QUESTIONS
+    private String correctAnswer;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<DefinitionAnswer> answers;
 
@@ -33,6 +36,13 @@ public class DefinitionQuestion{
     public DefinitionQuestion(String questionText, int type){
         this.questionText = questionText;
         this.type = type;
+        this.answers = new ArrayList<>();
+    }
+
+    public DefinitionQuestion(String questionText, int type, String correctAnswer){
+        this.questionText = questionText;
+        this.type = type;
+        this.correctAnswer = correctAnswer;
         this.answers = new ArrayList<>();
     }
 
@@ -75,6 +85,14 @@ public class DefinitionQuestion{
         if(q.getType() != this.type){
             this.type = q.getType();
         }
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
     
     

@@ -60,9 +60,11 @@ public class DatabaseInitializer {
 
                 DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?", 0);
                 DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?", 0);
+                DefinitionQuestion definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", 1, "Sí");
 
                 definitionRepository.save(definition1);
                 definitionRepository.save(definition2);
+                definitionRepository.save(definition3);
         
                 userRepository.save(new User("alumno", "alumno"));
                 userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"));

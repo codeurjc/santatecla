@@ -11,5 +11,26 @@
     <span *ngIf="questionDone">
       <p style="color: greenyellow">REALIZADO</p>
     </span>
+
+    <p>{{question1Test?.questionText}}</p>
+    <span *ngIf="!question1Done">
+      <form name="choosenAnswer">
+        <label>
+          <input type="radio" name="answer" value="Sí" placeholder="SI" [(ngModel)]="this.choosenAnswer"> SI
+        </label>
+        <label>
+          <input type="radio" name="answer" value="No" placeholder="NO" [(ngModel)]="this.choosenAnswer">NO
+        </label>
+      </form>
+      <button class="button" color="primary" (click)="correctType1Answer()">Guardar</button>
+    </span>
+    <span *ngIf="question1Done">
+      <span *ngIf="correct">
+        <p style="color: green">CORRECTO</p>
+      </span>
+      <span *ngIf="!correct">
+          <p style="color: red">INCORRECTO</p>
+      </span>
+    </span>
   </body>
 </html>
