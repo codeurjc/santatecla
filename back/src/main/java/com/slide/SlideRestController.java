@@ -3,6 +3,7 @@ package com.slide;
 import java.util.Optional;
 
 import com.GeneralRestController;
+import com.card.Card;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +33,10 @@ public class SlideRestController extends GeneralRestController {
     @GetMapping(value="/{id}")
     public ResponseEntity<Slide> slide(@PathVariable long id){
 
-        Optional<Slide> q = this.slideService.findOne(id);
+        Optional<Slide> s = this.slideService.findOne(id);
 
-        if (q.isPresent()) {
-            return new ResponseEntity<>(q.get(), HttpStatus.OK);
+        if (s.isPresent()) {
+            return new ResponseEntity<>(s.get(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,28 +55,45 @@ public class SlideRestController extends GeneralRestController {
     @DeleteMapping(value="/{id}")
     public ResponseEntity<Slide> deleteSlide(@PathVariable long id){
 
-        Optional<Slide> q = this.slideService.findOne(id);
+        Optional<Slide> s = this.slideService.findOne(id);
         
-        if(q.isPresent()){
+        if(s.isPresent()){
             this.slideService.delete(id);
-            return new ResponseEntity<>(q.get(), HttpStatus.OK);
+            return new ResponseEntity<>(s.get(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<Slide> updateQuote(@PathVariable long id, @RequestBody Slide slide){
+    public ResponseEntity<Slide> updateSlide(@PathVariable long id, @RequestBody Slide slide){
 
-        Optional<Slide> q = this.slideService.findOne(id);
+        Optional<Slide> s = this.slideService.findOne(id);
         
-        if(q.isPresent()){
-            q.get().update(slide);
-            this.slideService.save(q.get());
-            return new ResponseEntity<>(q.get(), HttpStatus.OK);
+        if(s.isPresent()){
+            s.get().update(slide);
+            this.slideService.save(s.get());
+            return new ResponseEntity<>(s.get(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping(value="/{slideId}/card/{cardId}")
+    public ResponseEntity<Slide> deleteCardFromSlide(@PathVariable long slideId, @PathVariable long cardId){
+        
+        Optional<Card> c =this.cardService.findOne(cardId);
+        Optional<TheorySlide> s = this.theorySlideService.findOne(slideId);
+        
+        if(s.isPresent()){
+            if(c.isPresent()){
+                s.get().getCards().remove(c.get());
+                this.slideService.save(s.get());
+                return new ResponseEntity<>(s.get(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

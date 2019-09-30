@@ -3,12 +3,15 @@ package com.itinerary;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.unit.Unit;
 import com.slide.Slide;
@@ -41,7 +44,11 @@ public class Itinerary{
         this.slides = new ArrayList<>();
     }
 
-    public void update(Itinerary itinerary) {}
+    public void update(Itinerary itinerary) {
+        if (StringUtils.isNotBlank(itinerary.getName())) {
+            this.name = itinerary.getName();
+        }
+    }
     
     public long getId() {
         return id;

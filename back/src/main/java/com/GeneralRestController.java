@@ -1,7 +1,8 @@
 package com;
 
+import com.card.CardService;
 import com.itinerary.ItineraryService;
-import com.slide.SlideService;
+import com.slide.*;
 import com.user.UserComponent;
 import com.user.UserService;
 
@@ -23,6 +24,12 @@ public class GeneralRestController {
 	protected SlideService slideService;
 
 	@Autowired
+	protected TheorySlideService theorySlideService;
+
+	@Autowired
 	protected ItineraryService itineraryService;
+
+	@Autowired
+	protected CardService cardService;
     
 }

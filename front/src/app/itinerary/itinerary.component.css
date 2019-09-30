@@ -1,14 +1,14 @@
 #editor-container {
   float: left;
-  width: 40%;
-  min-width: 40%;
+  width: 45%;
+  min-width: 45%;
   max-width: 60%;
   overflow: auto;
 }
 
 #html-itinerary-representation {
   float: right;
-  width: 60%;
+  width: 55%;
   overflow: auto;
 }
 
@@ -29,8 +29,13 @@
 }
 
 .slide-itinerary-adder {
+  left: 0;
+  bottom: 0;
+  margin-left: 1.4%;
+  margin-bottom: 1.4%;
   float: left;
   position: fixed;
+  z-index: 200;
 }
 
 .mat-radio-button ~ .mat-radio-button {

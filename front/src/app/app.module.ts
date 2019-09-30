@@ -5,6 +5,10 @@ import { MatAutocompleteModule, MatBadgeModule, MatBottomSheetModule, MatButtonM
   MatSnackBarModule, MatSortModule, MatStepperModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MatTreeModule,
 } from '@angular/material';
 
+import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
+  CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
+  CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule } from '@covalent/core';
+
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -25,6 +29,7 @@ import { ViewComponent } from './view/view.component';
 import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
+import { SlideService } from './slide/slide.service';
 
 @NgModule({
   declarations: [
@@ -76,9 +81,12 @@ import { CardService } from './card/card.service';
     MatTreeModule,
     FormsModule,
     routing,
-    NgJsonEditorModule
+    NgJsonEditorModule,
+    CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
+    CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
+    CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
-  providers: [LoginService, ItineraryService, CardService,
+  providers: [LoginService, ItineraryService, CardService, SlideService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

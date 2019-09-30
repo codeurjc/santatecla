@@ -3,6 +3,7 @@ package com.itinerary;
 import java.util.Optional;
 
 import com.GeneralRestController;
+import com.slide.Slide;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItineraryRestController extends GeneralRestController {
 
     @GetMapping(value="/")
-    public MappingJacksonValue itinerarys(){
+    public MappingJacksonValue itineraries(){
 
         MappingJacksonValue result = new MappingJacksonValue(this.itineraryService.findAll());
         return result;
@@ -32,10 +33,10 @@ public class ItineraryRestController extends GeneralRestController {
     @GetMapping(value="/{id}")
     public ResponseEntity<Itinerary> itinerary(@PathVariable long id){
 
-        Optional<Itinerary> q = this.itineraryService.findOne(id);
+        Optional<Itinerary> i = this.itineraryService.findOne(id);
 
-        if (q.isPresent()) {
-            return new ResponseEntity<>(q.get(), HttpStatus.OK);
+        if (i.isPresent()) {
+            return new ResponseEntity<>(i.get(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,7 +45,7 @@ public class ItineraryRestController extends GeneralRestController {
 
     @PostMapping(value="/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Itinerary newItinerarys(@RequestBody Itinerary itinerary){
+    public Itinerary newItinerary(@RequestBody Itinerary itinerary){
 
         this.itineraryService.save(itinerary);
         return itinerary;
@@ -52,29 +53,66 @@ public class ItineraryRestController extends GeneralRestController {
     }
 
     @DeleteMapping(value="/{id}")
-    public ResponseEntity<Itinerary> deleteItinerarys(@PathVariable long id){
+    public ResponseEntity<Itinerary> deleteItinerary(@PathVariable long id){
 
-        Optional<Itinerary> q = this.itineraryService.findOne(id);
+        Optional<Itinerary> i = this.itineraryService.findOne(id);
         
-        if(q.isPresent()){
+        if(i.isPresent()){
             this.itineraryService.delete(id);
-            return new ResponseEntity<>(q.get(), HttpStatus.OK);
+            return new ResponseEntity<>(i.get(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<Itinerary> updateItinerarys(@PathVariable long id, @RequestBody Itinerary itinerary){
+    public ResponseEntity<Itinerary> updateItinerary(@PathVariable long id, @RequestBody Itinerary itinerary){
 
-        Optional<Itinerary> q = this.itineraryService.findOne(id);
+        Optional<Itinerary> i = this.itineraryService.findOne(id);
         
-        if(q.isPresent()){
-            q.get().update(itinerary);
-            this.itineraryService.save(q.get());
-            return new ResponseEntity<>(q.get(), HttpStatus.OK);
+        if(i.isPresent()){
+            i.get().update(itinerary);
+            this.itineraryService.save(i.get());
+            return new ResponseEntity<>(i.get(), HttpStatus.OK);
         }
 
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping(value="/{itineraryId}/slide/{slideId}")
+    public ResponseEntity<Itinerary> deleteSlideFromItinerary(@PathVariable long slideId, @PathVariable long itineraryId){
+        
+        Optional<Itinerary> i =this.itineraryService.findOne(itineraryId);
+        Optional<Slide> s = this.slideService.findOne(slideId);
+        
+        if(i.isPresent()){
+            if(s.isPresent()){
+                i.get().getSlides().remove(s.get());
+                this.itineraryService.save(i.get());
+                this.slideService.delete(slideId);
+                return new ResponseEntity<>(i.get(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping(value="/{itineraryId}/itinerary/{itineraryId_2}")
+    public ResponseEntity<Itinerary> deleteItineraryFromItinerary(@PathVariable long itineraryId_2, @PathVariable long itineraryId){
+        
+        Optional<Itinerary> i =this.itineraryService.findOne(itineraryId);
+        Optional<Itinerary> i2 = this.itineraryService.findOne(itineraryId_2);
+        
+        if(i.isPresent()){
+            if(i2.isPresent()){
+                i.get().getItineraries().remove(i2.get());
+                this.itineraryService.save(i.get());
+                return new ResponseEntity<>(i.get(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
