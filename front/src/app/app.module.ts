@@ -30,13 +30,15 @@ import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
+import { DefinitionQuestionComponent } from './definition/definitionQuestion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ViewComponent,
     CardComponent,
-    ItineraryComponent
+    ItineraryComponent,
+    DefinitionQuestionComponent
   ],
   imports: [
     BrowserAnimationsModule,

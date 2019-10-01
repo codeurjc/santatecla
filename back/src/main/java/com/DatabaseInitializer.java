@@ -3,6 +3,8 @@ package com;
 import javax.annotation.PostConstruct;
 
 import com.card.*;
+import com.definition.definition_question.DefinitionQuestion;
+import com.definition.definition_question.DefinitionQuestionRepository;
 import com.itinerary.*;
 import com.relation.*;
 import com.unit.*;
@@ -33,6 +35,9 @@ public class DatabaseInitializer {
   
         @Autowired
         private UserRepository userRepository;
+
+        @Autowired
+        private DefinitionQuestionRepository definitionRepository;
 
 	@PostConstruct
 	public void init() {

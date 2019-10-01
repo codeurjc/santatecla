@@ -1,4 +1,4 @@
-package com.definition_justification;
+package com.definition.definition_justification;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

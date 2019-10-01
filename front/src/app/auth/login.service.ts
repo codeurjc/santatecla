@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 const LOGIN_URL = 'api/login';
 const LOGOUT_URL = 'api/logout';
@@ -22,7 +23,7 @@ export class LoginService {
   user: User;
   auth: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router:Router) {
     let user = JSON.parse(localStorage.getItem(CURRENT_USER_ITEM));
     if (user) {
       this.setCurrentUser(user);
@@ -56,6 +57,10 @@ export class LoginService {
       this.removeCurrentUser();
       return response;
     }));
+  }
+
+  getCurrentUser(){
+    return this.user;
   }
 
   removeCurrentUser() {

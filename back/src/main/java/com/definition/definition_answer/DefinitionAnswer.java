@@ -1,8 +1,9 @@
-package com.definition_answer;
+package com.definition.definition_answer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.definition_justification.DefinitionJustification;
+import com.definition.definition_justification.DefinitionJustification;
 import com.user.User;
 
 @Entity
@@ -27,10 +28,12 @@ public class DefinitionAnswer{
     @OneToMany
     private List<DefinitionJustification> justifications;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    public DefinitionAnswer(){}
+    public DefinitionAnswer(){
+        this.justifications = new ArrayList<>();
+    }
 
     public DefinitionAnswer(String answerText, boolean correct){
         this.answerText = answerText;
@@ -46,11 +49,11 @@ public class DefinitionAnswer{
         this.id = id;
     }
 
-    public String answerText() {
+    public String getAnswerText() {
         return answerText;
     }
 
-    public void answerText(String answerText) {
+    public void setAnswerText(String answerText) {
         this.answerText = answerText;
     }
 
@@ -68,6 +71,14 @@ public class DefinitionAnswer{
 
     public void setJustifications(List<DefinitionJustification> justifications) {
         this.justifications = justifications;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     
     

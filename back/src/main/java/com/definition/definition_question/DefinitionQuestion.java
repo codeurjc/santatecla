@@ -1,15 +1,16 @@
-package com.definition_question;
+package com.definition.definition_question;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.definition_answer.DefinitionAnswer;
+import com.definition.definition_answer.DefinitionAnswer;
 
 @Entity
 public class DefinitionQuestion{
@@ -22,14 +23,26 @@ public class DefinitionQuestion{
 
     private int type;
 
-    @OneToMany
+    //ONLY FOR TRUE/FALSE YES/NO QUESTIONS
+    private String correctAnswer;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<DefinitionAnswer> answers;
 
-    public DefinitionQuestion(){}
+    public DefinitionQuestion(){
+        this.answers = new ArrayList<>();
+    }
 
     public DefinitionQuestion(String questionText, int type){
         this.questionText = questionText;
         this.type = type;
+        this.answers = new ArrayList<>();
+    }
+
+    public DefinitionQuestion(String questionText, int type, String correctAnswer){
+        this.questionText = questionText;
+        this.type = type;
+        this.correctAnswer = correctAnswer;
         this.answers = new ArrayList<>();
     }
 
@@ -63,6 +76,23 @@ public class DefinitionQuestion{
 
     public void setAnswers(List<DefinitionAnswer> answers) {
         this.answers = answers;
+    }
+
+    public void update(DefinitionQuestion q) {
+        if(q.getQuestionText() !=null){
+            this.questionText = q.getQuestionText();
+        }
+        if(q.getType() != this.type){
+            this.type = q.getType();
+        }
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
     
     
