@@ -8,6 +8,7 @@ import { TdDialogService } from '@covalent/core';
 import { Router } from '@angular/router';
 
 import { ItineraryService } from './itinerary.service';
+import { LoginService } from '../auth/login.service';
 
 @Component({
   templateUrl: './itinerary.component.html',
@@ -32,7 +33,8 @@ export class ItineraryComponent implements OnInit {
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
               private router: Router,
-              private dialogService: TdDialogService ) {}
+              private dialogService: TdDialogService, 
+              private loginService: LoginService ) {}
 
   ngOnInit() {
 
@@ -145,6 +147,10 @@ export class ItineraryComponent implements OnInit {
           });
       }
     });
+  }
+
+  navigateQuestion(){
+    this.router.navigate(['/definition'])
   }
 
 }

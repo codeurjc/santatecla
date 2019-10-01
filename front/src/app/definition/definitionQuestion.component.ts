@@ -51,7 +51,7 @@ export class DefinitionQuestionComponent implements OnInit {
   sendAnswer(){
     this.questionAnswer.user = this.loginService.getCurrentUser();
     this.questionService.addDefinitionAnswer(this.questionTest.id, this.questionAnswer).subscribe(
-      (_) => {this.router.navigate(['/']);
+      (_) => {this.router.navigate(['/definition']);
               this.questionDone = true},
       (error) => console.log(error)
     )

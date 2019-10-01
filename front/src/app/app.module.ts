@@ -31,6 +31,7 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
 import { DefinitionQuestionComponent } from './definition/definitionQuestion.component';
+import { DefinitionQuestionService } from './definition/definitionQuestion.service';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,7 @@ import { DefinitionQuestionComponent } from './definition/definitionQuestion.com
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService,
+  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

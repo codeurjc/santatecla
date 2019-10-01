@@ -34,8 +34,7 @@ public class Itinerary{
     @OneToMany
     private List<Slide> slides;
 
-    public Itinerary(){
-    }
+    public Itinerary(){}
 
     public Itinerary(String name){
         this.name = name;
