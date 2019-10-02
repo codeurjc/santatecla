@@ -27,3 +27,7 @@ You can put exercises in the itineraries, these exercises can be of two types: d
 #### Student profile
 
 The student's profile can consult the units and their itineraries, answer the exercises and track their progress
+
+### Statecla document 📄
+
+https://docs.google.com/document/d/1UYYBEViuxSYDDl_sLN2MTALL7tVo_sH1dfBMDjnWALA/
