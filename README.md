@@ -4,7 +4,7 @@ Santa Tecla is a revolutionary teaching tool based on material created with stru
 ### Team members ✒️
 
 
- **David Cuenca Ortega**     | [DavidCuencaOrtega](https://github.com/DavidCuencaOrtega) | Preparatin of itineraries: itineraries and views
+* **David Cuenca Ortega**     | [DavidCuencaOrtega](https://github.com/DavidCuencaOrtega) | Preparatin of itineraries: itineraries and views
 * **Ignacio Martínez Castro** | [NachoMC](https://github.com/NachoMC)
 * **Alejandro Quesada Soto**  | [alexibro](https://github.com/alexibro)
 * **Jesús Borrero Gómez**     | [JesusBorrero](https://github.com/JesusBorrero)
