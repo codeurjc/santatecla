@@ -7,7 +7,7 @@ import { DefinitionQuestionComponent } from './definition/definitionQuestion.com
 const appRoutes = [
   { path: '' , component: ViewComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
-  { path: 'units/x/itineraries/y', component: ItineraryComponent },
+  { path: 'units/:unitId/itineraries/:itineraryId', component: ItineraryComponent },
   { path: 'definition', component: DefinitionQuestionComponent}
 ];
 

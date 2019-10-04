@@ -33,13 +33,13 @@ export class ItineraryComponent implements OnInit {
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
               private router: Router,
-              private dialogService: TdDialogService, 
+              private dialogService: TdDialogService,
               private loginService: LoginService ) {}
 
   ngOnInit() {
 
-    this.editorTypeJSON = false;
-    this.editorType = 'JSON';
+    this.editorTypeJSON = true;
+    this.editorType = 'Botones';
 
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];

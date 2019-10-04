@@ -2,23 +2,39 @@
 <html>
   <body>
 
+    <div class="itinerary-header">
+      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/']">
+        Fichas
+      </button>
+
+      <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" [routerLink]="['/']">
+        Ejercicios
+      </button>
+
+      <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" [routerLink]="['/units/5/itineraries/11']">
+        Itinerario
+      </button>
+    </div>
+
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <div id="editor-container">
-          <mat-card class="slide-itinerary-adder">
+
+          <!--<mat-card class="slide-itinerary-adder">
             <mat-radio-group>
               <mat-radio-button value="1">Vista</mat-radio-button>
               <mat-radio-button value="2">Itinerario</mat-radio-button>
             </mat-radio-group>
             <button mat-stroked-button color="primary">Añadir</button>
             <button mat-stroked-button (click)="changeEditorType()">{{editorType}}</button>
-          </mat-card>
+          </mat-card>-->
+
         <!-- JSON editor -->
         <div *ngIf= "editorTypeJSON == true">
           <json-editor [options]="editorOptions" [data]="data" (change)="getData($event)"></json-editor>
         </div>
 
-        <!-- Buttons editor -->
+        <!-- Buttons editor
         <div *ngIf= "editorTypeJSON == false">
           <button title="Eliminar itinerario" mat-mini-fab color="warn" class="delete-sub-itinerary" (click)="deleteItinerary()">
             <mat-icon>delete</mat-icon>
@@ -91,7 +107,7 @@
                 </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 

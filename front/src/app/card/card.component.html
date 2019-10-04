@@ -2,6 +2,20 @@
 <html>
   <body>
 
+    <div class="unit-header">
+        <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/']">
+          Fichas
+        </button>
+
+        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" [routerLink]="['/']">
+          Ejercicios
+        </button>
+
+        <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" [routerLink]="['/units/5/itineraries/11']">
+          Itinerario
+        </button>
+    </div>
+
     <mat-card class="card" *ngFor = "let card of this.cards">
       <div>{{card.name}}</div>
       <textarea [(ngModel)]="card.text"></textarea>
