@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +14,7 @@ import javax.persistence.OneToMany;
 
 import com.card.Card;
 import com.definition.definition_question.DefinitionQuestion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.item.Item;
 import com.itinerary.Itinerary;
 import com.list_question.ListQuestion;
@@ -25,26 +25,32 @@ public class Unit {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     protected long id;
 
     private String name;
     
     @OneToMany
+    @JsonIgnore
     private Map<Long, Card> cards;
 
     @ManyToMany
+    @JsonIgnore
     private List<Itinerary> itineraries;
 
     @OneToMany
     private List<Relation> relations;
 
     @OneToMany
+    @JsonIgnore
     private List<DefinitionQuestion> definitionQuestions;
 
     @OneToMany
+    @JsonIgnore
     private List<ListQuestion> listQuestions;
 
     @OneToMany
+    @JsonIgnore
     private List<Item> items;
 
     public Unit() {
@@ -93,24 +99,24 @@ public class Unit {
         return this.itineraries;
     }
 
-    public void setItineraries(List<Itinerary> itineraries) {
-        this.itineraries = itineraries;
+    public void addItinerary(Itinerary itinerary) {
+        this.itineraries.add(itinerary);
     }
 
     public List<Relation> getRelations() {
         return this.relations;
     }
 
-    public void setRelations(List<Relation> relations) {
-        this.relations = relations;
+    public void addRelation(Relation relation) {
+        this.relations.add(relation);
     }
 
     public List<DefinitionQuestion> getDefinitionQuestions() {
         return this.definitionQuestions;
     }
 
-    public void setDefinitionQuestions(List<DefinitionQuestion> definitionQuestions) {
-        this.definitionQuestions = definitionQuestions;
+    public void addDefinitionQuestion(DefinitionQuestion definitionQuestion) {
+        this.definitionQuestions.add(definitionQuestion);
     }
 
     public List<ListQuestion> getListQuestions() {

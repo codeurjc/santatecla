@@ -1,3 +1,4 @@
+import { ViewService } from './view.service';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
@@ -7,38 +8,21 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 })
 
 export class ViewComponent implements OnInit {
+
   public editorOptions: JsonEditorOptions;
   public data: any;
+
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
 
-  constructor() {}
+  constructor(private viewService: ViewService) {}
 
   ngOnInit() {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
-    this.data = {
-      "Unidad 1": {
-        "relations": [
-          {
-            "r1": "r1"
-          },
-          {
-            "r2": "r2"
-          }
-        ]
-      },
-      "Unidad 2": {
-        "relations": [
-          {
-            "r1": "r1"
-          },
-          {
-            "r2": "r2"
-          }
-        ]
-      }
-    };
+    this.viewService.getUnits().subscribe((data: any) => {
+      this.data = data;
+    }, error => {});
   }
 
 }

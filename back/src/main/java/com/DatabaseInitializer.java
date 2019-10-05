@@ -59,9 +59,11 @@ public class DatabaseInitializer {
                 cardRepository.save(card4);
   
                 //Units
-                Unit unit1 = new Unit("Programming language");
+                Unit unit1 = new Unit("Lenguaje de programación");
                 Unit unit2 = new Unit("Java");
                 Unit unit3 = new Unit("Python");
+                Unit unit4 = new Unit("Expresión");
+                Unit unit5 = new Unit("Expresión");
  
                 unit1.addCard(card1);
                 unit1.addCard(card4);
@@ -71,6 +73,28 @@ public class DatabaseInitializer {
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
+                unitRepository.save(unit4);
+                unitRepository.save(unit5);
+
+                //Relations
+                Relation relation1 = new Relation(Relation.RelationType.INHERITANCE, unit2);
+                relationRepository.save(relation1);
+                unit1.addRelation(relation1);
+                Relation relation2 = new Relation(Relation.RelationType.INHERITANCE, unit3);
+                relationRepository.save(relation2);
+                unit1.addRelation(relation2);
+                Relation relation3 = new Relation(Relation.RelationType.COMPOSITION, unit4);
+                relationRepository.save(relation3);
+                unit2.addRelation(relation3);
+                Relation relation4 = new Relation(Relation.RelationType.COMPOSITION, unit5);
+                relationRepository.save(relation4);
+                unit3.addRelation(relation4);
+
+                unitRepository.save(unit1);
+                unitRepository.save(unit2);
+                unitRepository.save(unit3);
+                unitRepository.save(unit4);
+                unitRepository.save(unit5);
 
                 //Slides
                 TheorySlide slide1 = new TheorySlide();
