@@ -45,6 +45,12 @@ public class UnitRestController extends GeneralRestController {
         return (unit.isPresent())?(new ResponseEntity<>(unit.get(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping(value="/search/{name}")
+    public ResponseEntity<List<Unit>> searchUnits(@PathVariable String name) {
+        List<Unit> units = this.unitService.findByNameContaining(name);
+        return new ResponseEntity<>(units, HttpStatus.OK);
+    }
+
     @GetMapping(value="/{unitId}/cards")
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
@@ -90,5 +96,5 @@ public class UnitRestController extends GeneralRestController {
         Card card = unit.get().getCard(cardId);
         return new ResponseEntity<Card>(card, HttpStatus.OK);
     }
-    
+
 }

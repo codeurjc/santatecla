@@ -6,5 +6,16 @@
       <json-editor [options]="editorOptions" [data]="data"></json-editor>
     </div>
 
+    <mat-form-field appearance="outline" id="search">
+      <mat-label>Buscar unidad</mat-label>
+      <input matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)" (focus)="setShowResults(true)" (focusout)="setShowResults(false)"/>
+      <div id="result-list" *ngIf="showResults">
+        <div id="result" *ngFor="let result of results; let i = index" [class.active]="i==arrowkeyLocation" (mouseover)="setActive(i)" (click)="getUnit(result.id)">
+          <span id="unit-prefix">{{getUnitPrefix(result.name)}}</span>
+          <span id="unit-name">{{getUnitName(result.name)}}</span>
+        </div>
+      </div>
+    </mat-form-field>
+
   </body>
 </html>

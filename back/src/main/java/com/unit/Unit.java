@@ -25,7 +25,6 @@ public class Unit {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
     protected long id;
 
     private String name;

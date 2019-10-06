@@ -64,7 +64,12 @@ public class DatabaseInitializer {
                 Unit unit3 = new Unit("Python");
                 Unit unit4 = new Unit("Expresión");
                 Unit unit5 = new Unit("Expresión");
- 
+                Unit unit6 = new Unit("C++");
+                Unit unit7 = new Unit("Expresión");
+                Unit unit8 = new Unit("L2");
+                Unit unit9 = new Unit("C++");
+                Unit unit10 = new Unit("Expresión");
+
                 unit1.addCard(card1);
                 unit1.addCard(card4);
                 unit2.addCard(card2);
@@ -75,6 +80,11 @@ public class DatabaseInitializer {
                 unitRepository.save(unit3);
                 unitRepository.save(unit4);
                 unitRepository.save(unit5);
+                unitRepository.save(unit6);
+                unitRepository.save(unit7);
+                unitRepository.save(unit8);
+                unitRepository.save(unit9);
+                unitRepository.save(unit10);
 
                 //Relations
                 Relation relation1 = new Relation(Relation.RelationType.INHERITANCE, unit2);
@@ -89,12 +99,29 @@ public class DatabaseInitializer {
                 Relation relation4 = new Relation(Relation.RelationType.COMPOSITION, unit5);
                 relationRepository.save(relation4);
                 unit3.addRelation(relation4);
+                Relation relation6 = new Relation(Relation.RelationType.INHERITANCE, unit6);
+                relationRepository.save(relation6);
+                unit1.addRelation(relation6);
+                Relation relation7 = new Relation(Relation.RelationType.COMPOSITION, unit7);
+                relationRepository.save(relation7);
+                unit6.addRelation(relation7);
+                Relation relation8 = new Relation(Relation.RelationType.INHERITANCE, unit9);
+                relationRepository.save(relation8);
+                unit8.addRelation(relation8);
+                Relation relation9 = new Relation(Relation.RelationType.COMPOSITION, unit10);
+                relationRepository.save(relation9);
+                unit9.addRelation(relation9);
 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
                 unitRepository.save(unit4);
                 unitRepository.save(unit5);
+                unitRepository.save(unit6);
+                unitRepository.save(unit7);
+                unitRepository.save(unit8);
+                unitRepository.save(unit9);
+                unitRepository.save(unit10);
 
                 //Slides
                 TheorySlide slide1 = new TheorySlide();
