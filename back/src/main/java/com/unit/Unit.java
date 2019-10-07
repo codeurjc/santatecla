@@ -134,4 +134,8 @@ public class Unit {
         this.items = items;
     }
 
+    public void update(Unit unit) {
+        this.name = unit.getName();
+    }
+
 }

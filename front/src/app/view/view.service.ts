@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Unit } from '../unit/unit.model';
 
 @Injectable()
 export class ViewService {
@@ -18,6 +19,13 @@ export class ViewService {
 
   searchByNameContaining(name: string) {
     return this.http.get(this.baseUrl + 'search/' + name);
+  }
+
+  save(data) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.put<Unit[]>(this.baseUrl, data, { headers });
   }
 
 }

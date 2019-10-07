@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unit.Unit;
 
 @Entity
@@ -14,7 +13,6 @@ public class Relation {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonIgnore
     protected long id;
 
     public enum RelationType {
@@ -41,11 +39,11 @@ public class Relation {
         this.id = id;
     }
 
-    public RelationType getType() {
+    public RelationType getRelationType() {
         return relationType;
     }
 
-    public void setType(RelationType type) {
+    public void setRelationType(RelationType type) {
         this.relationType = type;
     }
 
@@ -56,6 +54,9 @@ public class Relation {
     public void setRelatedTo(Unit relatedTo) {
         this.relatedTo = relatedTo;
     }
-
     
+    public void update(Relation relation) {
+        this.relationType = relation.getRelationType();
+    }
+
 }

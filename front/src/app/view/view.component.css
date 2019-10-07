@@ -8,23 +8,27 @@
 }
 
 #search {
-  width: 40rem;
+  margin: 1rem;
+  width: 50rem;
+}
+
+#search-input {
+  margin-bottom: 1em;
 }
 
 #result {
   padding: 1rem;
   cursor: pointer;
-  border: 1px solid  #b8d2f1;
-  border-radius: 3px;
-  margin: 0 -0.7em 0 -0.7em;
+  margin: 0 -0.6em 0 -0.6em;
+  border-top: 1px solid #e5e9f0;
 }
 
 .active {
-  background-color: #dde6f0;
+  background-color: #e5e9f0;
 }
 
 #unit-prefix {
-  color: #5d6b7e;
+  color: #646464;
 }
 
 #unit-name {

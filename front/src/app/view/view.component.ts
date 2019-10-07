@@ -33,23 +33,34 @@ export class ViewComponent implements OnInit {
     this.editorOptions.mode = 'code';
     this.viewService.getUnits().subscribe((data: any) => {
       this.data = data;
-    }, error => {});
+    }, error => {
+      console.log(error);
+    });
   }
 
   getUnit(id: number) {
     this.viewService.getUnit(id).subscribe((data: any) => {
-      this.data = data;
-    }, error => {});
+      this.data = [data];
+    }, error => {
+      console.log(error);
+    });
   }
 
   search() {
-    if (this.searchField === '') {
+    if (this.validSearchField()) {
+      this.viewService.searchByNameContaining(this.searchField).subscribe((data: any) => {
+        this.results = data;
+        this.arrowkeyLocation = 0;
+      }, error => {
+        console.log(error);
+      });
+    } else {
       this.results = [];
     }
-    this.viewService.searchByNameContaining(this.searchField).subscribe((data: any) => {
-      this.results = data;
-      this.arrowkeyLocation = 0;
-    }, error => {});
+  }
+
+  validSearchField() {
+    return this.searchField.split(' ').length !== (this.searchField.length + 1);
   }
 
   setShowResults(showResults: boolean) {
@@ -62,7 +73,7 @@ export class ViewComponent implements OnInit {
   }
 
   keyDown(event: KeyboardEvent) {
-    if (event.key === this.ENTER_KEY) {
+    if ((event.key === this.ENTER_KEY) && (this.results.length > 0)) {
       this.getUnit(this.results[this.arrowkeyLocation].id);
     } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowkeyLocation > 0)) {
       this.arrowkeyLocation--;
@@ -82,6 +93,14 @@ export class ViewComponent implements OnInit {
 
   getUnitName(completeName: string) {
     return completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1];
+  }
+
+  save(event: KeyboardEvent) {
+    event.preventDefault();
+    this.viewService.save(this.data).subscribe((data: any) => {
+    }, error => {
+      console.log(error);
+    });
   }
 
 }

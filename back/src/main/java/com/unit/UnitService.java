@@ -43,6 +43,28 @@ public class UnitService {
 	}
 
 	private List<Unit> resolveDuplicateNames(List<Unit> units) {
+		Map<String, List<Unit>> duplicatesMap = findDuplicates(units);
+		for (String key : duplicatesMap.keySet()) {
+			List<Unit> duplicates = duplicatesMap.get(key);
+			for (int i = 0; i < duplicates.size(); i++) {
+				for (int j = i + 1; j < duplicates.size(); j++) {
+					Unit uniti = duplicates.get(i);
+					Unit unitj = duplicates.get(j);
+					while (uniti.getName().contains(unitj.getName()) || unitj.getName().contains(uniti.getName())) {
+						if (uniti.getName().contains(unitj.getName())) {
+							setParentOnName(unitj);
+						}
+						if (unitj.getName().contains(uniti.getName())) {
+							setParentOnName(uniti);
+						}
+					}
+				}
+			}
+		}
+		return units;
+	}
+
+	private Map<String, List<Unit>> findDuplicates(List<Unit> units) {
 		Map<String, List<Unit>> duplicates = new HashMap<>();
 		for (int i = 0; i < units.size(); i++) {
 			for (int j = i + 1; j < units.size(); j++) {
@@ -64,32 +86,19 @@ public class UnitService {
 				}
 			}
 		}
-		for (String key : duplicates.keySet()) {
-			List<Unit> dup = duplicates.get(key);
-			for (int i = 0; i < dup.size(); i++) {
-				for (int j = i + 1; j < dup.size(); j++) {
-					Unit uniti = dup.get(i);
-					Unit unitj = dup.get(j);
-					while (uniti.getName().contains(unitj.getName()) || unitj.getName().contains(uniti.getName())) {
-						if (uniti.getName().contains(unitj.getName())) {
-							unitj.setName(getParent(unitj.getId(), getLevel(unitj.getName())).getName() + UNIT_NAME_SEPARATOR + unitj.getName());
-						}
-						if (unitj.getName().contains(uniti.getName())) {
-							uniti.setName(getParent(uniti.getId(), getLevel(uniti.getName())).getName() + UNIT_NAME_SEPARATOR + uniti.getName());
-						}
-					}
-				}
-			}
-		}
-		return units;
+		return duplicates;
 	}
 
-	private Unit getParent(Long id, int level) {
+	private Unit getParent(Long id, int level) throws NullPointerException {
 		Unit parent = unitRepository.getParent(id);
 		for (int i = 0; i < level; i++) {
 			parent = unitRepository.getParent(parent.getId());
 		}
 		return parent;
+	}
+
+	private void setParentOnName(Unit unit) {
+		unit.setName(getParent(unit.getId(), getLevel(unit.getName())).getName() + UNIT_NAME_SEPARATOR + unit.getName());			
 	}
 
 	private int getLevel(String name) {
