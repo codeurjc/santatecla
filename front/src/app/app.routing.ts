@@ -2,7 +2,7 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardComponent } from './card/card.component';
 import { RouterModule } from '@angular/router';
 import { ViewComponent } from './view/view.component';
-import { DefinitionQuestionComponent } from './definition/definitionQuestion.component';
+import { DefinitionQuestionComponent } from './questions/definitionQuestion.component';
 
 const appRoutes = [
   { path: '' , component: ViewComponent },

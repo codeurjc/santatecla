@@ -4,6 +4,8 @@ import { DefinitionQuestionService } from './definitionQuestion.service';
 import { DefinitionQuestion } from './definitionQuestion.model';
 import { DefinitionAnswer } from './definitionAnswer.model';
 import { LoginService } from '../auth/login.service';
+import { ListQuestion } from './listQuestion.model';
+import { ListQuestionService } from './listQuestion.service';
 
 @Component({
   templateUrl: './definitionQuestion.component.html',
@@ -22,14 +24,23 @@ export class DefinitionQuestionComponent implements OnInit {
   choosenAnswer: string;
   questionDone: boolean;
   question1Done: boolean;
+  listQuestion: ListQuestion
   correct:boolean;
+  choosenListAnswers: string[];
+  availableListAnswers: string[];
+  questionListDone: boolean;
+  questionListCorrect: boolean;
+  questionListCorrectAnswers: string[];
 
   constructor(
     private router: Router,
     private questionService:DefinitionQuestionService,
-    private loginService: LoginService){
+    private loginService: LoginService, 
+    private listService: ListQuestionService){
       this.questionDone = false;
       this.question1Done = false;
+      this.questionListDone = false;
+      this.choosenListAnswers = []
   }
 
   ngOnInit() {
@@ -43,6 +54,14 @@ export class DefinitionQuestionComponent implements OnInit {
     this.questionService.getDefinitionQuestionsType1().subscribe((data:DefinitionQuestion[])=> {
       this.questionsType1 = data;
       this.question1Test = this.questionsType1[0];
+    }, error => {
+
+    })
+
+    this.listService.getListQuestions().subscribe((data:ListQuestion[])=> {
+      this.listQuestion = data[0]
+      this.availableListAnswers = this.listQuestion.possibleAnswers;
+      this.questionListCorrectAnswers = this.listQuestion.correctAnswer;
     }, error => {
 
     })
@@ -66,5 +85,32 @@ export class DefinitionQuestionComponent implements OnInit {
     }
     this.question1Done = true;
   }
+
+  newChoosenAnswer(answer:string){
+    this.choosenListAnswers.push(answer);
+    this.availableListAnswers.splice(this.availableListAnswers.indexOf(answer), 1);
+  }
+
+  deleteChoosenAnswer(answer:string){
+    this.availableListAnswers.push(answer);
+    this.choosenListAnswers.splice(this.choosenListAnswers.indexOf(answer), 1);
+  }
+
+  correctListAnswer(){
+    if(this.choosenListAnswers.length == this.questionListCorrectAnswers.length){
+      this.questionListCorrect = true;
+      for(let i = 0; i<this.questionListCorrectAnswers.length; i++){
+        if(!this.choosenListAnswers.includes(this.questionListCorrectAnswers[i])){
+          this.questionListCorrect = false;
+          break;
+        }
+      }
+    }
+    else{
+      this.questionListCorrect = false;
+    }
+    this.questionListDone = true;
+  }
+
 
 }

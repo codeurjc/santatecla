@@ -1,11 +1,16 @@
 package com;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.annotation.PostConstruct;
 
 import com.card.*;
 import com.definition.definition_question.DefinitionQuestion;
 import com.definition.definition_question.DefinitionQuestionRepository;
 import com.itinerary.*;
+import com.list_question.ListQuestion;
+import com.list_question.ListQuestionRepository;
 import com.relation.*;
 import com.unit.*;
 import com.user.User;
@@ -38,6 +43,9 @@ public class DatabaseInitializer {
 
         @Autowired
         private DefinitionQuestionRepository definitionRepository;
+
+        @Autowired
+        private ListQuestionRepository listQuestionRepository;
 
 	@PostConstruct
 	public void init() {
@@ -109,6 +117,19 @@ public class DatabaseInitializer {
                 definitionRepository.save(definition1);
                 definitionRepository.save(definition2);
                 definitionRepository.save(definition3);
+
+                // List Questions
+                ArrayList<String> possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Java");
+                possibleAnswers.add("Javascropt");
+                possibleAnswers.add("Python");
+                ArrayList<String> correctAnswer = new ArrayList<>();
+                correctAnswer.add("Python");
+                correctAnswer.add("Java");
+                ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
+                 possibleAnswers, correctAnswer);
+
+                listQuestionRepository.save(list1);
 
                 //Users
                 userRepository.save(new User("alumno", "alumno"));
