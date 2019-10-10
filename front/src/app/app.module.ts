@@ -31,6 +31,7 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
 import { DefinitionQuestionComponent } from './questions/definitionQuestion.component';
+import { ListQuestionComponent } from './questions/listQuestion.component';
 import { DefinitionQuestionService } from './questions/definitionQuestion.service';
 import { ListQuestionService } from './questions/listQuestion.service';
 
@@ -40,7 +41,8 @@ import { ListQuestionService } from './questions/listQuestion.service';
     ViewComponent,
     CardComponent,
     ItineraryComponent,
-    DefinitionQuestionComponent
+    DefinitionQuestionComponent,
+    ListQuestionComponent
   ],
   imports: [
     BrowserAnimationsModule,

@@ -11,6 +11,10 @@ export class DefinitionQuestionService {
     return this.http.get('/api/definition/question/');
   }
 
+  getDefinitionQuestion(id:number){
+    return this.http.get('api/definition/question/'+id);
+  }
+
   addDefinitionAnswer(id: number, answer: DefinitionAnswer):Observable<DefinitionAnswer>{
     const body = JSON.stringify(answer);
 

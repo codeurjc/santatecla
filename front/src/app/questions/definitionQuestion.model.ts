@@ -1,6 +1,6 @@
 export interface DefinitionQuestion{
   id?: number;
-  questionText: string;
+  questionText:string;
   type: number;
   correctAnswer ?: string;
 }

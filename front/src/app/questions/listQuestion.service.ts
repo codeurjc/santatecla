@@ -8,4 +8,8 @@ export class ListQuestionService {
   getListQuestions() {
     return this.http.get('/api/definitionList/');
   }
+
+  getListQuestion(id:number){
+    return this.http.get('api/definitionList/'+id);
+  }
 }
