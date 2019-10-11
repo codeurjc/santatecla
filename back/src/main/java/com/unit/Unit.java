@@ -14,10 +14,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.card.Card;
-import com.definition.definition_question.DefinitionQuestion;
+import com.question.definition.definition_question.DefinitionQuestion;
 import com.item.Item;
 import com.itinerary.Itinerary;
-import com.list_question.ListQuestion;
+import com.question.list.list_question.ListQuestion;
 import com.relation.Relation;
 
 @Entity

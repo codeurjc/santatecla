@@ -12,9 +12,9 @@ public abstract class Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private String type;
+    private String subtype;
 
-    public Question() { this.type = this.getClass().getSimpleName(); }
+    public Question() { this.subtype = this.getClass().getSimpleName(); }
 
     public long getId() {
         return id;
@@ -24,11 +24,11 @@ public abstract class Question {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getSubtype() {
+        return subtype;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSubtype(String type) {
+        this.subtype = type;
     }
 }

@@ -6,11 +6,11 @@ import java.util.Arrays;
 import javax.annotation.PostConstruct;
 
 import com.card.*;
-import com.definition.definition_question.DefinitionQuestion;
-import com.definition.definition_question.DefinitionQuestionRepository;
+import com.question.definition.definition_question.DefinitionQuestion;
+import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.itinerary.*;
-import com.list_question.ListQuestion;
-import com.list_question.ListQuestionRepository;
+import com.question.list.list_question.ListQuestion;
+import com.question.list.list_question.ListQuestionRepository;
 import com.relation.*;
 import com.unit.*;
 import com.user.User;
