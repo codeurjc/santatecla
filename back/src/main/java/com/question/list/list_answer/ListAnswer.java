@@ -1,4 +1,4 @@
-package com.list_answer;
+package com.question.list.list_answer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

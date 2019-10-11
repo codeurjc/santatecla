@@ -1,14 +1,14 @@
-package com.definition;
+package com.question.definition;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
-import com.definition.definition_answer.DefinitionAnswer;
-import com.definition.definition_answer.DefinitionAnswerService;
-import com.definition.definition_justification.DefinitionJustificationService;
-import com.definition.definition_question.DefinitionQuestion;
-import com.definition.definition_question.DefinitionQuestionService;
+import com.question.definition.definition_answer.DefinitionAnswer;
+import com.question.definition.definition_answer.DefinitionAnswerService;
+import com.question.definition.definition_justification.DefinitionJustificationService;
+import com.question.definition.definition_question.DefinitionQuestion;
+import com.question.definition.definition_question.DefinitionQuestionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

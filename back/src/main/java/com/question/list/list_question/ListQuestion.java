@@ -1,4 +1,4 @@
-package com.list_question;
+package com.question.list.list_question;
 
 import java.util.List;
 
@@ -8,8 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.question.Question;
+
 @Entity
-public class ListQuestion{
+public class ListQuestion extends Question{
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

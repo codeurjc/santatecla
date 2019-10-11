@@ -1,4 +1,4 @@
-package com.definition.definition_answer;
+package com.question.definition.definition_answer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.definition.definition_justification.DefinitionJustification;
+import com.question.definition.definition_justification.DefinitionJustification;
 import com.user.User;
 
 @Entity

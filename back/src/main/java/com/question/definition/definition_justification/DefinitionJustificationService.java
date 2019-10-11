@@ -1,4 +1,4 @@
-package com.definition.definition_justification;
+package com.question.definition.definition_justification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

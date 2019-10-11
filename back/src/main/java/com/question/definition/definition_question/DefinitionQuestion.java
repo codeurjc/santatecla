@@ -1,4 +1,4 @@
-package com.definition.definition_question;
+package com.question.definition.definition_question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.definition.definition_answer.DefinitionAnswer;
+import com.question.Question;
+import com.question.definition.definition_answer.DefinitionAnswer;
 
 @Entity
-public class DefinitionQuestion{
+public class DefinitionQuestion extends Question{
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
