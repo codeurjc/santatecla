@@ -60,16 +60,28 @@ export class ViewComponent implements OnInit {
   }
 
   validSearchField() {
-    return this.searchField.split(' ').length !== (this.searchField.length + 1);
+    const invalidChars = ['?', '/', '\\', '[', ']', ';', '#'];
+    for (const ch of invalidChars) {
+      if (this.searchField.includes(ch)) {
+        return false;
+      }
+    }
+    const invalidCharsToSearchAlone = [' ', '.', '%'];
+    for (const ch of invalidCharsToSearchAlone) {
+      if (this.searchField.split(ch).length === (this.searchField.length + 1)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   setShowResults(showResults: boolean) {
-    this.showResults = showResults;
     if (showResults) {
       this.search();
     } else {
       this.results = [];
     }
+    this.showResults = showResults;
   }
 
   keyDown(event: KeyboardEvent) {
@@ -97,10 +109,12 @@ export class ViewComponent implements OnInit {
 
   save(event: KeyboardEvent) {
     event.preventDefault();
-    this.viewService.save(this.data).subscribe((data: any) => {
-    }, error => {
-      console.log(error);
-    });
+    if (this.editor.isValidJson()) {
+      this.viewService.save(this.data).subscribe((data: any) => {
+      }, error => {
+        console.log(error);
+      });
+    }
   }
 
 }
