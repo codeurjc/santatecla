@@ -34,6 +34,8 @@ import { DefinitionQuestionComponent } from './questions/definitionQuestion.comp
 import { ListQuestionComponent } from './questions/listQuestion.component';
 import { DefinitionQuestionService } from './questions/definitionQuestion.service';
 import { ListQuestionService } from './questions/listQuestion.service';
+import { ProgressComponent } from './progress/progress.component';
+import { ProgressService } from './progress/progress.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { ListQuestionService } from './questions/listQuestion.service';
     CardComponent,
     ItineraryComponent,
     DefinitionQuestionComponent,
-    ListQuestionComponent
+    ListQuestionComponent,
+    ProgressComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -92,7 +95,7 @@ import { ListQuestionService } from './questions/listQuestion.service';
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
+  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, ProgressService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

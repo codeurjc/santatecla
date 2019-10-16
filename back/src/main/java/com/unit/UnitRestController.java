@@ -1,5 +1,6 @@
 package com.unit;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
@@ -36,6 +37,11 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<Unit> getUnit(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
         return (unit.isPresent())?(new ResponseEntity<>(unit.get(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value="/")
+    public ResponseEntity<List<Unit>> getUnits() {
+        return new ResponseEntity<List<Unit>>(this.unitService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(value="/{unitId}/cards")

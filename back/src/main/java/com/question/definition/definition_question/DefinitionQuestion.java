@@ -30,14 +30,21 @@ public class DefinitionQuestion extends Question{
     @OneToMany(cascade = CascadeType.ALL)
     private List<DefinitionAnswer> answers;
 
+    private int correctAnswers;
+    private int wrongAnswers;
+
     public DefinitionQuestion(){
         this.answers = new ArrayList<>();
+        this.correctAnswers = 0;
+        this.wrongAnswers = 0;
     }
 
     public DefinitionQuestion(String questionText, int type){
         this.questionText = questionText;
         this.type = type;
         this.answers = new ArrayList<>();
+        this.correctAnswers = 0;
+        this.wrongAnswers = 0;
     }
 
     public DefinitionQuestion(String questionText, int type, String correctAnswer){
@@ -95,6 +102,21 @@ public class DefinitionQuestion extends Question{
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
+
+    public int getCorrectAnswers(){
+        return this.correctAnswers;
+    }
     
+    public void setCorrectAnswers(int a){
+        this.correctAnswers = a;
+    }
+
+    public int getWrongAnswers(){
+        return this.wrongAnswers;
+    }
+
+    public void setWrongAnswers(int a){
+        this.wrongAnswers = a;
+    }
     
 }

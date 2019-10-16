@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,10 +38,10 @@ public class Unit {
     @OneToMany
     private List<Relation> relations;
 
-    @OneToMany
+    @ManyToMany
     private List<DefinitionQuestion> definitionQuestions;
 
-    @OneToMany
+    @ManyToMany
     private List<ListQuestion> listQuestions;
 
     @OneToMany

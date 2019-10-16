@@ -1,10 +1,10 @@
 package com.unit;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 @Service
 public class UnitService {
 
@@ -13,6 +13,10 @@ public class UnitService {
 
 	public Optional<Unit> findOne(long id) {
 		return unitRepository.findById(id);
+	}
+
+	public List<Unit> findAll(){
+		return this.unitRepository.findAll();
 	}
 
     public void save(Unit theme) {

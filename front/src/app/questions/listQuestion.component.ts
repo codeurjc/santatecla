@@ -62,7 +62,9 @@ export class ListQuestionComponent implements OnInit {
       else{
         this.questionListCorrect = false;
       }
-      this.questionDone = true;
+      this.questionService.addListCorrection(this.id, this.questionListCorrect).subscribe(
+        (_) => {this.questionDone = true},
+        (error) => console.log(error));
     }
 
 }

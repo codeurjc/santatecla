@@ -55,10 +55,15 @@ export class DefinitionQuestionComponent implements OnInit {
   correctType1Answer(){
     if(this.choosenAnswer == this.question.correctAnswer){
       this.correct = true;
+      this.questionService.addDefinitionCorrection(this.id, this.correct).subscribe(
+        (_) => {this.questionDone = true},
+        (error) => console.log(error));
     }
     else{
       this.correct = false;
+      this.questionService.addDefinitionCorrection(this.id, this.correct).subscribe(
+        (_) => {this.questionDone = true},
+        (error) => console.log(error));
     }
-    this.questionDone = true;
   }
 }

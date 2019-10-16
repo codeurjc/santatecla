@@ -65,11 +65,42 @@ public class DatabaseInitializer {
                 cardRepository.save(card2);
                 cardRepository.save(card3);
                 cardRepository.save(card4);
+
+                // Definition Questions
+                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?", 0);
+                DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?", 0);
+                DefinitionQuestion definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", 1, "Sí");
+
+                definitionRepository.save(definition1);
+                definitionRepository.save(definition2);
+                definitionRepository.save(definition3);
+
+                // List Questions
+                ArrayList<String> possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Java");
+                possibleAnswers.add("Javascropt");
+                possibleAnswers.add("Python");
+                ArrayList<String> correctAnswer = new ArrayList<>();
+                correctAnswer.add("Python");
+                correctAnswer.add("Java");
+                ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
+                 possibleAnswers, correctAnswer);
+
+                listQuestionRepository.save(list1);
   
                 //Units
                 Unit unit1 = new Unit("Programming language");
                 Unit unit2 = new Unit("Java");
                 Unit unit3 = new Unit("Python");
+
+                ArrayList<DefinitionQuestion> unit1Questions = new ArrayList<>();
+                unit1Questions.add(definition1);
+                unit1Questions.add(definition3);
+                ArrayList<ListQuestion> unit1ListQuestions = new ArrayList<>();
+                unit1ListQuestions.add(list1);
+
+                unit1.setDefinitionQuestions(unit1Questions);
+                unit1.setListQuestions(unit1ListQuestions);
  
                 unit1.addCard(card1);
                 unit1.addCard(card4);
@@ -108,28 +139,6 @@ public class DatabaseInitializer {
                 itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
-                
-                // Definition Questions
-                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?", 0);
-                DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?", 0);
-                DefinitionQuestion definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", 1, "Sí");
-
-                definitionRepository.save(definition1);
-                definitionRepository.save(definition2);
-                definitionRepository.save(definition3);
-
-                // List Questions
-                ArrayList<String> possibleAnswers = new ArrayList<>();
-                possibleAnswers.add("Java");
-                possibleAnswers.add("Javascropt");
-                possibleAnswers.add("Python");
-                ArrayList<String> correctAnswer = new ArrayList<>();
-                correctAnswer.add("Python");
-                correctAnswer.add("Java");
-                ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
-                 possibleAnswers, correctAnswer);
-
-                listQuestionRepository.save(list1);
 
                 //Users
                 userRepository.save(new User("alumno", "alumno"));

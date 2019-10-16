@@ -18,4 +18,8 @@ public class ListQuestionService{
     public Optional<ListQuestion> findOne(long id){
       return this.repository.findById(id);
     }
+
+    public ListQuestion save(ListQuestion q) {
+      return this.repository.save(q);
+  }
 }

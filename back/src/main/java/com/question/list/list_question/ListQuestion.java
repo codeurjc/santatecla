@@ -25,9 +25,17 @@ public class ListQuestion extends Question{
     @ElementCollection
     private List<String> correctAnswer;
 
-    public ListQuestion(){}
+    private int correctAnswers;
+    private int wrongAnswers;
+
+    public ListQuestion(){
+        this.correctAnswers = 0;
+        this.wrongAnswers = 0;
+    }
 
     public ListQuestion(String questionText, List<String> possibleAnswers,List<String> correctAnswer){
+        this.correctAnswers = 0;
+        this.wrongAnswers = 0;
         this.questionText = questionText;
         this.possibleAnswers = possibleAnswers;
         this.correctAnswer = correctAnswer;
@@ -66,5 +74,20 @@ public class ListQuestion extends Question{
         this.possibleAnswers = possibleAnswers;
     }
     
+    public int getCorrectAnswers(){
+        return this.correctAnswers;
+    }
+    
+    public void setCorrectAnswers(int a){
+        this.correctAnswers = a;
+    }
+
+    public int getWrongAnswers(){
+        return this.wrongAnswers;
+    }
+
+    public void setWrongAnswers(int a){
+        this.wrongAnswers = a;
+    }
     
 }
