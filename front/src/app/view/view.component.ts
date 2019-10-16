@@ -1,29 +1,34 @@
+import { UmlParser } from './uml.parser';
 import { Unit } from './../unit/unit.model';
 import { ViewService } from './view.service';
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterContentInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+
+declare var mermaid: any;
 
 @Component({
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
 
-export class ViewComponent implements OnInit {
+export class ViewComponent implements OnInit, AfterContentInit {
 
   private UNIT_NAME_SEPARATOR = '.';
   private ENTER_KEY = 'Enter';
   private ARROW_UP_KEY = 'ArrowUp';
   private ARROW_DOWN_KEY = 'ArrowDown';
 
-  public editorOptions: JsonEditorOptions;
-  public data: any;
-
-  @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
-
   public searchField = '';
   public showResults = false;
   public results: Unit[] = [];
   public arrowkeyLocation = 0;
+
+  @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
+  public editorOptions: JsonEditorOptions;
+  public data: any;
+
+  @ViewChild('uml') umlDiv;
+  private umlParser: UmlParser;
 
   constructor(private viewService: ViewService) {}
 
@@ -31,16 +36,40 @@ export class ViewComponent implements OnInit {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
+    this.umlParser = new UmlParser();
     this.viewService.getUnits().subscribe((data: any) => {
       this.data = data;
+      this.updateUml();
     }, error => {
       console.log(error);
     });
   }
 
+  ngAfterContentInit() {
+    mermaid.initialize({
+      theme: 'forest',
+      logLevel: 3,
+      flowchart: { curve: 'basis' },
+      gantt: { axisFormat: '%m/%d/%Y' },
+      sequence: { actorMargin: 50 },
+    });
+  }
+
+  private updateUml() {
+    if (this.editor.isValidJson()) {
+      const element: any = this.umlDiv.nativeElement;
+      element.innerHTML = '';
+      mermaid.render('uml', this.umlParser.jsonToUml(this.data), (svgCode, bindFunctions) => {
+        element.innerHTML = svgCode;
+      });
+    }
+  }
+
   getUnit(id: number) {
     this.viewService.getUnit(id).subscribe((data: any) => {
       this.data = [data];
+      this.updateUml();
+      this.emptyResults();
     }, error => {
       console.log(error);
     });
@@ -55,7 +84,7 @@ export class ViewComponent implements OnInit {
         console.log(error);
       });
     } else {
-      this.results = [];
+      this.emptyResults();
     }
   }
 
@@ -79,9 +108,13 @@ export class ViewComponent implements OnInit {
     if (showResults) {
       this.search();
     } else {
-      this.results = [];
+      this.emptyResults();
     }
     this.showResults = showResults;
+  }
+
+  private emptyResults() {
+    this.results = [];
   }
 
   keyDown(event: KeyboardEvent) {

@@ -64,7 +64,7 @@ public class DatabaseInitializer {
                 Unit unit3 = new Unit("Python");
                 Unit unit4 = new Unit("Expresión");
                 Unit unit5 = new Unit("Expresión");
-                Unit unit6 = new Unit("C++");
+                Unit unit6 = new Unit("C");
                 Unit unit7 = new Unit("Expresión");
                 Unit unit8 = new Unit("Suma");
                 Unit unit9 = new Unit("Suma");
