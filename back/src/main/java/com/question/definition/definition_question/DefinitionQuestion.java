@@ -20,9 +20,9 @@ public class DefinitionQuestion extends Question{
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private String questionText;
+    public enum Type {Test, Open}
 
-    private int type;
+    private Type type;
 
     //ONLY FOR TRUE/FALSE YES/NO QUESTIONS
     private String correctAnswer;
@@ -34,13 +34,13 @@ public class DefinitionQuestion extends Question{
         this.answers = new ArrayList<>();
     }
 
-    public DefinitionQuestion(String questionText, int type){
+    public DefinitionQuestion(String questionText, Type type){
         this.questionText = questionText;
         this.type = type;
         this.answers = new ArrayList<>();
     }
 
-    public DefinitionQuestion(String questionText, int type, String correctAnswer){
+    public DefinitionQuestion(String questionText, Type type, String correctAnswer){
         this.questionText = questionText;
         this.type = type;
         this.correctAnswer = correctAnswer;
@@ -55,28 +55,12 @@ public class DefinitionQuestion extends Question{
         this.id = id;
     }
 
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
-    }
-
-    public int getType() {
+    public Type getType() {
         return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public List<DefinitionAnswer> getAnswers() {
         return answers;
-    }
-
-    public void setAnswers(List<DefinitionAnswer> answers) {
-        this.answers = answers;
     }
 
     public void update(DefinitionQuestion q) {
@@ -87,14 +71,5 @@ public class DefinitionQuestion extends Question{
             this.type = q.getType();
         }
     }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-    
     
 }

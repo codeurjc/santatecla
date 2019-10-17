@@ -17,20 +17,18 @@ public class ListQuestion extends Question{
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private String questionText;
-
     @ElementCollection
     private List<String> possibleAnswers;
 
     @ElementCollection
-    private List<String> correctAnswer;
+    private List<String> correctAnswers;
 
     public ListQuestion(){}
 
     public ListQuestion(String questionText, List<String> possibleAnswers,List<String> correctAnswer){
         this.questionText = questionText;
         this.possibleAnswers = possibleAnswers;
-        this.correctAnswer = correctAnswer;
+        this.correctAnswers = correctAnswer;
     }
 
     public long getId() {
@@ -45,26 +43,12 @@ public class ListQuestion extends Question{
         return questionText;
     }
 
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
-    }
-
-
     public List<String> getCorrectAnswer() {
-        return this.correctAnswer;
-    }
-
-    public void setCorectAnswers(List<String> answers) {
-        this.correctAnswer = answers;
+        return this.correctAnswers;
     }
 
     public List<String> getPossibleAnswers() {
         return this.possibleAnswers;
     }
 
-    public void setPossibleAnswers(List<String> possibleAnswers) {
-        this.possibleAnswers = possibleAnswers;
-    }
-    
-    
 }

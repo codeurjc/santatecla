@@ -6,13 +6,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public abstract class Question {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private String subtype;
+    protected String subtype;
+
+    protected String questionText;
 
     public Question() { this.subtype = this.getClass().getSimpleName(); }
 
@@ -24,11 +26,8 @@ public abstract class Question {
         this.id = id;
     }
 
-    public String getSubtype() {
-        return subtype;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setSubtype(String type) {
-        this.subtype = type;
-    }
 }
