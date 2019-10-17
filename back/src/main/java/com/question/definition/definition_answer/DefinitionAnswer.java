@@ -25,7 +25,7 @@ public class DefinitionAnswer{
 
     private boolean correct;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<DefinitionJustification> justifications;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -53,24 +53,16 @@ public class DefinitionAnswer{
         return answerText;
     }
 
-    public void setAnswerText(String answerText) {
-        this.answerText = answerText;
-    }
-
     public boolean isCorrect() {
         return correct;
-    }
-
-    public void setCorrect(boolean correct) {
-        this.correct = correct;
     }
 
     public List<DefinitionJustification> getJustifications() {
         return justifications;
     }
 
-    public void setJustifications(List<DefinitionJustification> justifications) {
-        this.justifications = justifications;
+    public void addJustification(DefinitionJustification justification) {
+        this.justifications.add(justification);
     }
 
     public User getUser() {

@@ -34,17 +34,8 @@ public class DefinitionJustification{
         return justificationText;
     }
 
-    public void setJustificationText(String justificationText) {
-        this.justificationText = justificationText;
-    }
-
     public boolean isValid() {
         return valid;
     }
 
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-    
-    
 }

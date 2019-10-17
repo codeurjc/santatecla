@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
+import org.aspectj.weaver.loadtime.definition.Definition;
 
 @Entity
 public class DefinitionQuestion extends Question{
@@ -47,6 +48,15 @@ public class DefinitionQuestion extends Question{
         this.answers = new ArrayList<>();
     }
 
+    public void update(DefinitionQuestion q) {
+        if(q.getQuestionText() != null){
+            this.questionText = q.getQuestionText();
+        }
+        if(q.getType() != this.type){
+            this.type = q.getType();
+        }
+    }
+
     public long getId() {
         return id;
     }
@@ -63,13 +73,8 @@ public class DefinitionQuestion extends Question{
         return answers;
     }
 
-    public void update(DefinitionQuestion q) {
-        if(q.getQuestionText() !=null){
-            this.questionText = q.getQuestionText();
-        }
-        if(q.getType() != this.type){
-            this.type = q.getType();
-        }
+    public void addAnswer(DefinitionAnswer answer) {
+        this.answers.add(answer);
     }
     
 }
