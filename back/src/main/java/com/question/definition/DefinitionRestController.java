@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 import com.question.definition.definition_answer.DefinitionAnswer;
-import com.question.definition.definition_justification.DefinitionJustification;
 import com.question.definition.definition_question.DefinitionQuestion;
 
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -104,7 +102,7 @@ public class DefinitionRestController extends GeneralRestController {
     }
 
     @PostMapping("/question/{id1}/answer/{id2}")
-    public ResponseEntity<DefinitionJustification> addJustification(@PathVariable long id1, @PathVariable long id2, @RequestBody DefinitionJustification justification) {
+    public ResponseEntity<DefinitionAnswer> addJustification(@PathVariable long id1, @PathVariable long id2, @RequestBody String justification) {
 
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id1);
 
@@ -112,25 +110,9 @@ public class DefinitionRestController extends GeneralRestController {
             Optional<DefinitionAnswer> answer = this.definitionQuestionService.findOneAnswer(question.get(), id2);
 
             if (answer.isPresent()) {
-                answer.get().addJustification(justification);
+                answer.get().setJustification(justification);
                 this.definitionQuestionService.save(question.get());
-                return new ResponseEntity<>(justification, HttpStatus.CREATED);
-            }
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/question/{id1}/answer/{id2}/justification")
-    public ResponseEntity<List<DefinitionJustification>> getJustification(@PathVariable long id1, @PathVariable long id2) {
-
-        Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id1);
-
-        if (question.isPresent()) {
-            Optional<DefinitionAnswer> answer = this.definitionQuestionService.findOneAnswer(question.get(), id2);
-
-            if (answer.isPresent()) {
-                return new ResponseEntity<>(answer.get().getJustifications(), HttpStatus.OK);
+                return new ResponseEntity<>(answer.get(), HttpStatus.CREATED);
             }
         }
 
