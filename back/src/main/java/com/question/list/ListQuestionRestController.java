@@ -51,5 +51,19 @@ public class ListQuestionRestController extends GeneralRestController{
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ListQuestion> updateQuestion(@PathVariable long id, @RequestBody ListQuestion newQuestion) {
+
+        Optional<ListQuestion> oldQuestion = this.listQuestionService.findOne(id);
+
+        if (oldQuestion.isPresent()) {
+            oldQuestion.get().update(newQuestion);
+            this.listQuestionService.save(oldQuestion.get());
+            return new ResponseEntity<>(oldQuestion.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 
 }

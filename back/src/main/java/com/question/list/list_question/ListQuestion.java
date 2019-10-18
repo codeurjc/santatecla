@@ -31,6 +31,18 @@ public class ListQuestion extends Question{
         this.correctAnswers = correctAnswer;
     }
 
+    public void update(ListQuestion q) {
+        if(q.getQuestionText() != null){
+            this.questionText = q.getQuestionText();
+        }
+        if(!q.getCorrectAnswers().equals(this.correctAnswers)) {
+            this.correctAnswers = q.getCorrectAnswers();
+        }
+        if(!q.getPossibleAnswers().equals(this.possibleAnswers)) {
+            this.possibleAnswers = q.getPossibleAnswers();
+        }
+    }
+
     public long getId() {
         return id;
     }
@@ -43,7 +55,7 @@ public class ListQuestion extends Question{
         return questionText;
     }
 
-    public List<String> getCorrectAnswer() {
+    public List<String> getCorrectAnswers() {
         return this.correctAnswers;
     }
 
