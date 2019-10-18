@@ -9,29 +9,46 @@ import com.question.list.list_question.ListQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/definitionList")
 public class ListQuestionRestController extends GeneralRestController{
     
     @Autowired
-    private ListQuestionService service;
+    private ListQuestionService listQuestionService;
 
     @GetMapping("/")
     public ResponseEntity<List<ListQuestion>> getQuestions(){
-        return new ResponseEntity<List<ListQuestion>>(this.service.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(this.listQuestionService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ListQuestion> getQuestion(@PathVariable long id){
-        Optional<ListQuestion> optional = this.service.findOne(id);
+        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){
-            return new ResponseEntity<ListQuestion>(optional.get(), HttpStatus.OK);
+            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<ListQuestion> addQuestion(@RequestBody ListQuestion question) {
+        this.listQuestionService.save(question);
+
+        return new ResponseEntity<>(question, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<ListQuestion> deleteQuestion(@PathVariable long id) {
+
+        Optional<ListQuestion> question = this.listQuestionService.findOne(id);
+
+        if (question.isPresent()) {
+            this.listQuestionService.delete(id);
+            return new ResponseEntity<>(question.get(), HttpStatus.OK);
+        }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
