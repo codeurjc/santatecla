@@ -30,4 +30,8 @@ public class Question {
         return questionText;
     }
 
+    public String getSubtype() {
+        return subtype;
+    }
+
 }

@@ -36,12 +36,14 @@ public class DefinitionQuestion extends Question{
     }
 
     public DefinitionQuestion(String questionText, Type type){
+        this.subtype = this.getClass().getSimpleName();
         this.questionText = questionText;
         this.type = type;
         this.answers = new ArrayList<>();
     }
 
     public DefinitionQuestion(String questionText, Type type, String correctAnswer){
+        this.subtype = this.getClass().getSimpleName();
         this.questionText = questionText;
         this.type = type;
         this.correctAnswer = correctAnswer;

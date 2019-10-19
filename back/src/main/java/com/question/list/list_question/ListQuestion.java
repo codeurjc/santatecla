@@ -26,6 +26,7 @@ public class ListQuestion extends Question{
     public ListQuestion(){}
 
     public ListQuestion(String questionText, List<String> possibleAnswers,List<String> correctAnswer){
+        this.subtype = this.getClass().getSimpleName();
         this.questionText = questionText;
         this.possibleAnswers = possibleAnswers;
         this.correctAnswers = correctAnswer;
