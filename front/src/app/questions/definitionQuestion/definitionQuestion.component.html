@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html>
-  <body>
-    <div align=center>
-      <span *ngIf="type == 0">
+<body>
+<div align=center>
+      <span *ngIf= "subtype == 'DefinitionQuestion'">
         <p>{{question?.questionText}}</p>
         <span *ngIf="!questionDone">
           <form #textForm="ngForm">
@@ -15,15 +15,15 @@
         </span>
       </span>
 
-      <span *ngIf="type==1">
+  <span *ngIf="subtype == 'ListQuestion'">
         <p>{{question?.questionText}}</p>
         <span *ngIf="!questionDone">
           <form name="choosenAnswer">
             <label>
-              <input type="radio" name="answer" value="Sí" placeholder="SI" [(ngModel)]="this.choosenAnswer"> SI
+              <input type="radio" name="answer" value="Sí" placeholder="SI" [(ngModel)]="this.chosenAnswer"> SI
             </label>
             <label>
-              <input type="radio" name="answer" value="No" placeholder="NO" [(ngModel)]="this.choosenAnswer">NO
+              <input type="radio" name="answer" value="No" placeholder="NO" [(ngModel)]="this.chosenAnswer">NO
             </label>
           </form>
           <button class="button" color="primary" (click)="correctType1Answer()">Guardar</button>
@@ -37,6 +37,6 @@
           </span>
         </span>
       </span>
-    </div>
-  </body>
+</div>
+</body>
 </html>

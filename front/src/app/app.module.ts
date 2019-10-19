@@ -30,10 +30,12 @@ import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
-import { DefinitionQuestionComponent } from './questions/definitionQuestion.component';
-import { ListQuestionComponent } from './questions/listQuestion.component';
-import { DefinitionQuestionService } from './questions/definitionQuestion.service';
-import { ListQuestionService } from './questions/listQuestion.service';
+import { DefinitionQuestionComponent } from './questions/definitionQuestion/definitionQuestion.component';
+import { ListQuestionComponent } from './questions/listQuestion/listQuestion.component';
+import { DefinitionQuestionService } from './questions/definitionQuestion/definitionQuestion.service';
+import { ListQuestionService } from './questions/listQuestion/listQuestion.service';
+import {QuestionComponent} from './questions/question.component';
+import {QuestionService} from './questions/question.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { ListQuestionService } from './questions/listQuestion.service';
     CardComponent,
     ItineraryComponent,
     DefinitionQuestionComponent,
-    ListQuestionComponent
+    ListQuestionComponent,
+    QuestionComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -92,7 +95,7 @@ import { ListQuestionService } from './questions/listQuestion.service';
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
+  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
