@@ -65,5 +65,47 @@ public class ListQuestionRestController extends GeneralRestController{
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping("/{id}/correct/")
+    public ResponseEntity<ListQuestion> addCorrectAnswer(@PathVariable long id){
+        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
+        if(optional.isPresent()){
+            optional.get().setCorrectAnswers(optional.get().getCorrectAnswersCount()+1);
+            this.listQuestionService.save(optional.get());
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/{id}/wrong/")
+    public ResponseEntity<ListQuestion> addWrongAnswer(@PathVariable long id){
+        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
+        if(optional.isPresent()){
+            optional.get().setWrongAnswers(optional.get().getWrongAnswers()+1);
+            this.listQuestionService.save(optional.get());
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{id}/correct/")
+    public ResponseEntity<Integer> getCorrectAnswers(@PathVariable long id){
+        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
+        if(optional.isPresent()){
+            return new ResponseEntity<>(optional.get().getCorrectAnswersCount(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{id}/wrong/")
+    public ResponseEntity<Integer> getWrongAnswers(@PathVariable long id){
+        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
+        if(optional.isPresent()){
+            return new ResponseEntity<>(optional.get().getWrongAnswers(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 
 }
