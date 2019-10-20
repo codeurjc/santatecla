@@ -1,11 +1,14 @@
 package com.unit;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
 import com.card.Card;
 import com.card.CardService;
+import com.relation.Relation;
+import com.relation.RelationService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,6 +36,29 @@ public class UnitRestController extends GeneralRestController {
 	@Autowired
     protected CardService cardService;
     
+	@Autowired
+    protected RelationService relationService;
+    
+    @PutMapping(value="/")
+    public ResponseEntity<List<Unit>> updateUnit(@RequestBody List<Unit> units) {
+        List<Unit> savedUnits = new ArrayList<>();
+        for (Unit unit : units) {
+            Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
+            if (savedUnit.isPresent()) {
+                savedUnit.get().update(unit);
+                for (Relation relation : unit.getRelations()) {
+                    Optional<Relation> savedRelation = this.relationService.findOne(relation.getId());
+                    savedRelation.get().update(relation);
+                }
+                this.unitService.save(savedUnit.get());
+                savedUnits.add(savedUnit.get());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>(savedUnits, HttpStatus.OK);
+    }
+
     @GetMapping(value="/{id}")
     public ResponseEntity<Unit> getUnit(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
@@ -42,6 +68,12 @@ public class UnitRestController extends GeneralRestController {
     @GetMapping(value="/")
     public ResponseEntity<List<Unit>> getUnits() {
         return new ResponseEntity<List<Unit>>(this.unitService.findAll(), HttpStatus.OK);
+    }
+    
+    @GetMapping(value="/search/{name}")
+    public ResponseEntity<List<Unit>> searchUnits(@PathVariable String name) {
+        List<Unit> units = this.unitService.findByNameContaining(name);
+        return new ResponseEntity<>(units, HttpStatus.OK);
     }
 
     @GetMapping(value="/{unitId}/cards")
@@ -89,5 +121,5 @@ public class UnitRestController extends GeneralRestController {
         Card card = unit.get().getCard(cardId);
         return new ResponseEntity<Card>(card, HttpStatus.OK);
     }
-    
+
 }

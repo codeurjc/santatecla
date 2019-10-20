@@ -27,6 +27,4 @@ export class ItineraryService {
     return this.http.delete('/api/itineraries/' + itinerary.id + '/itinerary/' + id);
   }
 
-
 }
-

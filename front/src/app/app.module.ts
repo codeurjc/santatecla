@@ -30,6 +30,7 @@ import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
+import { ViewService } from './view/view.service';
 import { DefinitionQuestionComponent } from './questions/definitionQuestion.component';
 import { ListQuestionComponent } from './questions/listQuestion.component';
 import { DefinitionQuestionService } from './questions/definitionQuestion.service';
@@ -95,7 +96,7 @@ import { ProgressService } from './progress/progress.service';
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, ProgressService,
+  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, ProgressService, ViewService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

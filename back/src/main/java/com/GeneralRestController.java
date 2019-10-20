@@ -24,9 +24,6 @@ public class GeneralRestController {
 	protected SlideService slideService;
 
 	@Autowired
-	protected TheorySlideService theorySlideService;
-
-	@Autowired
 	protected ItineraryService itineraryService;
 
 	@Autowired

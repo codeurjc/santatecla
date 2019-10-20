@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +14,7 @@ import javax.persistence.OneToMany;
 
 import com.card.Card;
 import com.question.definition.definition_question.DefinitionQuestion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.item.Item;
 import com.itinerary.Itinerary;
 import com.question.list.list_question.ListQuestion;
@@ -30,9 +30,11 @@ public class Unit {
     private String name;
     
     @OneToMany
+    @JsonIgnore
     private Map<Long, Card> cards;
 
     @ManyToMany
+    @JsonIgnore
     private List<Itinerary> itineraries;
 
     @OneToMany
@@ -45,6 +47,7 @@ public class Unit {
     private List<ListQuestion> listQuestions;
 
     @OneToMany
+    @JsonIgnore
     private List<Item> items;
 
     public Unit() {
@@ -93,23 +96,27 @@ public class Unit {
         return this.itineraries;
     }
 
-    public void setItineraries(List<Itinerary> itineraries) {
-        this.itineraries = itineraries;
+    public void addItinerary(Itinerary itinerary) {
+        this.itineraries.add(itinerary);
     }
 
     public List<Relation> getRelations() {
         return this.relations;
     }
 
-    public void setRelations(List<Relation> relations) {
-        this.relations = relations;
+    public void addRelation(Relation relation) {
+        this.relations.add(relation);
     }
 
     public List<DefinitionQuestion> getDefinitionQuestions() {
         return this.definitionQuestions;
     }
 
-    public void setDefinitionQuestions(List<DefinitionQuestion> definitionQuestions) {
+    public void addDefinitionQuestion(DefinitionQuestion definitionQuestion) {
+        this.definitionQuestions.add(definitionQuestion);
+    }
+
+    public void setDefinitionQuestions(List<DefinitionQuestion> definitionQuestions){
         this.definitionQuestions = definitionQuestions;
     }
 
@@ -127,6 +134,10 @@ public class Unit {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public void update(Unit unit) {
+        this.name = unit.getName();
     }
 
 }
