@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+    <div align=center>
+      <span *ngIf="type == 0">
+        <p>{{question?.questionText}}</p>
+        <span *ngIf="!questionDone">
+          <form #textForm="ngForm">
+            <input placeholder="Texto" [(ngModel)]="questionAnswer.answerText" name="answer" required>
+          </form>
+          <button class="button" color="primary" (click)="sendAnswer()">Guardar</button>
+        </span>
+        <span *ngIf="questionDone">
+          <p style="color: greenyellow">REALIZADO</p>
+        </span>
+      </span>
+
+      <span *ngIf="type==1">
+        <p>{{question?.questionText}}</p>
+        <span *ngIf="!questionDone">
+          <form name="choosenAnswer">
+            <label>
+              <input type="radio" name="answer" value="Sí" placeholder="SI" [(ngModel)]="this.choosenAnswer"> SI
+            </label>
+            <label>
+              <input type="radio" name="answer" value="No" placeholder="NO" [(ngModel)]="this.choosenAnswer">NO
+            </label>
+          </form>
+          <button class="button" color="primary" (click)="correctType1Answer()">Guardar</button>
+        </span>
+        <span *ngIf="questionDone">
+          <span *ngIf="correct">
+            <p style="color: green">CORRECTO</p>
+          </span>
+          <span *ngIf="!correct">
+              <p style="color: red">INCORRECTO</p>
+          </span>
+        </span>
+      </span>
+    </div>
+  </body>
+</html>

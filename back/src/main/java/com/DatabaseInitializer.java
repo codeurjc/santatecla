@@ -1,16 +1,26 @@
 package com;
 
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 
-import com.card.*;
+import com.card.Card;
+import com.card.CardRepository;
 import com.definition.definition_question.DefinitionQuestion;
 import com.definition.definition_question.DefinitionQuestionRepository;
-import com.itinerary.*;
-import com.relation.*;
-import com.unit.*;
+import com.itinerary.Itinerary;
+import com.itinerary.ItineraryRepository;
+import com.list_question.ListQuestion;
+import com.list_question.ListQuestionRepository;
+import com.relation.RelationRepository;
+import com.slide.PracticeSlide;
+import com.slide.Slide;
+import com.slide.SlideRepository;
+import com.slide.TheorySlide;
+import com.unit.Unit;
+import com.unit.UnitRepository;
 import com.user.User;
 import com.user.UserRepository;
-import com.slide.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +48,9 @@ public class DatabaseInitializer {
 
         @Autowired
         private DefinitionQuestionRepository definitionRepository;
+
+        @Autowired
+        private ListQuestionRepository listQuestionRepository;
 
 	@PostConstruct
 	public void init() {
@@ -121,14 +134,14 @@ public class DatabaseInitializer {
                 unitRepository.save(unit9);
 
                 //Slides
-                TheorySlide slide1 = new TheorySlide();
-                PracticeSlide slide2 = new PracticeSlide();
-                TheorySlide slide3 = new TheorySlide();
+                Slide slide1 = new TheorySlide();
+                Slide slide2 = new PracticeSlide();
+                Slide slide3 = new TheorySlide();
 
-                slide1.getCards().add(card1);
-                slide1.getCards().add(card4);
-                slide3.getCards().add(card2);
-                slide3.getCards().add(card3);
+                slide1.getComponents().add(card1);
+                slide1.getComponents().add(card4);
+                slide3.getComponents().add(card2);
+                slide3.getComponents().add(card3);
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
@@ -157,6 +170,19 @@ public class DatabaseInitializer {
                 definitionRepository.save(definition1);
                 definitionRepository.save(definition2);
                 definitionRepository.save(definition3);
+
+                // List Questions
+                ArrayList<String> possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Java");
+                possibleAnswers.add("Javascropt");
+                possibleAnswers.add("Python");
+                ArrayList<String> correctAnswer = new ArrayList<>();
+                correctAnswer.add("Python");
+                correctAnswer.add("Java");
+                ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
+                 possibleAnswers, correctAnswer);
+
+                listQuestionRepository.save(list1);
 
                 //Users
                 userRepository.save(new User("alumno", "alumno"));

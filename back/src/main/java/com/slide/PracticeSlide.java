@@ -35,13 +35,13 @@ public class PracticeSlide extends Slide{
         this.id = id;
     }
 
-    /*public List<Exercise> getExercises() {
-        return exercises;
+    public List getComponents() {
+        return new ArrayList<>();
     }
 
-    public void setCards(List<Exercise> exercises) {
-        this.exercises = exercises;
-    }*/
+    public void setComponents(List components) {
+    }
+
 
     
 }

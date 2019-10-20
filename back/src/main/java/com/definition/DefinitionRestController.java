@@ -41,6 +41,15 @@ public class DefinitionRestController extends GeneralRestController{
         return new ResponseEntity<List<DefinitionQuestion>>(this.questionService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/question/{id}")
+    public ResponseEntity<DefinitionQuestion> getQuestion(@PathVariable long id){
+        Optional<DefinitionQuestion> optional = this.questionService.findOne(id);
+        if(optional.isPresent()){
+            return new ResponseEntity<DefinitionQuestion>(optional.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("/question/")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<DefinitionQuestion> addQuestion(@RequestBody DefinitionQuestion question){
