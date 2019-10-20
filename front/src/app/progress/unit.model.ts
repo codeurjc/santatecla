@@ -1,5 +1,5 @@
-import { DefinitionQuestion } from '../questions/definitionQuestion.model';
-import { ListQuestion } from '../questions/listQuestion.model';
+import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
+import { ListQuestion } from '../question/listQuestion/listQuestion.model';
 
 export interface Unit{
     id?: number;
