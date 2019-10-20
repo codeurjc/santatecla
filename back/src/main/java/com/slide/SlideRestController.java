@@ -83,11 +83,11 @@ public class SlideRestController extends GeneralRestController {
     public ResponseEntity<Slide> deleteCardFromSlide(@PathVariable long slideId, @PathVariable long cardId){
         
         Optional<Card> c =this.cardService.findOne(cardId);
-        Optional<TheorySlide> s = this.theorySlideService.findOne(slideId);
+        Optional<Slide> s = this.slideService.findOne(slideId);
         
         if(s.isPresent()){
             if(c.isPresent()){
-                s.get().getCards().remove(c.get());
+                s.get().getComponents().remove(c.get());
                 this.slideService.save(s.get());
                 return new ResponseEntity<>(s.get(), HttpStatus.OK);
             }

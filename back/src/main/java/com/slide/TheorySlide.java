@@ -21,16 +21,6 @@ public class TheorySlide extends Slide {
     @OneToMany
     private List<Card> cards;
 
-    /*
-    A slide has ONE text, image etc or could have more?
-    private String text;
-    private long imagePath;
-    private String code;
-
-    UML representation not decided yet
-    private String uml;
-    */
-
     public TheorySlide() {
         super();
         this.cards = new ArrayList<>();
@@ -46,11 +36,11 @@ public class TheorySlide extends Slide {
         this.id = id;
     }
 
-    public List<Card> getCards() {
+    public List<Card> getComponents() {
         return cards;
     }
 
-    public void setCards(List<Card> cards) {
+    public void setComponents(List cards) {
         this.cards = cards;
     }
 
