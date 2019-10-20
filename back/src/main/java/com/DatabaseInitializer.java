@@ -108,10 +108,10 @@ public class DatabaseInitializer {
                 Unit unit9 = new Unit("Suma");
 
                 ArrayList<DefinitionQuestion> unit1Questions = new ArrayList<>();
-                unit1Questions.add(definition1);
-                unit1Questions.add(definition3);
+                unit1Questions.add((DefinitionQuestion)definition1);
+                unit1Questions.add((DefinitionQuestion)definition3);
                 ArrayList<ListQuestion> unit1ListQuestions = new ArrayList<>();
-                unit1ListQuestions.add(list1);
+                unit1ListQuestions.add((ListQuestion)list1);
 
                 unit1.setDefinitionQuestions(unit1Questions);
                 unit1.setListQuestions(unit1ListQuestions);
