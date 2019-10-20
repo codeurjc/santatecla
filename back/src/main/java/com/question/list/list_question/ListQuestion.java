@@ -11,34 +11,45 @@ import javax.persistence.Id;
 import com.question.Question;
 
 @Entity
-public class ListQuestion extends Question{
-    
+public class ListQuestion extends Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
-
-    private String questionText;
 
     @ElementCollection
     private List<String> possibleAnswers;
 
     @ElementCollection
-    private List<String> correctAnswer;
+    private List<String> correctAnswers;
 
-    private int correctAnswers;
+    private int correctAnswersCount;
     private int wrongAnswers;
 
-    public ListQuestion(){
-        this.correctAnswers = 0;
+    public ListQuestion() {
+        this.correctAnswersCount = 0;
         this.wrongAnswers = 0;
     }
 
-    public ListQuestion(String questionText, List<String> possibleAnswers,List<String> correctAnswer){
-        this.correctAnswers = 0;
+    public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer) {
+        this.subtype = this.getClass().getSimpleName();
+        this.correctAnswersCount = 0;
         this.wrongAnswers = 0;
         this.questionText = questionText;
         this.possibleAnswers = possibleAnswers;
-        this.correctAnswer = correctAnswer;
+        this.correctAnswers = correctAnswer;
+    }
+
+    public void update(ListQuestion q) {
+        if (q.getQuestionText() != null) {
+            this.questionText = q.getQuestionText();
+        }
+        if (!q.getCorrectAnswers().equals(this.correctAnswers)) {
+            this.correctAnswers = q.getCorrectAnswers();
+        }
+        if (!q.getPossibleAnswers().equals(this.possibleAnswers)) {
+            this.possibleAnswers = q.getPossibleAnswers();
+        }
     }
 
     public long getId() {
@@ -53,17 +64,8 @@ public class ListQuestion extends Question{
         return questionText;
     }
 
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
-    }
-
-
-    public List<String> getCorrectAnswer() {
-        return this.correctAnswer;
-    }
-
-    public void setCorectAnswers(List<String> answers) {
-        this.correctAnswer = answers;
+    public List<String> getCorrectAnswers() {
+        return this.correctAnswers;
     }
 
     public List<String> getPossibleAnswers() {
@@ -73,21 +75,21 @@ public class ListQuestion extends Question{
     public void setPossibleAnswers(List<String> possibleAnswers) {
         this.possibleAnswers = possibleAnswers;
     }
-    
-    public int getCorrectAnswers(){
-        return this.correctAnswers;
-    }
-    
-    public void setCorrectAnswers(int a){
-        this.correctAnswers = a;
+
+    public int getCorrectAnswersCount() {
+        return this.correctAnswersCount;
     }
 
-    public int getWrongAnswers(){
+    public void setCorrectAnswersCount(int a) {
+        this.correctAnswersCount = a;
+    }
+
+    public int getWrongAnswers() {
         return this.wrongAnswers;
     }
 
-    public void setWrongAnswers(int a){
+    public void setWrongAnswers(int a) {
         this.wrongAnswers = a;
     }
-    
+
 }

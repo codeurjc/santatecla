@@ -2,6 +2,8 @@ package com;
 
 import com.card.CardService;
 import com.itinerary.ItineraryService;
+import com.question.definition.definition_question.DefinitionQuestionService;
+import com.question.list.list_question.ListQuestionService;
 import com.slide.*;
 import com.user.UserComponent;
 import com.user.UserService;
@@ -28,5 +30,10 @@ public class GeneralRestController {
 
 	@Autowired
 	protected CardService cardService;
-    
+
+	@Autowired
+	protected DefinitionQuestionService definitionQuestionService;
+
+	@Autowired
+	protected ListQuestionService listQuestionService;
 }

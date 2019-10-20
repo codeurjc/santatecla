@@ -1,17 +1,12 @@
 package com.question.definition.definition_answer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.question.definition.definition_justification.DefinitionJustification;
 import com.user.User;
 
 @Entity
@@ -25,20 +20,16 @@ public class DefinitionAnswer{
 
     private boolean correct;
 
-    @OneToMany
-    private List<DefinitionJustification> justifications;
+    private String justification;
 
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    public DefinitionAnswer(){
-        this.justifications = new ArrayList<>();
-    }
+    public DefinitionAnswer(){}
 
     public DefinitionAnswer(String answerText, boolean correct){
         this.answerText = answerText;
         this.correct = correct;
-        this.justifications = new ArrayList<>();
     }
 
     public long getId() {
@@ -53,24 +44,16 @@ public class DefinitionAnswer{
         return answerText;
     }
 
-    public void setAnswerText(String answerText) {
-        this.answerText = answerText;
-    }
-
     public boolean isCorrect() {
         return correct;
     }
 
-    public void setCorrect(boolean correct) {
-        this.correct = correct;
+    public String getJustifications() {
+        return justification;
     }
 
-    public List<DefinitionJustification> getJustifications() {
-        return justifications;
-    }
-
-    public void setJustifications(List<DefinitionJustification> justifications) {
-        this.justifications = justifications;
+    public void setJustification(String justification) {
+        this.justification = justification;
     }
 
     public User getUser() {

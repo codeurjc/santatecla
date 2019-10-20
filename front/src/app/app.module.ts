@@ -30,6 +30,8 @@ import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
+import {QuestionComponent} from './questions/question.component';
+import {QuestionService} from './questions/question.service';
 import { ViewService } from './view/view.service';
 import { DefinitionQuestionComponent } from './questions/definitionQuestion.component';
 import { ListQuestionComponent } from './questions/listQuestion.component';
@@ -46,6 +48,7 @@ import { ProgressService } from './progress/progress.service';
     ItineraryComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
+    QuestionComponent,
     ProgressComponent
   ],
   imports: [
@@ -96,7 +99,8 @@ import { ProgressService } from './progress/progress.service';
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, ProgressService, ViewService,
+  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
+    ProgressService, ViewService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
