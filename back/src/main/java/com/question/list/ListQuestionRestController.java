@@ -5,8 +5,6 @@ import java.util.Optional;
 import com.GeneralRestController;
 
 import com.question.list.list_question.ListQuestion;
-import com.question.list.list_question.ListQuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/definitionList")
 public class ListQuestionRestController extends GeneralRestController{
-    
-    @Autowired
-    private ListQuestionService listQuestionService;
 
     @GetMapping("/")
     public ResponseEntity<List<ListQuestion>> getQuestions(){
@@ -69,7 +64,7 @@ public class ListQuestionRestController extends GeneralRestController{
     public ResponseEntity<ListQuestion> addCorrectAnswer(@PathVariable long id){
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){
-            optional.get().setCorrectAnswers(optional.get().getCorrectAnswersCount()+1);
+            optional.get().setCorrectAnswersCount(optional.get().getCorrectAnswersCount()+1);
             this.listQuestionService.save(optional.get());
             return new ResponseEntity<>(HttpStatus.CREATED);
         }

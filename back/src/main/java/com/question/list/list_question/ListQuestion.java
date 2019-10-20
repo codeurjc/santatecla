@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import com.question.Question;
 
 @Entity
-public class ListQuestion extends Question{
-    
+public class ListQuestion extends Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
@@ -26,12 +26,12 @@ public class ListQuestion extends Question{
     private int correctAnswersCount;
     private int wrongAnswers;
 
-    public ListQuestion(){
-        this.correctAnswers = 0;
+    public ListQuestion() {
+        this.correctAnswersCount = 0;
         this.wrongAnswers = 0;
     }
 
-    public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer){
+    public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer) {
         this.subtype = this.getClass().getSimpleName();
         this.correctAnswersCount = 0;
         this.wrongAnswers = 0;
@@ -41,13 +41,13 @@ public class ListQuestion extends Question{
     }
 
     public void update(ListQuestion q) {
-        if(q.getQuestionText() != null){
+        if (q.getQuestionText() != null) {
             this.questionText = q.getQuestionText();
         }
-        if(!q.getCorrectAnswers().equals(this.correctAnswers)) {
+        if (!q.getCorrectAnswers().equals(this.correctAnswers)) {
             this.correctAnswers = q.getCorrectAnswers();
         }
-        if(!q.getPossibleAnswers().equals(this.possibleAnswers)) {
+        if (!q.getPossibleAnswers().equals(this.possibleAnswers)) {
             this.possibleAnswers = q.getPossibleAnswers();
         }
     }
@@ -75,21 +75,21 @@ public class ListQuestion extends Question{
     public void setPossibleAnswers(List<String> possibleAnswers) {
         this.possibleAnswers = possibleAnswers;
     }
-    
-    public int getCorrectAnswersCount(){
+
+    public int getCorrectAnswersCount() {
         return this.correctAnswersCount;
     }
-    
-    public void setCorrectAnswers(int a){
-        this.correctAnswers = a;
+
+    public void setCorrectAnswersCount(int a) {
+        this.correctAnswersCount = a;
     }
 
-    public int getWrongAnswers(){
+    public int getWrongAnswers() {
         return this.wrongAnswers;
     }
 
-    public void setWrongAnswers(int a){
+    public void setWrongAnswers(int a) {
         this.wrongAnswers = a;
     }
-    
+
 }

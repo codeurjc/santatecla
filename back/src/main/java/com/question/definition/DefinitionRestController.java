@@ -121,10 +121,10 @@ public class DefinitionRestController extends GeneralRestController {
 
     @PostMapping("/question/{id}/correct/")
     public ResponseEntity<DefinitionQuestion> addCorrectAnswer(@PathVariable long id){
-        Optional<DefinitionQuestion> optional = this.questionService.findOne(id);
+        Optional<DefinitionQuestion> optional = this.definitionQuestionService.findOne(id);
         if(optional.isPresent()){
             optional.get().setCorrectAnswers(optional.get().getCorrectAnswers()+1);
-            this.questionService.save(optional.get());
+            this.definitionQuestionService.save(optional.get());
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
     
@@ -133,10 +133,10 @@ public class DefinitionRestController extends GeneralRestController {
 
     @PostMapping("/question/{id}/wrong/")
     public ResponseEntity<DefinitionQuestion> addWrongAnswer(@PathVariable long id){
-        Optional<DefinitionQuestion> optional = this.questionService.findOne(id);
+        Optional<DefinitionQuestion> optional = this.definitionQuestionService.findOne(id);
         if(optional.isPresent()){
             optional.get().setWrongAnswers(optional.get().getWrongAnswers()+1);
-            this.questionService.save(optional.get());
+            this.definitionQuestionService.save(optional.get());
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
     
@@ -145,18 +145,18 @@ public class DefinitionRestController extends GeneralRestController {
 
     @GetMapping("/question/{id}/correct/")
     public ResponseEntity<Integer> getCorrectAnswers(@PathVariable long id){
-        Optional<DefinitionQuestion> optional = this.questionService.findOne(id);
+        Optional<DefinitionQuestion> optional = this.definitionQuestionService.findOne(id);
         if(optional.isPresent()){
-            return new ResponseEntity<Integer>(optional.get().getCorrectAnswers(), HttpStatus.OK);
+            return new ResponseEntity<>(optional.get().getCorrectAnswers(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/question/{id}/wrong/")
     public ResponseEntity<Integer> getWrongAnswers(@PathVariable long id){
-        Optional<DefinitionQuestion> optional = this.questionService.findOne(id);
+        Optional<DefinitionQuestion> optional = this.definitionQuestionService.findOne(id);
         if(optional.isPresent()){
-            return new ResponseEntity<Integer>(optional.get().getWrongAnswers(), HttpStatus.OK);
+            return new ResponseEntity<>(optional.get().getWrongAnswers(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
