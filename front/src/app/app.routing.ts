@@ -5,6 +5,8 @@ import { ViewComponent } from './view/view.component';
 import { DefinitionQuestionComponent } from './questions/definitionQuestion/definitionQuestion.component';
 import { ListQuestionComponent } from './questions/listQuestion/listQuestion.component';
 import {QuestionComponent} from './questions/question.component';
+import { ProgressComponent } from './progress/progress.component';
+
 
 const appRoutes = [
   { path: '' , component: ViewComponent },
@@ -13,7 +15,8 @@ const appRoutes = [
   // { path: 'units/:unitId/questions/:questionId', component: QuestionComponent },
   { path: 'definitionQuestion/:questionId', component: DefinitionQuestionComponent},
   { path: 'listQuestion/:questionId', component: ListQuestionComponent},
-  { path: 'question', component: QuestionComponent}
+  { path: 'question', component: QuestionComponent},
+  { path: 'units/:unitId/progress', component: ProgressComponent }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

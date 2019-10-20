@@ -9,14 +9,14 @@ import javax.persistence.OneToOne;
 import com.unit.Unit;
 
 @Entity
-public class Relation{
+public class Relation {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private enum RelationType {
-        HERITAGE, COMPOSITION, ASSOCIATION, USE;
+    public enum RelationType {
+        ASSOCIATION, AGGREGATION, COMPOSITION, INHERITANCE;
     };
 
     private RelationType relationType;
@@ -24,10 +24,11 @@ public class Relation{
     @OneToOne
     private Unit relatedTo;
 
-    public Relation(){}
+    public Relation() {}
 
-    public Relation(RelationType t){
-        this.relationType = t;
+    public Relation(RelationType relationType, Unit relatedTo) {
+        this.relationType = relationType;
+        this.relatedTo = relatedTo;
     }
 
     public long getId() {
@@ -38,11 +39,11 @@ public class Relation{
         this.id = id;
     }
 
-    public RelationType getType() {
+    public RelationType getRelationType() {
         return relationType;
     }
 
-    public void setType(RelationType type) {
+    public void setRelationType(RelationType type) {
         this.relationType = type;
     }
 
@@ -53,6 +54,9 @@ public class Relation{
     public void setRelatedTo(Unit relatedTo) {
         this.relatedTo = relatedTo;
     }
-
     
+    public void update(Relation relation) {
+        this.relationType = relation.getRelationType();
+    }
+
 }

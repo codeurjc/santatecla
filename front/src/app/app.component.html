@@ -16,17 +16,23 @@
         <mat-icon>home</mat-icon>
       </button>
 
-      <button mat-flat-button color="primary" style="position:absolute; left:10rem; margin-top: 0.4rem;" [routerLink]="['/units/5/cards']">
-        Unidad 5
+      <button mat-flat-button color="primary" style="position:absolute; left:10rem; margin-top: 0.4rem;" [routerLink]="['/units/9/cards']">
+        Unidad 9
       </button>
 
-      <button mat-flat-button color="primary" style="position:absolute; left:20rem; margin-top: 0.4rem;" [routerLink]="['/units/6/cards']">
-        Unidad 6
+      <button mat-flat-button color="primary" style="position:absolute; left:20rem; margin-top: 0.4rem;" [routerLink]="['/units/10/cards']">
+        Unidad 10
       </button>
 
       <button mat-flat-button color="primary" style="position:absolute; left:30rem; margin-top: 0.4rem;" [routerLink]="['/units/7/cards']">
         Unidad 7
       </button>
+
+      <div *ngIf="loginService.isAdmin">
+          <button mat-flat-button color="primary" style="position:absolute; left:40rem; margin-top: 0.4rem;" [routerLink]="['/progress']">
+            Seguimiento
+          </button>
+      </div>
 
     </div>
 

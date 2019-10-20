@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class="unit-header">
+            <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/']">
+                Fichas
+            </button>
+            
+            <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" [routerLink]="['/units/9/itineraries/11']">
+                Itinerario
+            </button>
+            
+            <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" [routerLink]="['/units/9/progress']">
+                Seguimiento
+            </button>
+        </div>
+
+        <mat-card class="question" *ngFor = "let question of unit?.definitionQuestions">
+            <p>{{question.questionText}}</p>
+            <div style="border: solid; color: gray;">
+                <p>Correctas : {{question.correctAnswers}}</p>
+                <p>Incorectas: {{question.wrongAnswers}}</p>
+                <span *ngIf= "question.wrongAnswers > 0.75 * (question.wrongAnswers + question.correctAnswers)">
+                    <p style="color: red;">CUIDADO REVISAR</p>
+                    <i class="material-icons">warning</i>
+                </span>
+                <p></p>
+            </div>
+        </mat-card>
+
+        <mat-card class="questionList" *ngFor = "let listQuestion of unit?.listQuestions">
+            <p>{{listQuestion.questionText}}</p>
+            <div style="border: solid; color: gray;">
+                <p>Correctas: {{listQuestion.correctAnswers}}</p>
+                <p>Incorectas: {{listQuestion.wrongAnswers}}</p>
+                <span *ngIf= "listQuestion.wrongAnswers > 0.75 * (listQuestion.wrongAnswers + listQuestion.correctAnswers)">
+                    <p style="color: red;">CUIDADO REVISAR</p>
+                    <i class="material-icons">warning</i>
+                </span>
+                <p></p>
+            </div>
+        </mat-card>
+    </body>
+</html>

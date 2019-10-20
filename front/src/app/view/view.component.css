@@ -6,3 +6,31 @@
   resize: horizontal;
   overflow: auto;
 }
+
+#search {
+  margin: 1rem;
+  width: 50rem;
+}
+
+#search-input {
+  margin-bottom: 1em;
+}
+
+#result {
+  padding: 1rem;
+  cursor: pointer;
+  margin: 0 -0.6em 0 -0.6em;
+  border-top: 1px solid #e5e9f0;
+}
+
+.active {
+  background-color: #e5e9f0;
+}
+
+#unit-prefix {
+  color: #646464;
+}
+
+#unit-name {
+  font-weight: bold;
+}

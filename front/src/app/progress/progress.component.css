@@ -1,0 +1,13 @@
+#image-container {
+    width: 10rem;
+    display: flex;
+    float: right;
+  }
+  
+  .unit-header {
+    height: 3rem;
+    background-color: #5382ce;
+    color: white;
+    font-size: 0.8rem;
+  }
+  
