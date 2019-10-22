@@ -28,12 +28,6 @@
         Unidad 7
       </button>
 
-      <div *ngIf="loginService.isAdmin">
-          <button mat-flat-button color="primary" style="position:absolute; left:40rem; margin-top: 0.4rem;" [routerLink]="['/progress']">
-            Seguimiento
-          </button>
-      </div>
-
     </div>
 
     <div *ngIf="!loginService.isLogged">
