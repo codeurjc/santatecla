@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html>
+  <body>
+    <div align="center">
+      <h1>Preguntas</h1>
+      <span *ngFor="let question of questions">
+        <p>{{ question.questionText }}</p>
+      </span>
+    </div>
 
-<body>
-<div>
-  <h1>Test</h1>
-   <span *ngFor="let question of questions">
-     <p>{{question.questionText}}</p>
-   </span>
-</div>
-</body>
+    <div align="center">
+      <h1>Añadir pregunta</h1>
+
+      <input type="radio" name="subtype"
+              [(ngModel)]="subtype" value="Definition" default> Definicion
+      <input type="radio" name="subtype"
+             [(ngModel)]="subtype" value="List"> Listado
+
+      <span *ngIf="subtype == 'Definition'">
+        <form #textForm="ngForm">
+          <input
+            placeholder="Pregunta"
+            #questionInput type="text"
+            name="question"
+            required
+          />
+        </form>
+        <button class="button" color="primary" (click)="sendQuestion(questionInput.value); questionInput.value=''">
+          Guardar
+        </button>
+      </span>
+      <span *ngIf="subtype != 'Definition'">
+        <form #textForm="ngForm">
+          <input
+            placeholder="Pregunta"
+            #questionInput type="text"
+            name="question"
+            required
+          />
+        </form>
+        <button class="button" color="primary" (click)="sendQuestion(questionInput.value); questionInput.value=''">
+          Guardar
+        </button>
+      </span>
+    </div>
+  </body>
 </html>

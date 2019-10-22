@@ -16,7 +16,11 @@ export class ListQuestionService {
     return this.http.get('api/definitionList/' + id);
   }
 
-  ddListCorrection(id: number, correct: boolean): Observable<ListQuestion> {
+  addListQuestion(listQuestion: ListQuestion) {
+    console.log('TODO');
+  }
+
+  addListCorrection(id: number, correct: boolean): Observable<ListQuestion> {
     if (correct) {
       const body = JSON.stringify(correct);
 
