@@ -38,7 +38,8 @@ export class QuestionComponent implements OnInit {
     if (this.subtype === 'Definition') {
       this.definitionQuestion = {
         questionText: text,
-        subtype: 'Definition'
+        subtype: 'Definition',
+        type: 'Open'
       };
       this.definitionService.addDefinitionQuestion(this.definitionQuestion).subscribe(
         (_) => {},
