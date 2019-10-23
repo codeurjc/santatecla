@@ -30,9 +30,15 @@ import { CardComponent } from './card/card.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
-import { DefinitionQuestionComponent } from './definition/definitionQuestion.component';
-import { DefinitionQuestionService } from './definition/definitionQuestion.service';
+import {QuestionComponent} from './question/question.component';
 import { ViewService } from './view/view.service';
+import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
+import { DefinitionQuestionService } from './question/definitionQuestion/definitionQuestion.service';
+import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
+import { ListQuestionService } from './question/listQuestion/listQuestion.service';
+import { ProgressComponent } from './progress/progress.component';
+import { ProgressService } from './progress/progress.service';
+import {QuestionService} from './question/question.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +46,10 @@ import { ViewService } from './view/view.service';
     ViewComponent,
     CardComponent,
     ItineraryComponent,
-    DefinitionQuestionComponent
+    DefinitionQuestionComponent,
+    ListQuestionComponent,
+    QuestionComponent,
+    ProgressComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -90,7 +99,8 @@ import { ViewService } from './view/view.service';
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ViewService,
+  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
+    ProgressService, ViewService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {map} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 const LOGIN_URL = 'api/login';
 const LOGOUT_URL = 'api/logout';
@@ -23,7 +23,7 @@ export class LoginService {
   user: User;
   auth: string;
 
-  constructor(private http: HttpClient, private router:Router) {
+  constructor(private http: HttpClient, private router: Router) {
     let user = JSON.parse(localStorage.getItem(CURRENT_USER_ITEM));
     if (user) {
       this.setCurrentUser(user);
@@ -36,7 +36,7 @@ export class LoginService {
       Authorization: 'Basic ' + auth,
       'X-Requested-With': 'XMLHttpRequest',
     });
-    return this.http.get<User>(LOGIN_URL, { headers }).pipe(map(user => {
+    return this.http.get<User>(LOGIN_URL, {headers}).pipe(map(user => {
       if (user) {
         this.setCurrentUser(user);
         user.authdata = auth;
@@ -47,9 +47,9 @@ export class LoginService {
   }
 
   private setCurrentUser(user: User) {
-      this.isLogged = true;
-      this.user = user;
-      this.isAdmin = this.user.roles.indexOf(ROLE_ADMIN) !== -1;
+    this.isLogged = true;
+    this.user = user;
+    this.isAdmin = this.user.roles.indexOf(ROLE_ADMIN) !== -1;
   }
 
   logout() {
@@ -59,14 +59,14 @@ export class LoginService {
     }));
   }
 
-  getCurrentUser(){
+  getCurrentUser() {
     return this.user;
   }
 
   removeCurrentUser() {
-      localStorage.removeItem(CURRENT_USER_ITEM);
-      this.isLogged = false;
-      this.isAdmin = false;
+    localStorage.removeItem(CURRENT_USER_ITEM);
+    this.isLogged = false;
+    this.isAdmin = false;
   }
 
 }

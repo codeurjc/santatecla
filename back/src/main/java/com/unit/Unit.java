@@ -13,11 +13,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.card.Card;
-import com.definition.definition_question.DefinitionQuestion;
+import com.question.definition.definition_question.DefinitionQuestion;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.item.Item;
 import com.itinerary.Itinerary;
-import com.list_question.ListQuestion;
+import com.question.list.list_question.ListQuestion;
 import com.relation.Relation;
 
 @Entity
@@ -40,12 +40,10 @@ public class Unit {
     @OneToMany
     private List<Relation> relations;
 
-    @OneToMany
-    @JsonIgnore
+    @ManyToMany
     private List<DefinitionQuestion> definitionQuestions;
 
-    @OneToMany
-    @JsonIgnore
+    @ManyToMany
     private List<ListQuestion> listQuestions;
 
     @OneToMany
@@ -116,6 +114,10 @@ public class Unit {
 
     public void addDefinitionQuestion(DefinitionQuestion definitionQuestion) {
         this.definitionQuestions.add(definitionQuestion);
+    }
+
+    public void setDefinitionQuestions(List<DefinitionQuestion> definitionQuestions){
+        this.definitionQuestions = definitionQuestions;
     }
 
     public List<ListQuestion> getListQuestions() {

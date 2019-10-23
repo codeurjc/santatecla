@@ -1,16 +1,29 @@
 package com;
 
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 
-import com.card.*;
-import com.definition.definition_question.DefinitionQuestion;
-import com.definition.definition_question.DefinitionQuestionRepository;
-import com.itinerary.*;
-import com.relation.*;
-import com.unit.*;
+import com.question.Question;
+import com.question.QuestionRepository;
+import com.card.Card;
+import com.card.CardRepository;
+import com.itinerary.Itinerary;
+import com.itinerary.ItineraryRepository;
+import com.question.definition.definition_question.DefinitionQuestion;
+import com.question.definition.definition_question.DefinitionQuestionRepository;
+import com.question.list.list_question.ListQuestion;
+import com.question.list.list_question.ListQuestionRepository;
+import com.relation.Relation;
+import com.relation.RelationRepository;
+import com.slide.PracticeSlide;
+import com.slide.Slide;
+import com.slide.SlideRepository;
+import com.slide.TheorySlide;
+import com.unit.Unit;
+import com.unit.UnitRepository;
 import com.user.User;
 import com.user.UserRepository;
-import com.slide.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +50,10 @@ public class DatabaseInitializer {
         private UserRepository userRepository;
 
         @Autowired
-        private DefinitionQuestionRepository definitionRepository;
+        private QuestionRepository questionRepository;
+
+        @Autowired
+        private ListQuestionRepository listQuestionRepository;
 
 	@PostConstruct
 	public void init() {
@@ -57,6 +73,28 @@ public class DatabaseInitializer {
                 cardRepository.save(card2);
                 cardRepository.save(card3);
                 cardRepository.save(card4);
+
+                // Definition Questions
+                Question definition1 = new DefinitionQuestion("¿Qué es el software?", DefinitionQuestion.Type.Open);
+                Question definition2 = new DefinitionQuestion("¿Qué es Java?", DefinitionQuestion.Type.Open);
+                Question definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", DefinitionQuestion.Type.Test, "Sí");
+
+                questionRepository.save(definition1);
+                questionRepository.save(definition2);
+                questionRepository.save(definition3);
+
+                // List Questions
+                ArrayList<String> possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Java");
+                possibleAnswers.add("Javascropt");
+                possibleAnswers.add("Python");
+                ArrayList<String> correctAnswer = new ArrayList<>();
+                correctAnswer.add("Python");
+                correctAnswer.add("Java");
+                Question list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
+                 possibleAnswers, correctAnswer);
+
+                questionRepository.save(list1);
   
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
@@ -68,6 +106,15 @@ public class DatabaseInitializer {
                 Unit unit7 = new Unit("Expresión");
                 Unit unit8 = new Unit("Suma");
                 Unit unit9 = new Unit("Suma");
+
+                ArrayList<DefinitionQuestion> unit1Questions = new ArrayList<>();
+                unit1Questions.add((DefinitionQuestion)definition1);
+                unit1Questions.add((DefinitionQuestion)definition3);
+                ArrayList<ListQuestion> unit1ListQuestions = new ArrayList<>();
+                unit1ListQuestions.add((ListQuestion)list1);
+
+                unit1.setDefinitionQuestions(unit1Questions);
+                unit1.setListQuestions(unit1ListQuestions);
 
                 unit1.addCard(card1);
                 unit1.addCard(card4);
@@ -121,14 +168,14 @@ public class DatabaseInitializer {
                 unitRepository.save(unit9);
 
                 //Slides
-                TheorySlide slide1 = new TheorySlide();
-                PracticeSlide slide2 = new PracticeSlide();
-                TheorySlide slide3 = new TheorySlide();
+                Slide slide1 = new TheorySlide();
+                Slide slide2 = new PracticeSlide();
+                Slide slide3 = new TheorySlide();
 
-                slide1.getCards().add(card1);
-                slide1.getCards().add(card4);
-                slide3.getCards().add(card2);
-                slide3.getCards().add(card3);
+                slide1.getComponents().add(card1);
+                slide1.getComponents().add(card4);
+                slide3.getComponents().add(card2);
+                slide3.getComponents().add(card3);
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
@@ -148,15 +195,6 @@ public class DatabaseInitializer {
                 itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
-                
-                // Definition Questions
-                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?", 0);
-                DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?", 0);
-                DefinitionQuestion definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", 1, "Sí");
-
-                definitionRepository.save(definition1);
-                definitionRepository.save(definition2);
-                definitionRepository.save(definition3);
 
                 //Users
                 userRepository.save(new User("alumno", "alumno"));

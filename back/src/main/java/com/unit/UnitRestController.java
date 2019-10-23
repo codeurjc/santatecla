@@ -38,12 +38,6 @@ public class UnitRestController extends GeneralRestController {
     
 	@Autowired
     protected RelationService relationService;
-
-    @GetMapping(value="/")
-    public ResponseEntity<List<Unit>> getUnits() {
-        List<Unit> units = this.unitService.findRootUnits();
-        return new ResponseEntity<>(units, HttpStatus.OK);
-    }
     
     @PutMapping(value="/")
     public ResponseEntity<List<Unit>> updateUnit(@RequestBody List<Unit> units) {
@@ -71,6 +65,11 @@ public class UnitRestController extends GeneralRestController {
         return (unit.isPresent())?(new ResponseEntity<>(unit.get(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping(value="/")
+    public ResponseEntity<List<Unit>> getUnits() {
+        return new ResponseEntity<List<Unit>>(this.unitService.findAll(), HttpStatus.OK);
+    }
+    
     @GetMapping(value="/search/{name}")
     public ResponseEntity<List<Unit>> searchUnits(@PathVariable String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);

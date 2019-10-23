@@ -149,8 +149,12 @@ export class ItineraryComponent implements OnInit {
     });
   }
 
-  navigateQuestion(){
-    this.router.navigate(['/definition'])
+  navigateQuestion(id: number){
+    this.router.navigate(['/definitionQuestion/'+id])
+  }
+
+  navigateListQuestion(id: number){
+    this.router.navigate(['/listQuestion/'+id])
   }
 
 }
