@@ -1,8 +1,9 @@
 import { UmlParser } from './uml.parser';
-import { Unit } from './../unit/unit.model';
+import { Unit } from '../unit/unit.model';
 import { ViewService } from './view.service';
 import { Component, ViewChild, OnInit, AfterContentInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { Router } from '@angular/router';
 
 declare var mermaid: any;
 
@@ -30,14 +31,14 @@ export class ViewComponent implements OnInit, AfterContentInit {
   @ViewChild('uml') umlDiv;
   private umlParser: UmlParser;
 
-  constructor(private viewService: ViewService) {}
+  constructor(private router: Router, private viewService: ViewService) {}
 
   ngOnInit() {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
     this.umlParser = new UmlParser();
-    this.viewService.getUnits().subscribe((data: any) => {
+    this.viewService.getUnit(9).subscribe((data: any) => {
       this.data = data;
       this.updateUml();
     }, error => {
@@ -67,9 +68,9 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   getUnit(id: number) {
     this.viewService.getUnit(id).subscribe((data: any) => {
-      this.data = [data];
+      this.data = data;
       this.updateUml();
-      this.emptyResults();
+      this.setShowResults(false);
     }, error => {
       console.log(error);
     });
@@ -143,10 +144,17 @@ export class ViewComponent implements OnInit, AfterContentInit {
   save(event: KeyboardEvent) {
     event.preventDefault();
     if (this.editor.isValidJson()) {
-      this.viewService.save(this.data).subscribe((data: any) => {
+      this.viewService.saveUnit(this.data).subscribe((data: any) => {
       }, error => {
         console.log(error);
       });
+    }
+  }
+
+  handle(event: MouseEvent) {
+    const target = <HTMLInputElement>event.target;
+    if ((target.tagName === 'text') || (target.tagName ==='rect')) {
+      this.router.navigate(['/units/' + target.id + '/cards']);
     }
   }
 

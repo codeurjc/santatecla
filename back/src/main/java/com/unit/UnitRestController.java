@@ -40,23 +40,19 @@ public class UnitRestController extends GeneralRestController {
     protected RelationService relationService;
     
     @PutMapping(value="/")
-    public ResponseEntity<List<Unit>> updateUnit(@RequestBody List<Unit> units) {
-        List<Unit> savedUnits = new ArrayList<>();
-        for (Unit unit : units) {
-            Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
-            if (savedUnit.isPresent()) {
-                savedUnit.get().update(unit);
-                for (Relation relation : unit.getRelations()) {
-                    Optional<Relation> savedRelation = this.relationService.findOne(relation.getId());
-                    savedRelation.get().update(relation);
-                }
-                this.unitService.save(savedUnit.get());
-                savedUnits.add(savedUnit.get());
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
+        Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
+        if (savedUnit.isPresent()) {
+            savedUnit.get().update(unit);
+            for (Relation relation : unit.getRelations()) {
+                Optional<Relation> savedRelation = this.relationService.findOne(relation.getId());
+                savedRelation.get().update(relation);
             }
+            this.unitService.save(savedUnit.get());
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(savedUnits, HttpStatus.OK);
+        return new ResponseEntity<>(savedUnit.get(), HttpStatus.OK);
     }
 
     @GetMapping(value="/{id}")

@@ -10,9 +10,7 @@ export class UmlParser {
 
   jsonToUml(json: any) {
     let uml = 'classDiagram\n';
-    json.forEach((unit: any) => {
-      uml += this.getRelations(unit);
-    });
+    uml += this.getRelations(json);
     return uml;
   }
 

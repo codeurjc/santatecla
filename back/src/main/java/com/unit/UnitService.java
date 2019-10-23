@@ -33,10 +33,6 @@ public class UnitService {
 		unitRepository.deleteById(id);
 	}
 
-	public List<Unit> findRootUnits() {
-		return unitRepository.findRootUnits();
-	}
-
 	public List<Unit> findByNameContaining(String name) {
 		return resolveDuplicateNames(unitRepository.findByNameContaining(name));
 	}

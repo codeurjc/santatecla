@@ -21,11 +21,11 @@ export class ViewService {
     return this.http.get(this.baseUrl + 'search/' + name);
   }
 
-  save(data) {
+  saveUnit(data) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.put<Unit[]>(this.baseUrl, data, { headers });
+    return this.http.put<Unit>(this.baseUrl, data, { headers });
   }
 
 }
