@@ -5,14 +5,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import com.question.Question;
-import com.question.QuestionRepository;
 import com.card.Card;
 import com.card.CardRepository;
 import com.itinerary.Itinerary;
 import com.itinerary.ItineraryRepository;
+import com.question.Question;
+import com.question.QuestionRepository;
 import com.question.definition.definition_question.DefinitionQuestion;
-import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
 import com.question.list.list_question.ListQuestionRepository;
 import com.question.test.TestQuestion;
@@ -101,6 +100,35 @@ public class DatabaseInitializer {
 
                 this.questionRepository.save(test);
 
+                //Slides
+                Slide slide1 = new TheorySlide();
+                Slide slide2 = new PracticeSlide();
+                Slide slide3 = new TheorySlide();
+
+                slide1.getComponents().add(card1);
+                slide1.getComponents().add(card4);
+                slide3.getComponents().add(card2);
+                slide3.getComponents().add(card3);
+
+                slideRepository.save(slide1);
+                slideRepository.save(slide2);
+                slideRepository.save(slide3);
+
+                //Itinerary
+                Itinerary itinerary1 = new Itinerary("Introducción");
+                Itinerary itinerary2 = new Itinerary("Introducción Java");
+
+                itinerary2.getSlides().add(slide3);
+
+                itineraryRepository.save(itinerary2);
+
+                itinerary1.getItineraries().add(itinerary2);
+
+                itinerary1.getSlides().add(slide1);
+                itinerary1.getSlides().add(slide2);
+
+                itineraryRepository.save(itinerary1);
+  
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
                 Unit unit2 = new Unit("Java");
@@ -125,6 +153,9 @@ public class DatabaseInitializer {
                 unit1.addCard(card4);
                 unit2.addCard(card2);
                 unit2.addCard(card3);
+
+                unit1.addItinerary(itinerary1);
+                unit2.addItinerary(itinerary2);
                 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
@@ -171,35 +202,6 @@ public class DatabaseInitializer {
                 unitRepository.save(unit7);
                 unitRepository.save(unit8);
                 unitRepository.save(unit9);
-
-                //Slides
-                Slide slide1 = new TheorySlide();
-                Slide slide2 = new PracticeSlide();
-                Slide slide3 = new TheorySlide();
-
-                slide1.getComponents().add(card1);
-                slide1.getComponents().add(card4);
-                slide3.getComponents().add(card2);
-                slide3.getComponents().add(card3);
-
-                slideRepository.save(slide1);
-                slideRepository.save(slide2);
-                slideRepository.save(slide3);
-
-                //Itinerary
-                Itinerary itinerary1 = new Itinerary("Introducción");
-                Itinerary itinerary2 = new Itinerary("Introducción Java");
-
-                itinerary2.getSlides().add(slide3);
-
-                itineraryRepository.save(itinerary2);
-
-                itinerary1.getItineraries().add(itinerary2);
-
-                itinerary1.getSlides().add(slide1);
-                itinerary1.getSlides().add(slide2);
-
-                itineraryRepository.save(itinerary1);
 
                 //Users
                 userRepository.save(new User("alumno", "alumno"));

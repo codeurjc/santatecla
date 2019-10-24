@@ -2,17 +2,19 @@
 <html>
     <body>
         <div class="unit-header">
-            <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/']">
-                Fichas
+          <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
+            Fichas
+          </button>
+
+          <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
+            Seguimiento
+          </button>
+
+          <div *ngFor="let itinerary of itineraries">
+            <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
+              Itinerario {{itinerary.id}}
             </button>
-            
-            <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" [routerLink]="['/units/9/itineraries/11']">
-                Itinerario
-            </button>
-            
-            <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" [routerLink]="['/units/9/progress']">
-                Seguimiento
-            </button>
+          </div>
         </div>
 
         <mat-card class="question" *ngFor = "let question of unit?.definitionQuestions">

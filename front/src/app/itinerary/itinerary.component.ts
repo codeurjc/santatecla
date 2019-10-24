@@ -1,3 +1,4 @@
+import { Unit } from './../unit/unit.model';
 import { Card } from './../card/card.model';
 import { SlideService } from './../slide/slide.service';
 import { Slide } from './../slide/slide.model';
@@ -5,10 +6,11 @@ import { Itineray } from './itinerary.model';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { TdDialogService } from '@covalent/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ItineraryService } from './itinerary.service';
 import { LoginService } from '../auth/login.service';
+import { ViewService } from '../view/view.service';
 
 @Component({
   templateUrl: './itinerary.component.html',
@@ -23,20 +25,40 @@ export class ItineraryComponent implements OnInit {
   public editorOptions: JsonEditorOptions;
   public data: any;
 
+  unit: Unit;
   itinerary: Itineray;
   name: string;
   itineraries: Itineray[];
+  itineraries2: Itineray[];
   slides: Slide[];
+
+  unitId: number;
+  itineraryId: number;
 
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
 
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
               private router: Router,
+              private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
-              private loginService: LoginService ) {}
+              private loginService: LoginService,
+              private viewService: ViewService ) {}
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      this.unitId = params['unitId'];
+      this.itineraryId = params['itineraryId'];
+    });
+
+    this.viewService.getUnit(this.unitId).subscribe((data: Unit) => {
+      this.unit = {
+        id: data['id'],
+        name: data['name'],
+        itineraries: data['itineraries']
+      };
+      this.itineraries2 = this.unit.itineraries;
+    });
 
     this.editorTypeJSON = true;
     this.editorType = 'Botones';
@@ -44,9 +66,9 @@ export class ItineraryComponent implements OnInit {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
-    this.itineraryService.getItinerary(12).subscribe(d => this.data = d);
+    this.itineraryService.getItinerary(this.itineraryId).subscribe(d => this.data = d);
 
-    this.itineraryService.getItinerary(12).subscribe((data: Itineray) => {
+    this.itineraryService.getItinerary(this.itineraryId).subscribe((data: Itineray) => {
       this.itinerary = {
         id: data['id'],
         name: data['name'],
@@ -150,11 +172,22 @@ export class ItineraryComponent implements OnInit {
   }
 
   navigateQuestion(id: number){
-    this.router.navigate(['/definitionQuestion/'+id])
+    this.router.navigate(['/definitionQuestion/' + id]);
   }
 
   navigateListQuestion(id: number){
-    this.router.navigate(['/listQuestion/'+id])
+    this.router.navigate(['/listQuestion/' + id]);
   }
 
+  navigateToUnitCards() {
+    this.router.navigate(['/units/' + this.unitId + '/cards']);
+  }
+
+  navigateToUnitProgress() {
+    this.router.navigate(['/units/' + this.unitId + '/progress']);
+  }
+
+  navigateToUnitItinerary(itineraryId: number) {
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
+  }
 }

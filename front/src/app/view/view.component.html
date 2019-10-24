@@ -17,5 +17,13 @@
       </div>
     </mat-form-field>
 
+    <div id="unit-representation" *ngFor="let d of data">
+      <mat-card>
+        <button mat-flat-button color="primary" style="position:absolute; left:10rem; margin-top: 0.4rem;" (click)="navigateToUnit(d.id)">
+          Unidad {{d.id}}
+        </button>
+      </mat-card>
+    </div>
+
   </body>
 </html>

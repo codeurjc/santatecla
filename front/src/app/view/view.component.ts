@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Unit } from './../unit/unit.model';
 import { ViewService } from './view.service';
 import { Component, ViewChild, OnInit } from '@angular/core';
@@ -25,7 +26,10 @@ export class ViewComponent implements OnInit {
   public results: Unit[] = [];
   public arrowkeyLocation = 0;
 
-  constructor(private viewService: ViewService) {}
+  unitId: number;
+
+  constructor(private viewService: ViewService,
+              private router: Router) {}
 
   ngOnInit() {
     this.editorOptions = new JsonEditorOptions();
@@ -44,6 +48,7 @@ export class ViewComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+    this.unitId = 8;
   }
 
   search() {
@@ -115,6 +120,10 @@ export class ViewComponent implements OnInit {
         console.log(error);
       });
     }
+  }
+
+  navigateToUnit(id: number) {
+    this.router.navigate(['/units/' + id + '/cards']);
   }
 
 }
