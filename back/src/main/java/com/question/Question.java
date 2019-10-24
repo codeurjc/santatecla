@@ -32,6 +32,10 @@ public class Question {
         this.questionText = questionText;
     }
 
+    /**
+     * Getters and Setters
+     */
+
     public long getId() {
         return id;
     }
@@ -39,10 +43,6 @@ public class Question {
     public void setId(long id) {
         this.id = id;
     }
-
-    /**
-     * Getters and Setters
-     */
 
     public String getQuestionText() {
         return questionText;

@@ -2,13 +2,11 @@ package com.question.test;
 
 import com.question.Question;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class TestQuestion extends Question {
 
     @Id
@@ -34,5 +32,13 @@ public class TestQuestion extends Question {
     /**
      * Getters and Setters
      */
+
+    public List<String> getPossibleAnswers() {
+        return possibleAnswers;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
 
 }
