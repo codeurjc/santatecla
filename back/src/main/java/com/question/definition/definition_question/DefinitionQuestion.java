@@ -15,56 +15,38 @@ import com.question.definition.definition_answer.DefinitionAnswer;
 import org.aspectj.weaver.loadtime.definition.Definition;
 
 @Entity
-public class DefinitionQuestion extends Question{
-    
+public class DefinitionQuestion extends Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected long id;
-
-    public enum Type {Test, Open}
-
-    private Type type;
-
-    //ONLY FOR TRUE/FALSE YES/NO QUESTIONS
-    private String correctAnswer;
+    private long id;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<DefinitionAnswer> answers;
 
-    private int correctAnswers;
-    private int wrongAnswers;
-
-    public DefinitionQuestion(){
+    public DefinitionQuestion() {
+        super();
         this.answers = new ArrayList<>();
-        this.correctAnswers = 0;
-        this.wrongAnswers = 0;
     }
 
-    public DefinitionQuestion(String questionText, Type type){
-        this.subtype = this.getClass().getSimpleName();
-        this.questionText = questionText;
-        this.type = type;
-        this.answers = new ArrayList<>();
-        this.correctAnswers = 0;
-        this.wrongAnswers = 0;
-    }
-
-    public DefinitionQuestion(String questionText, Type type, String correctAnswer){
-        this.subtype = this.getClass().getSimpleName();
-        this.questionText = questionText;
-        this.type = type;
-        this.correctAnswer = correctAnswer;
+    public DefinitionQuestion(String questionText) {
+        super(questionText);
         this.answers = new ArrayList<>();
     }
 
     public void update(DefinitionQuestion q) {
-        if(q.getQuestionText() != null){
+        if (q.getQuestionText() != null) {
             this.questionText = q.getQuestionText();
         }
-        if(q.getType() != this.type){
-            this.type = q.getType();
-        }
     }
+
+    public void addAnswer(DefinitionAnswer answer) {
+        this.answers.add(answer);
+    }
+
+    /**
+     * Getters and Setters
+     */
 
     public long getId() {
         return id;
@@ -74,40 +56,7 @@ public class DefinitionQuestion extends Question{
         this.id = id;
     }
 
-    public Type getType() {
-        return type;
-    }
-
     public List<DefinitionAnswer> getAnswers() {
         return answers;
     }
-
-    public void addAnswer(DefinitionAnswer answer) {
-        this.answers.add(answer);
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
-    public int getCorrectAnswers(){
-        return this.correctAnswers;
-    }
-    
-    public void setCorrectAnswers(int a){
-        this.correctAnswers = a;
-    }
-
-    public int getWrongAnswers(){
-        return this.wrongAnswers;
-    }
-
-    public void setWrongAnswers(int a){
-        this.wrongAnswers = a;
-    }
-    
 }

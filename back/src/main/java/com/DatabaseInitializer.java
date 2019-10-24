@@ -75,13 +75,13 @@ public class DatabaseInitializer {
                 cardRepository.save(card4);
 
                 // Definition Questions
-                Question definition1 = new DefinitionQuestion("¿Qué es el software?", DefinitionQuestion.Type.Open);
-                Question definition2 = new DefinitionQuestion("¿Qué es Java?", DefinitionQuestion.Type.Open);
-                Question definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", DefinitionQuestion.Type.Test, "Sí");
+                Question definition1 = new DefinitionQuestion("¿Qué es el software?");
+                Question definition2 = new DefinitionQuestion("¿Qué es Java?");
+                //Question definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", new ArrayList<String>(), "Sí");
 
                 questionRepository.save(definition1);
                 questionRepository.save(definition2);
-                questionRepository.save(definition3);
+                //questionRepository.save(definition3);
 
                 // List Questions
                 ArrayList<String> possibleAnswers = new ArrayList<>();
@@ -109,7 +109,7 @@ public class DatabaseInitializer {
 
                 ArrayList<DefinitionQuestion> unit1Questions = new ArrayList<>();
                 unit1Questions.add((DefinitionQuestion)definition1);
-                unit1Questions.add((DefinitionQuestion)definition3);
+                //unit1Questions.add((DefinitionQuestion)definition3);
                 ArrayList<ListQuestion> unit1ListQuestions = new ArrayList<>();
                 unit1ListQuestions.add((ListQuestion)list1);
 

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -13,10 +14,23 @@ public class Question {
     protected long id;
 
     protected String subtype;
-
     protected String questionText;
 
-    public Question() { this.subtype = this.getClass().getSimpleName(); }
+    protected int totalAnswers;
+    protected int totalCorrectAnswers;
+    protected int totalWrongAnswers;
+
+    public Question() {
+        this.subtype = this.getClass().getSimpleName();
+        this.totalAnswers = 0;
+        this.totalCorrectAnswers = 0;
+        this.totalWrongAnswers = 0;
+    }
+
+    public Question(String questionText) {
+        this();
+        this.questionText = questionText;
+    }
 
     public long getId() {
         return id;
@@ -25,6 +39,10 @@ public class Question {
     public void setId(long id) {
         this.id = id;
     }
+
+    /**
+     * Getters and Setters
+     */
 
     public String getQuestionText() {
         return questionText;

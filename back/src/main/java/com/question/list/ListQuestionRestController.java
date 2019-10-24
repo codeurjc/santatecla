@@ -60,7 +60,7 @@ public class ListQuestionRestController extends GeneralRestController{
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{id}/correct/")
+    /*@PostMapping("/{id}/correct/")
     public ResponseEntity<ListQuestion> addCorrectAnswer(@PathVariable long id){
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){
@@ -100,7 +100,7 @@ public class ListQuestionRestController extends GeneralRestController{
             return new ResponseEntity<>(optional.get().getWrongAnswers(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
 
 
 }
