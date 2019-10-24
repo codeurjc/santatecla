@@ -1,6 +1,7 @@
 package com;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -14,6 +15,7 @@ import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
 import com.question.list.list_question.ListQuestionRepository;
+import com.question.test.TestQuestion;
 import com.relation.Relation;
 import com.relation.RelationRepository;
 import com.slide.PracticeSlide;
@@ -52,9 +54,6 @@ public class DatabaseInitializer {
         @Autowired
         private QuestionRepository questionRepository;
 
-        @Autowired
-        private ListQuestionRepository listQuestionRepository;
-
 	@PostConstruct
 	public void init() {
 
@@ -77,11 +76,9 @@ public class DatabaseInitializer {
                 // Definition Questions
                 Question definition1 = new DefinitionQuestion("¿Qué es el software?");
                 Question definition2 = new DefinitionQuestion("¿Qué es Java?");
-                //Question definition3 = new DefinitionQuestion("¿Es Java un lenguaje de programación?", new ArrayList<String>(), "Sí");
 
                 questionRepository.save(definition1);
                 questionRepository.save(definition2);
-                //questionRepository.save(definition3);
 
                 // List Questions
                 ArrayList<String> possibleAnswers = new ArrayList<>();
@@ -95,7 +92,15 @@ public class DatabaseInitializer {
                  possibleAnswers, correctAnswer);
 
                 questionRepository.save(list1);
-  
+
+                //Test Questions
+                List<String> testAnswers = new ArrayList<>();
+                testAnswers.add("Sí");
+                testAnswers.add("No");
+                Question test = new TestQuestion("¿Es Java un lenguaje de programación?", testAnswers, "Sí");
+
+                this.questionRepository.save(test);
+
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
                 Unit unit2 = new Unit("Java");
