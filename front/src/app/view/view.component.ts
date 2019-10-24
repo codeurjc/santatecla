@@ -4,8 +4,43 @@ import { ViewService } from './view.service';
 import { Component, ViewChild, OnInit, AfterContentInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
+import { Relation } from '../relation/relation.model';
 
 declare var mermaid: any;
+
+class VisibleUnit implements Unit {
+  id: number;
+  name: string;
+  relations: VisibleRelation[] = [];
+
+  constructor(data: any) {
+    this.id = data.id;
+    this.name = data.name;
+    data.relations.forEach((relation: any) => {
+      this.relations.push(new VisibleRelation(relation));
+    });
+  }
+
+  getSortedData() {
+    return {
+      id: this.id,
+      name: this.name,
+      relations: this.relations
+    }
+  }
+}
+
+class VisibleRelation implements Relation {
+  id: number;
+  relationType: string;
+  relatedTo: any;
+
+  constructor(data: any) {
+    this.id = data.id;
+    this.relationType = data.relationType;
+    this.relatedTo = new VisibleUnit(data.relatedTo).getSortedData();
+  }
+}
 
 @Component({
   templateUrl: './view.component.html',
@@ -22,7 +57,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
   public searchField = '';
   public showResults = false;
   public results: Unit[] = [];
-  public arrowkeyLocation = 0;
+  public arrowKeyLocation = 0;
 
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
   public editorOptions: JsonEditorOptions;
@@ -38,12 +73,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
     this.umlParser = new UmlParser();
-    this.viewService.getUnit(9).subscribe((data: any) => {
-      this.data = data;
-      this.updateUml();
-    }, error => {
-      console.log(error);
-    });
+    this.getUnit(14);
   }
 
   ngAfterContentInit() {
@@ -67,21 +97,25 @@ export class ViewComponent implements OnInit, AfterContentInit {
   }
 
   getUnit(id: number) {
-    this.viewService.getUnit(id).subscribe((data: any) => {
-      this.data = data;
+    this.viewService.getUnit(id).subscribe((data: Unit) => {
+      this.setData(data);
       this.updateUml();
       this.setShowResults(false);
     }, error => {
       console.log(error);
     });
-    this.unitId = 8;
+  }
+
+  private setData(data: any) {
+    const visibleData = new VisibleUnit(data);
+    this.data = visibleData.getSortedData();
   }
 
   search() {
     if (this.validSearchField()) {
       this.viewService.searchByNameContaining(this.searchField).subscribe((data: any) => {
         this.results = data;
-        this.arrowkeyLocation = 0;
+        this.arrowKeyLocation = 0;
       }, error => {
         console.log(error);
       });
@@ -121,16 +155,16 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   keyDown(event: KeyboardEvent) {
     if ((event.key === this.ENTER_KEY) && (this.results.length > 0)) {
-      this.getUnit(this.results[this.arrowkeyLocation].id);
-    } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowkeyLocation > 0)) {
-      this.arrowkeyLocation--;
-    } else if ((event.key === this.ARROW_DOWN_KEY) && (this.arrowkeyLocation < (this.results.length - 1))) {
-      this.arrowkeyLocation++;
+      this.getUnit(this.results[this.arrowKeyLocation].id);
+    } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowKeyLocation > 0)) {
+      this.arrowKeyLocation--;
+    } else if ((event.key === this.ARROW_DOWN_KEY) && (this.arrowKeyLocation < (this.results.length - 1))) {
+      this.arrowKeyLocation++;
     }
   }
 
   setActive(i: number) {
-    this.arrowkeyLocation = i;
+    this.arrowKeyLocation = i;
   }
 
   getUnitPrefix(completeName: string) {
