@@ -1,7 +1,10 @@
+import { Unit } from './../unit/unit.model';
+import { Itineray } from './../itinerary/itinerary.model';
 import { CardService } from './card.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Card } from './card.model';
+import { ViewService } from '../view/view.service';
 
 @Component({
   templateUrl: './card.component.html',
@@ -12,12 +15,25 @@ export class CardComponent implements OnInit {
 
   unitId: number;
   cards: Card[];
+  unit: Unit;
+  itineraries: Itineray[];
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private cardService: CardService) {}
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private cardService: CardService,
+              private viewService: ViewService) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params['unitId'];
+      this.viewService.getUnit(this.unitId).subscribe((data: Unit) => {
+        this.unit = {
+          id: data['id'],
+          name: data['name'],
+          itineraries: data['itineraries']
+        };
+        this.itineraries = this.unit.itineraries;
+      });
       this.cardService.getCards(this.unitId).subscribe((data: Card[]) => {
         this.cards = [];
         data.forEach((card: Card) => {
@@ -63,6 +79,18 @@ export class CardComponent implements OnInit {
         );
       }
     });
+  }
+
+  navigateToUnitCards() {
+    this.router.navigate(['/units/' + this.unitId + '/cards']);
+  }
+
+  navigateToUnitProgress() {
+    this.router.navigate(['/units/' + this.unitId + '/progress']);
+  }
+
+  navigateToUnitItinerary(itineraryId: number) {
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
   }
 
 }

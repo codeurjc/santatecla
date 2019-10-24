@@ -34,7 +34,6 @@ public class Unit {
     private Map<Long, Card> cards;
 
     @ManyToMany
-    @JsonIgnore
     private List<Itinerary> itineraries;
 
     @OneToMany
