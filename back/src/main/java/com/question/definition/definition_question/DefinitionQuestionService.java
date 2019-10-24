@@ -29,10 +29,6 @@ public class DefinitionQuestionService {
         return this.questionRepository.findById(id);
     }
 
-    public List<DefinitionQuestion> findByType(DefinitionQuestion.Type type){
-        return this.questionRepository.findByType(type);
-    }
-
     public Optional<DefinitionAnswer> findOneAnswer(DefinitionQuestion question, long answerId) {
         for (DefinitionAnswer answer: question.getAnswers()) {
             if (answer.getId() == answerId) {

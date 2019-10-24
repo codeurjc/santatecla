@@ -10,7 +10,7 @@ import com.user.User;
 
 @Entity
 public class ListAnswer{
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
@@ -52,6 +52,6 @@ public class ListAnswer{
     public void setCorrect(boolean correct) {
         this.correct = correct;
     }
-    
-    
+
+
 }

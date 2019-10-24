@@ -74,6 +74,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     }, error => {
       console.log(error);
     });
+    this.unitId = 8;
   }
 
   search() {
@@ -154,8 +155,12 @@ export class ViewComponent implements OnInit, AfterContentInit {
   handle(event: MouseEvent) {
     const target = <HTMLInputElement>event.target;
     if ((target.tagName === 'text') || (target.tagName ==='rect')) {
-      this.router.navigate(['/units/' + target.id + '/cards']);
+      this.goToUnit(target.id);
     }
+  }
+
+  goToUnit(id) {
+    this.router.navigate(['/units/' + id + '/cards']);
   }
 
 }

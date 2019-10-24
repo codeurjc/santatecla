@@ -96,11 +96,6 @@ public class DefinitionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/question/type/{type}")
-    public ResponseEntity<List<DefinitionQuestion>> getQuestionsByType(@PathVariable DefinitionQuestion.Type type) {
-        return new ResponseEntity<>(definitionQuestionService.findByType(type), HttpStatus.OK);
-    }
-
     @PostMapping("/question/{id1}/answer/{id2}")
     public ResponseEntity<DefinitionAnswer> addJustification(@PathVariable long id1, @PathVariable long id2, @RequestBody String justification) {
 
@@ -119,7 +114,7 @@ public class DefinitionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/question/{id}/correct/")
+    /*@PostMapping("/question/{id}/correct/")
     public ResponseEntity<DefinitionQuestion> addCorrectAnswer(@PathVariable long id){
         Optional<DefinitionQuestion> optional = this.definitionQuestionService.findOne(id);
         if(optional.isPresent()){
@@ -159,5 +154,5 @@ public class DefinitionRestController extends GeneralRestController {
             return new ResponseEntity<>(optional.get().getWrongAnswers(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
 }

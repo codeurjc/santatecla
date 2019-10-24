@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuestionRestController extends GeneralRestController {
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
-    @GetMapping("/test")
+    @GetMapping("/")
     public ResponseEntity<List<Question>> getQuestions() {
-        return new ResponseEntity<>(this.questionRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(this.questionService.findAll(), HttpStatus.OK);
     }
 }

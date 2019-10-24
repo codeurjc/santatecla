@@ -1,5 +1,6 @@
 package com.question.list.list_question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -15,7 +16,7 @@ public class ListQuestion extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected long id;
+    private long id;
 
     @ElementCollection
     private List<String> possibleAnswers;
@@ -23,19 +24,14 @@ public class ListQuestion extends Question {
     @ElementCollection
     private List<String> correctAnswers;
 
-    private int correctAnswersCount;
-    private int wrongAnswers;
-
     public ListQuestion() {
-        this.correctAnswersCount = 0;
-        this.wrongAnswers = 0;
+        super();
+        this.possibleAnswers = new ArrayList<>();
+        this.correctAnswers = new ArrayList<>();
     }
 
     public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer) {
-        this.subtype = this.getClass().getSimpleName();
-        this.correctAnswersCount = 0;
-        this.wrongAnswers = 0;
-        this.questionText = questionText;
+        super(questionText);
         this.possibleAnswers = possibleAnswers;
         this.correctAnswers = correctAnswer;
     }
@@ -52,6 +48,10 @@ public class ListQuestion extends Question {
         }
     }
 
+    /**
+     * Getters and Setters
+     */
+
     public long getId() {
         return id;
     }
@@ -60,36 +60,12 @@ public class ListQuestion extends Question {
         this.id = id;
     }
 
-    public String getQuestionText() {
-        return questionText;
-    }
-
     public List<String> getCorrectAnswers() {
         return this.correctAnswers;
     }
 
     public List<String> getPossibleAnswers() {
         return this.possibleAnswers;
-    }
-
-    public void setPossibleAnswers(List<String> possibleAnswers) {
-        this.possibleAnswers = possibleAnswers;
-    }
-
-    public int getCorrectAnswersCount() {
-        return this.correctAnswersCount;
-    }
-
-    public void setCorrectAnswersCount(int a) {
-        this.correctAnswersCount = a;
-    }
-
-    public int getWrongAnswers() {
-        return this.wrongAnswers;
-    }
-
-    public void setWrongAnswers(int a) {
-        this.wrongAnswers = a;
     }
 
 }

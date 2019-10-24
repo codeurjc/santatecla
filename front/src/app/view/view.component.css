@@ -7,6 +7,12 @@
   overflow: auto;
 }
 
+#unit-representation {
+  float: right;
+  width: 70%;
+  overflow: auto;
+}
+
 #search {
   margin: 1rem;
   width: 50rem;
