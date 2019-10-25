@@ -81,10 +81,6 @@ export class CardComponent implements OnInit {
     });
   }
 
-  navigateToUnitCards() {
-    this.router.navigate(['/units/' + this.unitId + '/cards']);
-  }
-
   navigateToUnitProgress() {
     this.router.navigate(['/units/' + this.unitId + '/progress']);
   }

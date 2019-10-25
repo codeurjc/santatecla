@@ -3,7 +3,7 @@
   <body>
 
     <div id="json-editor-container">
-      <json-editor [options]="editorOptions" [(ngModel)]="data" (keydown.control.s)="save($event)" (change)="updateUml()"></json-editor>
+      <json-editor [options]="editorOptions" [(ngModel)]="data" (keydown.control.s)="save($event)" (change)="updateJson()"></json-editor>
     </div>
 
     <mat-form-field appearance="outline" id="search">

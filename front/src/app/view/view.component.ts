@@ -5,6 +5,7 @@ import { Component, ViewChild, OnInit, AfterContentInit } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
+import { RelationType } from '../relation/relation.type';
 
 declare var mermaid: any;
 
@@ -78,7 +79,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     mermaid.initialize({
-      theme: 'forest',
+      theme: 'default',
       logLevel: 3,
       flowchart: { curve: 'basis' },
       gantt: { axisFormat: '%m/%d/%Y' },
@@ -86,17 +87,40 @@ export class ViewComponent implements OnInit, AfterContentInit {
     });
   }
 
-  private updateUml() {
-    if (this.editor.isValidJson()) {
-      const element: any = this.umlDiv.nativeElement;
-      element.innerHTML = '';
-      mermaid.render('uml', this.umlParser.jsonToUml(this.data), (svgCode, bindFunctions) => {
-        element.innerHTML = svgCode;
-      });
+  private updateJson() {
+    if (this.isValidJson()) {
+      this.updateUml();
     }
   }
 
-  getUnit(id: number) {
+  private isValidJson(): boolean {
+    return ((this.validRelations(this.data)) && (this.editor.isValidJson()));
+  }
+
+  private validRelations(data: VisibleUnit): boolean {
+    let valid = true;
+    data.relations.forEach((relation: VisibleRelation) => {
+      if (valid) {
+        if (Object.values(RelationType).indexOf(relation.relationType) === -1) {
+          valid = false;
+        }
+        if (!this.validRelations(relation.relatedTo)) {
+          valid = false;
+        }
+      }
+    });
+    return valid;
+  }
+
+  private updateUml() {
+    const element: any = this.umlDiv.nativeElement;
+    element.innerHTML = '';
+    mermaid.render('uml', this.umlParser.jsonToUml(this.data), (svgCode, bindFunctions) => {
+      element.innerHTML = svgCode;
+    });
+  }
+
+  private getUnit(id: number) {
     this.viewService.getUnit(id).subscribe((data: Unit) => {
       this.setData(data);
       this.updateUml();
@@ -111,7 +135,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     this.data = visibleData.getSortedData();
   }
 
-  search() {
+  private search() {
     if (this.validSearchField()) {
       this.viewService.searchByNameContaining(this.searchField).subscribe((data: any) => {
         this.results = data;
@@ -124,7 +148,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     }
   }
 
-  validSearchField() {
+  private validSearchField() {
     const invalidChars = ['?', '/', '\\', '[', ']', ';', '#'];
     for (const ch of invalidChars) {
       if (this.searchField.includes(ch)) {
@@ -140,7 +164,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     return true;
   }
 
-  setShowResults(showResults: boolean) {
+  private setShowResults(showResults: boolean) {
     if (showResults) {
       this.search();
     } else {
@@ -153,7 +177,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     this.results = [];
   }
 
-  keyDown(event: KeyboardEvent) {
+  private keyDown(event: KeyboardEvent) {
     if ((event.key === this.ENTER_KEY) && (this.results.length > 0)) {
       this.getUnit(this.results[this.arrowKeyLocation].id);
     } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowKeyLocation > 0)) {
@@ -163,20 +187,20 @@ export class ViewComponent implements OnInit, AfterContentInit {
     }
   }
 
-  setActive(i: number) {
+  private setActive(i: number) {
     this.arrowKeyLocation = i;
   }
 
-  getUnitPrefix(completeName: string) {
+  private getUnitPrefix(completeName: string) {
     const nameLength = completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1].length;
     return completeName.substring(0, completeName.length - nameLength);
   }
 
-  getUnitName(completeName: string) {
+  private getUnitName(completeName: string) {
     return completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1];
   }
 
-  save(event: KeyboardEvent) {
+  private save(event: KeyboardEvent) {
     event.preventDefault();
     if (this.editor.isValidJson()) {
       this.viewService.saveUnit(this.data).subscribe((data: any) => {
@@ -186,14 +210,14 @@ export class ViewComponent implements OnInit, AfterContentInit {
     }
   }
 
-  handle(event: MouseEvent) {
+  private handle(event: MouseEvent) {
     const target = <HTMLInputElement>event.target;
     if ((target.tagName === 'text') || (target.tagName ==='rect')) {
       this.goToUnit(target.id);
     }
   }
 
-  goToUnit(id) {
+  private goToUnit(id) {
     this.router.navigate(['/units/' + id + '/cards']);
   }
 

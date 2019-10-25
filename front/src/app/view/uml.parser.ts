@@ -1,8 +1,4 @@
-
-const RELATION_TYPE_ASSOCIATION = 'ASSOCIATION';
-const RELATION_TYPE_AGGREGATION = 'AGGREGATION';
-const RELATION_TYPE_COMPOSITION = 'COMPOSITION';
-const RELATION_TYPE_INHERITANCE = 'INHERITANCE';
+import { RelationType } from '../relation/relation.type';
 
 export class UmlParser {
 
@@ -19,19 +15,19 @@ export class UmlParser {
     unit.relations.forEach((relation: any) => {
       const relatedTo = relation.relatedTo;
       switch (relation.relationType) {
-        case RELATION_TYPE_ASSOCIATION: {
+        case RelationType.ASSOCIATION: {
           uml += unit.id + unit.name + ' <-- ' + relatedTo.id + relatedTo.name + '\n';
           break;
         }
-        case RELATION_TYPE_AGGREGATION: {
+        case RelationType.AGGREGATION: {
           uml += unit.id + unit.name + ' "1" o-- "many" ' + relatedTo.id + relatedTo.name + '\n';
           break;
         }
-        case RELATION_TYPE_COMPOSITION: {
+        case RelationType.COMPOSITION: {
           uml += unit.id + unit.name + ' "0" *-- "0..n" ' + relatedTo.id + relatedTo.name + '\n';
           break;
         }
-        case RELATION_TYPE_INHERITANCE: {
+        case RelationType.INHERITANCE: {
           uml += unit.id + unit.name + ' <|-- ' + relatedTo.id + relatedTo.name + '\n';
           break;
         }
