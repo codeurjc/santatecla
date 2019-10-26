@@ -373,11 +373,13 @@ g.classGroup text {
   fill: #000000;
   stroke: none;
   font-size: 10px;
+  cursor: pointer;
 }
 
 g.classGroup rect {
   fill: #f1f8ff;
   stroke: #006fe6;
+  cursor: pointer;
 }
 
 g.classGroup line {

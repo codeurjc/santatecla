@@ -42,3 +42,14 @@
 #unit-name {
   font-weight: bold;
 }
+
+#umlNodeOptions {
+  position: absolute;
+  right: 0;
+  color: red;
+}
+
+
+.umlOptionIcon {
+  font-size: 1rem;
+}

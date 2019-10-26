@@ -17,7 +17,16 @@
       </div>
     </mat-form-field>
 
-    <div #uml (dblclick)="handle($event)"></div>
+    <div #uml (click)="handle($event)"></div>
+
+    <div #umlNodeOptions [hidden]="!showUmlNodeOptions">
+      <div id="umlNodeOptions" (window:resize)="drawUmlNodeOptions()">
+        <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id)">
+          <mat-icon class="umlOptionIcon">call_made</mat-icon>
+        </button>
+
+      </div>
+    </div>
 
   </body>
 </html>

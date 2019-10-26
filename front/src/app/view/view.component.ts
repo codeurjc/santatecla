@@ -1,7 +1,7 @@
 import { UmlParser } from './uml.parser';
 import { Unit } from '../unit/unit.model';
 import { ViewService } from './view.service';
-import { Component, ViewChild, OnInit, AfterContentInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterContentInit, ElementRef } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
@@ -66,6 +66,10 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   @ViewChild('uml') umlDiv;
   private umlParser: UmlParser;
+
+  @ViewChild('umlNodeOptions') umlNodeOptions: ElementRef;
+  private selectedTarget: HTMLInputElement;
+  private showUmlNodeOptions = false;
 
   constructor(private router: Router, private viewService: ViewService) {}
 
@@ -211,10 +215,22 @@ export class ViewComponent implements OnInit, AfterContentInit {
   }
 
   private handle(event: MouseEvent) {
-    const target = <HTMLInputElement>event.target;
-    if ((target.tagName === 'text') || (target.tagName ==='rect')) {
-      this.goToUnit(target.id);
+    this.selectedTarget = <HTMLInputElement>event.target;
+    const tagName = this.selectedTarget.tagName;
+    if ((tagName === 'rect') || (tagName ==='text')) {
+      if (tagName === 'text') {
+        this.selectedTarget = <HTMLInputElement>this.selectedTarget.previousElementSibling;
+      }
+      this.showUmlNodeOptions = true;
+      this.drawUmlNodeOptions();
+    } else if (tagName === 'path') {
+
     }
+  }
+
+  private drawUmlNodeOptions() {
+    this.umlNodeOptions.nativeElement.firstChild.style.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
+    this.umlNodeOptions.nativeElement.firstChild.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
   }
 
   private goToUnit(id) {
