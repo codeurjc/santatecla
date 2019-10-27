@@ -20,7 +20,7 @@
         <mat-card class="question" *ngFor = "let question of unit?.definitionQuestions">
             <p>{{question.questionText}}</p>
             <div style="border: solid; color: gray;">
-                <p>Correctas : {{question.correctAnswers}}</p>
+                <p>Correctas : {{question.totalCorrectAnswers}}</p>
                 <p>Incorectas: {{question.wrongAnswers}}</p>
                 <span *ngIf= "question.wrongAnswers > 0.75 * (question.wrongAnswers + question.correctAnswers)">
                     <p style="color: red;">CUIDADO REVISAR</p>

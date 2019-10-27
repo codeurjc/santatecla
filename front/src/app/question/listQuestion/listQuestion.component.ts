@@ -3,6 +3,8 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {LoginService} from '../../auth/login.service';
 import {ListQuestion} from './listQuestion.model';
 import {ListQuestionService} from './listQuestion.service';
+import {ListAnswer} from './listAnswer.model';
+import {TestAnswer} from '../testQuestion/testAnswer.model';
 
 @Component({
   templateUrl: './listQuestion.component.html'
@@ -15,13 +17,19 @@ export class ListQuestionComponent implements OnInit {
   questionDone: boolean;
   questionListCorrect: boolean;
   questionListCorrectAnswers: string[];
+  questionAnswer: ListAnswer;
   id: number;
+  alreadyDone: boolean;
+  timesSolved: number;
+  prevResults: string;
 
   constructor(
     private questionService: ListQuestionService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private loginService: LoginService) {
     this.questionDone = false;
     this.choosenListAnswers = [];
+    this.prevResults = '';
   }
 
   ngOnInit() {
@@ -30,9 +38,24 @@ export class ListQuestionComponent implements OnInit {
       this.questionService.getListQuestion(this.id).subscribe((data: ListQuestion) => {
         this.question = data;
         this.availableListAnswers = this.question.possibleAnswers;
-        this.questionListCorrectAnswers = this.question.correctAnswer;
+        this.questionListCorrectAnswers = this.question.correctAnswers;
       }, error => {
       });
+    });
+
+    this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: ListAnswer[]) => {
+      if (data.length != 0) {
+        this.alreadyDone = true;
+        this.timesSolved = data.length;
+        console.log(data);
+        for (let answer of data){
+          if (answer[2] == true){
+            this.prevResults = this.prevResults + 'BIEN ';
+          } else {
+            this.prevResults.concat('MAL ');
+          }
+        }
+      }
     });
   }
 
@@ -58,7 +81,12 @@ export class ListQuestionComponent implements OnInit {
     } else {
       this.questionListCorrect = false;
     }
-    this.questionDone = true;
+    this.questionAnswer = {user: this.loginService.getCurrentUser(), correct: this.questionListCorrect};
+    this.questionService.addAnswer(this.id, this.questionAnswer).subscribe(
+      (_) => {
+        this.questionDone = true;
+      },
+      (error) => console.log(error));
   }
 
 }

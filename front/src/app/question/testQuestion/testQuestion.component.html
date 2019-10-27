@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+<div align=center>
+  <p>{{question?.questionText}}</p>
+  <span *ngIf="!alreadyDone">
+    <span *ngIf="!questionDone">
+              <form name="choosenAnswer">
+                <label>
+                  <input type="radio" name="answer" value="Sí" placeholder="SI" [(ngModel)]="this.chosenAnswer"> SI
+                </label>
+                <label>
+                  <input type="radio" name="answer" value="No" placeholder="NO" [(ngModel)]="this.chosenAnswer">NO
+                </label>
+              </form>
+              <div *ngIf="!loginService.isAdmin">
+                <button class="button" color="primary" (click)="correctType1Answer()">Guardar</button>
+              </div>
+            </span>
+    <span *ngIf="questionDone">
+              <span *ngIf="correct">
+                <p style="color: green">CORRECTO</p>
+              </span>
+              <span *ngIf="!correct">
+                  <p style="color: red">INCORRECTO</p>
+              </span>
+    </span>
+  </span>
+  <span *ngIf="alreadyDone">
+    <p>Has realizado esta pregunta {{timesSolved}} veces con los siguientes resultados: {{prevResults}}</p>
+  </span>
+</div>
+</body>
+</html>

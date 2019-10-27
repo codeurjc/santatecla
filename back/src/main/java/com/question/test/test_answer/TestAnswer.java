@@ -1,15 +1,11 @@
-package com.question.list.list_answer;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+package com.question.test.test_answer;
 
 import com.user.User;
 
+import javax.persistence.*;
+
 @Entity
-public class ListAnswer{
+public class TestAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,9 +18,10 @@ public class ListAnswer{
     @OneToOne
     private User user;
 
-    public ListAnswer(){}
+    public TestAnswer() {
+    }
 
-    public ListAnswer(String answerText, boolean correct){
+    public TestAnswer(String answerText, boolean correct) {
         this.answerText = answerText;
         this.correct = correct;
     }
@@ -37,11 +34,11 @@ public class ListAnswer{
         this.id = id;
     }
 
-    public String answerText() {
+    public String getAnswerText() {
         return answerText;
     }
 
-    public void answerText(String answerText) {
+    public void setAnswerText(String answerText) {
         this.answerText = answerText;
     }
 
@@ -61,3 +58,4 @@ public class ListAnswer{
         this.user = user;
     }
 }
+

@@ -71,7 +71,7 @@ public class DefinitionRestController extends GeneralRestController {
     }
 
     @PostMapping("/question/{id}")
-    public ResponseEntity<DefinitionAnswer> addAnswer(@PathVariable long id, @RequestBody DefinitionAnswer answer) {
+    public ResponseEntity<DefinitionAnswer> addAnswer1(@PathVariable long id, @RequestBody DefinitionAnswer answer) {
 
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
 
@@ -112,6 +112,11 @@ public class DefinitionRestController extends GeneralRestController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/question/{id}/answer/user/{userId}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
+        return new ResponseEntity<List<Object>>(this.definitionQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
     }
 
     /*@PostMapping("/question/{id}/correct/")

@@ -9,10 +9,6 @@ export class DefinitionQuestionService {
   constructor(private http: HttpClient) {
   }
 
-  getDefinitionQuestions() {
-    return this.http.get('/api/definition/question');
-  }
-
   getDefinitionQuestion(id: number) {
     return this.http.get('api/definition/question/' + id);
   }
@@ -37,31 +33,7 @@ export class DefinitionQuestionService {
     return this.http.post<DefinitionAnswer>('/api/definition/question/' + id, body, {headers});
   }
 
-  addDefinitionCorrection(id: number, correct: boolean): Observable<DefinitionAnswer> {
-    if (correct) {
-      const body = JSON.stringify(correct);
-
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-      });
-
-      return this.http.post<DefinitionAnswer>('/api/definition/question/' + id + '/correct/', body, {headers});
-    } else {
-      const body = JSON.stringify(correct);
-
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-      });
-
-      return this.http.post<DefinitionAnswer>('/api/definition/question/' + id + '/wrong/', body, {headers});
-    }
-  }
-
-  getDefinitionAnswers(id: number) {
-    return this.http.get('/api/definition/question/' + id);
-  }
-
-  getDefinitionQuestionsType1() {
-    return this.http.get('/api/definition/question/type/1');
+  getUserAnswers(questionId: number, userId: number) {
+    return this.http.get('api/definition/question/' + questionId + '/answer/user/' + userId);
   }
 }

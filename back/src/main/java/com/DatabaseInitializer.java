@@ -9,12 +9,12 @@ import com.card.Card;
 import com.card.CardRepository;
 import com.itinerary.Itinerary;
 import com.itinerary.ItineraryRepository;
-import com.question.Question;
-import com.question.QuestionRepository;
 import com.question.definition.definition_question.DefinitionQuestion;
+import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
 import com.question.list.list_question.ListQuestionRepository;
-import com.question.test.TestQuestion;
+import com.question.test.test_question.TestQuestion;
+import com.question.test.test_question.TestQuestionRepository;
 import com.relation.Relation;
 import com.relation.RelationRepository;
 import com.slide.PracticeSlide;
@@ -51,7 +51,13 @@ public class DatabaseInitializer {
         private UserRepository userRepository;
 
         @Autowired
-        private QuestionRepository questionRepository;
+        private DefinitionQuestionRepository definitionQuestionRepository;
+
+        @Autowired
+        private ListQuestionRepository listQuestionRepository;
+
+        @Autowired
+        private TestQuestionRepository testQuestionRepository;
 
 	@PostConstruct
 	public void init() {
@@ -73,11 +79,11 @@ public class DatabaseInitializer {
                 cardRepository.save(card4);
 
                 // Definition Questions
-                Question definition1 = new DefinitionQuestion("¿Qué es el software?");
-                Question definition2 = new DefinitionQuestion("¿Qué es Java?");
+                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?");
+                DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?");
 
-                questionRepository.save(definition1);
-                questionRepository.save(definition2);
+                definitionQuestionRepository.save(definition1);
+                definitionQuestionRepository.save(definition2);
 
                 // List Questions
                 ArrayList<String> possibleAnswers = new ArrayList<>();
@@ -87,18 +93,18 @@ public class DatabaseInitializer {
                 ArrayList<String> correctAnswer = new ArrayList<>();
                 correctAnswer.add("Python");
                 correctAnswer.add("Java");
-                Question list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
+                ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
                  possibleAnswers, correctAnswer);
 
-                questionRepository.save(list1);
+                listQuestionRepository.save(list1);
 
                 //Test Questions
                 List<String> testAnswers = new ArrayList<>();
                 testAnswers.add("Sí");
                 testAnswers.add("No");
-                Question test = new TestQuestion("¿Es Java un lenguaje de programación?", testAnswers, "Sí");
+                TestQuestion test = new TestQuestion("¿Es Java un lenguaje de programación?", testAnswers, "Sí");
 
-                this.questionRepository.save(test);
+                this.testQuestionRepository.save(test);
 
                 //Slides
                 Slide slide1 = new TheorySlide();

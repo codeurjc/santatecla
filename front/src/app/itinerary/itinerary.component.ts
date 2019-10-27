@@ -179,6 +179,10 @@ export class ItineraryComponent implements OnInit {
     this.router.navigate(['/listQuestion/' + id]);
   }
 
+  navigateTestQuestion(id: number) {
+    this.router.navigate(['/testQuestion/' + id]);
+  }
+
   navigateToUnitCards() {
     this.router.navigate(['/units/' + this.unitId + '/cards']);
   }

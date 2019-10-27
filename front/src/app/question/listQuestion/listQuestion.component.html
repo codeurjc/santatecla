@@ -4,31 +4,36 @@
 <body>
   <div align="center">
     <p>{{question?.questionText}}</p>
-    <span *ngIf="!questionDone">
-      <form name="possibleListAnswers">
-        <p>RESPUESTAS POSIBLES</p>
-        <span *ngFor="let answer of availableListAnswers">
-          <input type="button" name="answer" value="{{answer}}" (click)="newChoosenAnswer(answer)">
-        </span>
-      </form>
-      <form name="choosenListAnswers">
-        <p>RESPUESTAS ESCOGIDAS</p>
-        <span *ngFor="let answer of choosenListAnswers">
-          <input type="button" name="answer" value="{{answer}}" (click)="deleteChoosenAnswer(answer)">
-        </span>
-      </form>
-      <div>
-        <button class="button" style="color: dodgerblue" (click)="correctListAnswer()">Enviar</button>
-      </div>
-    </span>
+    <span *ngIf="!alreadyDone">
+      <span *ngIf="!questionDone">
+        <form name="possibleListAnswers">
+          <p>RESPUESTAS POSIBLES</p>
+          <span *ngFor="let answer of availableListAnswers">
+            <input type="button" name="answer" value="{{answer}}" (click)="newChoosenAnswer(answer)">
+          </span>
+        </form>
+        <form name="choosenListAnswers">
+          <p>RESPUESTAS ESCOGIDAS</p>
+          <span *ngFor="let answer of choosenListAnswers">
+            <input type="button" name="answer" value="{{answer}}" (click)="deleteChoosenAnswer(answer)">
+          </span>
+        </form>
+        <div *ngIf="!loginService.isAdmin">
+          <button class="button" style="color: dodgerblue" (click)="correctListAnswer()">Enviar</button>
+        </div>
+      </span>
 
-    <span *ngIf="questionDone">
-      <span *ngIf="questionListCorrect">
-        <p style="color: green">CORRECTO</p>
+      <span *ngIf="questionDone">
+        <span *ngIf="questionListCorrect">
+          <p style="color: green">CORRECTO</p>
+        </span>
+        <span *ngIf="!questionListCorrect">
+          <p style="color: red">INCORRECTO</p>
+        </span>
       </span>
-      <span *ngIf="!questionListCorrect">
-        <p style="color: red">INCORRECTO</p>
-      </span>
+    </span>
+    <span *ngIf="alreadyDone">
+      <p>Has realizado esta pregunta {{timesSolved}} veces con los siguientes resultados: {{prevResults}}</p>
     </span>
   </div>
 </body>

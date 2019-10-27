@@ -38,6 +38,12 @@ export class DefinitionQuestionComponent implements OnInit {
         this.subtype = data.subtype;
       }, error => {
       });
+
+      this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: DefinitionAnswer[]) => {
+        if (data.length != 0) {
+          this.questionDone = true;
+        }
+      });
     });
   }
 
@@ -49,14 +55,5 @@ export class DefinitionQuestionComponent implements OnInit {
       },
       (error) => console.log(error)
     );
-  }
-
-  correctType1Answer() {
-    if (this.chosenAnswer === this.question.correctAnswer) {
-      this.correct = true;
-    } else {
-      this.correct = false;
-    }
-    this.questionDone = true;
   }
 }

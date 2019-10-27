@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 
+import com.question.list.list_answer.ListAnswer;
 import com.question.list.list_question.ListQuestion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,19 +61,31 @@ public class ListQuestionRestController extends GeneralRestController{
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    /*@PostMapping("/{id}/correct/")
-    public ResponseEntity<ListQuestion> addCorrectAnswer(@PathVariable long id){
+    @PostMapping("/{id}/answer")
+    public ResponseEntity<ListQuestion> addAnswer2(@PathVariable long id, @RequestBody ListAnswer answer){
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){
-            optional.get().setCorrectAnswersCount(optional.get().getCorrectAnswersCount()+1);
-            this.listQuestionService.save(optional.get());
+            ListQuestion question = optional.get();
+            question.addAnswer(answer);
+            if(answer.isCorrect()){
+                question.setCorrectAnswerCount(question.getCorrectAnswerCount() + 1);
+            }
+            else {
+                question.setWrongAnswerCount(question.getWrongAnswerCount() + 1);
+            }
+            this.listQuestionService.save(question);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{id}/wrong/")
+    @GetMapping("/{id}/answer/user/{userId}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
+        return new ResponseEntity<List<Object>>(this.listQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
+    }
+
+    /*@PostMapping("/{id}/wrong/")
     public ResponseEntity<ListQuestion> addWrongAnswer(@PathVariable long id){
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){

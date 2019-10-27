@@ -6,6 +6,7 @@ import { DefinitionQuestionComponent } from './question/definitionQuestion/defin
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
 import {QuestionComponent} from './question/question.component';
 import { ProgressComponent } from './progress/progress.component';
+import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 
 
 const appRoutes = [
@@ -15,6 +16,7 @@ const appRoutes = [
   // { path: 'units/:unitId/question/:questionId', component: QuestionComponent },
   { path: 'definitionQuestion/:questionId', component: DefinitionQuestionComponent},
   { path: 'listQuestion/:questionId', component: ListQuestionComponent},
+  { path: 'testQuestion/:questionId', component: TestQuestionComponent},
   { path: 'question', component: QuestionComponent},
   { path: 'units/:unitId/progress', component: ProgressComponent }
 ];
