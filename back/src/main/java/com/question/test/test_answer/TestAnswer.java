@@ -1,4 +1,4 @@
-package com.question.test;
+package com.question.test.test_answer;
 
 import com.user.User;
 
@@ -34,11 +34,11 @@ public class TestAnswer {
         this.id = id;
     }
 
-    public String answerText() {
+    public String getAnswerText() {
         return answerText;
     }
 
-    public void answerText(String answerText) {
+    public void setAnswerText(String answerText) {
         this.answerText = answerText;
     }
 

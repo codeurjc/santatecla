@@ -1,7 +1,7 @@
-package com.question.test;
+package com.question.test.test_question;
 
 import com.question.Question;
-import com.question.definition.definition_answer.DefinitionAnswer;
+import com.question.test.test_answer.TestAnswer;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,6 +31,22 @@ public class TestQuestion extends Question {
         super(questionText);
         this.possibleAnswers = possibleAnswers;
         this.correctAnswer = correctAnswer;
+    }
+
+    public void update(TestQuestion q) {
+        if (q.getQuestionText() != null) {
+            this.questionText = q.getQuestionText();
+        }
+        if (!q.getCorrectAnswer().equals(this.correctAnswer)) {
+            this.correctAnswer = q.getCorrectAnswer();
+        }
+        if (!q.getPossibleAnswers().equals(this.possibleAnswers)) {
+            this.possibleAnswers = q.getPossibleAnswers();
+        }
+    }
+
+    public void addAnswer(TestAnswer answer) {
+        this.answers.add(answer);
     }
 
     /**
