@@ -9,13 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.JViews.Summary;
 import com.card.Card;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 public class TheorySlide extends Slide {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
     @OneToMany

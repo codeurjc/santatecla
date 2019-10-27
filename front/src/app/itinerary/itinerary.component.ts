@@ -29,7 +29,7 @@ export class ItineraryComponent implements OnInit {
   itinerary: Itineray;
   name: string;
   itineraries: Itineray[];
-  itineraries2: Itineray[];
+  itinerariesTabs: Itineray[];
   slides: Slide[];
 
   unitId: number;
@@ -57,7 +57,7 @@ export class ItineraryComponent implements OnInit {
         name: data['name'],
         itineraries: data['itineraries']
       };
-      this.itineraries2 = this.unit.itineraries;
+      this.itinerariesTabs = this.unit.itineraries;
     });
 
     this.editorTypeJSON = true;
@@ -66,7 +66,7 @@ export class ItineraryComponent implements OnInit {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
-    this.itineraryService.getItinerary(this.itineraryId).subscribe(d => this.data = d);
+    this.itineraryService.getItinerarySumm(this.itineraryId).subscribe(d => this.data = d);
 
     this.itineraryService.getItinerary(this.itineraryId).subscribe((data: Itineray) => {
       this.itinerary = {

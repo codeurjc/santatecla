@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.question.Question;
 
 @Entity
@@ -16,6 +18,7 @@ public class PracticeSlide extends Slide{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
     @OneToMany

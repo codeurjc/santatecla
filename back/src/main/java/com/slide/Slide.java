@@ -7,11 +7,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 public abstract class Slide {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
     private String type;

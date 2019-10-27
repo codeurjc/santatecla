@@ -73,7 +73,16 @@
               </div>
             </div>
             <div *ngIf= "slide.type == 'PracticeSlide'">
-                <h2>Ejercicio</h2>
+              <div *ngFor="let component of slide.components">
+                <h2>Ejercicio {{component.id}}</h2>
+                <p>{{component.questionText}}</p>
+                <div *ngIf= "component.subtype == 'DefinitionQuestion'">
+                  <button (click)="navigateQuestion(component.id)">Resolver</button>
+                </div>
+                <div *ngIf= "component.subtype == 'ListQuestion'">
+                  <button (click)="navigateListQuestion(component.id)">Resolver</button>
+                </div>
+              </div>
             </div>
           </div>
       </div>

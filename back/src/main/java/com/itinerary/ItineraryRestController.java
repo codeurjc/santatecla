@@ -3,6 +3,8 @@ package com.itinerary;
 import java.util.Optional;
 
 import com.GeneralRestController;
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.slide.Slide;
 
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,20 @@ public class ItineraryRestController extends GeneralRestController {
 
     @GetMapping(value="/{id}")
     public ResponseEntity<Itinerary> itinerary(@PathVariable long id){
+
+        Optional<Itinerary> i = this.itineraryService.findOne(id);
+
+        if (i.isPresent()) {
+            return new ResponseEntity<>(i.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    }
+
+    @GetMapping(value="/{id}/summarized")
+    @JsonView(Summary.class)
+    public ResponseEntity<Itinerary> itinerarySumm(@PathVariable long id){
 
         Optional<Itinerary> i = this.itineraryService.findOne(id);
 

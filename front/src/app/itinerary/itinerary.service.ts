@@ -15,6 +15,10 @@ export class ItineraryService {
     return this.http.get('/api/itineraries/' + id);
   }
 
+  getItinerarySumm(id: number) {
+    return this.http.get('/api/itineraries/' + id + '/summarized');
+  }
+
   deleteItinerary(itinerary: Itineray): Observable<Itineray> {
     return this.http.delete<Itineray>('/api/itineraries/' + itinerary.id);
   }
