@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/question")
 public class QuestionRestController extends GeneralRestController {
 
-    @Autowired
-    private QuestionService questionService;
-
     @GetMapping("/")
     public ResponseEntity<List<Question>> getQuestions() {
         return new ResponseEntity<>(this.questionService.findAll(), HttpStatus.OK);

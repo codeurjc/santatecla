@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
-import org.aspectj.weaver.loadtime.definition.Definition;
 
 @Entity
 public class DefinitionQuestion extends Question {

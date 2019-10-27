@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ListAnswerRepository extends JpaRepository<ListAnswer, Long> {
     
-    public List<ListAnswer> findAll();
-    
-    
+    List<ListAnswer> findAll();
+
 }

@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/definition")
-public class DefinitionRestController extends GeneralRestController {
+public class DefinitionQuestionRestController extends GeneralRestController {
 
-    @GetMapping("/question")
+    @GetMapping("/")
     public ResponseEntity<List<DefinitionQuestion>> getQuestions() {
         return new ResponseEntity<>(this.definitionQuestionService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/question/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DefinitionQuestion> getQuestion(@PathVariable long id) {
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
         if (question.isPresent()) {
@@ -36,14 +36,14 @@ public class DefinitionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/question")
+    @PostMapping("/")
     public ResponseEntity<DefinitionQuestion> addQuestion(@RequestBody DefinitionQuestion question) {
         this.definitionQuestionService.save(question);
 
         return new ResponseEntity<>(question, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/question/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<DefinitionQuestion> deleteQuestion(@PathVariable long id) {
 
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
@@ -56,7 +56,7 @@ public class DefinitionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/question/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<DefinitionQuestion> updateQuestion(@PathVariable long id, @RequestBody DefinitionQuestion newQuestion) {
 
         Optional<DefinitionQuestion> oldQuestion = this.definitionQuestionService.findOne(id);
@@ -70,13 +70,14 @@ public class DefinitionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/question/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<DefinitionAnswer> addAnswer(@PathVariable long id, @RequestBody DefinitionAnswer answer) {
 
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
 
         if (question.isPresent()) {
-            question.get().addAnswer(answer);
+            DefinitionAnswer da = new DefinitionAnswer(answer.getAnswerText(), false);
+            question.get().addAnswer(da);
             this.definitionQuestionService.save(question.get());
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
@@ -84,7 +85,7 @@ public class DefinitionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/question/{id}/answer")
+    @GetMapping(value = "/{id}/answer")
     public ResponseEntity<List<DefinitionAnswer>> getAnswers(@PathVariable long id) {
 
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
@@ -96,7 +97,7 @@ public class DefinitionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/question/{id1}/answer/{id2}")
+    @PostMapping("/{id1}/answer/{id2}")
     public ResponseEntity<DefinitionAnswer> addJustification(@PathVariable long id1, @PathVariable long id2, @RequestBody String justification) {
 
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id1);

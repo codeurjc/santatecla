@@ -3,13 +3,10 @@ package com.question.list.list_question;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import com.question.Question;
+import com.question.list.list_answer.ListAnswer;
 
 @Entity
 public class ListQuestion extends Question {
@@ -23,6 +20,9 @@ public class ListQuestion extends Question {
 
     @ElementCollection
     private List<String> correctAnswers;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ListAnswer> answers;
 
     public ListQuestion() {
         super();
@@ -48,6 +48,10 @@ public class ListQuestion extends Question {
         }
     }
 
+    public void addAnswer(ListAnswer answer) {
+        this.answers.add(answer);
+    }
+
     /**
      * Getters and Setters
      */
@@ -68,4 +72,7 @@ public class ListQuestion extends Question {
         return this.possibleAnswers;
     }
 
+    public List<ListAnswer> getAnswers() {
+        return answers;
+    }
 }
