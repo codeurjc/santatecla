@@ -3,8 +3,12 @@
   <body>
 
     <div id="json-editor-container">
-      <json-editor [options]="editorOptions" [(ngModel)]="data" (keydown.control.s)="save($event)" (change)="updateJson()"></json-editor>
+      <json-editor [options]="editorOptions" [(ngModel)]="data" (keydown.control.s)="save($event)" (change)="updateJson(true)"></json-editor>
     </div>
+
+    <button id="save-button" mat-icon-button color="primary" [disabled]="!changed" (click)="save(null)">
+      <mat-icon>save</mat-icon>
+    </button>
 
     <mat-form-field appearance="outline" id="search">
       <mat-label>Buscar unidad</mat-label>
@@ -21,7 +25,7 @@
 
     <div #umlNodeOptions [hidden]="!showUmlNodeOptions" (window:resize)="drawUmlNodeOptions()">
 
-      <input id="uml-edit-input">
+      <input id="uml-edit-input" (change)="updateUnitName()">
 
       <div id="uml-node-options">
         <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id)">

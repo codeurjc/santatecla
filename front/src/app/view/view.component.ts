@@ -55,14 +55,15 @@ export class ViewComponent implements OnInit, AfterContentInit {
   private ARROW_UP_KEY = 'ArrowUp';
   private ARROW_DOWN_KEY = 'ArrowDown';
 
-  public searchField = '';
-  public showResults = false;
-  public results: Unit[] = [];
-  public arrowKeyLocation = 0;
+  private searchField = '';
+  private showResults = false;
+  private results: Unit[] = [];
+  private arrowKeyLocation = 0;
 
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
-  public editorOptions: JsonEditorOptions;
-  public data: any;
+  private editorOptions: JsonEditorOptions;
+  private data: any;
+  private changed: boolean = false;
 
   @ViewChild('uml') umlDiv;
   private umlParser: UmlParser;
@@ -91,7 +92,8 @@ export class ViewComponent implements OnInit, AfterContentInit {
     });
   }
 
-  private updateJson() {
+  private updateJson(changed: boolean) {
+    this.changed = changed;
     if (this.isValidJson()) {
       this.updateUml();
     }
@@ -131,7 +133,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
   private getUnit(id: number) {
     this.viewService.getUnit(id).subscribe((data: Unit) => {
       this.setData(data);
-      this.updateUml();
+      this.updateJson(false);
       this.emptyResults();
     }, error => {
       console.log(error);
@@ -209,13 +211,40 @@ export class ViewComponent implements OnInit, AfterContentInit {
   }
 
   private save(event: KeyboardEvent) {
-    event.preventDefault();
-    if (this.editor.isValidJson()) {
-      this.viewService.saveUnit(this.data).subscribe((data: any) => {
-      }, error => {
-        console.log(error);
+    if (this.changed) {
+      if (event) { event.preventDefault(); }
+      if (this.editor.isValidJson()) {
+        this.viewService.saveUnit(this.data).subscribe(() => {
+        }, error => {
+          console.log(error);
+        });
+      }
+      this.changed = false;
+    }
+  }
+
+  private updateUnitName() {
+    const selectedUnit: VisibleUnit = this.findUnit(this.data, this.selectedTarget.id);
+    selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
+    this.setData(this.data);
+    this.updateJson(true);
+    this.setShowUmlNodeOptions(false);
+    this.save(null);
+  }
+
+  private findUnit(data, id): VisibleUnit {
+    let unit = null;
+    if (data.id.toString() === id) {
+      unit = data;
+    } else {
+      data.relations.forEach((relation: any) => {
+        const u = this.findUnit(relation.relatedTo, id);
+        if (u !== null) {
+          unit = u;
+        }
       });
     }
+    return unit;
   }
 
   @HostListener('document:click', ['$event'])
@@ -235,9 +264,9 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
     // Uml
     if ((target.tagName === 'rect') || (target.tagName ==='text')) {
-      this.selectedTarget = <HTMLInputElement>event.target;
+      this.selectedTarget = target;
       if (target.tagName === 'text') {
-        this.selectedTarget = <HTMLInputElement>this.selectedTarget.previousElementSibling;
+        this.selectedTarget = <HTMLInputElement>target.previousElementSibling;
       }
       this.setShowUmlNodeOptions(true);
       this.drawUmlNodeOptions();

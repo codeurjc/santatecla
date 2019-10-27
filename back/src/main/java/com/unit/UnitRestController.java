@@ -1,6 +1,5 @@
 package com.unit;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +46,7 @@ public class UnitRestController extends GeneralRestController {
             for (Relation relation : unit.getRelations()) {
                 Optional<Relation> savedRelation = this.relationService.findOne(relation.getId());
                 savedRelation.get().update(relation);
+                updateUnit(relation.getRelatedTo());
             }
             this.unitService.save(savedUnit.get());
         } else {
@@ -90,7 +90,7 @@ public class UnitRestController extends GeneralRestController {
         }
         updatedCard.update(card);
         cardService.save(updatedCard);
-        return new ResponseEntity<Card>(updatedCard, HttpStatus.OK);	
+        return new ResponseEntity<>(updatedCard, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{unitId}/cards/{cardId}/image", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
