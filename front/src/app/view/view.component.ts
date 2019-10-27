@@ -1,7 +1,7 @@
 import { UmlParser } from './uml.parser';
 import { Unit } from '../unit/unit.model';
 import { ViewService } from './view.service';
-import { Component, ViewChild, OnInit, AfterContentInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterContentInit, ElementRef, HostListener } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
@@ -121,6 +121,10 @@ export class ViewComponent implements OnInit, AfterContentInit {
     element.innerHTML = '';
     mermaid.render('uml', this.umlParser.jsonToUml(this.data), (svgCode, bindFunctions) => {
       element.innerHTML = svgCode;
+      if (this.showUmlNodeOptions) {
+        this.updateSelectedTarget();
+        this.drawUmlNodeOptions();
+      }
     });
   }
 
@@ -128,7 +132,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     this.viewService.getUnit(id).subscribe((data: Unit) => {
       this.setData(data);
       this.updateUml();
-      this.setShowResults(false);
+      this.emptyResults();
     }, error => {
       console.log(error);
     });
@@ -214,23 +218,63 @@ export class ViewComponent implements OnInit, AfterContentInit {
     }
   }
 
-  private handle(event: MouseEvent) {
-    this.selectedTarget = <HTMLInputElement>event.target;
-    const tagName = this.selectedTarget.tagName;
-    if ((tagName === 'rect') || (tagName ==='text')) {
-      if (tagName === 'text') {
+  @HostListener('document:click', ['$event'])
+  public documentClick(event: Event): void {
+    const target = <HTMLInputElement>event.target;
+
+    // Search
+    if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
+      this.getUnit(this.results[this.arrowKeyLocation].id);
+    } else if ((target.attributes) && (target.attributes['class']) &&
+      ((target.attributes['class'].nodeValue === 'mat-form-field-flex') || (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
+      (target.attributes['class'].nodeValue === 'mat-form-field-infix') || (target.id === 'search-input'))) {
+      this.setShowResults(true);
+    } else {
+      this.setShowResults(false);
+    }
+
+    // Uml
+    if ((target.tagName === 'rect') || (target.tagName ==='text')) {
+      this.selectedTarget = <HTMLInputElement>event.target;
+      if (target.tagName === 'text') {
         this.selectedTarget = <HTMLInputElement>this.selectedTarget.previousElementSibling;
       }
-      this.showUmlNodeOptions = true;
+      this.setShowUmlNodeOptions(true);
       this.drawUmlNodeOptions();
-    } else if (tagName === 'path') {
+    } else if (target.tagName === 'path') {
 
+    } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
+      this.setShowUmlNodeOptions(false);
     }
   }
 
   private drawUmlNodeOptions() {
-    this.umlNodeOptions.nativeElement.firstChild.style.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
-    this.umlNodeOptions.nativeElement.firstChild.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    const input = this.umlNodeOptions.nativeElement.firstChild;
+    input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
+    input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
+    input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
+    input.value = (<HTMLInputElement>this.selectedTarget.nextSibling).innerHTML;
+    input.setSelectionRange(0, input.value.length);
+    const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
+    optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
+    optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+  }
+
+  private updateSelectedTarget() {
+    const id = this.selectedTarget.id;
+    let found = false;
+    this.umlDiv.nativeElement.firstChild.childNodes.forEach((childNode: HTMLInputElement) => {
+      const firstChild = <HTMLInputElement> childNode.firstChild;
+      if ((!found) && (childNode.firstChild) && (firstChild.id === id)) {
+        this.selectedTarget = firstChild;
+        found = true;
+      }
+    });
+  }
+
+  private setShowUmlNodeOptions(showUmlNodeOptions: boolean) {
+    this.showUmlNodeOptions = showUmlNodeOptions;
   }
 
   private goToUnit(id) {

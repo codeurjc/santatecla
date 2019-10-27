@@ -43,13 +43,14 @@
   font-weight: bold;
 }
 
-#umlNodeOptions {
+#uml-edit-input {
   position: absolute;
-  right: 0;
-  color: red;
 }
 
+#uml-node-options {
+  position: absolute;
+}
 
-.umlOptionIcon {
+.uml-option-icon {
   font-size: 1rem;
 }

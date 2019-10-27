@@ -8,24 +8,27 @@
 
     <mat-form-field appearance="outline" id="search">
       <mat-label>Buscar unidad</mat-label>
-      <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)" (focus)="setShowResults(true)" (focusout)="setShowResults(false)"/>
+      <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)"/>
       <div id="result-list" *ngIf="showResults">
-        <div id="result" *ngFor="let result of results; let i = index" [class.active]="i==arrowKeyLocation" (mouseover)="setActive(i)" (click)="getUnit(result.id)">
+        <div id="result" *ngFor="let result of results; let i = index" [class.active]="i==arrowKeyLocation" (mouseover)="setActive(i)">
           <span id="unit-prefix">{{getUnitPrefix(result.name)}}</span>
           <span id="unit-name">{{getUnitName(result.name)}}</span>
         </div>
       </div>
     </mat-form-field>
 
-    <div #uml (click)="handle($event)"></div>
+    <div #uml></div>
 
-    <div #umlNodeOptions [hidden]="!showUmlNodeOptions">
-      <div id="umlNodeOptions" (window:resize)="drawUmlNodeOptions()">
+    <div #umlNodeOptions [hidden]="!showUmlNodeOptions" (window:resize)="drawUmlNodeOptions()">
+
+      <input id="uml-edit-input">
+
+      <div id="uml-node-options">
         <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id)">
-          <mat-icon class="umlOptionIcon">call_made</mat-icon>
+          <mat-icon class="uml-option-icon">call_made</mat-icon>
         </button>
-
       </div>
+
     </div>
 
   </body>

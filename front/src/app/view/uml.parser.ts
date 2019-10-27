@@ -6,11 +6,16 @@ export class UmlParser {
 
   jsonToUml(json: any) {
     let uml = 'classDiagram\n';
-    uml += this.getRelations(json);
+    let relations = this.getRelationsDiagram(json);
+    if (relations === '') {
+      uml += this.getOnlyOneUnitDiagram(json);
+    } else {
+      uml += relations;
+    }
     return uml;
   }
 
-  private getRelations(unit: any) {
+  private getRelationsDiagram(unit: any): string {
     let uml = '';
     unit.relations.forEach((relation: any) => {
       const relatedTo = relation.relatedTo;
@@ -32,9 +37,13 @@ export class UmlParser {
           break;
         }
       }
-      uml += this.getRelations(relatedTo);
+      uml += this.getRelationsDiagram(relatedTo);
     });
     return uml;
+  }
+
+  private getOnlyOneUnitDiagram(unit: any): string {
+    return unit.id + unit.name + '<--' + unit.id + unit.name + '\n';
   }
 
 }
