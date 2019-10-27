@@ -11,22 +11,22 @@ import org.springframework.stereotype.Service;
 public class DefinitionQuestionService {
 
     @Autowired
-    private DefinitionQuestionRepository questionRepository;
+    private DefinitionQuestionRepository definitionRepository;
 
     public DefinitionQuestion save(DefinitionQuestion q) {
-        return this.questionRepository.save(q);
+        return this.definitionRepository.save(q);
     }
 
     public void delete(long id) {
-        this.questionRepository.deleteById(id);
+        this.definitionRepository.deleteById(id);
     }
 
     public List<DefinitionQuestion> findAll() {
-        return this.questionRepository.findAll();
+        return this.definitionRepository.findAll();
     }
 
     public Optional<DefinitionQuestion> findOne(long id) {
-        return this.questionRepository.findById(id);
+        return this.definitionRepository.findById(id);
     }
 
     public Optional<DefinitionAnswer> findOneAnswer(DefinitionQuestion question, long answerId) {

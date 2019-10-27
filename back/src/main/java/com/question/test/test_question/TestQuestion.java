@@ -25,12 +25,14 @@ public class TestQuestion extends Question {
     public TestQuestion() {
         super();
         this.possibleAnswers = new ArrayList<>();
+        this.answers = new ArrayList<>();
     }
 
     public TestQuestion(String questionText, List<String> possibleAnswers, String correctAnswer) {
         super(questionText);
         this.possibleAnswers = possibleAnswers;
         this.correctAnswer = correctAnswer;
+        this.answers = new ArrayList<>();
     }
 
     public void update(TestQuestion q) {

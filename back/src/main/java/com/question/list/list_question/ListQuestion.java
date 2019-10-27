@@ -28,12 +28,14 @@ public class ListQuestion extends Question {
         super();
         this.possibleAnswers = new ArrayList<>();
         this.correctAnswers = new ArrayList<>();
+        this.answers = new ArrayList<>();
     }
 
     public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer) {
         super(questionText);
         this.possibleAnswers = possibleAnswers;
         this.correctAnswers = correctAnswer;
+        this.answers = new ArrayList<>();
     }
 
     public void update(ListQuestion q) {

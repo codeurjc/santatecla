@@ -18,7 +18,7 @@ public class ListAnswer{
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private List<String> answer;
+    private ArrayList<String> answer;
 
     private boolean correct;
 
@@ -29,7 +29,7 @@ public class ListAnswer{
         this.answer = new ArrayList<>();
     }
 
-    public ListAnswer(List<String> answer, boolean correct){
+    public ListAnswer(ArrayList<String> answer, boolean correct){
         this.answer = answer;
         this.correct = correct;
     }
@@ -42,11 +42,11 @@ public class ListAnswer{
         this.id = id;
     }
 
-    public List<String> getAnswer() {
+    public ArrayList<String> getAnswer() {
         return answer;
     }
 
-    public void setAnswer(List<String> answer) {
+    public void setAnswer(ArrayList<String> answer) {
         this.answer = answer;
     }
 

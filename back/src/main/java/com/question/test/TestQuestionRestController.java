@@ -70,7 +70,6 @@ public class TestQuestionRestController extends GeneralRestController {
         if (question.isPresent()) {
             TestAnswer ta = new TestAnswer(answer.getAnswerText(), false);
             question.get().addAnswer(ta);
-            question.get().addAnswer(answer);
             this.testQuestionService.save(question.get());
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }

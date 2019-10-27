@@ -3,7 +3,6 @@ package com.question.list.list_question;
 import java.util.List;
 import java.util.Optional;
 
-import com.question.list.list_answer.ListAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
