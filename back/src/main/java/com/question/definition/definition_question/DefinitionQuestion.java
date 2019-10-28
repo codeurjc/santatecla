@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import org.aspectj.weaver.loadtime.definition.Definition;
@@ -19,6 +21,7 @@ public class DefinitionQuestion extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL)

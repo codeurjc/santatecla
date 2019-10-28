@@ -22,6 +22,7 @@ public class PracticeSlide extends Slide{
     protected long id;
 
     @OneToMany
+    @JsonView(Summary.class)
     private List<Question> questions;
 
     public PracticeSlide() {

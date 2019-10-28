@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
@@ -13,6 +16,7 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
     private String name;

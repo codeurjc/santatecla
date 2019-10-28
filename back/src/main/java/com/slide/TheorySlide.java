@@ -22,6 +22,7 @@ public class TheorySlide extends Slide {
     protected long id;
 
     @OneToMany
+    @JsonView(Summary.class)
     private List<Card> cards;
 
     public TheorySlide() {

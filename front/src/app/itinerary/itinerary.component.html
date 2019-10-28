@@ -11,7 +11,7 @@
         Seguimiento
       </button>
 
-      <div *ngFor="let itinerary of itineraries2">
+      <div *ngFor="let itinerary of itinerariesTabs">
         <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
           Itinerario {{itinerary.id}}
         </button>

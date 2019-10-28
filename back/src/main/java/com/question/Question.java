@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.List;
 
 @Entity
@@ -11,6 +15,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
     protected String subtype;
