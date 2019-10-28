@@ -30,6 +30,22 @@ public class SlideRestController extends GeneralRestController {
 
     }
 
+    @GetMapping(value="/theorySlides")
+    public MappingJacksonValue theorySlides(){
+
+        MappingJacksonValue result = new MappingJacksonValue(this.slideService.getTheorySlides());
+        return result;
+
+    }
+
+    @GetMapping(value="/practiceSlides")
+    public MappingJacksonValue practiceSlides(){
+
+        MappingJacksonValue result = new MappingJacksonValue(this.slideService.getPracticeSlides());
+        return result;
+
+    }
+
     @GetMapping(value="/{id}")
     public ResponseEntity<Slide> slide(@PathVariable long id){
 

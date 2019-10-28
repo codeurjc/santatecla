@@ -27,4 +27,12 @@ public class SlideService {
 	public void delete(long id) {
 		repository.deleteById(id);
 	}
+
+	public List<TheorySlide> getTheorySlides() {
+		return repository.getTheorySlides();
+	}
+
+	public List<PracticeSlide> getPracticeSlides() {
+		return repository.getPracticeSlides();
+	}
 }
