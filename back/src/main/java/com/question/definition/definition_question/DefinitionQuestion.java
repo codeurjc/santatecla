@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
-import org.aspectj.weaver.loadtime.definition.Definition;
 
 @Entity
 public class DefinitionQuestion{
@@ -27,16 +26,15 @@ public class DefinitionQuestion{
     private int totalWrongAnswers;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<DefinitionAnswer> answers;
+    private List<DefinitionAnswer> definitionAnswers;
 
     public DefinitionQuestion() {
+        super();
         this.answers = new ArrayList<>();
-        this.subtype = this.getClass().getSimpleName();
     }
 
     public DefinitionQuestion(String questionText) {
-        this.subtype = this.getClass().getSimpleName();
-        this.questionText = questionText;
+        super(questionText);
         this.answers = new ArrayList<>();
     }
 
@@ -47,7 +45,7 @@ public class DefinitionQuestion{
     }
 
     public void addAnswer(DefinitionAnswer answer) {
-        this.answers.add(answer);
+        this.definitionAnswers.add(answer);
     }
 
     /**
@@ -63,7 +61,7 @@ public class DefinitionQuestion{
     }
 
     public List<DefinitionAnswer> getAnswers() {
-        return answers;
+        return definitionAnswers;
     }
 
     public String getQuestionText() {

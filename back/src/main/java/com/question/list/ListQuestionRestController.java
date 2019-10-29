@@ -1,4 +1,5 @@
 package com.question.list;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,18 +12,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/definitionList")
-public class ListQuestionRestController extends GeneralRestController{
+@RequestMapping("/api/list")
+public class ListQuestionRestController extends GeneralRestController {
 
     @GetMapping("/")
-    public ResponseEntity<List<ListQuestion>> getQuestions(){
+    public ResponseEntity<List<ListQuestion>> getQuestions() {
         return new ResponseEntity<>(this.listQuestionService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ListQuestion> getQuestion(@PathVariable long id){
+    public ResponseEntity<ListQuestion> getQuestion(@PathVariable long id) {
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             return new ResponseEntity<>(optional.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -47,6 +48,7 @@ public class ListQuestionRestController extends GeneralRestController{
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @PutMapping(value = "/{id}")
     public ResponseEntity<ListQuestion> updateQuestion(@PathVariable long id, @RequestBody ListQuestion newQuestion) {
 
@@ -61,8 +63,35 @@ public class ListQuestionRestController extends GeneralRestController{
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{id}/answer")
-    public ResponseEntity<ListQuestion> addAnswer2(@PathVariable long id, @RequestBody ListAnswer answer){
+    @PostMapping("/{id}")
+    public ResponseEntity<ListAnswer> addAnswer(@PathVariable long id, @RequestBody ListAnswer answer) {
+
+        Optional<ListQuestion> question = this.listQuestionService.findOne(id);
+
+        if (question.isPresent()) {
+            ListAnswer la = new ListAnswer(answer.getAnswer(), false);
+            question.get().addAnswer(la);
+            this.listQuestionService.save(question.get());
+            return new ResponseEntity<>(answer, HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/{id}/answer")
+    public ResponseEntity<List<ListAnswer>> getAnswers(@PathVariable long id) {
+
+        Optional<ListQuestion> question = this.listQuestionService.findOne(id);
+
+        if (question.isPresent()) {
+            return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /*@PostMapping("/{id}/correct/")
+    public ResponseEntity<ListQuestion> addCorrectAnswer(@PathVariable long id){
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){
             ListQuestion question = optional.get();

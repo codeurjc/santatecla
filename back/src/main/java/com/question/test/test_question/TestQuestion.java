@@ -1,5 +1,6 @@
 package com.question.test.test_question;
 
+import com.question.Question;
 import com.question.test.test_answer.TestAnswer;
 
 import javax.persistence.*;
@@ -7,17 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class TestQuestion {
+public class TestQuestion extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    private String questionText;
-    private String subtype;
-    private int totalAnswers;
-    private int totalCorrectAnswers;
-    private int totalWrongAnswers;
 
     @ElementCollection
     private List<String> possibleAnswers;
@@ -25,20 +20,19 @@ public class TestQuestion {
     private String correctAnswer;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<TestAnswer> answers;
+    private List<TestAnswer> testAnswers;
 
     public TestQuestion() {
-        this.subtype = this.getClass().getSimpleName();
+        super();
         this.possibleAnswers = new ArrayList<>();
-        this.answers = new ArrayList<>();
+        this.testAnswers = new ArrayList<>();
     }
 
     public TestQuestion(String questionText, List<String> possibleAnswers, String correctAnswer) {
-        this.subtype = this.getClass().getSimpleName();
-        this.questionText = questionText;
+        super(questionText);
         this.possibleAnswers = possibleAnswers;
         this.correctAnswer = correctAnswer;
-        this.answers = new ArrayList<>();
+        this.testAnswers = new ArrayList<>();
     }
 
     public void update(TestQuestion q) {
@@ -54,20 +48,12 @@ public class TestQuestion {
     }
 
     public void addAnswer(TestAnswer answer) {
-        this.answers.add(answer);
+        this.testAnswers.add(answer);
     }
 
     /**
      * Getters and Setters
      */
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public List<String> getPossibleAnswers() {
         return possibleAnswers;
@@ -78,31 +64,7 @@ public class TestQuestion {
     }
 
     public List<TestAnswer> getAnswers() {
-        return answers;
-    }
-
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    public String getSubtype() {
-        return subtype;
-    }
-
-    public int getCorrectAnswerCount() {
-        return this.totalCorrectAnswers;
-    }
-
-    public void setCorrectAnswerCount(int correctAnswerCount) {
-        this.totalCorrectAnswers = correctAnswerCount;
-    }
-
-    public int getWrongAnswerCount() {
-        return totalWrongAnswers;
-    }
-
-    public void setWrongAnswerCount(int wrongAnswerCount) {
-        this.totalWrongAnswers = wrongAnswerCount;
+        return testAnswers;
     }
 
 }

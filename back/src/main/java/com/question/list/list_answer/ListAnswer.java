@@ -8,6 +8,9 @@ import javax.persistence.OneToOne;
 
 import com.user.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class ListAnswer{
 
@@ -15,17 +18,19 @@ public class ListAnswer{
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private String answerText;
+    private ArrayList<String> answer;
 
     private boolean correct;
 
     @OneToOne
     private User user;
 
-    public ListAnswer(){}
+    public ListAnswer(){
+        this.answer = new ArrayList<>();
+    }
 
-    public ListAnswer(String answerText, boolean correct){
-        this.answerText = answerText;
+    public ListAnswer(ArrayList<String> answer, boolean correct){
+        this.answer = answer;
         this.correct = correct;
     }
 
@@ -37,12 +42,12 @@ public class ListAnswer{
         this.id = id;
     }
 
-    public String answerText() {
-        return answerText;
+    public ArrayList<String> getAnswer() {
+        return answer;
     }
 
-    public void answerText(String answerText) {
-        this.answerText = answerText;
+    public void setAnswer(ArrayList<String> answer) {
+        this.answer = answer;
     }
 
     public boolean isCorrect() {

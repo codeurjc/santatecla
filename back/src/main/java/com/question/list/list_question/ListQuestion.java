@@ -28,19 +28,19 @@ public class ListQuestion{
     private List<String> correctAnswers;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<ListAnswer> answers;
+    private List<ListAnswer> listAnswers;
 
     public ListQuestion() {
         this.possibleAnswers = new ArrayList<>();
         this.correctAnswers = new ArrayList<>();
-        this.answers = new ArrayList<>();
+        this.listAnswers = new ArrayList<>();
     }
 
     public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer) {
         this.questionText = questionText;
         this.possibleAnswers = possibleAnswers;
         this.correctAnswers = correctAnswer;
-        this.answers = new ArrayList<>();
+        this.listAnswers = new ArrayList<>();
     }
 
     public void update(ListQuestion q) {
@@ -53,6 +53,10 @@ public class ListQuestion{
         if (!q.getPossibleAnswers().equals(this.possibleAnswers)) {
             this.possibleAnswers = q.getPossibleAnswers();
         }
+    }
+
+    public void addAnswer(ListAnswer answer) {
+        this.listAnswers.add(answer);
     }
 
     /**

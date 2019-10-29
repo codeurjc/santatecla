@@ -9,6 +9,8 @@ import com.card.Card;
 import com.card.CardRepository;
 import com.itinerary.Itinerary;
 import com.itinerary.ItineraryRepository;
+import com.question.Question;
+import com.question.QuestionRepository;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
