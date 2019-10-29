@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.GeneralRestController;
 import com.card.Card;
 import com.card.CardService;
+import com.itinerary.Itinerary;
 import com.relation.Relation;
 import com.relation.RelationService;
 
@@ -18,11 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -120,6 +123,20 @@ public class UnitRestController extends GeneralRestController {
         }
         Card card = unit.get().getCard(cardId);
         return new ResponseEntity<Card>(card, HttpStatus.OK);
+    }
+
+    @PostMapping(value="/{unitId}/itineraries")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Itinerary addItinerary(@RequestBody Itinerary itinerary, @PathVariable long unitId){
+
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+
+        this.itineraryService.save(itinerary);
+
+        unit.get().getItineraries().add(itinerary);
+        this.unitService.save(unit.get());
+
+        return itinerary;
     }
 
 }

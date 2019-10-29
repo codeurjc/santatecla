@@ -1,4 +1,4 @@
-package com.slide;
+package com.slide.practiceSlide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.JViews.Summary;
-import com.card.Card;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.question.Question;
+import com.slide.Slide;
 
 @Entity
-public class TheorySlide extends Slide {
+public class PracticeSlide extends Slide{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,11 +24,11 @@ public class TheorySlide extends Slide {
 
     @OneToMany
     @JsonView(Summary.class)
-    private List<Card> cards;
+    private List<Question> questions;
 
-    public TheorySlide() {
+    public PracticeSlide() {
         super();
-        this.cards = new ArrayList<>();
+        this.questions = new ArrayList<>();
     }
 
     public void update(Slide slide) { }
@@ -40,13 +41,14 @@ public class TheorySlide extends Slide {
         this.id = id;
     }
 
-    public List<Card> getComponents() {
-        return cards;
+    public List<Question> getComponents() {
+        return questions;
     }
 
-    public void setComponents(List cards) {
-        this.cards = cards;
+    public void setComponents(List questions) {
+        this.questions = questions;
     }
+
 
     
 }

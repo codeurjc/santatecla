@@ -6,6 +6,9 @@ import com.GeneralRestController;
 import com.JViews.Summary;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.slide.Slide;
+import com.slide.practiceSlide.PracticeSlide;
+import com.slide.theorySlide.TheorySlide;
+import com.unit.Unit;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,15 +62,6 @@ public class ItineraryRestController extends GeneralRestController {
 
     }
 
-    @PostMapping(value="/")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Itinerary newItinerary(@RequestBody Itinerary itinerary){
-
-        this.itineraryService.save(itinerary);
-        return itinerary;
-        
-    }
-
     @DeleteMapping(value="/{id}")
     public ResponseEntity<Itinerary> deleteItinerary(@PathVariable long id){
 
@@ -95,6 +89,34 @@ public class ItineraryRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping(value="/{itineraryId}/theorySlide")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TheorySlide addTheorySlideToItinerary(@RequestBody TheorySlide slide, @PathVariable long itineraryId){
+
+        Optional<Itinerary> i = this.itineraryService.findOne(itineraryId);
+
+        this.theorySlideService.save(slide);
+
+        i.get().getSlides().add(slide);
+        this.itineraryService.save(i.get());
+
+        return slide;
+    }
+
+    @PostMapping(value="/{itineraryId}/practiceSlide")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PracticeSlide addPracticeSlideToItinerary(@RequestBody PracticeSlide slide, @PathVariable long itineraryId){
+
+        Optional<Itinerary> i = this.itineraryService.findOne(itineraryId);
+
+        this.practiceSlideService.save(slide);
+
+        i.get().getSlides().add(slide);
+        this.itineraryService.save(i.get());
+
+        return slide;
+    }
+
     @DeleteMapping(value="/{itineraryId}/slide/{slideId}")
     public ResponseEntity<Itinerary> deleteSlideFromItinerary(@PathVariable long slideId, @PathVariable long itineraryId){
         
@@ -111,6 +133,26 @@ public class ItineraryRestController extends GeneralRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping(value="/{itineraryId}/itinerary/{newItineraryId}")
+    public ResponseEntity<Itinerary> addItineraryToItinerary(@PathVariable long itineraryId, @PathVariable long newItineraryId){
+
+        Optional<Itinerary> itinerary = this.itineraryService.findOne(itineraryId);
+        Optional<Itinerary> newItinerary = this.itineraryService.findOne(newItineraryId);
+
+        if(itinerary.isPresent()){
+            if(newItinerary.isPresent()){
+                if(!itinerary.get().getItineraries().contains(newItinerary.get())){
+                    itinerary.get().getItineraries().add(newItinerary.get());
+                    this.itineraryService.save(itinerary.get());
+                    return new ResponseEntity<>(itinerary.get(), HttpStatus.OK);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

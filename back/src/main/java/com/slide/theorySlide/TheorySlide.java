@@ -1,4 +1,4 @@
-package com.slide;
+package com.slide.theorySlide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,27 +7,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 import com.JViews.Summary;
+import com.card.Card;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.question.Question;
+import com.slide.Slide;
 
 @Entity
-public class PracticeSlide extends Slide{
+public class TheorySlide extends Slide {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Summary.class)
     protected long id;
 
-    @OneToMany
+    @ManyToMany
     @JsonView(Summary.class)
-    private List<Question> questions;
+    private List<Card> cards;
 
-    public PracticeSlide() {
+    public TheorySlide() {
         super();
-        this.questions = new ArrayList<>();
+        this.cards = new ArrayList<>();
     }
 
     public void update(Slide slide) { }
@@ -40,14 +41,13 @@ public class PracticeSlide extends Slide{
         this.id = id;
     }
 
-    public List<Question> getComponents() {
-        return questions;
+    public List<Card> getComponents() {
+        return cards;
     }
 
-    public void setComponents(List questions) {
-        this.questions = questions;
+    public void setComponents(List cards) {
+        this.cards = cards;
     }
-
 
     
 }
