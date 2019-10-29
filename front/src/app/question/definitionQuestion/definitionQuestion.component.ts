@@ -18,8 +18,9 @@ export class DefinitionQuestionComponent implements OnInit {
   questionDone: boolean;
   id: number;
   subtype: string;
-  chosenAnswer: string;
-  correct: boolean;
+
+  unitId: number;
+  itineraryId: number;
 
   constructor(
     private router: Router,
@@ -33,6 +34,8 @@ export class DefinitionQuestionComponent implements OnInit {
     this.questionAnswer = {answerText: ''};
     this.activatedRoute.params.subscribe(params => {
       this.id = params.questionId;
+      this.itineraryId = params.itineraryId;
+      this.unitId = params.unitId;
       this.questionService.getDefinitionQuestion(this.id).subscribe((data: DefinitionQuestion) => {
         this.question = data;
         this.subtype = data.subtype;
@@ -55,5 +58,9 @@ export class DefinitionQuestionComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  return(){
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId]);
   }
 }

@@ -69,6 +69,12 @@ public class TestQuestionRestController extends GeneralRestController {
 
         if (question.isPresent()) {
             question.get().addAnswer(answer);
+            if(answer.isCorrect()){
+                question.get().setCorrectAnswerCount(question.get().getCorrectAnswerCount() + 1);
+            }
+            else {
+                question.get().setWrongAnswerCount(question.get().getWrongAnswerCount() + 1);
+            }
             this.testQuestionService.save(question.get());
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }

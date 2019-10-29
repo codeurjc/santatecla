@@ -1,12 +1,9 @@
-import {Component, OnInit, SystemJsNgModuleLoader} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LoginService} from '../../auth/login.service';
-import {ListQuestion} from '../listQuestion/listQuestion.model';
-import {ListQuestionService} from '../listQuestion/listQuestion.service';
 import {TestQuestion} from './testQuestion.model';
 import {TestAnswer} from './testAnswer.model';
 import {TestQuestionService} from './testQuestion.service';
-import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Component({
   templateUrl: './testQuestion.component.html'
@@ -22,8 +19,9 @@ export class TestQuestionComponent implements OnInit {
   chosenAnswer: string;
   correct: boolean;
   alreadyDone: boolean;
-  timesSolved: number;
-  prevResults: string;
+  unitId: number;
+  itineraryId: number;
+
 
   constructor(
     private router: Router,
@@ -32,7 +30,7 @@ export class TestQuestionComponent implements OnInit {
     private activatedRoute: ActivatedRoute) {
     this.questionDone = false;
     this.alreadyDone = false;
-    this.prevResults = '';
+    this.correct = false;
   }
 
   ngOnInit() {
@@ -40,6 +38,8 @@ export class TestQuestionComponent implements OnInit {
     this.questionAnswer = {answerText: ''};
     this.activatedRoute.params.subscribe(params => {
       this.id = params.questionId;
+      this.itineraryId = params.itineraryId;
+      this.unitId = params.unitId;
       this.questionService.getTestQuestion(this.id).subscribe((data: TestQuestion) => {
         this.question = data;
         this.subtype = data.subtype;
@@ -49,13 +49,11 @@ export class TestQuestionComponent implements OnInit {
       this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: TestAnswer[]) => {
         if (data.length != 0) {
           this.alreadyDone = true;
-          this.timesSolved = data.length;
           console.log(data);
           for (let answer of data){
-            if (answer[2] == true){
-              this.prevResults = this.prevResults + 'BIEN ';
-            } else {
-              this.prevResults.concat('MAL ');
+            if (answer[2] === true) {
+              this.correct = true;
+              break;
             }
           }
         }
@@ -76,5 +74,9 @@ export class TestQuestionComponent implements OnInit {
         this.questionDone = true;
       },
       (error) => console.log(error));
+  }
+
+  return(){
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId]);
   }
 }

@@ -14,9 +14,9 @@ const appRoutes = [
   { path: 'units/:unitId/cards', component: CardComponent },
   { path: 'units/:unitId/itineraries/:itineraryId', component: ItineraryComponent },
   // { path: 'units/:unitId/question/:questionId', component: QuestionComponent },
-  { path: 'definitionQuestion/:questionId', component: DefinitionQuestionComponent},
-  { path: 'listQuestion/:questionId', component: ListQuestionComponent},
-  { path: 'testQuestion/:questionId', component: TestQuestionComponent},
+  { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
+  { path: 'units/:unitId/itineraries/:itineraryId/listQuestion/:questionId', component: ListQuestionComponent},
+  { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},
   { path: 'question', component: QuestionComponent},
   { path: 'units/:unitId/progress', component: ProgressComponent }
 ];

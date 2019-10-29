@@ -15,6 +15,9 @@ public class TestQuestion {
 
     private String questionText;
     private String subtype;
+    private int totalAnswers;
+    private int totalCorrectAnswers;
+    private int totalWrongAnswers;
 
     @ElementCollection
     private List<String> possibleAnswers;
@@ -84,6 +87,22 @@ public class TestQuestion {
 
     public String getSubtype() {
         return subtype;
+    }
+
+    public int getCorrectAnswerCount() {
+        return this.totalCorrectAnswers;
+    }
+
+    public void setCorrectAnswerCount(int correctAnswerCount) {
+        this.totalCorrectAnswers = correctAnswerCount;
+    }
+
+    public int getWrongAnswerCount() {
+        return totalWrongAnswers;
+    }
+
+    public void setWrongAnswerCount(int wrongAnswerCount) {
+        this.totalWrongAnswers = wrongAnswerCount;
     }
 
 }

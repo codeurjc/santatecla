@@ -20,9 +20,9 @@
         <mat-card class="question" *ngFor = "let question of unit?.definitionQuestions">
             <p>{{question.questionText}}</p>
             <div style="border: solid; color: gray;">
-                <p>Correctas : {{question.totalCorrectAnswers}}</p>
-                <p>Incorectas: {{question.wrongAnswers}}</p>
-                <span *ngIf= "question.wrongAnswers > 0.75 * (question.wrongAnswers + question.correctAnswers)">
+                <p>Respuestas Correctas : {{question.totalCorrectAnswers}}</p>
+                <p>Respuestas Incorectas: {{question.totalWrongAnswers}}</p>
+                <span *ngIf= "question.totalWrongAnswers > 0.75 * (question.totalWrongAnswers + question.totalCorrectAnswers)">
                     <p style="color: red;">CUIDADO REVISAR</p>
                     <i class="material-icons">warning</i>
                 </span>
@@ -33,14 +33,27 @@
         <mat-card class="questionList" *ngFor = "let listQuestion of unit?.listQuestions">
             <p>{{listQuestion.questionText}}</p>
             <div style="border: solid; color: gray;">
-                <p>Correctas: {{listQuestion.correctAnswers}}</p>
-                <p>Incorectas: {{listQuestion.wrongAnswers}}</p>
-                <span *ngIf= "listQuestion.wrongAnswers > 0.75 * (listQuestion.wrongAnswers + listQuestion.correctAnswers)">
+                <p>Respuestas Correctas: {{listQuestion.totalCorrectAnswers}}</p>
+                <p>Respuestas Incorectas: {{listQuestion.totalWrongAnswers}}</p>
+                <span *ngIf= "listQuestion.totalWrongAnswers > 0.75 * (listQuestion.totalWrongAnswers + listQuestion.totalCorrectAnswers)">
                     <p style="color: red;">CUIDADO REVISAR</p>
                     <i class="material-icons">warning</i>
                 </span>
                 <p></p>
             </div>
+        </mat-card>
+
+        <mat-card class="questionTest" *ngFor = "let testQuestion of unit?.testQuestions">
+          <p>{{testQuestion.questionText}}</p>
+          <div style="border: solid; color: gray;">
+            <p>Respuestas Correctas: {{testQuestion.correctAnswerCount}}</p>
+            <p>Respuestas Incorectas: {{testQuestion.wrongAnswerCount}}</p>
+            <span *ngIf= "testQuestion.wrongAnswerCount > 0.75 * (testQuestion.wrongAnswerCount + testQuestion.correctAnswerCount)">
+                    <p style="color: red;">CUIDADO REVISAR</p>
+                    <i class="material-icons">warning</i>
+                </span>
+            <p></p>
+          </div>
         </mat-card>
     </body>
 </html>

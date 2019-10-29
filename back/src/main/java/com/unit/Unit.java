@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.item.Item;
 import com.itinerary.Itinerary;
 import com.question.list.list_question.ListQuestion;
+import com.question.test.test_question.TestQuestion;
 import com.relation.Relation;
 
 @Entity
@@ -45,6 +46,9 @@ public class Unit {
     @ManyToMany
     private List<ListQuestion> listQuestions;
 
+    @ManyToMany
+    private List<TestQuestion> testQuestions;
+
     @OneToMany
     @JsonIgnore
     private List<Item> items;
@@ -56,6 +60,7 @@ public class Unit {
         this.definitionQuestions = new ArrayList<>();
         this.listQuestions = new ArrayList<>();
         this.items = new ArrayList<>();
+        this.testQuestions = new ArrayList<>();
     }
 
     public Unit(String name) {
@@ -139,4 +144,11 @@ public class Unit {
         this.name = unit.getName();
     }
 
+    public List<TestQuestion> getTestQuestions() {
+        return testQuestions;
+    }
+
+    public void setTestQuestions(List<TestQuestion> testQuestions) {
+        this.testQuestions = testQuestions;
+    }
 }

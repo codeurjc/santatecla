@@ -3,4 +3,6 @@ export interface DefinitionQuestion{
   questionText: string;
   subtype: string;
   correctAnswer?: string;
+  totalCorrectAnswers ?: number;
+  totalWrongAnswers ?: number;
 }

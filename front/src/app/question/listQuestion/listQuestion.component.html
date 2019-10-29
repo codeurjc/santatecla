@@ -25,16 +25,28 @@
 
       <span *ngIf="questionDone">
         <span *ngIf="questionListCorrect">
-          <p style="color: green">CORRECTO</p>
+          <p>{{question.correctAnswers}}</p>
+          <p style="color: green"> RESPUESTA CORRECTA</p>
         </span>
         <span *ngIf="!questionListCorrect">
-          <p style="color: red">INCORRECTO</p>
+          <p style="color: red"> RESPUESTA INCORRECTA</p>
+          <mat-button-toggle (click)="this.questionDone=false">Volver a intentar</mat-button-toggle>
         </span>
       </span>
     </span>
+
     <span *ngIf="alreadyDone">
-      <p>Has realizado esta pregunta {{timesSolved}} veces con los siguientes resultados: {{prevResults}}</p>
+      <span *ngIf="this.questionListCorrect">
+      <p>{{question.correctAnswers}}</p>
+      <p style="color: green"> RESPUESTA CORRECTA</p>
     </span>
+    <span *ngIf="!this.questionListCorrect">
+      <p style="color: red"> RESPUESTA INCORRECTA</p>
+      <mat-button-toggle (click)="this.questionDone=false ; this.alreadyDone = false">Volver a intentar</mat-button-toggle>
+    </span>
+    </span>
+
+    <mat-button-toggle (click)="return()" style="margin-top: 5%">Volver</mat-button-toggle>
   </div>
 </body>
 </html>

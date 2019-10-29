@@ -5,4 +5,5 @@ export interface TestAnswer {
   answerText?: string;
   correct?: boolean;
   user?: User;
+  possibleAnswers ?: string[];
 }

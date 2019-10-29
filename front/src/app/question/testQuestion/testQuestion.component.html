@@ -3,32 +3,41 @@
 <body>
 <div align=center>
   <p>{{question?.questionText}}</p>
-  <span *ngIf="!alreadyDone">
+  <span *ngIf="!this.alreadyDone">
     <span *ngIf="!questionDone">
-              <form name="choosenAnswer">
-                <label>
-                  <input type="radio" name="answer" value="Sí" placeholder="SI" [(ngModel)]="this.chosenAnswer"> SI
-                </label>
-                <label>
-                  <input type="radio" name="answer" value="No" placeholder="NO" [(ngModel)]="this.chosenAnswer">NO
-                </label>
-              </form>
-              <div *ngIf="!loginService.isAdmin">
-                <button class="button" color="primary" (click)="correctType1Answer()">Guardar</button>
-              </div>
-            </span>
+      <form name="choosenAnswer">
+        <span *ngFor="let answer of question?.possibleAnswers">
+          <label>
+            <input type="radio" name="answer" value="{{answer}}" [(ngModel)]="this.chosenAnswer"> {{answer}}
+          </label>
+        </span>
+      </form>
+      <div *ngIf="!loginService.isAdmin">
+        <button class="button" color="primary" (click)="correctType1Answer()">Guardar</button>
+      </div>
+    </span>
     <span *ngIf="questionDone">
-              <span *ngIf="correct">
-                <p style="color: green">CORRECTO</p>
-              </span>
-              <span *ngIf="!correct">
-                  <p style="color: red">INCORRECTO</p>
-              </span>
+      <span *ngIf="correct">
+        <p>{{question.correctAnswer}}</p>
+        <p style="color: green"> RESPUESTA CORRECTA</p>
+      </span>
+      <span *ngIf="!correct">
+        <p style="color: red"> RESPUESTA INCORRECTA</p>
+        <mat-button-toggle (click)="this.questionDone=false">Volver a intentar</mat-button-toggle>
+      </span>
     </span>
   </span>
-  <span *ngIf="alreadyDone">
-    <p>Has realizado esta pregunta {{timesSolved}} veces con los siguientes resultados: {{prevResults}}</p>
+  <span *ngIf="this.alreadyDone">
+    <span *ngIf="this.correct">
+      <p>{{question.correctAnswer}}</p>
+      <p style="color: green"> RESPUESTA CORRECTA</p>
+    </span>
+    <span *ngIf="!this.correct">
+      <p style="color: red"> RESPUESTA INCORRECTA</p>
+      <mat-button-toggle (click)="this.questionDone=false ; this.alreadyDone = false">Volver a intentar</mat-button-toggle>
+    </span>
   </span>
+  <mat-button-toggle (click)="return()" style="margin-top: 5%">Volver</mat-button-toggle>
 </div>
 </body>
 </html>

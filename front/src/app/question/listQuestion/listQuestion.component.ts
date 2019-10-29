@@ -1,10 +1,9 @@
-import {Component, OnInit, SystemJsNgModuleLoader} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LoginService} from '../../auth/login.service';
 import {ListQuestion} from './listQuestion.model';
 import {ListQuestionService} from './listQuestion.service';
 import {ListAnswer} from './listAnswer.model';
-import {TestAnswer} from '../testQuestion/testAnswer.model';
 
 @Component({
   templateUrl: './listQuestion.component.html'
@@ -20,21 +19,24 @@ export class ListQuestionComponent implements OnInit {
   questionAnswer: ListAnswer;
   id: number;
   alreadyDone: boolean;
-  timesSolved: number;
-  prevResults: string;
+
+  unitId: number;
+  itineraryId: number;
 
   constructor(
     private questionService: ListQuestionService,
     private activatedRoute: ActivatedRoute,
-    private loginService: LoginService) {
+    private loginService: LoginService,
+    private router: Router) {
     this.questionDone = false;
     this.choosenListAnswers = [];
-    this.prevResults = '';
   }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.id = params.questionId;
+      this.itineraryId = params.itineraryId;
+      this.unitId = params.unitId;
       this.questionService.getListQuestion(this.id).subscribe((data: ListQuestion) => {
         this.question = data;
         this.availableListAnswers = this.question.possibleAnswers;
@@ -46,13 +48,11 @@ export class ListQuestionComponent implements OnInit {
     this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: ListAnswer[]) => {
       if (data.length != 0) {
         this.alreadyDone = true;
-        this.timesSolved = data.length;
         console.log(data);
         for (let answer of data){
-          if (answer[2] == true){
-            this.prevResults = this.prevResults + 'BIEN ';
-          } else {
-            this.prevResults.concat('MAL ');
+          if (answer[2] === true) {
+            this.questionListCorrect = true;
+            break;
           }
         }
       }
@@ -87,6 +87,10 @@ export class ListQuestionComponent implements OnInit {
         this.questionDone = true;
       },
       (error) => console.log(error));
+  }
+
+  return(){
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId]);
   }
 
 }

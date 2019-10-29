@@ -2,18 +2,19 @@
 <html>
 <body>
 <div align=center>
-        <p>{{question?.questionText}}</p>
-        <span *ngIf="!questionDone">
-          <form #textForm="ngForm">
-            <input placeholder="Texto" [(ngModel)]="questionAnswer.answerText" name="answer" required>
-          </form>
-          <div *ngIf="!loginService.isAdmin">
-            <button class="button" color="primary" (click)="sendAnswer()">Guardar</button>
-          </div>
-        </span>
-        <span *ngIf="questionDone">
-          <p style="color: greenyellow">REALIZADO</p>
-        </span>
+  <p>{{question?.questionText}}</p>
+  <span *ngIf="!questionDone">
+    <form #textForm="ngForm">
+      <input placeholder="Texto" [(ngModel)]="questionAnswer.answerText" name="answer" required>
+    </form>
+    <div *ngIf="!loginService.isAdmin">
+      <button class="button" color="primary" (click)="sendAnswer()">Guardar</button>
+    </div>
+  </span>
+  <span *ngIf="questionDone">
+    <p>A LA ESPERA DE CORRECCIÓN</p>
+  </span>
+  <mat-button-toggle (click)="return()" style="margin-top: 5%">Volver</mat-button-toggle>
 </div>
 </body>
 </html>

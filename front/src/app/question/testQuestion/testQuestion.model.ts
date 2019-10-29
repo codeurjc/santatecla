@@ -4,4 +4,6 @@ export interface TestQuestion{
   subtype: string;
   possibleAnswers ?: string[];
   correctAnswer?: string;
+  correctAnswerCount?: number;
+  wrongAnswerCount ?: number;
 }

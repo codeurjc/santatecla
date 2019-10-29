@@ -30,7 +30,8 @@ export class ProgressComponent implements OnInit {
           name: data['name'],
           itineraries: data['itineraries'],
           definitionQuestions: data['definitionQuestions'],
-          listQuestions: data['listQuestions']
+          listQuestions: data['listQuestions'],
+          testQuestions: data.testQuestions
         };
         this.itineraries = this.unit.itineraries;
       }, error => {

@@ -151,9 +151,12 @@ public class DatabaseInitializer {
                 //unit1Questions.add((DefinitionQuestion)definition3);
                 ArrayList<ListQuestion> unit1ListQuestions = new ArrayList<>();
                 unit1ListQuestions.add((ListQuestion)list1);
+                ArrayList<TestQuestion> unit1TestQuestions = new ArrayList<>();
+                unit1TestQuestions.add(test);
 
                 unit1.setDefinitionQuestions(unit1Questions);
                 unit1.setListQuestions(unit1ListQuestions);
+                unit1.setTestQuestions(unit1TestQuestions);
 
                 unit1.addCard(card1);
                 unit1.addCard(card4);

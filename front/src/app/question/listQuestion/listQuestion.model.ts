@@ -3,4 +3,6 @@ export interface ListQuestion {
   questionText: string;
   possibleAnswers: string[];
   correctAnswers?: string[];
+  totalCorrectAnswers ?: number;
+  totalWrongAnswers ?: number;
 }
