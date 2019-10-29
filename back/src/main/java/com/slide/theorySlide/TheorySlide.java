@@ -1,4 +1,4 @@
-package com.slide;
+package com.slide.theorySlide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,18 +7,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
+import com.JViews.Summary;
 import com.card.Card;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.slide.Slide;
 
 @Entity
 public class TheorySlide extends Slide {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
-    @OneToMany
+    @ManyToMany
+    @JsonView(Summary.class)
     private List<Card> cards;
 
     public TheorySlide() {

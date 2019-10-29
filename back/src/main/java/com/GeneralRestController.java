@@ -7,6 +7,8 @@ import com.question.definition.definition_question.DefinitionQuestionService;
 import com.question.list.list_question.ListQuestionService;
 import com.question.test.test_question.TestQuestionService;
 import com.slide.*;
+import com.slide.practiceSlide.PracticeSlideService;
+import com.slide.theorySlide.TheorySlideService;
 import com.user.UserComponent;
 import com.user.UserService;
 
@@ -26,6 +28,12 @@ public class GeneralRestController {
 
 	@Autowired
 	protected SlideService slideService;
+
+	@Autowired
+	protected TheorySlideService theorySlideService;
+
+	@Autowired
+	protected PracticeSlideService practiceSlideService;
 
 	@Autowired
 	protected ItineraryService itineraryService;

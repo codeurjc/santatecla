@@ -11,7 +11,7 @@
         Seguimiento
       </button>
 
-      <div *ngFor="let itinerary of itineraries2">
+      <div *ngFor="let itinerary of itinerariesTabs">
         <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
           Itinerario {{itinerary.id}}
         </button>
@@ -44,14 +44,22 @@
       <h1>{{itinerary?.name}}</h1>
       <div *ngFor="let slide of slides">
         <div *ngIf= "slide.type == 'TheorySlide'">
-          <div *ngFor="let component of slide.components">
-            <h2>{{component.name}}</h2>
-            <p>{{component.text}}</p>
+          <div *ngFor="let card of slide.cards">
+            <h2>{{card.name}}</h2>
+            <p>{{card.text}}</p>
           </div>
         </div>
         <div *ngIf= "slide.type == 'PracticeSlide'">
-          <h2>Ejercicios 1</h2>
-          <p>¿Que es un lenguaje de programación?</p>
+          <div *ngFor="let question of slide.questions">
+            <h2>Ejercicio {{question.id}}</h2>
+            <p>{{question.questionText}}</p>
+            <div *ngIf= "question.subtype == 'DefinitionQuestion'">
+              <button (click)="navigateQuestion(question.id)">Resolver</button>
+            </div>
+            <div *ngIf= "question.subtype == 'ListQuestion'">
+              <button (click)="navigateListQuestion(question.id)">Resolver</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -59,19 +67,25 @@
         <h1>{{itinerary.name}}</h1>
         <div *ngFor="let slide of itinerary.slides">
             <div *ngIf= "slide.type == 'TheorySlide'">
-              <div *ngFor="let component of slide.components">
-                <h2>{{component.name}}</h2>
-                <p>{{component.text}}</p>
+              <div *ngFor="let card of slide.cards">
+                <h2>{{card.name}}</h2>
+                <p>{{card.text}}</p>
               </div>
             </div>
             <div *ngIf= "slide.type == 'PracticeSlide'">
-                <h2>Ejercicio</h2>
+              <div *ngFor="let question of slide.questions">
+                <h2>Ejercicio {{question.id}}</h2>
+                <p>{{question.questionText}}</p>
+                <div *ngIf= "question.subtype == 'DefinitionQuestion'">
+                  <button (click)="navigateQuestion(question.id)">Resolver</button>
+                </div>
+                <div *ngIf= "question.subtype == 'ListQuestion'">
+                  <button (click)="navigateListQuestion(question.id)">Resolver</button>
+                </div>
+              </div>
             </div>
           </div>
       </div>
-      <button (click)="navigateQuestion(5)">EJERCICIO DEFINICION 1</button>
-      <button (click)="navigateTestQuestion(8)">EJERCICIO TEST 1</button>
-      <button (click)="navigateListQuestion(7)">EJERCICIO LISTADO 1</button>
     </div>
   </body>
 </html>

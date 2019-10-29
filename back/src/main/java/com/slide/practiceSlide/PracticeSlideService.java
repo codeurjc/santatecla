@@ -1,34 +1,31 @@
-package com.slide;
+package com.slide.practiceSlide;
 
 import java.util.List;
 import java.util.Optional;
-
-import com.slide.practiceSlide.PracticeSlide;
-import com.slide.theorySlide.TheorySlide;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SlideService {
+public class PracticeSlideService {
 
     @Autowired
-    private SlideRepository repository;
+    private PracticeSlideRepository repository;
     
-    public Optional<Slide> findOne(long id) {
+    public Optional<PracticeSlide> findOne(long id) {
 		return repository.findById(id);
 	}
 
-	public List<Slide> findAll() {
+	public List<PracticeSlide> findAll() {
 		return repository.findAll();
 	}
 
-    public void save(Slide slide) {
+    public void save(PracticeSlide slide) {
 		repository.save(slide);
   	}
 
 	public void delete(long id) {
 		repository.deleteById(id);
-	}
-
+    }
+    
 }

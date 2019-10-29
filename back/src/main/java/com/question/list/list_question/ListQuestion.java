@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.question.Question;
 import com.question.list.list_answer.ListAnswer;
 
@@ -13,6 +15,7 @@ public class ListQuestion extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     private long id;
 
     @ElementCollection

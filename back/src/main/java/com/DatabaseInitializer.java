@@ -19,10 +19,10 @@ import com.question.test.test_question.TestQuestion;
 import com.question.test.test_question.TestQuestionRepository;
 import com.relation.Relation;
 import com.relation.RelationRepository;
-import com.slide.PracticeSlide;
 import com.slide.Slide;
 import com.slide.SlideRepository;
-import com.slide.TheorySlide;
+import com.slide.practiceSlide.PracticeSlide;
+import com.slide.theorySlide.TheorySlide;
 import com.unit.Unit;
 import com.unit.UnitRepository;
 import com.user.User;
@@ -113,10 +113,20 @@ public class DatabaseInitializer {
                 Slide slide2 = new PracticeSlide();
                 Slide slide3 = new TheorySlide();
 
-                slide1.getComponents().add(card1);
-                slide1.getComponents().add(card4);
-                slide3.getComponents().add(card2);
-                slide3.getComponents().add(card3);
+                ArrayList<Card> slide1Cards = new ArrayList<>();
+                slide1Cards.add((Card)card1);
+                slide1Cards.add((Card)card4);
+                slide1.setComponents(slide1Cards);
+
+                ArrayList<Question> slide2Questions = new ArrayList<>();
+                slide2Questions.add((DefinitionQuestion)definition1);
+                slide2Questions.add((ListQuestion)list1);
+                slide2.setComponents(slide2Questions);
+
+                ArrayList<Card> slide3Cards = new ArrayList<>();
+                slide3Cards.add((Card)card2);
+                slide3Cards.add((Card)card3);
+                slide3.setComponents(slide3Cards);
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);

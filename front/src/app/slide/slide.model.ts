@@ -1,7 +1,9 @@
-import { Card } from '../card/card.model';
+import { Question } from './../question/question.model';
+import { Card } from './../card/card.model';
 
 export interface Slide {
   id?: number;
-  components?: Card[];
-  type: string;
+  type?: string;
+  cards?: Card[];
+  questions?: Question[];
 }

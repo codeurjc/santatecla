@@ -1,3 +1,4 @@
+import { Card } from './../card/card.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Slide } from './slide.model';
@@ -24,5 +25,8 @@ export class SlideService {
     return this.http.delete('/api/slides/' + slide.id + '/card/' + cardId);
   }
 
+  addCard(cardId: number, id: number): Observable<Slide> {
+    return this.http.post<Slide>('/api/slides/' + id + '/card/' + cardId, null);
+  }
 
 }

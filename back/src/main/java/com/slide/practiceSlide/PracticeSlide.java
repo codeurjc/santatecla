@@ -1,28 +1,34 @@
-package com.slide;
+package com.slide.practiceSlide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.question.Question;
+import com.slide.Slide;
+
 @Entity
 public class PracticeSlide extends Slide{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
-    //@OneToMany
-    //private List<Exercise> exercises;
+    @OneToMany
+    @JsonView(Summary.class)
+    private List<Question> questions;
 
     public PracticeSlide() {
         super();
-        //this.exercises = new ArrayList<>();
+        this.questions = new ArrayList<>();
     }
 
     public void update(Slide slide) { }
@@ -35,11 +41,12 @@ public class PracticeSlide extends Slide{
         this.id = id;
     }
 
-    public List getComponents() {
-        return new ArrayList<>();
+    public List<Question> getComponents() {
+        return questions;
     }
 
-    public void setComponents(List components) {
+    public void setComponents(List questions) {
+        this.questions = questions;
     }
 
 

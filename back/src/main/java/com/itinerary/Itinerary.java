@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import org.apache.commons.lang3.StringUtils;
 
 import com.unit.Unit;
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.slide.Slide;
 
 @Entity
@@ -21,18 +23,21 @@ public class Itinerary{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     protected long id;
 
+    @JsonView(Summary.class)
     private String name;
 
     // @ManyToMany
     // private List<Unit> units;
-
-    @ManyToMany
-    private List<Itinerary> itineraries;
-
+    @JsonView(Summary.class)
     @OneToMany
     private List<Slide> slides;
+
+    @JsonView(Summary.class)
+    @ManyToMany
+    private List<Itinerary> itineraries;
 
     public Itinerary(){}
 

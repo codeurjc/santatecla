@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 import com.card.Card;
+import com.question.Question;
+import com.slide.practiceSlide.PracticeSlide;
+import com.slide.theorySlide.TheorySlide;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,14 +46,39 @@ public class SlideRestController extends GeneralRestController {
 
     }
 
-    @PostMapping(value="/")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Slide newSlide(@RequestBody Slide slide){
+    @PostMapping(value="/{slideId}/card/{cardId}")
+    public ResponseEntity<TheorySlide> addCardToSlide(@PathVariable long slideId, @PathVariable long cardId){
 
-        this.slideService.save(slide);
-        return slide;
-        
+        Optional<TheorySlide> slide = this.theorySlideService.findOne(slideId);
+        Optional<Card> card = this.cardService.findOne(cardId);
+
+        if(slide.isPresent()){
+            if(card.isPresent()){
+                if(!slide.get().getComponents().contains(card.get())){
+                    slide.get().getComponents().add(card.get());
+                    this.theorySlideService.save(slide.get());
+                    return new ResponseEntity<>(slide.get(), HttpStatus.OK);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    /*@PostMapping(value="/{id}/question")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Question addQuestionToSlide(@RequestBody Question question, @PathVariable long id){
+
+        Optional<PracticeSlide> s = this.practiceSlideService.findOne(id);
+
+        this.questionService.save(question);
+
+        s.get().getComponents().add(question);
+        this.slideService.save(s.get());
+
+        return question;
+    }*/
 
     @DeleteMapping(value="/{id}")
     public ResponseEntity<Slide> deleteSlide(@PathVariable long id){
