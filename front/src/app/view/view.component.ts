@@ -72,6 +72,8 @@ export class ViewComponent implements OnInit, AfterContentInit {
   private selectedTarget: HTMLInputElement;
   private showUmlNodeOptions = false;
 
+  private showSpinner = false;
+
   constructor(private router: Router, private viewService: ViewService) {}
 
   ngOnInit() {
@@ -132,17 +134,17 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   private getUnit(id: number) {
     this.viewService.getUnit(id).subscribe((data: Unit) => {
-      this.setData(data);
-      this.updateJson(false);
+      this.setData(data, false);
       this.emptyResults();
     }, error => {
       console.log(error);
     });
   }
 
-  private setData(data: any) {
+  private setData(data: any, changed: boolean) {
     const visibleData = new VisibleUnit(data);
     this.data = visibleData.getSortedData();
+    this.updateJson(changed);
   }
 
   private search() {
@@ -213,8 +215,11 @@ export class ViewComponent implements OnInit, AfterContentInit {
   private save(event: KeyboardEvent) {
     if (this.changed) {
       if (event) { event.preventDefault(); }
-      if (this.editor.isValidJson()) {
-        this.viewService.saveUnit(this.data).subscribe(() => {
+      if (this.isValidJson()) {
+        this.showSpinner = true;
+        this.viewService.saveUnit(this.data).subscribe((data) => {
+          this.setData(data, false);
+          this.showSpinner = false;
         }, error => {
           console.log(error);
         });
@@ -226,10 +231,8 @@ export class ViewComponent implements OnInit, AfterContentInit {
   private updateUnitName() {
     const selectedUnit: VisibleUnit = this.findUnit(this.data, this.selectedTarget.id);
     selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
-    this.setData(this.data);
-    this.updateJson(true);
+    this.setData(this.data, true);
     this.setShowUmlNodeOptions(false);
-    this.save(null);
   }
 
   private findUnit(data, id): VisibleUnit {
@@ -245,6 +248,22 @@ export class ViewComponent implements OnInit, AfterContentInit {
       });
     }
     return unit;
+  }
+
+  private createRelation(relationType): VisibleUnit {
+    const selectedUnit: VisibleUnit = this.findUnit(this.data, this.selectedTarget.id);
+    const newUnit: VisibleUnit = new VisibleUnit({
+      id: 0,
+      name: 'Nueva unidad',
+      relations: []
+    });
+    selectedUnit.relations.push(new VisibleRelation({
+      id: 0,
+      relationType: relationType,
+      relatedTo: newUnit
+    }));
+    this.setData(this.data, true);
+    return newUnit;
   }
 
   @HostListener('document:click', ['$event'])
@@ -272,9 +291,34 @@ export class ViewComponent implements OnInit, AfterContentInit {
       this.drawUmlNodeOptions();
     } else if (target.tagName === 'path') {
 
+    } else if (target.id === 'create-association-button') {
+      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.ASSOCIATION).id);
+      this.drawUmlNodeOptions();
+    } else if (target.id === 'create-aggregation-button') {
+      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.AGGREGATION).id);
+      this.drawUmlNodeOptions();
+    } else if (target.id === 'create-composition-button') {
+      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.COMPOSITION).id);
+      this.drawUmlNodeOptions();
+    } else if (target.id === 'create-inheritance-button') {
+      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.INHERITANCE).id);
+      this.drawUmlNodeOptions();
     } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
       this.setShowUmlNodeOptions(false);
     }
+  }
+
+  private findUnitTarget(id): HTMLInputElement {
+    let found = false;
+    let target: HTMLInputElement = null;
+    this.selectedTarget.parentElement.parentElement.childNodes.forEach((childNode) => {
+      const firstChild = <HTMLInputElement>childNode.firstChild;
+      if ((!found) && (firstChild) && (firstChild.id === id.toString())) {
+        target = firstChild;
+        found = true;
+      }
+    });
+    return target;
   }
 
   private drawUmlNodeOptions() {

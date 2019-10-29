@@ -21,7 +21,9 @@
       </div>
     </mat-form-field>
 
-    <div #uml></div>
+    <img src="../../assets/img/spinner.gif" *ngIf="showSpinner">
+
+    <div #uml [hidden]="showSpinner"></div>
 
     <div #umlNodeOptions [hidden]="!showUmlNodeOptions" (window:resize)="drawUmlNodeOptions()">
 
@@ -30,6 +32,22 @@
       <div id="uml-node-options">
         <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id)">
           <mat-icon class="uml-option-icon">call_made</mat-icon>
+        </button>
+        <br>
+        <button id="create-association-button">
+          association
+        </button>
+        <br>
+        <button id="create-aggregation-button">
+          aggregation
+        </button>
+        <br>
+        <button id="create-composition-button">
+          composition
+        </button>
+        <br>
+        <button id="create-inheritance-button">
+          inheritance
         </button>
       </div>
 
