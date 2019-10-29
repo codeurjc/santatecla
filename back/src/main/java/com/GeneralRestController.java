@@ -41,4 +41,7 @@ public class GeneralRestController {
 
 	@Autowired
 	protected TestQuestionService testQuestionService;
+
+	@Autowired
+	protected QuestionService questionService;
 }

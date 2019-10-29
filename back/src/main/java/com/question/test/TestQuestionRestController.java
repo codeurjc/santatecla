@@ -70,10 +70,10 @@ public class TestQuestionRestController extends GeneralRestController {
         if (question.isPresent()) {
             question.get().addAnswer(answer);
             if(answer.isCorrect()){
-                question.get().setCorrectAnswerCount(question.get().getCorrectAnswerCount() + 1);
+                question.get().setTotalCorrectAnswers(question.get().getTotalCorrectAnswers() + 1);
             }
             else {
-                question.get().setWrongAnswerCount(question.get().getWrongAnswerCount() + 1);
+                question.get().setTotalWrongAnswers(question.get().getTotalWrongAnswers() + 1);
             }
             this.testQuestionService.save(question.get());
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
@@ -96,6 +96,6 @@ public class TestQuestionRestController extends GeneralRestController {
 
     @GetMapping("/{id}/answer/user/{userId}")
     public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
-        return new ResponseEntity<List<Object>>(this.testQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
+        return new ResponseEntity<>(this.testQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
     }
 }

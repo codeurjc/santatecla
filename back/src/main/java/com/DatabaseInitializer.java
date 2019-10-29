@@ -106,7 +106,7 @@ public class DatabaseInitializer {
                 testAnswers.add("No");
                 TestQuestion test = new TestQuestion("¿Es Java un lenguaje de programación?", testAnswers, "Sí");
 
-                this.testQuestionRepository.save(test);
+                testQuestionRepository.save(test);
 
                 //Slides
                 Slide slide1 = new TheorySlide();

@@ -40,7 +40,7 @@ public class DefinitionQuestionService {
     }
 
     public List<Object> findUserAnswers(long userId, long questionId){
-        return this.questionRepository.findUserAnswers(userId, questionId);
+        return this.definitionRepository.findUserAnswers(userId, questionId);
     }
 
 }

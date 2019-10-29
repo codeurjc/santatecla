@@ -66,13 +66,17 @@ public class ListQuestionRestController extends GeneralRestController {
     @PostMapping("/{id}")
     public ResponseEntity<ListAnswer> addAnswer(@PathVariable long id, @RequestBody ListAnswer answer) {
 
-        Optional<ListQuestion> question = this.listQuestionService.findOne(id);
-
-        if (question.isPresent()) {
-            ListAnswer la = new ListAnswer(answer.getAnswer(), false);
-            question.get().addAnswer(la);
-            this.listQuestionService.save(question.get());
-            return new ResponseEntity<>(answer, HttpStatus.CREATED);
+        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
+        if (optional.isPresent()) {
+            ListQuestion question = optional.get();
+            question.addAnswer(answer);
+            if (answer.isCorrect()) {
+                question.setTotalCorrectAnswers(question.getTotalCorrectAnswers() + 1);
+            } else {
+                question.setTotalWrongAnswers(question.getTotalWrongAnswers() + 1);
+            }
+            this.listQuestionService.save(question);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -88,6 +92,11 @@ public class ListQuestionRestController extends GeneralRestController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{id}/answer/user/{userId}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
+        return new ResponseEntity<>(this.listQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
     }
 
     /*@PostMapping("/{id}/correct/")
@@ -107,11 +116,6 @@ public class ListQuestionRestController extends GeneralRestController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/{id}/answer/user/{userId}")
-    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
-        return new ResponseEntity<List<Object>>(this.listQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
     }
 
     /*@PostMapping("/{id}/wrong/")

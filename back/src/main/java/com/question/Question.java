@@ -51,4 +51,35 @@ public class Question {
         return subtype;
     }
 
+    public int getTotalAnswers() {
+        return totalAnswers;
+    }
+
+    public int getTotalCorrectAnswers() {
+        return totalCorrectAnswers;
+    }
+
+    public int getTotalWrongAnswers() {
+        return totalWrongAnswers;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public void setTotalAnswers(int totalAnswers) {
+        this.totalAnswers = totalAnswers;
+    }
+
+    public void setTotalCorrectAnswers(int totalCorrectAnswers) {
+        this.totalCorrectAnswers = totalCorrectAnswers;
+    }
+
+    public void setTotalWrongAnswers(int totalWrongAnswers) {
+        this.totalWrongAnswers = totalWrongAnswers;
+    }
 }
