@@ -68,8 +68,13 @@ public class TestQuestionRestController extends GeneralRestController {
         Optional<TestQuestion> question = this.testQuestionService.findOne(id);
 
         if (question.isPresent()) {
-            TestAnswer ta = new TestAnswer(answer.getAnswerText(), false);
-            question.get().addAnswer(ta);
+            question.get().addAnswer(answer);
+            if(answer.isCorrect()){
+                question.get().setCorrectAnswerCount(question.get().getCorrectAnswerCount() + 1);
+            }
+            else {
+                question.get().setWrongAnswerCount(question.get().getWrongAnswerCount() + 1);
+            }
             this.testQuestionService.save(question.get());
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
@@ -87,5 +92,10 @@ public class TestQuestionRestController extends GeneralRestController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{id}/answer/user/{userId}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
+        return new ResponseEntity<List<Object>>(this.testQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
     }
 }

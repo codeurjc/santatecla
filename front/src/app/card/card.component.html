@@ -3,20 +3,20 @@
   <body>
 
     <div class="unit-header">
-        <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
-          Fichas
-        </button>
+      <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
+        Seguimiento
+      </button>
 
-        <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
-          Seguimiento
+      <div *ngFor="let itinerary of itineraries">
+        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
+          Itinerario {{itinerary.id}}
         </button>
-
-        <div *ngFor="let itinerary of itineraries">
-          <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-            Itinerario {{itinerary.id}}
-          </button>
-        </div>
+      </div>
     </div>
+
+    <h1>{{unit?.name}}</h1>
+    <hr>
+    <h3>Fichas</h3>
 
     <mat-card class="card" *ngFor = "let card of this.cards">
       <div>{{card.name}}</div>

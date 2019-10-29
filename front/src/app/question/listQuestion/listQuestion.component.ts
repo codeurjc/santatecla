@@ -1,8 +1,9 @@
-import {Component, OnInit, SystemJsNgModuleLoader} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LoginService} from '../../auth/login.service';
 import {ListQuestion} from './listQuestion.model';
 import {ListQuestionService} from './listQuestion.service';
+import {ListAnswer} from './listAnswer.model';
 
 @Component({
   templateUrl: './listQuestion.component.html'
@@ -15,11 +16,18 @@ export class ListQuestionComponent implements OnInit {
   questionDone: boolean;
   questionListCorrect: boolean;
   questionListCorrectAnswers: string[];
+  questionAnswer: ListAnswer;
   id: number;
+  alreadyDone: boolean;
+
+  unitId: number;
+  itineraryId: number;
 
   constructor(
     private questionService: ListQuestionService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private loginService: LoginService,
+    private router: Router) {
     this.questionDone = false;
     this.choosenListAnswers = [];
   }
@@ -27,12 +35,27 @@ export class ListQuestionComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.id = params.questionId;
+      this.itineraryId = params.itineraryId;
+      this.unitId = params.unitId;
       this.questionService.getListQuestion(this.id).subscribe((data: ListQuestion) => {
         this.question = data;
         this.availableListAnswers = this.question.possibleAnswers;
-        this.questionListCorrectAnswers = this.question.correctAnswer;
+        this.questionListCorrectAnswers = this.question.correctAnswers;
       }, error => {
       });
+    });
+
+    this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: ListAnswer[]) => {
+      if (data.length != 0) {
+        this.alreadyDone = true;
+        console.log(data);
+        for (let answer of data){
+          if (answer[2] === true) {
+            this.questionListCorrect = true;
+            break;
+          }
+        }
+      }
     });
   }
 
@@ -58,7 +81,16 @@ export class ListQuestionComponent implements OnInit {
     } else {
       this.questionListCorrect = false;
     }
-    this.questionDone = true;
+    this.questionAnswer = {user: this.loginService.getCurrentUser(), correct: this.questionListCorrect};
+    this.questionService.addAnswer(this.id, this.questionAnswer).subscribe(
+      (_) => {
+        this.questionDone = true;
+      },
+      (error) => console.log(error));
+  }
+
+  return(){
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId]);
   }
 
 }

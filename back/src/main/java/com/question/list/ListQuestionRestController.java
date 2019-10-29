@@ -94,15 +94,27 @@ public class ListQuestionRestController extends GeneralRestController {
     public ResponseEntity<ListQuestion> addCorrectAnswer(@PathVariable long id){
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){
-            optional.get().setCorrectAnswersCount(optional.get().getCorrectAnswersCount()+1);
-            this.listQuestionService.save(optional.get());
+            ListQuestion question = optional.get();
+            question.addAnswer(answer);
+            if(answer.isCorrect()){
+                question.setCorrectAnswerCount(question.getCorrectAnswerCount() + 1);
+            }
+            else {
+                question.setWrongAnswerCount(question.getWrongAnswerCount() + 1);
+            }
+            this.listQuestionService.save(question);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{id}/wrong/")
+    @GetMapping("/{id}/answer/user/{userId}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
+        return new ResponseEntity<List<Object>>(this.listQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
+    }
+
+    /*@PostMapping("/{id}/wrong/")
     public ResponseEntity<ListQuestion> addWrongAnswer(@PathVariable long id){
         Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
         if(optional.isPresent()){

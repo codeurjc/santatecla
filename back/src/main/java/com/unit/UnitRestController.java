@@ -1,6 +1,5 @@
 package com.unit;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,23 +39,36 @@ public class UnitRestController extends GeneralRestController {
     protected RelationService relationService;
     
     @PutMapping(value="/")
-    public ResponseEntity<List<Unit>> updateUnit(@RequestBody List<Unit> units) {
-        List<Unit> savedUnits = new ArrayList<>();
-        for (Unit unit : units) {
-            Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
-            if (savedUnit.isPresent()) {
-                savedUnit.get().update(unit);
-                for (Relation relation : unit.getRelations()) {
-                    Optional<Relation> savedRelation = this.relationService.findOne(relation.getId());
-                    savedRelation.get().update(relation);
-                }
-                this.unitService.save(savedUnit.get());
-                savedUnits.add(savedUnit.get());
+    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
+        Unit savedUnit;
+        if (!this.unitService.findOne(unit.getId()).isPresent()) {
+            savedUnit = new Unit(unit.getName());
+        } else {
+            Optional<Unit> u = this.unitService.findOne(unit.getId());
+            if (u.isPresent()) {
+                savedUnit = this.unitService.findOne(unit.getId()).get();
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
-        return new ResponseEntity<>(savedUnits, HttpStatus.OK);
+        savedUnit.update(unit);
+        for (Relation relation : unit.getRelations()) {
+            Relation savedRelation;
+            boolean newRelation = !this.relationService.findOne(relation.getId()).isPresent();
+            if (newRelation) {
+                savedRelation = new Relation(relation.getRelationType(), relation.getRelatedTo());
+            } else {
+                savedRelation = this.relationService.findOne(relation.getId()).get();
+                savedRelation.update(relation);
+            }
+            savedRelation.setRelatedTo(updateUnit(relation.getRelatedTo()).getBody());
+            this.relationService.save(savedRelation);
+            if (newRelation) {
+                savedUnit.addRelation(savedRelation);
+            }
+        }
+        this.unitService.save(savedUnit);
+        return new ResponseEntity<>(savedUnit, HttpStatus.OK);
     }
 
     @GetMapping(value="/{id}")
@@ -94,7 +106,7 @@ public class UnitRestController extends GeneralRestController {
         }
         updatedCard.update(card);
         cardService.save(updatedCard);
-        return new ResponseEntity<Card>(updatedCard, HttpStatus.OK);	
+        return new ResponseEntity<>(updatedCard, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{unitId}/cards/{cardId}/image", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

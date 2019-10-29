@@ -18,8 +18,9 @@ export class DefinitionQuestionComponent implements OnInit {
   questionDone: boolean;
   id: number;
   subtype: string;
-  chosenAnswer: string;
-  correct: boolean;
+
+  unitId: number;
+  itineraryId: number;
 
   constructor(
     private router: Router,
@@ -33,10 +34,18 @@ export class DefinitionQuestionComponent implements OnInit {
     this.questionAnswer = {answerText: ''};
     this.activatedRoute.params.subscribe(params => {
       this.id = params.questionId;
+      this.itineraryId = params.itineraryId;
+      this.unitId = params.unitId;
       this.questionService.getDefinitionQuestion(this.id).subscribe((data: DefinitionQuestion) => {
         this.question = data;
         this.subtype = data.subtype;
       }, error => {
+      });
+
+      this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: DefinitionAnswer[]) => {
+        if (data.length != 0) {
+          this.questionDone = true;
+        }
       });
     });
   }
@@ -51,12 +60,7 @@ export class DefinitionQuestionComponent implements OnInit {
     );
   }
 
-  correctType1Answer() {
-    if (this.chosenAnswer === this.question.correctAnswer) {
-      this.correct = true;
-    } else {
-      this.correct = false;
-    }
-    this.questionDone = true;
+  return(){
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId]);
   }
 }

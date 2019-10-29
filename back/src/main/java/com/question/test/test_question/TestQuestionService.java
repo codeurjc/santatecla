@@ -27,4 +27,8 @@ public class TestQuestionService {
     public Optional<TestQuestion> findOne(long id){
         return this.testRepository.findById(id);
     }
+
+    public List<Object> findUserAnswers(long userId, long questionId){
+        return this.testRepository.findUserAnswers(userId, questionId);
+    }
 }

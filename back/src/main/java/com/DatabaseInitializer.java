@@ -11,7 +11,6 @@ import com.itinerary.Itinerary;
 import com.itinerary.ItineraryRepository;
 import com.question.Question;
 import com.question.QuestionRepository;
-import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -87,9 +86,6 @@ public class DatabaseInitializer {
 
                 definitionQuestionRepository.save(definition1);
                 definitionQuestionRepository.save(definition2);
-                //DefinitionAnswer da = new DefinitionAnswer("Lo que es el hardware", false);
-                //definition1.addAnswer(da);
-                //definitionQuestionRepository.save(definition1);
 
                 // List Questions
                 ArrayList<String> possibleAnswers = new ArrayList<>();
@@ -102,7 +98,7 @@ public class DatabaseInitializer {
                 ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
                  possibleAnswers, correctAnswer);
 
-                this.listQuestionRepository.save(list1);
+                listQuestionRepository.save(list1);
 
                 //Test Questions
                 List<String> testAnswers = new ArrayList<>();
@@ -147,7 +143,7 @@ public class DatabaseInitializer {
                 Unit unit3 = new Unit("Python");
                 Unit unit4 = new Unit("Expresión");
                 Unit unit5 = new Unit("Expresión");
-                Unit unit6 = new Unit("C++");
+                Unit unit6 = new Unit("C");
                 Unit unit7 = new Unit("Expresión");
                 Unit unit8 = new Unit("Suma");
                 Unit unit9 = new Unit("Suma");
@@ -157,9 +153,12 @@ public class DatabaseInitializer {
                 //unit1Questions.add((DefinitionQuestion)definition3);
                 ArrayList<ListQuestion> unit1ListQuestions = new ArrayList<>();
                 unit1ListQuestions.add((ListQuestion)list1);
+                ArrayList<TestQuestion> unit1TestQuestions = new ArrayList<>();
+                unit1TestQuestions.add(test);
 
                 unit1.setDefinitionQuestions(unit1Questions);
                 unit1.setListQuestions(unit1ListQuestions);
+                unit1.setTestQuestions(unit1TestQuestions);
 
                 unit1.addCard(card1);
                 unit1.addCard(card4);

@@ -34,7 +34,7 @@ export class QuestionComponent implements OnInit {
     );
   }
 
-  sendQuestion(text: string) {
+  /*sendQuestion(text: string) {
     if (this.subtype === 'Definition') {
       this.definitionQuestion = {
         questionText: text,
@@ -48,5 +48,5 @@ export class QuestionComponent implements OnInit {
     } else {
       this.listService.addListQuestion(this.listQuestion);
     }
-  }
+  }*/
 }

@@ -9,11 +9,17 @@ import com.question.Question;
 import com.question.list.list_answer.ListAnswer;
 
 @Entity
-public class ListQuestion extends Question {
+public class ListQuestion{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    private String questionText;
+    private String subtype;
+    private int totalAnswers;
+    private int totalCorrectAnswers;
+    private int totalWrongAnswers;
 
     @ElementCollection
     private List<String> possibleAnswers;
@@ -25,14 +31,13 @@ public class ListQuestion extends Question {
     private List<ListAnswer> listAnswers;
 
     public ListQuestion() {
-        super();
         this.possibleAnswers = new ArrayList<>();
         this.correctAnswers = new ArrayList<>();
         this.listAnswers = new ArrayList<>();
     }
 
     public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer) {
-        super(questionText);
+        this.questionText = questionText;
         this.possibleAnswers = possibleAnswers;
         this.correctAnswers = correctAnswer;
         this.listAnswers = new ArrayList<>();
@@ -75,6 +80,62 @@ public class ListQuestion extends Question {
     }
 
     public List<ListAnswer> getAnswers() {
-        return listAnswers;
+        return answers;
+    }
+
+    public void setAnswers(List<ListAnswer> answers) {
+        this.answers = answers;
+    }
+
+    public void addAnswer(ListAnswer answer){
+        this.answers.add(answer);
+    }
+
+    public int getCorrectAnswerCount() {
+        return this.totalCorrectAnswers;
+    }
+
+    public void setCorrectAnswerCount(int correctAnswerCount) {
+        this.totalCorrectAnswers = correctAnswerCount;
+    }
+
+    public int getWrongAnswerCount() {
+        return totalWrongAnswers;
+    }
+
+    public void setWrongAnswerCount(int wrongAnswerCount) {
+        this.totalWrongAnswers = wrongAnswerCount;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public int getTotalCorrectAnswers() {
+        return totalCorrectAnswers;
+    }
+
+    public void setTotalCorrectAnswers(int totalCorrectAnswers) {
+        this.totalCorrectAnswers = totalCorrectAnswers;
+    }
+
+    public int getTotalWrongAnswers() {
+        return totalWrongAnswers;
+    }
+
+    public void setTotalWrongAnswers(int totalWrongAnswers) {
+        this.totalWrongAnswers = totalWrongAnswers;
+    }
+
+    public void setPossibleAnswers(List<String> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
+
+    public void setCorrectAnswers(List<String> correctAnswers) {
+        this.correctAnswers = correctAnswers;
     }
 }

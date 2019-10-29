@@ -15,4 +15,8 @@ public class RelationService {
 		return relationRepository.findById(id);
 	}
 
+	public void save(Relation relation) {
+		relationRepository.save(relation);
+	}
+
 }

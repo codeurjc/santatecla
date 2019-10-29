@@ -58,4 +58,11 @@ public class ListAnswer{
         this.correct = correct;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

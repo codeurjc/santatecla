@@ -25,16 +25,12 @@ public class UnitService {
 		return unitRepository.findById(id);
 	}
 	
-    public void save(Unit theme) {
-		unitRepository.save(theme);
+    public void save(Unit unit) {
+		unitRepository.save(unit);
 	}
 
 	public void delete(long id) {
 		unitRepository.deleteById(id);
-	}
-
-	public List<Unit> findRootUnits() {
-		return unitRepository.findRootUnits();
 	}
 
 	public List<Unit> findByNameContaining(String name) {

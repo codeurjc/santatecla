@@ -14,23 +14,28 @@ import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 
 @Entity
-public class DefinitionQuestion extends Question {
-
+public class DefinitionQuestion{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    private String questionText;
+    private String subtype;
+    private int totalAnswers;
+    private int totalCorrectAnswers;
+    private int totalWrongAnswers;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<DefinitionAnswer> definitionAnswers;
 
     public DefinitionQuestion() {
         super();
-        this.definitionAnswers = new ArrayList<>();
+        this.answers = new ArrayList<>();
     }
 
     public DefinitionQuestion(String questionText) {
         super(questionText);
-        this.definitionAnswers = new ArrayList<>();
+        this.answers = new ArrayList<>();
     }
 
     public void update(DefinitionQuestion q) {
@@ -57,5 +62,41 @@ public class DefinitionQuestion extends Question {
 
     public List<DefinitionAnswer> getAnswers() {
         return definitionAnswers;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
+    }
+
+    public int getTotalCorrectAnswers() {
+        return totalCorrectAnswers;
+    }
+
+    public void setTotalCorrectAnswers(int totalCorrectAnswers) {
+        this.totalCorrectAnswers = totalCorrectAnswers;
+    }
+
+    public int getTotalWrongAnswers() {
+        return totalWrongAnswers;
+    }
+
+    public void setTotalWrongAnswers(int totalWrongAnswers) {
+        this.totalWrongAnswers = totalWrongAnswers;
+    }
+
+    public void setAnswers(List<DefinitionAnswer> answers) {
+        this.answers = answers;
     }
 }
