@@ -22,7 +22,7 @@ public class DefinitionAnswer{
 
     private String justification;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private User user;
 
     public DefinitionAnswer(){}

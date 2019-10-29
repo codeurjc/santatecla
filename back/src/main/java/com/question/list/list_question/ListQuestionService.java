@@ -26,4 +26,8 @@ public class ListQuestionService{
     public Optional<ListQuestion> findOne(long id){
         return this.listRepository.findById(id);
     }
+
+    public List<Object> findUserAnswers(long userId, long questionId){
+        return this.listRepository.findUserAnswers(userId, questionId);
+    }
 }

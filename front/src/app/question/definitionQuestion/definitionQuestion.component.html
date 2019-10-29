@@ -2,41 +2,19 @@
 <html>
 <body>
 <div align=center>
-      <span *ngIf= "subtype == 'DefinitionQuestion'">
-        <p>{{question?.questionText}}</p>
-        <span *ngIf="!questionDone">
-          <form #textForm="ngForm">
-            <input placeholder="Texto" [(ngModel)]="questionAnswer.answerText" name="answer" required>
-          </form>
-          <button class="button" color="primary" (click)="sendAnswer()">Guardar</button>
-        </span>
-        <span *ngIf="questionDone">
-          <p style="color: greenyellow">REALIZADO</p>
-        </span>
-      </span>
-
-  <span *ngIf="subtype == 'ListQuestion'">
-        <p>{{question?.questionText}}</p>
-        <span *ngIf="!questionDone">
-          <form name="choosenAnswer">
-            <label>
-              <input type="radio" name="answer" value="Sí" placeholder="SI" [(ngModel)]="this.chosenAnswer"> SI
-            </label>
-            <label>
-              <input type="radio" name="answer" value="No" placeholder="NO" [(ngModel)]="this.chosenAnswer">NO
-            </label>
-          </form>
-          <button class="button" color="primary" (click)="correctType1Answer()">Guardar</button>
-        </span>
-        <span *ngIf="questionDone">
-          <span *ngIf="correct">
-            <p style="color: green">CORRECTO</p>
-          </span>
-          <span *ngIf="!correct">
-              <p style="color: red">INCORRECTO</p>
-          </span>
-        </span>
-      </span>
+  <p>{{question?.questionText}}</p>
+  <span *ngIf="!questionDone">
+    <form #textForm="ngForm">
+      <input placeholder="Texto" [(ngModel)]="questionAnswer.answerText" name="answer" required>
+    </form>
+    <div *ngIf="!loginService.isAdmin">
+      <button class="button" color="primary" (click)="sendAnswer()">Guardar</button>
+    </div>
+  </span>
+  <span *ngIf="questionDone">
+    <p>A LA ESPERA DE CORRECCIÓN</p>
+  </span>
+  <mat-button-toggle (click)="return()" style="margin-top: 5%">Volver</mat-button-toggle>
 </div>
 </body>
 </html>

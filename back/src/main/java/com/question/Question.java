@@ -11,7 +11,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected long id;
+    private long id;
 
     protected String subtype;
     protected String questionText;

@@ -172,11 +172,15 @@ export class ItineraryComponent implements OnInit {
   }
 
   navigateQuestion(id: number){
-    this.router.navigate(['/definitionQuestion/' + id]);
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/definitionQuestion/' + id]);
   }
 
   navigateListQuestion(id: number){
-    this.router.navigate(['/listQuestion/' + id]);
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/listQuestion/' + id]);
+  }
+
+  navigateTestQuestion(id: number) {
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/testQuestion/' + id]);
   }
 
   navigateToUnitCards() {
