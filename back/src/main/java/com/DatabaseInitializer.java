@@ -11,6 +11,7 @@ import com.itinerary.Itinerary;
 import com.itinerary.ItineraryRepository;
 import com.question.Question;
 import com.question.QuestionRepository;
+import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -86,6 +87,9 @@ public class DatabaseInitializer {
 
                 definitionQuestionRepository.save(definition1);
                 definitionQuestionRepository.save(definition2);
+                //DefinitionAnswer da = new DefinitionAnswer("Lo que es el hardware", false);
+                //definition1.addAnswer(da);
+                //definitionQuestionRepository.save(definition1);
 
                 // List Questions
                 ArrayList<String> possibleAnswers = new ArrayList<>();

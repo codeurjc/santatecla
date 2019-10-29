@@ -21,16 +21,16 @@ public class DefinitionQuestion extends Question {
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<DefinitionAnswer> answers;
+    private List<DefinitionAnswer> definitionAnswers;
 
     public DefinitionQuestion() {
         super();
-        this.answers = new ArrayList<>();
+        this.definitionAnswers = new ArrayList<>();
     }
 
     public DefinitionQuestion(String questionText) {
         super(questionText);
-        this.answers = new ArrayList<>();
+        this.definitionAnswers = new ArrayList<>();
     }
 
     public void update(DefinitionQuestion q) {
@@ -40,7 +40,7 @@ public class DefinitionQuestion extends Question {
     }
 
     public void addAnswer(DefinitionAnswer answer) {
-        this.answers.add(answer);
+        this.definitionAnswers.add(answer);
     }
 
     /**
@@ -56,6 +56,6 @@ public class DefinitionQuestion extends Question {
     }
 
     public List<DefinitionAnswer> getAnswers() {
-        return answers;
+        return definitionAnswers;
     }
 }

@@ -22,20 +22,20 @@ public class ListQuestion extends Question {
     private List<String> correctAnswers;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<ListAnswer> answers;
+    private List<ListAnswer> listAnswers;
 
     public ListQuestion() {
         super();
         this.possibleAnswers = new ArrayList<>();
         this.correctAnswers = new ArrayList<>();
-        this.answers = new ArrayList<>();
+        this.listAnswers = new ArrayList<>();
     }
 
     public ListQuestion(String questionText, List<String> possibleAnswers, List<String> correctAnswer) {
         super(questionText);
         this.possibleAnswers = possibleAnswers;
         this.correctAnswers = correctAnswer;
-        this.answers = new ArrayList<>();
+        this.listAnswers = new ArrayList<>();
     }
 
     public void update(ListQuestion q) {
@@ -51,7 +51,7 @@ public class ListQuestion extends Question {
     }
 
     public void addAnswer(ListAnswer answer) {
-        this.answers.add(answer);
+        this.listAnswers.add(answer);
     }
 
     /**
@@ -75,6 +75,6 @@ public class ListQuestion extends Question {
     }
 
     public List<ListAnswer> getAnswers() {
-        return answers;
+        return listAnswers;
     }
 }
