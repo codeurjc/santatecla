@@ -1,5 +1,7 @@
 package com.question.test.test_question;
 
+import com.JViews.Summary;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.question.Question;
 import com.question.test.test_answer.TestAnswer;
 
@@ -12,6 +14,7 @@ public class TestQuestion extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Summary.class)
     private long id;
 
     @ElementCollection

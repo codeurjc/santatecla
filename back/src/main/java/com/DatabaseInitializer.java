@@ -112,6 +112,7 @@ public class DatabaseInitializer {
                 Slide slide1 = new TheorySlide();
                 Slide slide2 = new PracticeSlide();
                 Slide slide3 = new TheorySlide();
+                Slide slide4 = new PracticeSlide();
 
                 ArrayList<Card> slide1Cards = new ArrayList<>();
                 slide1Cards.add((Card)card1);
@@ -123,6 +124,10 @@ public class DatabaseInitializer {
                 slide2Questions.add((ListQuestion)list1);
                 slide2.setComponents(slide2Questions);
 
+                ArrayList<Question> slide4Questions = new ArrayList<>();
+                slide4Questions.add((TestQuestion)test);
+                slide4.setComponents(slide4Questions);
+
                 ArrayList<Card> slide3Cards = new ArrayList<>();
                 slide3Cards.add((Card)card2);
                 slide3Cards.add((Card)card3);
@@ -131,12 +136,14 @@ public class DatabaseInitializer {
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
                 slideRepository.save(slide3);
+                slideRepository.save(slide4);
 
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
                 Itinerary itinerary2 = new Itinerary("Introducción Java");
 
                 itinerary2.getSlides().add(slide3);
+                itinerary2.getSlides().add(slide4);
 
                 itineraryRepository.save(itinerary2);
 
@@ -163,12 +170,13 @@ public class DatabaseInitializer {
                 //unit1Questions.add((DefinitionQuestion)definition3);
                 ArrayList<ListQuestion> unit1ListQuestions = new ArrayList<>();
                 unit1ListQuestions.add((ListQuestion)list1);
-                ArrayList<TestQuestion> unit1TestQuestions = new ArrayList<>();
-                unit1TestQuestions.add(test);
+                ArrayList<TestQuestion> unitTestQuestions = new ArrayList<>();
+                unitTestQuestions.add(test);
 
                 unit1.setDefinitionQuestions(unit1Questions);
                 unit1.setListQuestions(unit1ListQuestions);
-                unit1.setTestQuestions(unit1TestQuestions);
+                unit1.setTestQuestions(unitTestQuestions);
+                unit2.setTestQuestions(unitTestQuestions);
 
                 unit1.addCard(card1);
                 unit1.addCard(card4);

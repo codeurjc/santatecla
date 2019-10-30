@@ -66,7 +66,7 @@ public class SlideRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    /*@PostMapping(value="/{id}/question")
+    /*@PostMapping(value="/{slideId}/question/")
     @ResponseStatus(HttpStatus.CREATED)
     public Question addQuestionToSlide(@RequestBody Question question, @PathVariable long id){
 
