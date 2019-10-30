@@ -7,6 +7,8 @@ import {DefinitionQuestionService} from './definitionQuestion/definitionQuestion
 import {ListQuestionService} from './listQuestion/listQuestion.service';
 import {DefinitionQuestion} from './definitionQuestion/definitionQuestion.model';
 import {ListQuestion} from './listQuestion/listQuestion.model';
+import {TestQuestion} from './testQuestion/testQuestion.model';
+import {TestQuestionService} from './testQuestion/testQuestion.service';
 
 @Component({
   templateUrl: './question.component.html'
@@ -16,17 +18,19 @@ export class QuestionComponent implements OnInit {
   questions: Question[];
   definitionQuestion: DefinitionQuestion;
   listQuestion: ListQuestion;
+  testQuestion: TestQuestion;
   subtype: string;
 
   constructor(
     private questionService: QuestionService,
-    private definitionService: DefinitionQuestionService,
-    private listService: ListQuestionService,
+    private definitionQuestionService: DefinitionQuestionService,
+    private listQuestionService: ListQuestionService,
+    private testQuestionService: TestQuestionService,
     private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.subtype = 'Definition';
+    this.subtype = 'DefinitionQuestion';
     this.questionService.getQuestions().subscribe((data: Question[]) => {
       this.questions = data;
     },
@@ -34,19 +38,42 @@ export class QuestionComponent implements OnInit {
     );
   }
 
-  /*sendQuestion(text: string) {
-    if (this.subtype === 'Definition') {
-      this.definitionQuestion = {
-        questionText: text,
-        subtype: 'Definition',
-        type: 'Open'
-      };
-      this.definitionService.addDefinitionQuestion(this.definitionQuestion).subscribe(
-        (_) => {},
-        (error) => console.log(error)
-      );
-    } else {
-      this.listService.addListQuestion(this.listQuestion);
+  sendQuestion(text: string) {
+    switch (this.subtype) {
+      case 'DefinitionQuestion':
+        this.definitionQuestion = {
+          questionText: text,
+          subtype: 'DefinitionQuestion'
+        };
+        this.definitionQuestionService.addDefinitionQuestion(this.definitionQuestion).subscribe(
+          (_) => {},
+          (error) => console.log(error)
+        );
+        break;
+      case 'ListQuestion':
+          this.listQuestion = {
+            questionText: text,
+            subtype: 'ListQuestion',
+            possibleAnswers: ['TODO']
+          };
+          this.listQuestionService.addListQuestion(this.listQuestion).subscribe(
+            (_) => {},
+            (error) => console.log(error)
+          );
+          break;
+      case 'TestQuestion':
+        this.testQuestion = {
+          questionText: text,
+          subtype: 'TestQuestion',
+          possibleAnswers: ['TODO']
+        };
+        this.testQuestionService.addTestQuestion(this.testQuestion).subscribe(
+          (_) => {},
+          (error) => console.log(error)
+        );
+        break;
+      default:
+        break;
     }
-  }*/
+  }
 }

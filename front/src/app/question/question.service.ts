@@ -7,6 +7,6 @@ export class QuestionService {
   constructor(private http: HttpClient) {
   }
   getQuestions() {
-    return this.http.get('/api/definition/question');
+    return this.http.get('/api/question/');
   }
 }

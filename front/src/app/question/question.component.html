@@ -12,11 +12,13 @@
       <h1>Añadir pregunta</h1>
 
       <input type="radio" name="subtype"
-              [(ngModel)]="subtype" value="Definition" default> Definicion
+              [(ngModel)]="subtype" value="DefinitionQuestion" default> Definicion
       <input type="radio" name="subtype"
-             [(ngModel)]="subtype" value="List"> Listado
+             [(ngModel)]="subtype" value="ListQuestion"> Listado
+      <input type="radio" name="subtype"
+             [(ngModel)]="subtype" value="TestQuestion"> Test
 
-      <span *ngIf="subtype == 'Definition'">
+      <span *ngIf="subtype == 'DefinitionQuestion'">
         <form #textForm="ngForm">
           <input
             placeholder="Pregunta"
@@ -29,7 +31,7 @@
           Guardar
         </button>
       </span>
-      <span *ngIf="subtype != 'Definition'">
+      <span *ngIf="subtype == 'ListQuestion'">
         <form #textForm="ngForm">
           <input
             placeholder="Pregunta"
@@ -41,6 +43,19 @@
         <button class="button" color="primary" (click)="sendQuestion(questionInput.value); questionInput.value=''">
           Guardar
         </button>
+      </span>
+      <span *ngIf="subtype == 'TestQuestion'">
+      <form #textForm="ngForm">
+        <input
+          placeholder="Pregunta"
+          #questionInput type="text"
+          name="question"
+          required
+        />
+      </form>
+      <button class="button" color="primary" (click)="sendQuestion(questionInput.value); questionInput.value=''">
+        Guardar
+      </button>
       </span>
     </div>
   </body>

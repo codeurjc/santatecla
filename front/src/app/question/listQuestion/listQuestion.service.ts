@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ListQuestion} from './listQuestion.model';
 import {ListAnswer} from './listAnswer.model';
+import {DefinitionQuestion} from '../definitionQuestion/definitionQuestion.model';
 
 @Injectable()
 export class ListQuestionService {
@@ -14,7 +15,13 @@ export class ListQuestionService {
   }
 
   addListQuestion(listQuestion: ListQuestion) {
-    console.log('TODO');
+    const body = JSON.stringify(listQuestion);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<DefinitionQuestion>('/api/question/', body, {headers});
   }
 
   addAnswer(id: number, listAnswer: ListAnswer): Observable<ListQuestion> {

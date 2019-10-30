@@ -20,7 +20,7 @@ export class DefinitionQuestionService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<DefinitionQuestion>('/api/definition', body, {headers});
+    return this.http.post<DefinitionQuestion>('/api/definition/', body, {headers});
   }
 
   addDefinitionAnswer(id: number, answer: DefinitionAnswer): Observable<DefinitionAnswer> {
