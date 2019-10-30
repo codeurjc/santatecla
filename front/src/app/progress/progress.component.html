@@ -46,9 +46,9 @@
         <mat-card class="questionTest" *ngFor = "let testQuestion of unit?.testQuestions">
           <p>{{testQuestion.questionText}}</p>
           <div style="border: solid; color: gray;">
-            <p>Respuestas Correctas: {{testQuestion.correctAnswerCount}}</p>
-            <p>Respuestas Incorectas: {{testQuestion.wrongAnswerCount}}</p>
-            <span *ngIf= "testQuestion.wrongAnswerCount > 0.75 * (testQuestion.wrongAnswerCount + testQuestion.correctAnswerCount)">
+            <p>Respuestas Correctas: {{testQuestion.totalCorrectAnswers}}</p>
+            <p>Respuestas Incorectas: {{testQuestion.totalWrongAnswers}}</p>
+            <span *ngIf= "testQuestion.totalWrongAnswers > 0.75 * (testQuestion.totalWrongAnswers + testQuestion.totalCorrectAnswers)">
                     <p style="color: red;">CUIDADO REVISAR</p>
                     <i class="material-icons">warning</i>
                 </span>
