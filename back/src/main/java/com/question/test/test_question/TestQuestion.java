@@ -58,6 +58,10 @@ public class TestQuestion extends Question {
      * Getters and Setters
      */
 
+    public long getId() {
+        return id;
+    }
+
     public List<String> getPossibleAnswers() {
         return possibleAnswers;
     }
@@ -66,7 +70,7 @@ public class TestQuestion extends Question {
         return correctAnswer;
     }
 
-    public List<TestAnswer> getAnswers() {
+    public List<TestAnswer> getTestAnswers() {
         return testAnswers;
     }
 

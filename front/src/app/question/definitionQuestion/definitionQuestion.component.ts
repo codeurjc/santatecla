@@ -41,7 +41,7 @@ export class DefinitionQuestionComponent implements OnInit {
         this.subtype = data.subtype;
       }, error => {
       });
-
+      console.log(this.loginService.getCurrentUser());
       this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: DefinitionAnswer[]) => {
         if (data.length != 0) {
           this.questionDone = true;

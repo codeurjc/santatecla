@@ -76,8 +76,7 @@ public class DefinitionQuestionRestController extends GeneralRestController {
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
 
         if (question.isPresent()) {
-            DefinitionAnswer da = new DefinitionAnswer(answer.getAnswerText(), false);
-            question.get().addAnswer(da);
+            question.get().addAnswer(answer);
             this.definitionQuestionService.save(question.get());
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
@@ -115,7 +114,7 @@ public class DefinitionQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/question/{id}/answer/user/{userId}")
+    @GetMapping("/{id}/answer/user/{userId}")
     public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
         return new ResponseEntity<>(this.definitionQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
     }

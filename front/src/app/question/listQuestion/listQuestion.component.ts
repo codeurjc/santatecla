@@ -50,7 +50,7 @@ export class ListQuestionComponent implements OnInit {
         this.alreadyDone = true;
         console.log(data);
         for (let answer of data){
-          if (answer[2] === true) {
+          if (answer[1] === true) {
             this.questionListCorrect = true;
             break;
           }

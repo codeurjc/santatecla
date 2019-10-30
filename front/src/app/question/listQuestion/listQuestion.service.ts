@@ -9,12 +9,8 @@ export class ListQuestionService {
   constructor(private http: HttpClient) {
   }
 
-  getListQuestions() {
-    return this.http.get('/api/definitionList/');
-  }
-
   getListQuestion(id: number) {
-    return this.http.get('api/definitionList/' + id);
+    return this.http.get('api/list/' + id);
   }
 
   addListQuestion(listQuestion: ListQuestion) {
@@ -28,10 +24,10 @@ export class ListQuestionService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<ListQuestion>('api/definitionList/' + id + '/answer', body, {headers});
+    return this.http.post<ListQuestion>('api/list/' + id, body, {headers});
   }
 
   getUserAnswers(questionId: number, userId: number) {
-    return this.http.get('api/definitionList/' + questionId + '/answer/user/' + userId);
+    return this.http.get('api/list/' + questionId + '/answer/user/' + userId);
   }
 }

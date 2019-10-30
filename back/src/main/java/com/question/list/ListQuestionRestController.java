@@ -88,7 +88,7 @@ public class ListQuestionRestController extends GeneralRestController {
         Optional<ListQuestion> question = this.listQuestionService.findOne(id);
 
         if (question.isPresent()) {
-            return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
+            return new ResponseEntity<>(question.get().getListAnswers(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

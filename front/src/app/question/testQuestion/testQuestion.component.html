@@ -29,7 +29,7 @@
   </span>
   <span *ngIf="this.alreadyDone">
     <span *ngIf="this.correct">
-      <p>{{question.correctAnswer}}</p>
+      <p>{{question?.correctAnswer}}</p>
       <p style="color: green"> RESPUESTA CORRECTA</p>
     </span>
     <span *ngIf="!this.correct">

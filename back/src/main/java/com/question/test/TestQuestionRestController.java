@@ -88,7 +88,7 @@ public class TestQuestionRestController extends GeneralRestController {
         Optional<TestQuestion> question = this.testQuestionService.findOne(id);
 
         if (question.isPresent()) {
-            return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
+            return new ResponseEntity<>(question.get().getTestAnswers(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

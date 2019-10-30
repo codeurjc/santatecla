@@ -69,10 +69,6 @@ public class ListQuestion extends Question {
         this.id = id;
     }
 
-    public List<ListAnswer> getAnswers() {
-        return listAnswers;
-    }
-
     public List<String> getPossibleAnswers() {
         return possibleAnswers;
     }

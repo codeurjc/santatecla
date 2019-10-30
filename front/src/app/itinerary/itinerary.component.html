@@ -57,9 +57,6 @@
               <button (click)="navigateQuestion(question.id)">Resolver</button>
             </div>
             <div *ngIf= "question.subtype == 'ListQuestion'">
-              <div *ngFor="let posibleAnswer of question.possibleAnswers">
-                <p>{{posibleAnswer}}</p>
-              </div>
               <button (click)="navigateListQuestion(question.id)">Resolver</button>
             </div>
             <div *ngIf= "question.subtype == 'TestQuestion'">

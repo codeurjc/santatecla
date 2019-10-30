@@ -10,7 +10,7 @@ export class DefinitionQuestionService {
   }
 
   getDefinitionQuestion(id: number) {
-    return this.http.get('api/definition/question/' + id);
+    return this.http.get('api/definition/' + id);
   }
 
   addDefinitionQuestion(question: DefinitionQuestion) {
@@ -20,7 +20,7 @@ export class DefinitionQuestionService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<DefinitionQuestion>('/api/definition/question', body, {headers});
+    return this.http.post<DefinitionQuestion>('/api/definition', body, {headers});
   }
 
   addDefinitionAnswer(id: number, answer: DefinitionAnswer): Observable<DefinitionAnswer> {
@@ -30,10 +30,10 @@ export class DefinitionQuestionService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<DefinitionAnswer>('/api/definition/question/' + id, body, {headers});
+    return this.http.post<DefinitionAnswer>('/api/definition/' + id, body, {headers});
   }
 
   getUserAnswers(questionId: number, userId: number) {
-    return this.http.get('api/definition/question/' + questionId + '/answer/user/' + userId);
+    return this.http.get('api/definition/' + questionId + '/answer/user/' + userId);
   }
 }
