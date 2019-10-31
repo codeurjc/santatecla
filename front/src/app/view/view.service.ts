@@ -9,10 +9,6 @@ export class ViewService {
 
   constructor(private http: HttpClient) {}
 
-  getUnits() {
-    return this.http.get(this.baseUrl);
-  }
-
   getUnit(id: number) {
     return this.http.get(this.baseUrl + id);
   }

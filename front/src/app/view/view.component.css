@@ -1,7 +1,7 @@
 #json-editor-container {
-  float: left;
+  position: absolute;
   width: 40%;
-  overflow: auto;
+  height: calc(100vh - 3rem);
 }
 
 #unit-representation {
@@ -11,8 +11,10 @@
 }
 
 #search {
+  position: absolute;
+  right: 0;
   margin: 1rem;
-  width: 50rem;
+  width: calc(60% - 2rem);
   z-index: 5;
 }
 
@@ -53,4 +55,15 @@
 }
 
 #save-button {
+  position: absolute;
+  left: 40%;
+  margin: 6rem 1rem 1rem 1rem;
+}
+
+#spinner {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  left: 65%;
+  top: 40%;
 }

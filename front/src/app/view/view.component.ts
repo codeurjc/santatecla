@@ -29,7 +29,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
   private editorOptions: JsonEditorOptions;
   private data: any;
-  private changed: boolean = false;
+  private changed = false;
 
   @ViewChild('uml') umlDiv;
   private umlParser: UmlParser;
@@ -167,7 +167,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     });
     selectedUnit.relations.push(new VisibleRelation({
       id: 0,
-      relationType: relationType,
+      relationType,
       relatedTo: newUnit
     }));
     this.setData(this.data, true);
@@ -178,7 +178,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     let found = false;
     let target: HTMLInputElement = null;
     this.umlDiv.nativeElement.firstChild.childNodes.forEach((childNode) => {
-      const firstChild = <HTMLInputElement>childNode.firstChild;
+      const firstChild = childNode.firstChild as HTMLInputElement;
       if ((!found) && (firstChild) && (firstChild.id === id.toString())) {
         target = firstChild;
         found = true;
@@ -193,7 +193,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
     input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
     input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
-    input.value = (<HTMLInputElement>this.selectedTarget.nextSibling).innerHTML;
+    input.value = (this.selectedTarget.nextSibling as HTMLInputElement).innerHTML;
     input.setSelectionRange(0, input.value.length);
     const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
     optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
@@ -210,13 +210,14 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   @HostListener('document:click', ['$event'])
   public documentClick(event: Event): void {
-    const target = <HTMLInputElement>event.target;
+    const target = event.target as HTMLInputElement;
 
     // Search
     if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
       this.getUnit(this.results[this.arrowKeyLocation].id);
     } else if ((target.attributes) && (target.attributes['class']) &&
-      ((target.attributes['class'].nodeValue === 'mat-form-field-flex') || (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
+      ((target.attributes['class'].nodeValue === 'mat-form-field-flex') ||
+        (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
         (target.attributes['class'].nodeValue === 'mat-form-field-infix') || (target.id === 'search-input'))) {
       this.setShowResults(true);
     } else {
@@ -224,10 +225,10 @@ export class ViewComponent implements OnInit, AfterContentInit {
     }
 
     // Uml
-    if ((target.tagName === 'rect') || (target.tagName ==='text')) {
+    if ((target.tagName === 'rect') || (target.tagName === 'text')) {
       this.selectedTarget = target;
       if (target.tagName === 'text') {
-        this.selectedTarget = <HTMLInputElement>target.previousElementSibling;
+        this.selectedTarget = target.previousElementSibling as HTMLInputElement;
       }
       this.setShowUmlNodeOptions(true);
       this.drawUmlNodeOptions();
@@ -252,7 +253,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
 
 
-  //Search
+  // Search
 
   private search() {
     if (this.validSearchField()) {
@@ -347,7 +348,7 @@ class VisibleUnit implements Unit {
       id: this.id,
       name: this.name,
       relations: this.relations
-    }
+    };
   }
 }
 

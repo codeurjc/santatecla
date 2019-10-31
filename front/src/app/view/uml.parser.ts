@@ -5,14 +5,7 @@ export class UmlParser {
   constructor() {}
 
   jsonToUml(json: any) {
-    let uml = 'classDiagram\n';
-    let relations = this.getRelationsDiagram(json);
-    if (relations === '') {
-      uml += this.getOnlyOneUnitDiagram(json);
-    } else {
-      uml += relations;
-    }
-    return uml;
+    return 'classDiagram\n' + this.getRelationsDiagram(json);
   }
 
   private getRelationsDiagram(unit: any): string {
@@ -40,10 +33,6 @@ export class UmlParser {
       uml += this.getRelationsDiagram(relatedTo);
     });
     return uml;
-  }
-
-  private getOnlyOneUnitDiagram(unit: any): string {
-    return unit.id + unit.name + '<--' + unit.id + unit.name + '\n';
   }
 
 }
