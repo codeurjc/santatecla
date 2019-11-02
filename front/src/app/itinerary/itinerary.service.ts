@@ -20,6 +20,16 @@ export class ItineraryService {
     return this.http.get('/api/itineraries/' + id + '/summarized');
   }
 
+  updateItinerary(itinerary: Itineray): Observable<Itineray> {
+    const body = JSON.stringify(itinerary);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put<Itineray>('/api/itineraries/' + itinerary.id , body, {headers});
+  }
+
   addItinerary(itinerary: Itineray, id: number) {
     const body = JSON.stringify(itinerary);
 

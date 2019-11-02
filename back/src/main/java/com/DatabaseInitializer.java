@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.xml.soap.Text;
 
 import com.card.Card;
 import com.card.CardRepository;
@@ -142,15 +143,18 @@ public class DatabaseInitializer {
                 Itinerary itinerary1 = new Itinerary("Introducción");
                 Itinerary itinerary2 = new Itinerary("Introducción Java");
 
-                itinerary2.getSlides().add(slide3);
-                itinerary2.getSlides().add(slide4);
+                itinerary1.setText("== " + itinerary1.getName());
+                itinerary2.setText("== " + itinerary2.getName());
+
+                //itinerary2.getSlides().add(slide3);
+                //itinerary2.getSlides().add(slide4);
 
                 itineraryRepository.save(itinerary2);
 
                 itinerary1.getItineraries().add(itinerary2);
 
-                itinerary1.getSlides().add(slide1);
-                itinerary1.getSlides().add(slide2);
+                //itinerary1.getSlides().add(slide1);
+                //itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
   

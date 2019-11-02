@@ -97,7 +97,7 @@ public class ItineraryRestController extends GeneralRestController {
 
         this.theorySlideService.save(slide);
 
-        i.get().getSlides().add(slide);
+        //i.get().getSlides().add(slide);
         this.itineraryService.save(i.get());
 
         return slide;
@@ -111,7 +111,7 @@ public class ItineraryRestController extends GeneralRestController {
 
         this.practiceSlideService.save(slide);
 
-        i.get().getSlides().add(slide);
+        //i.get().getSlides().add(slide);
         this.itineraryService.save(i.get());
 
         return slide;
@@ -125,7 +125,7 @@ public class ItineraryRestController extends GeneralRestController {
         
         if(i.isPresent()){
             if(s.isPresent()){
-                i.get().getSlides().remove(s.get());
+                //i.get().getSlides().remove(s.get());
                 this.itineraryService.save(i.get());
                 this.slideService.delete(slideId);
                 return new ResponseEntity<>(i.get(), HttpStatus.OK);

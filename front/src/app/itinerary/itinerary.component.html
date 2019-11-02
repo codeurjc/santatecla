@@ -21,7 +21,7 @@
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <div id="editor-container">
-
+        <textarea [(ngModel)]="itinerary.text" (change)="updateHTMLView()"></textarea>
           <!--<mat-card class="slide-itinerary-adder">
             <mat-radio-group>
               <mat-radio-button value="1">Vista</mat-radio-button>
@@ -31,17 +31,18 @@
             <button mat-stroked-button (click)="changeEditorType()">{{editorType}}</button>
           </mat-card>-->
 
-        <!-- JSON editor -->
+        <!-- JSON editor
         <div *ngIf= "editorTypeJSON == true">
           <json-editor [options]="editorOptions" [data]="data" (change)="getData($event)"></json-editor>
-        </div>
+        </div>-->
 
       </div>
     </div>
 
     <!-- HTML REPRESENTATION -->
     <div id="html-itinerary-representation">
-      <h1>{{itinerary?.name}}</h1>
+      <div [innerHTML]="textConversion"></div>
+      <!--<h1>{{itinerary?.name}}</h1>
       <div *ngFor="let slide of slides">
         <div *ngIf= "slide.type == 'TheorySlide'">
           <div *ngFor="let card of slide.cards">
@@ -94,7 +95,7 @@
               </div>
             </div>
           </div>
-      </div>
+      </div>-->
     </div>
   </body>
 </html>
