@@ -22,8 +22,6 @@ import com.relation.Relation;
 import com.relation.RelationRepository;
 import com.slide.Slide;
 import com.slide.SlideRepository;
-import com.slide.practiceSlide.PracticeSlide;
-import com.slide.theorySlide.TheorySlide;
 import com.unit.Unit;
 import com.unit.UnitRepository;
 import com.user.User;
@@ -66,15 +64,10 @@ public class DatabaseInitializer {
 	public void init() {
 
                 //Cards
-                Card card1 = new Card("¿Que?");
-                Card card2 = new Card("¿Que?");
-                Card card3 = new Card("¿Cuándo?");
-                Card card4 = new Card("¿Cuándo?");
-
-                card1.setText("Un lenguaje de programación es un lenguaje formal que proporciona una serie de instrucciones...");
-                card4.setText("A finales de 1953, John Backus sometió una propuesta a sus superiores en IBM...");
-                card2.setText("Java es un lenguaje de programación y una plataforma informática...");
-                card3.setText("Comercializada por primera vez en 1995 por Sun Microsystems...");
+                Card card1 = new Card("Que");
+                Card card2 = new Card("Que");
+                Card card3 = new Card("Cuando");
+                Card card4 = new Card("Cuando");
 
                 cardRepository.save(card1);
                 cardRepository.save(card2);
@@ -110,51 +103,17 @@ public class DatabaseInitializer {
                 testQuestionRepository.save(test);
 
                 //Slides
-                Slide slide1 = new TheorySlide();
-                Slide slide2 = new PracticeSlide();
-                Slide slide3 = new TheorySlide();
-                Slide slide4 = new PracticeSlide();
-
-                ArrayList<Card> slide1Cards = new ArrayList<>();
-                slide1Cards.add((Card)card1);
-                slide1Cards.add((Card)card4);
-                slide1.setComponents(slide1Cards);
-
-                ArrayList<Question> slide2Questions = new ArrayList<>();
-                slide2Questions.add((DefinitionQuestion)definition1);
-                slide2Questions.add((ListQuestion)list1);
-                slide2.setComponents(slide2Questions);
-
-                ArrayList<Question> slide4Questions = new ArrayList<>();
-                slide4Questions.add((TestQuestion)test);
-                slide4.setComponents(slide4Questions);
-
-                ArrayList<Card> slide3Cards = new ArrayList<>();
-                slide3Cards.add((Card)card2);
-                slide3Cards.add((Card)card3);
-                slide3.setComponents(slide3Cards);
+                Slide slide1 = new Slide("Concepto");
+                Slide slide2 = new Slide("Tipos");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
-                slideRepository.save(slide3);
-                slideRepository.save(slide4);
 
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
-                Itinerary itinerary2 = new Itinerary("Introducción Java");
 
-                itinerary1.setText("== " + itinerary1.getName());
-                itinerary2.setText("== " + itinerary2.getName());
-
-                //itinerary2.getSlides().add(slide3);
-                //itinerary2.getSlides().add(slide4);
-
-                itineraryRepository.save(itinerary2);
-
-                itinerary1.getItineraries().add(itinerary2);
-
-                //itinerary1.getSlides().add(slide1);
-                //itinerary1.getSlides().add(slide2);
+                itinerary1.getSlides().add(slide1);
+                itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
   
@@ -188,8 +147,7 @@ public class DatabaseInitializer {
                 unit2.addCard(card3);
 
                 unit1.addItinerary(itinerary1);
-                unit2.addItinerary(itinerary2);
-                
+
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
