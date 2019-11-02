@@ -14,7 +14,7 @@ public class Card {
     private String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String text;
+    private String content;
 
     @Lob
     private Byte[] image;
@@ -30,8 +30,8 @@ public class Card {
         if (StringUtils.isNotBlank(card.getName())) {
             this.name = card.getName();
         }
-        if (StringUtils.isNotBlank(card.getText())) {
-            this.text = card.getText();
+        if (StringUtils.isNotBlank(card.getContent())) {
+            this.content = card.getContent();
         }
     }
 
@@ -47,8 +47,8 @@ public class Card {
         return this.name;
     }
 
-    public String getText() {
-        return this.text;
+    public String getContent() {
+        return this.content;
     }
 
     public Byte[] getImage() {
@@ -63,8 +63,8 @@ public class Card {
         this.name = name;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public void setImage(Byte[] image) {

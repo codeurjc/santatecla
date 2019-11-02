@@ -17,7 +17,7 @@ public class Itinerary{
     private String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String text;
+    private String content;
 
     @ManyToMany
     private List<Slide> slides;
@@ -29,12 +29,12 @@ public class Itinerary{
     public Itinerary(String name){
         this();
         this.name = name;
-        this.text = "== " + name + "\n";
+        this.content = "== " + name + "\n";
     }
 
     public void update(Itinerary itinerary) {
         this.name = itinerary.getName();
-        this.text = itinerary.getText();
+        this.content = itinerary.getContent();
         this.slides = itinerary.getSlides();
     }
 
@@ -48,7 +48,7 @@ public class Itinerary{
 
     public List<Slide> getSlides() { return slides; }
 
-    public String getText() { return text; }
+    public String getContent() { return content; }
 
     public void setId(long id) { this.id = id; }
 
@@ -56,5 +56,5 @@ public class Itinerary{
 
     public void setSlides(List<Slide> slides) { this.slides = slides; }
 
-    public void setText(String text) { this.text = text; }
+    public void setContent(String content) { this.content = content; }
 }

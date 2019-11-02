@@ -47,7 +47,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
     this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
     this.umlParser = new UmlParser();
-    this.getUnit(15);
+    this.getUnit(12);
   }
 
   ngAfterContentInit() {
