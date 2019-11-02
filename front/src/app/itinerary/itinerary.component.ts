@@ -10,6 +10,7 @@ import { LoginService } from '../auth/login.service';
 import { ViewService } from '../view/view.service';
 
 import Asciidoctor from 'asciidoctor';
+import {Slide} from '../slide/slide.model';
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -24,16 +25,16 @@ function convertToHTML(text) {
 
 export class ItineraryComponent implements OnInit {
 
-  textConversion: any;
+  contentHTML: any;
+  itineraryContent: any;
 
   unit: Unit;
   itinerary: Itineray;
-  name: string;
-  itineraries: Itineray[];
-  itineraryTabs: Itineray[];
 
   unitId: number;
   itineraryId: number;
+
+  itineraryTabs: Itineray[];
 
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
@@ -63,42 +64,79 @@ export class ItineraryComponent implements OnInit {
       this.itinerary = {
         id: data.id,
         name: data.name,
-        content: data.content
+        slides: data.slides
       };
-      this.name = this.itinerary.name;
-      this.textConversion = convertToHTML(this.itinerary.content);
+      this.itineraryContent = '== ' + this.itinerary.name + '\n';
+      this.slidesToContent(this.itinerary.slides);
+      this.contentHTML = convertToHTML(this.itineraryContent);
+    });
+
+  }
+
+  slidesToContent(slides: Slide[]) {
+    slides.forEach((slide: Slide) => {
+      this.itineraryContent = this.itineraryContent + slide.content;
     });
   }
 
-    updateHTMLView() {
-      this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
-        this.textConversion = convertToHTML(this.itinerary.content);
-      }, (error) => {
-        console.error(error);
-      });
+  contentToItinerary(content: string) {
+    let slidesContent: string[];
+    slidesContent = content.split('===');
+    if (slidesContent[0].split(' ')[0] === '==') {
+      this.itinerary.name = '';
+      for (let i = 1; i < slidesContent[0].split(' ').length; i ++) {
+        this.itinerary.name = this.itinerary.name + slidesContent[0].split(' ')[i].split('\n')[0];
+      }
     }
+    this.contentToSlides(slidesContent);
+  }
 
-    navigateQuestion(id: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/definitionQuestion/' + id]);
+  contentToSlides(content: string[]) {
+    this.itinerary.slides = [];
+    let slide: Slide;
+    for (let i = 1; i < content.length; i ++) {
+      slide = { name: '', content: ''};
+      let lines: string[];
+      lines = content[i].split('\n');
+      slide.name = lines[0].split(' ')[1];
+      slide.content = '=== ' + slide.name + '\n';
+      for (let j = 1; j < lines.length - 1; j ++) {
+        slide.content = slide.content + lines[j] + '\n';
+      }
+      this.itinerary.slides.push(slide);
     }
+  }
 
-    navigateListQuestion(id: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/listQuestion/' + id]);
-    }
+  updateHTMLView() {
+    this.contentToItinerary(this.itineraryContent);
+    this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
+      this.contentHTML = convertToHTML(this.itineraryContent);
+    }, (error) => {
+      console.error(error);
+    });
+  }
 
-    navigateTestQuestion(id: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/testQuestion/' + id]);
-    }
-
-    navigateToUnitCards() {
+  navigateToUnitCards() {
     this.router.navigate(['/units/' + this.unitId + '/cards']);
-    }
+  }
 
-    navigateToUnitProgress() {
+  navigateToUnitProgress() {
     this.router.navigate(['/units/' + this.unitId + '/progress']);
-    }
+  }
 
-    navigateToUnitItinerary(itineraryId: number) {
+  navigateToUnitItinerary(itineraryId: number) {
     this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
-    }
+  }
+
+  navigateQuestion(id: number) {
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/definitionQuestion/' + id]);
+  }
+
+  navigateListQuestion(id: number) {
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/listQuestion/' + id]);
+  }
+
+  navigateTestQuestion(id: number) {
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/testQuestion/' + id]);
+  }
 }

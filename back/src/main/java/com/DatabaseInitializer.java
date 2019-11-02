@@ -112,8 +112,8 @@ public class DatabaseInitializer {
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
 
-                itinerary1.getSlides().add(slide1);
                 itinerary1.getSlides().add(slide2);
+                itinerary1.getSlides().add(slide1);
 
                 itineraryRepository.save(itinerary1);
   

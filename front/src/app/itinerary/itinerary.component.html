@@ -21,13 +21,13 @@
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <div id="editor-container">
-        <textarea [(ngModel)]="itinerary.content" (change)="updateHTMLView()"></textarea>
+        <textarea [(ngModel)]="itineraryContent" (change)="updateHTMLView()"></textarea>
       </div>
     </div>
 
     <!-- HTML REPRESENTATION -->
     <div id="html-itinerary-representation">
-      <div [innerHTML]="textConversion"></div>
+      <div [innerHTML]="contentHTML"></div>
     </div>
 
   </body>

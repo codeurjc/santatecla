@@ -58,8 +58,20 @@ public class ItineraryRestController extends GeneralRestController {
     @PutMapping(value="/{id}")
     public ResponseEntity<Itinerary> updateItinerary(@PathVariable long id, @RequestBody Itinerary itinerary){
 
+        for (Slide slide: itinerary.getSlides()) {
+            Optional<Slide> s = this.slideService.findOne(slide.getId());
+            if(!s.isPresent()){
+                this.slideService.save(slide);
+            }
+        }
+
         Optional<Itinerary> i = this.itineraryService.findOne(id);
-        
+
+        for (Slide slide: i.get().getSlides()) {
+            Optional<Slide> s = this.slideService.findOne(slide.getId());
+            this.slideService.delete(s.get().getId());
+        }
+
         if(i.isPresent()){
             i.get().update(itinerary);
             this.itineraryService.save(i.get());

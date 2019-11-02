@@ -24,6 +24,12 @@ public class Slide {
         this.content = "=== " + name + "\n";
     }
 
+    public Slide(String name, String content) {
+        this();
+        this.name = name;
+        this.content = content;
+    }
+
     public void update(Slide slide) { }
 
     /********************
