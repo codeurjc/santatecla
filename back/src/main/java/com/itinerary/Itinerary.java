@@ -17,6 +17,7 @@ public class Itinerary{
     private String name;
 
     @ManyToMany
+    @OrderColumn
     private List<Slide> slides;
 
     public Itinerary(){
