@@ -31,9 +31,24 @@ public class Itinerary{
     public void update(Itinerary itinerary) {
         this.name = itinerary.getName();
         this.slides = itinerary.getSlides();
-        for (Slide slide: this.slides) {
-            System.out.println(slide.getName());
+    }
+
+    public List compareId(List<Slide> slides) {
+        List diferences = new ArrayList();
+        List<Long> slidesId = new ArrayList();
+        List<Long> inSlidesId = new ArrayList();
+        for (Slide slide: this.getSlides()) {
+            slidesId.add(slide.getId());
         }
+        for (Slide slide: slides) {
+            inSlidesId.add(slide.getId());
+        }
+        for (long id: slidesId) {
+            if (!(inSlidesId.contains(id))) {
+                diferences.add(id);
+            }
+        }
+        return diferences;
     }
 
     /********************

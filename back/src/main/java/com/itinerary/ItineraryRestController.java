@@ -1,5 +1,6 @@
 package com.itinerary;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
@@ -60,16 +61,14 @@ public class ItineraryRestController extends GeneralRestController {
 
         for (Slide slide: itinerary.getSlides()) {
             Optional<Slide> s = this.slideService.findOne(slide.getId());
-            if(!s.isPresent()){
-                this.slideService.save(slide);
-            }
+            this.slideService.save(slide);
         }
 
         Optional<Itinerary> i = this.itineraryService.findOne(id);
 
-        for (Slide slide: i.get().getSlides()) {
-            Optional<Slide> s = this.slideService.findOne(slide.getId());
-            this.slideService.delete(s.get().getId());
+        List<Long> diferences = i.get().compareId(itinerary.getSlides());
+        for (long diferenceId: diferences) {
+            this.slideService.delete(diferenceId);
         }
 
         if(i.isPresent()){

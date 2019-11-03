@@ -75,17 +75,17 @@ export class ItineraryComponent implements OnInit {
 
   slidesToContent(slides: Slide[]) {
     slides.forEach((slide: Slide) => {
-      this.itineraryContent = this.itineraryContent + slide.content;
+      this.itineraryContent = this.itineraryContent + slide.content + '// ' + slide.id + '\n\n';
     });
   }
 
   contentToItinerary(content: string) {
     let slidesContent: string[];
-    slidesContent = content.split('===');
+    slidesContent = content.split('=== ');
     if (slidesContent[0].split(' ')[0] === '==') {
       this.itinerary.name = '';
       for (let i = 1; i < slidesContent[0].split(' ').length; i ++) {
-        this.itinerary.name = this.itinerary.name + slidesContent[0].split(' ')[i].split('\n')[0];
+        this.itinerary.name = this.itinerary.name + slidesContent[0].split(' ')[i].split('\n')[0] + ' ';
       }
     }
     this.contentToSlides(slidesContent);
@@ -98,13 +98,25 @@ export class ItineraryComponent implements OnInit {
       slide = { name: '', content: ''};
       let lines: string[];
       lines = content[i].split('\n');
-      slide.name = lines[0].split(' ')[1];
+      console.log(lines);
+      slide.name = lines[0];
       slide.content = '=== ' + slide.name + '\n';
-      for (let j = 1; j < lines.length - 1; j ++) {
-        slide.content = slide.content + lines[j] + '\n';
+      for (let j = 1; j < lines.length; j ++) {
+        if (j < lines.length - 2) {
+          if (!(lines[j].split(' ')[0] === '//')) {
+            slide.content = slide.content + lines[j] + '\n';
+          }
+        } else {
+          if ( (lines.length > 2) && ( j >= 2) ) {
+            if (lines[j - 2].split(' ')[0] === '//') {
+              slide.id = Number(lines[j - 2].split(' ')[1]);
+            }
+          }
+        }
       }
       this.itinerary.slides.push(slide);
     }
+    console.log(this.itinerary.slides);
   }
 
   updateHTMLView() {
