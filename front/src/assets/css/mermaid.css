@@ -10,7 +10,7 @@
 .node circle,
 .node ellipse,
 .node polygon {
-  fill: #f1f8ff;
+  fill: #fafcff;
   stroke: #003e80;
   stroke-width: 1px;
 }
@@ -57,7 +57,7 @@ div.mermaidTooltip {
 
 .actor {
   stroke: #CCCCFF;
-  fill: #f1f8ff;
+  fill: #fafcff;
 }
 
 text.actor {
@@ -103,7 +103,7 @@ text.actor {
 
 .labelBox {
   stroke: #CCCCFF;
-  fill: #f1f8ff;
+  fill: #fafcff;
 }
 
 .labelText {
@@ -377,8 +377,20 @@ g.classGroup text {
 }
 
 g.classGroup rect {
-  fill: #f1f8ff;
+  fill: #fafcff;
   stroke: #006fe6;
+  cursor: pointer;
+}
+
+g.classGroup rect[id^="f"] {
+  fill: #d1d8e4;
+  stroke: #003a92;
+  cursor: pointer;
+}
+
+g.classGroup rect[id^="d0"] {
+  fill: #fafffb;
+  stroke: #03ca24;
   cursor: pointer;
 }
 
@@ -390,7 +402,7 @@ g.classGroup line {
 .classLabel .box {
   stroke: none;
   stroke-width: 0;
-  fill: #f1f8ff;
+  fill: #fafcff;
   opacity: 0.5;
 }
 

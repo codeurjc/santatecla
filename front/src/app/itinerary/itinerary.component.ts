@@ -10,7 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { ItineraryService } from './itinerary.service';
 import { LoginService } from '../auth/login.service';
-import { ViewService } from '../view/view.service';
+import { UnitService } from '../unit/unit.service';
 
 @Component({
   templateUrl: './itinerary.component.html',
@@ -43,7 +43,7 @@ export class ItineraryComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
               private loginService: LoginService,
-              private viewService: ViewService ) {}
+              private unitService: UnitService ) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -51,7 +51,7 @@ export class ItineraryComponent implements OnInit {
       this.itineraryId = params['itineraryId'];
     });
 
-    this.viewService.getUnit(this.unitId).subscribe((data: Unit) => {
+    this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
       this.unit = {
         id: data['id'],
         name: data['name'],

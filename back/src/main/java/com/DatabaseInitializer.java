@@ -10,7 +10,6 @@ import com.card.CardRepository;
 import com.itinerary.Itinerary;
 import com.itinerary.ItineraryRepository;
 import com.question.Question;
-import com.question.QuestionRepository;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -61,8 +60,8 @@ public class DatabaseInitializer {
         @Autowired
         private TestQuestionRepository testQuestionRepository;
 
-	@PostConstruct
-	public void init() {
+        @PostConstruct
+        public void init() {
 
                 //Cards
                 Card card1 = new Card("¿Que?");
@@ -153,8 +152,9 @@ public class DatabaseInitializer {
                 itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
-  
+
                 //Units
+                Unit unit0 = new Unit("Root");
                 Unit unit1 = new Unit("Lenguaje de programación");
                 Unit unit2 = new Unit("Java");
                 Unit unit3 = new Unit("Python");
@@ -185,7 +185,8 @@ public class DatabaseInitializer {
 
                 unit1.addItinerary(itinerary1);
                 unit2.addItinerary(itinerary2);
-                
+
+                unitRepository.save(unit0);
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
@@ -197,31 +198,48 @@ public class DatabaseInitializer {
                 unitRepository.save(unit9);
 
                 //Relations
-                Relation relation1 = new Relation(Relation.RelationType.INHERITANCE, unit2);
+                Relation relation0 = new Relation(Relation.RelationType.INHERITANCE, unit0.getId(), unit1.getId());
+                relationRepository.save(relation0);
+                unit0.addIncomingRelation(relation0);
+                unit1.addOutgoingRelation(relation0);
+                Relation relation1 = new Relation(Relation.RelationType.INHERITANCE, unit1.getId(), unit2.getId());
                 relationRepository.save(relation1);
-                unit1.addRelation(relation1);
-                Relation relation2 = new Relation(Relation.RelationType.INHERITANCE, unit3);
+                unit1.addIncomingRelation(relation1);
+                unit2.addOutgoingRelation(relation1);
+                Relation relation2 = new Relation(Relation.RelationType.INHERITANCE, unit1.getId(), unit3.getId());
                 relationRepository.save(relation2);
-                unit1.addRelation(relation2);
-                Relation relation3 = new Relation(Relation.RelationType.COMPOSITION, unit4);
+                unit1.addIncomingRelation(relation2);
+                unit3.addOutgoingRelation(relation2);
+                Relation relation3 = new Relation(Relation.RelationType.COMPOSITION, unit2.getId(), unit4.getId());
                 relationRepository.save(relation3);
-                unit2.addRelation(relation3);
-                Relation relation4 = new Relation(Relation.RelationType.COMPOSITION, unit5);
+                unit2.addIncomingRelation(relation3);
+                unit4.addOutgoingRelation(relation3);
+                Relation relation4 = new Relation(Relation.RelationType.COMPOSITION, unit3.getId(), unit5.getId());
                 relationRepository.save(relation4);
-                unit3.addRelation(relation4);
-                Relation relation6 = new Relation(Relation.RelationType.INHERITANCE, unit6);
+                unit3.addIncomingRelation(relation4);
+                unit5.addOutgoingRelation(relation4);
+                Relation relation6 = new Relation(Relation.RelationType.INHERITANCE, unit1.getId(), unit6.getId());
                 relationRepository.save(relation6);
-                unit1.addRelation(relation6);
-                Relation relation7 = new Relation(Relation.RelationType.COMPOSITION, unit7);
+                unit1.addIncomingRelation(relation6);
+                unit6.addOutgoingRelation(relation6);
+                Relation relation7 = new Relation(Relation.RelationType.COMPOSITION, unit6.getId(), unit7.getId());
                 relationRepository.save(relation7);
-                unit6.addRelation(relation7);
-                Relation relation8 = new Relation(Relation.RelationType.INHERITANCE, unit8);
+                unit6.addIncomingRelation(relation7);
+                unit7.addOutgoingRelation(relation7);
+                Relation relation8 = new Relation(Relation.RelationType.INHERITANCE, unit4.getId(), unit8.getId());
                 relationRepository.save(relation8);
-                unit4.addRelation(relation8);
-                Relation relation9 = new Relation(Relation.RelationType.INHERITANCE, unit9);
+                unit4.addIncomingRelation(relation8);
+                unit8.addOutgoingRelation(relation8);
+                Relation relation9 = new Relation(Relation.RelationType.INHERITANCE, unit5.getId(), unit9.getId());
                 relationRepository.save(relation9);
-                unit5.addRelation(relation9);
+                unit5.addIncomingRelation(relation9);
+                unit9.addOutgoingRelation(relation9);
+                Relation relation10 = new Relation(Relation.RelationType.ASSOCIATION, unit9.getId(), unit5.getId());
+                relationRepository.save(relation10);
+                unit9.addIncomingRelation(relation10);
+                unit5.addOutgoingRelation(relation10);
 
+                unitRepository.save(unit0);
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
@@ -235,7 +253,6 @@ public class DatabaseInitializer {
                 //Users
                 userRepository.save(new User("alumno", "alumno"));
                 userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"));
-
-	}
+        }
 
 }

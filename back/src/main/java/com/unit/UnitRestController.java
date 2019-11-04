@@ -7,8 +7,6 @@ import com.GeneralRestController;
 import com.card.Card;
 import com.card.CardService;
 import com.itinerary.Itinerary;
-import com.relation.Relation;
-import com.relation.RelationService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,60 +29,46 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/units")
 public class UnitRestController extends GeneralRestController {
-    
-	@Autowired
+
+    @Autowired
     protected UnitService unitService;
 
 	@Autowired
     protected CardService cardService;
-    
-	@Autowired
-    protected RelationService relationService;
-    
-    @PutMapping(value="/")
-    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
-        Unit savedUnit;
-        if (!this.unitService.findOne(unit.getId()).isPresent()) {
-            savedUnit = new Unit(unit.getName());
-        } else {
-            Optional<Unit> u = this.unitService.findOne(unit.getId());
-            if (u.isPresent()) {
-                savedUnit = this.unitService.findOne(unit.getId()).get();
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-        savedUnit.update(unit);
-        for (Relation relation : unit.getRelations()) {
-            Relation savedRelation;
-            boolean newRelation = !this.relationService.findOne(relation.getId()).isPresent();
-            if (newRelation) {
-                savedRelation = new Relation(relation.getRelationType(), relation.getRelatedTo());
-            } else {
-                savedRelation = this.relationService.findOne(relation.getId()).get();
-                savedRelation.update(relation);
-            }
-            savedRelation.setRelatedTo(updateUnit(relation.getRelatedTo()).getBody());
-            this.relationService.save(savedRelation);
-            if (newRelation) {
-                savedUnit.addRelation(savedRelation);
-            }
-        }
-        this.unitService.save(savedUnit);
-        return new ResponseEntity<>(savedUnit, HttpStatus.OK);
+
+    @GetMapping(value="/")
+    public ResponseEntity<List<Unit>> getUnits() {
+        return new ResponseEntity<>(this.unitService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(value="/{id}")
     public ResponseEntity<Unit> getUnit(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
-        return (unit.isPresent())?(new ResponseEntity<>(unit.get(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (unit.isPresent()) {
+            return new ResponseEntity<>(unit.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @GetMapping(value="/")
-    public ResponseEntity<List<Unit>> getUnits() {
-        return new ResponseEntity<List<Unit>>(this.unitService.findAll(), HttpStatus.OK);
+    @PutMapping(value="/")
+    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
+        Unit savedUnit;
+        if (!this.unitService.findOne(unit.getId()).isPresent()) {
+            savedUnit = new Unit();
+        } else {
+            Optional<Unit> u = this.unitService.findOne(unit.getId());
+            if (u.isPresent()) {
+                savedUnit = u.get();
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        savedUnit.update(unit);
+        this.unitService.save(savedUnit);
+        return new ResponseEntity<>(savedUnit, HttpStatus.OK);
     }
-    
+
     @GetMapping(value="/search/{name}")
     public ResponseEntity<List<Unit>> searchUnits(@PathVariable String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);
@@ -94,7 +78,11 @@ public class UnitRestController extends GeneralRestController {
     @GetMapping(value="/{unitId}/cards")
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent())?(new ResponseEntity<Iterable<Card>>(unit.get().getCards(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (unit.isPresent()) {
+            return new ResponseEntity<Iterable<Card>>(unit.get().getCards(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(value = "/{unitId}/cards/{cardId}")
@@ -124,7 +112,7 @@ public class UnitRestController extends GeneralRestController {
         }
         cardService.setImage(card, image);
         cardService.save(card);
-        return new ResponseEntity<Card>(card, HttpStatus.OK);	
+        return new ResponseEntity<Card>(card, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{unitId}/cards/{cardId}", method = RequestMethod.GET)

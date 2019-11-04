@@ -1,18 +1,14 @@
 package com.unit;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 @Service
 public class UnitService {
 
-	private String UNIT_NAME_SEPARATOR = ".";
-	private String UNIT_NAME_SPLITTER = "\\.";
+	private String UNIT_NAME_SEPARATOR = "/";
 
 	@Autowired
 	private UnitRepository unitRepository;
@@ -84,20 +80,28 @@ public class UnitService {
 		return duplicates;
 	}
 
-	private Unit getParent(Long id, int level) throws NullPointerException {
-		Unit parent = unitRepository.getParent(id);
-		for (int i = 0; i < level; i++) {
-			parent = unitRepository.getParent(parent.getId());
+	private void setParentOnName(Unit unit) {
+		unit.setName(getAncestor(unit, getLevel(unit.getName())).getName() + UNIT_NAME_SEPARATOR + unit.getName());
+	}
+
+	private int getLevel(String name) {
+		return name.split(UNIT_NAME_SEPARATOR).length - 1;
+	}
+
+	private Unit getAncestor(Unit unit, int level) {
+		Unit parent = getParent(unit);
+		while (level > 0) {
+			parent = getParent(parent);
+			level--;
 		}
 		return parent;
 	}
 
-	private void setParentOnName(Unit unit) {
-		unit.setName(getParent(unit.getId(), getLevel(unit.getName())).getName() + UNIT_NAME_SEPARATOR + unit.getName());			
-	}
-
-	private int getLevel(String name) {
-		return name.split(UNIT_NAME_SPLITTER).length - 1;
+	Unit getParent(Unit unit) {
+		if (unit.getOutgoingRelations().isEmpty()) {
+			return null;
+		}
+		return findOne(unit.getOutgoingRelations().get(0).getIncoming()).get();
 	}
 
 }

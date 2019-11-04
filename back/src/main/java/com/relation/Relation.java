@@ -4,9 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import com.unit.Unit;
 
 @Entity
 public class Relation {
@@ -16,19 +13,21 @@ public class Relation {
     protected long id;
 
     public enum RelationType {
-        ASSOCIATION, AGGREGATION, COMPOSITION, INHERITANCE;
+        ASSOCIATION, AGGREGATION, COMPOSITION, INHERITANCE, USE;
     };
 
     private RelationType relationType;
 
-    @OneToOne
-    private Unit relatedTo;
+    private Long incoming;
+
+    private Long outgoing;
 
     public Relation() {}
 
-    public Relation(RelationType relationType, Unit relatedTo) {
+    public Relation(RelationType relationType, Long incoming, Long outgoing) {
         this.relationType = relationType;
-        this.relatedTo = relatedTo;
+        this.incoming = incoming;
+        this.outgoing = outgoing;
     }
 
     public long getId() {
@@ -47,16 +46,53 @@ public class Relation {
         this.relationType = type;
     }
 
-    public Unit getRelatedTo() {
-        return relatedTo;
-    }
+    public Long getIncoming() { return incoming; }
 
-    public void setRelatedTo(Unit relatedTo) {
-        this.relatedTo = relatedTo;
-    }
-    
+    public void setIncoming(Long incoming) { this.incoming = incoming; }
+
+    public Long getOutgoing() { return outgoing; }
+
+    public void setOutgoing(Long outgoing) { this.outgoing = outgoing; }
+
     public void update(Relation relation) {
         this.relationType = relation.getRelationType();
+        this.incoming = relation.getIncoming();
+        this.outgoing = relation.getOutgoing();
+    }
+
+    public static int compareType(RelationType relationType1, RelationType relationType2) {
+        int value = 0;
+        if (relationType1.equals(relationType2)) {
+            value = 0;
+        } else if (relationType1.equals(RelationType.COMPOSITION)) {
+            value = 1;
+        } else if (relationType1.equals(RelationType.INHERITANCE)) {
+            if (relationType2.equals(RelationType.COMPOSITION)) {
+                value = -1;
+            } else {
+                value = 1;
+            }
+        } else if (relationType1.equals(RelationType.AGGREGATION)) {
+            if (relationType2.equals(RelationType.COMPOSITION) || relationType2.equals(RelationType.INHERITANCE)) {
+                value = -1;
+            } else {
+                value = 1;
+            }
+        } else if (relationType1.equals(RelationType.ASSOCIATION)) {
+            if (relationType2.equals(RelationType.USE)) {
+                value = 1;
+            } else {
+                value = -1;
+            }
+        } else if (relationType1.equals(RelationType.USE)) {
+            value = -1;
+        }
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return (((Relation)object).getId() == this.id);
     }
 
 }

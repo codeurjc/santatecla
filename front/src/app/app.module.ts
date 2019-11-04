@@ -31,16 +31,17 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
 import { QuestionComponent } from './question/question.component';
-import { ViewService } from './view/view.service';
+import { UnitService } from './unit/unit.service';
 import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
 import { DefinitionQuestionService } from './question/definitionQuestion/definitionQuestion.service';
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
 import { ListQuestionService } from './question/listQuestion/listQuestion.service';
 import { ProgressComponent } from './progress/progress.component';
 import { ProgressService } from './progress/progress.service';
-import {QuestionService} from './question/question.service';
-import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
-import {TestQuestionService} from './question/testQuestion/testQuestion.service';
+import { QuestionService } from './question/question.service';
+import { TestQuestionComponent } from './question/testQuestion/testQuestion.component';
+import { TestQuestionService } from './question/testQuestion/testQuestion.service';
+import { RelationService } from './relation/relation.service';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,7 @@ import {TestQuestionService} from './question/testQuestion/testQuestion.service'
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, ViewService, TestQuestionService,
+    ProgressService, UnitService, TestQuestionService, RelationService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

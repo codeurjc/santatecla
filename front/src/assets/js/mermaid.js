@@ -49157,11 +49157,22 @@ const drawClass = function (elem, classDef) {
     width: 0,
     height: 0
   };
+
+
+
+
   const g = elem.append('g').attr('id', id).attr('class', 'classGroup');
-  const splittedClassDef = classDef.id.match(/[0-9]+|([^\n\"<>-])+/g);
-  g.append('text').attr('x', conf.padding).attr('y', conf.textHeight + conf.padding).attr('id', splittedClassDef[0]).text(splittedClassDef[1]);
+  const splittedClassDef = classDef.id.match(/[fd][0-9]+|[^\n\"\-\.<>0-9]*[\/]+|([^\n\"\-<>])+/g);
+  g.append('text').attr('x', conf.padding).attr('y', conf.textHeight + conf.padding)
+    .attr('id', splittedClassDef[0]).text(splittedClassDef[2]);
+
   const classBox = g.node().getBBox();
-  g.insert('rect', ':first-child').attr('x', 0).attr('y', 0).attr('width', classBox.width + 2 * conf.padding).attr('height', classBox.height + conf.padding + 0.5 * conf.dividerMargin).attr('id', splittedClassDef[0]);
+  g.insert('rect', ':first-child').attr('x', 0).attr('y', 0).attr('width', classBox.width + 2 * conf.padding).attr('height', classBox.height + conf.padding + 0.5 * conf.dividerMargin)
+    .attr('id', splittedClassDef[0]);
+
+
+
+
 
   classInfo.width = classBox.width + 2 * conf.padding;
   classInfo.height = classBox.height + conf.padding + 0.5 * conf.dividerMargin;

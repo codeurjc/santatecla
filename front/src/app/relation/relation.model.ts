@@ -1,7 +1,8 @@
 import { Unit } from '../unit/unit.model';
 
 export interface Relation {
-  id?: number;
+  id?: string;
   relationType: string;
-  relatedTo: Unit;
+  incoming: string;
+  outgoing: string;
 }
