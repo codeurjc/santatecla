@@ -36,6 +36,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private units: Map<string, Unit> = new Map<string, Unit>();
   private changedUnits: Map<string, Unit> = new Map<string, Unit>();
 
+  private unitAbove: Unit;
+  private disableUpButton = false;
+
   private newUnitId = 0;
   private newRelationId = 0;
 
@@ -120,7 +123,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.showSpinner = true;
     this.focusedUnit = this.getUnitById(id.toString());
     this.setData(this.focusedUnit, false);
-    this.updateJson(false);
+    this.unitAbove = this.focusedUnit;
+    this.disableUpButton = false;
+    this.upLevelAbove();
     this.showSpinner = false;
   }
 
@@ -164,6 +169,20 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       if (!this.visited.has(+relation.incoming)) {
         this.getOutgoingRelations(this.getUnitById(relation.incoming));
       }
+    }
+  }
+
+  private upLevelAbove() {
+    const relation = this.unitAbove.outgoingRelations[0];
+    if (relation) {
+      this.data.push(new VisibleRelation(relation.relationType, this.getAbsoluteName(this.getUnitById(relation.incoming)), this.getAbsoluteName(this.getUnitById(relation.outgoing))));
+      this.unitAbove = this.getParent(this.unitAbove);
+      if (!this.getParent(this.unitAbove)) {
+        this.disableUpButton = true;
+      }
+      this.updateJson(false);
+    } else {
+      this.disableUpButton = true;
     }
   }
 

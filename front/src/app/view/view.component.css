@@ -64,6 +64,13 @@
   z-index: 110;
 }
 
+#up-button {
+  position: absolute;
+  right: 0;
+  margin: 6rem 1rem 1rem 1rem;
+  z-index: 110;
+}
+
 #spinner {
   position: absolute;
   width: 10rem;

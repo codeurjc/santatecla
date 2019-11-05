@@ -154,16 +154,20 @@ public class DatabaseInitializer {
                 itineraryRepository.save(itinerary1);
 
                 //Units
-                Unit unit0 = new Unit("Root");
                 Unit unit1 = new Unit("Lenguaje de programación");
                 Unit unit2 = new Unit("Java");
                 Unit unit3 = new Unit("Python");
-                Unit unit4 = new Unit("Expresión");
+                Unit unit4 = new Unit("C");
                 Unit unit5 = new Unit("Expresión");
-                Unit unit6 = new Unit("C");
+                Unit unit6 = new Unit("Expresión");
                 Unit unit7 = new Unit("Expresión");
-                Unit unit8 = new Unit("Suma");
+                Unit unit8 = new Unit("Variable");
                 Unit unit9 = new Unit("Suma");
+                Unit unit10 = new Unit("Resta");
+                Unit unit11 = new Unit("Suma");
+                Unit unit12 = new Unit("Tipo de dato");
+                Unit unit13 = new Unit("Entero");
+                Unit unit14 = new Unit("Real");
 
                 ArrayList<DefinitionQuestion> unit1Questions = new ArrayList<>();
                 unit1Questions.add((DefinitionQuestion)definition1);
@@ -186,7 +190,6 @@ public class DatabaseInitializer {
                 unit1.addItinerary(itinerary1);
                 unit2.addItinerary(itinerary2);
 
-                unitRepository.save(unit0);
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
@@ -196,12 +199,13 @@ public class DatabaseInitializer {
                 unitRepository.save(unit7);
                 unitRepository.save(unit8);
                 unitRepository.save(unit9);
+                unitRepository.save(unit10);
+                unitRepository.save(unit11);
+                unitRepository.save(unit12);
+                unitRepository.save(unit13);
+                unitRepository.save(unit14);
 
                 //Relations
-                Relation relation0 = new Relation(Relation.RelationType.INHERITANCE, unit0.getId(), unit1.getId());
-                relationRepository.save(relation0);
-                unit0.addIncomingRelation(relation0);
-                unit1.addOutgoingRelation(relation0);
                 Relation relation1 = new Relation(Relation.RelationType.INHERITANCE, unit1.getId(), unit2.getId());
                 relationRepository.save(relation1);
                 unit1.addIncomingRelation(relation1);
@@ -210,23 +214,23 @@ public class DatabaseInitializer {
                 relationRepository.save(relation2);
                 unit1.addIncomingRelation(relation2);
                 unit3.addOutgoingRelation(relation2);
-                Relation relation3 = new Relation(Relation.RelationType.COMPOSITION, unit2.getId(), unit4.getId());
+                Relation relation3 = new Relation(Relation.RelationType.COMPOSITION, unit2.getId(), unit5.getId());
                 relationRepository.save(relation3);
                 unit2.addIncomingRelation(relation3);
-                unit4.addOutgoingRelation(relation3);
-                Relation relation4 = new Relation(Relation.RelationType.COMPOSITION, unit3.getId(), unit5.getId());
+                unit5.addOutgoingRelation(relation3);
+                Relation relation4 = new Relation(Relation.RelationType.COMPOSITION, unit3.getId(), unit6.getId());
                 relationRepository.save(relation4);
                 unit3.addIncomingRelation(relation4);
-                unit5.addOutgoingRelation(relation4);
-                Relation relation6 = new Relation(Relation.RelationType.INHERITANCE, unit1.getId(), unit6.getId());
+                unit6.addOutgoingRelation(relation4);
+                Relation relation6 = new Relation(Relation.RelationType.INHERITANCE, unit1.getId(), unit4.getId());
                 relationRepository.save(relation6);
                 unit1.addIncomingRelation(relation6);
-                unit6.addOutgoingRelation(relation6);
-                Relation relation7 = new Relation(Relation.RelationType.COMPOSITION, unit6.getId(), unit7.getId());
+                unit4.addOutgoingRelation(relation6);
+                Relation relation7 = new Relation(Relation.RelationType.AGGREGATION, unit4.getId(), unit7.getId());
                 relationRepository.save(relation7);
-                unit6.addIncomingRelation(relation7);
+                unit4.addIncomingRelation(relation7);
                 unit7.addOutgoingRelation(relation7);
-                Relation relation8 = new Relation(Relation.RelationType.INHERITANCE, unit4.getId(), unit8.getId());
+                Relation relation8 = new Relation(Relation.RelationType.AGGREGATION, unit4.getId(), unit8.getId());
                 relationRepository.save(relation8);
                 unit4.addIncomingRelation(relation8);
                 unit8.addOutgoingRelation(relation8);
@@ -234,12 +238,27 @@ public class DatabaseInitializer {
                 relationRepository.save(relation9);
                 unit5.addIncomingRelation(relation9);
                 unit9.addOutgoingRelation(relation9);
-                Relation relation10 = new Relation(Relation.RelationType.ASSOCIATION, unit9.getId(), unit5.getId());
+                Relation relation10 = new Relation(Relation.RelationType.INHERITANCE, unit5.getId(), unit10.getId());
                 relationRepository.save(relation10);
-                unit9.addIncomingRelation(relation10);
-                unit5.addOutgoingRelation(relation10);
+                unit5.addIncomingRelation(relation10);
+                unit10.addOutgoingRelation(relation10);
+                Relation relation11 = new Relation(Relation.RelationType.INHERITANCE, unit6.getId(), unit11.getId());
+                relationRepository.save(relation11);
+                unit6.addIncomingRelation(relation11);
+                unit11.addOutgoingRelation(relation11);
+                Relation relation12 = new Relation(Relation.RelationType.USE, unit8.getId(), unit12.getId());
+                relationRepository.save(relation12);
+                unit8.addIncomingRelation(relation12);
+                unit12.addOutgoingRelation(relation12);
+                Relation relation13 = new Relation(Relation.RelationType.INHERITANCE, unit12.getId(), unit13.getId());
+                relationRepository.save(relation13);
+                unit12.addIncomingRelation(relation13);
+                unit13.addOutgoingRelation(relation13);
+                Relation relation14 = new Relation(Relation.RelationType.INHERITANCE, unit12.getId(), unit14.getId());
+                relationRepository.save(relation14);
+                unit12.addIncomingRelation(relation14);
+                unit14.addOutgoingRelation(relation14);
 
-                unitRepository.save(unit0);
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
                 unitRepository.save(unit3);
@@ -249,6 +268,11 @@ public class DatabaseInitializer {
                 unitRepository.save(unit7);
                 unitRepository.save(unit8);
                 unitRepository.save(unit9);
+                unitRepository.save(unit10);
+                unitRepository.save(unit11);
+                unitRepository.save(unit12);
+                unitRepository.save(unit13);
+                unitRepository.save(unit14);
 
                 //Users
                 userRepository.save(new User("alumno", "alumno"));
