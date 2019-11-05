@@ -2,9 +2,9 @@
 <html>
   <body>
   <div align="center">
-    <p>MIS CURSOS</p>
+    <h1>MIS CURSOS</h1>
     <span *ngFor="let course of courses">
-      <mat-button-toggle (click)="navigateCourse(course.id)">{{course.name}}</mat-button-toggle>
+      <mat-button-toggle [routerLink]="['/course', course.id]" (click)="tabService.addTab('course', course.id, course.name)">{{course.name}}</mat-button-toggle>
       <p></p>
     </span>
   </div>

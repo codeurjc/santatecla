@@ -3,11 +3,12 @@
 <body>
 <div align="center">
   <h1>{{course?.name}}</h1>
+  <h3>Unidades</h3>
   <span *ngFor="let unit of course?.units">
-    <mat-button-toggle (click)="navigateUnit(unit.id)">{{unit.name}}</mat-button-toggle>
+    <mat-button-toggle [routerLink]="['/units', unit.id, 'cards']" (click)="tabService.addTab('units', unit.id, unit.name, this.id)">{{unit.name}}</mat-button-toggle>
     <p></p>
   </span>
-  <mat-button-toggle (click)="navigateHome()">Volver a Mis Cursos</mat-button-toggle>
+  <mat-button-toggle style="margin-top: 10%; background-color: lightgrey" (click)="navigateHome()">Volver a Mis Cursos</mat-button-toggle>
 </div>
 </body>
 </html>

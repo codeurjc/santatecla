@@ -45,6 +45,7 @@ import {StudentHomeComponent} from './course/studentHome.component';
 import {StudentHomeService} from './course/studentHome.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
+import {TabService} from './tab/tab.service';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,7 @@ import {CourseService} from './course/course.service';
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, ViewService, TestQuestionService, StudentHomeService, CourseService,
+    ProgressService, ViewService, TestQuestionService, StudentHomeService, CourseService, TabService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

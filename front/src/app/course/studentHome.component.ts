@@ -3,6 +3,7 @@ import {LoginService} from '../auth/login.service';
 import {StudentHomeService} from './studentHome.service';
 import {Course} from './course.model';
 import {Router} from '@angular/router';
+import {TabService} from '../tab/tab.service';
 
 @Component({
   templateUrl: './studentHome.component.html'
@@ -13,13 +14,13 @@ export class StudentHomeComponent implements OnInit {
 
   constructor(private loginService: LoginService,
               private courseService: StudentHomeService,
-              private router: Router) {
+              private router: Router,
+              private tabService: TabService) {
     this.courses = [];
   }
 
   ngOnInit(): void {
     this.courseService.getUserCourses(this.loginService.getCurrentUser().id).subscribe((data: Course[]) => {
-      console.log(data);
       this.courses = data;
     }, error => {console.log(error); });
   }

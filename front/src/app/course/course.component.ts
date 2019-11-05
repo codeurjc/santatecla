@@ -3,6 +3,7 @@ import {Course} from './course.model';
 import {LoginService} from '../auth/login.service';
 import {CourseService} from './course.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {TabService} from '../tab/tab.service';
 
 @Component({
   templateUrl: './course.component.html'
@@ -15,7 +16,8 @@ export class CourseComponent implements OnInit {
   constructor(private loginService: LoginService,
               private courseService: CourseService,
               private activatedRoute: ActivatedRoute,
-              private router: Router) {}
+              private router: Router,
+              private tabService: TabService) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
