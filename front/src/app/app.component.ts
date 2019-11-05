@@ -16,7 +16,11 @@ export class AppComponent {
     event.preventDefault();
     this.loginService.login(user, pass).subscribe(
       (u) => {
-        this.router.navigate(['/']);
+        if (u.roles.includes('ROLE_ADMIN')) {
+          this.router.navigate(['/']);
+        } else {
+          this.router.navigate(['/student']);
+        }
       },
       (error) => alert('Invalid user or password'),
     );
