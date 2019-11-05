@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+  <div align="center">
+    <p>MIS CURSOS</p>
+    <span *ngFor="let course of courses">
+      <mat-button-toggle (click)="navigateCourse(course.id)">{{course.name}}</mat-button-toggle>
+      <p></p>
+    </span>
+  </div>
+  </body>
+</html>

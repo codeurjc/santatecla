@@ -1,11 +1,13 @@
 <!DOCTYPE HTML>
 <html>
-  <body>
-  <div align="center">
-    <p>MIS CURSOS</p>
-    <span *ngFor="let course of courses">
-      <p>{{course.name}}</p>
-    </span>
-  </div>
-  </body>
+<body>
+<div align="center">
+  <h1>{{course?.name}}</h1>
+  <span *ngFor="let unit of course?.units">
+    <mat-button-toggle (click)="navigateUnit(unit.id)">{{unit.name}}</mat-button-toggle>
+    <p></p>
+  </span>
+  <mat-button-toggle (click)="navigateHome()">Volver a Mis Cursos</mat-button-toggle>
+</div>
+</body>
 </html>

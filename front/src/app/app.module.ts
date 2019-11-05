@@ -41,6 +41,8 @@ import { ProgressService } from './progress/progress.service';
 import {QuestionService} from './question/question.service';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {TestQuestionService} from './question/testQuestion/testQuestion.service';
+import {StudentHomeComponent} from './course/studentHome.component';
+import {StudentHomeService} from './course/studentHome.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
 
@@ -55,6 +57,7 @@ import {CourseService} from './course/course.service';
     QuestionComponent,
     ProgressComponent,
     TestQuestionComponent,
+    StudentHomeComponent,
     CourseComponent
   ],
   imports: [
@@ -106,7 +109,7 @@ import {CourseService} from './course/course.service';
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, ViewService, TestQuestionService, CourseService,
+    ProgressService, ViewService, TestQuestionService, StudentHomeService, CourseService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

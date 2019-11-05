@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +23,15 @@ public class CourseRestController extends GeneralRestController {
     }
 
     @GetMapping(value="/user/{id}")
-    public ResponseEntity<List<Long>> getUserCourses(@PathVariable long id){
-        return new ResponseEntity<>(this.courseService.findUserCourses(id), HttpStatus.OK);
+    public ResponseEntity<List<Course>> getUserCourses(@PathVariable long id){
+        List<Course> courses = new ArrayList<>();
+        for(Long courseId : this.courseService.findUserCourses(id)){
+            Optional<Course> optional = this.courseService.findOne(courseId);
+            if(optional.isPresent()) {
+                courses.add(optional.get());
+            }
+        }
+        return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
     @GetMapping(value="/{id}")
