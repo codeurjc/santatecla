@@ -29,7 +29,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
   private editorOptions: JsonEditorOptions;
 
-  private data = [];
+  private data;
   private relations = new Map<string, Relation>();
   private relationIds = new Map<string, string>();
 
@@ -130,7 +130,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private setData(data: Unit, changed: boolean) {
-    this.data = [];
+    this.data = {
+      units: [],
+      relations: []
+    };
     this.relations = new Map();
     this.visited = new Set<number>();
     this.getIncomingRelations(data);
@@ -140,6 +143,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private getIncomingRelations(data: Unit) {
     this.visited.add(+data.id);
+    this.data.units.push(new VisibleUnit(data.id, this.getAbsoluteName(data)))
     data.incomingRelations.forEach((relation: any) => {
       const outgoing = relation.outgoing;
       let key = relation.id;
@@ -148,7 +152,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       }
       if (!this.relations.get(key)) {
         this.addRelation(key, relation);
-        this.data.push(new VisibleRelation(relation.relationType, this.getAbsoluteName(this.getUnitById(relation.incoming)), this.getAbsoluteName(this.getUnitById(outgoing))));
+        this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming.toString(), outgoing.toString()));
       }
       if (!this.visited.has(+outgoing)) {
         this.getIncomingRelations(this.getUnitById(outgoing));
@@ -164,7 +168,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       if (!key) {
         key = this.getNewRelationId();
       }
-      this.data.push(new VisibleRelation(relation.relationType, this.getAbsoluteName(this.getUnitById(relation.incoming)), this.getAbsoluteName(this.getUnitById(relation.outgoing))));
+      this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming.toString(), relation.outgoing.toString()));
       this.addRelation(key, relation);
       if (!this.visited.has(+relation.incoming)) {
         this.getOutgoingRelations(this.getUnitById(relation.incoming));
@@ -173,13 +177,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private upLevelAbove() {
-    const relation = this.unitAbove.outgoingRelations[0];
-    if (relation) {
-      this.data.push(new VisibleRelation(relation.relationType, this.getAbsoluteName(this.getUnitById(relation.incoming)), this.getAbsoluteName(this.getUnitById(relation.outgoing))));
-      this.unitAbove = this.getParent(this.unitAbove);
-      if (!this.getParent(this.unitAbove)) {
-        this.disableUpButton = true;
-      }
+    if (this.unitAbove.outgoingRelations[0]) {
+      this.unitAbove.outgoingRelations.forEach((relation: Relation) => {
+        this.data.units.push(new VisibleUnit(relation.incoming.toString(), this.getAbsoluteName(this.getUnitById(relation.incoming.toString()))));
+        this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming.toString(), relation.outgoing.toString()));
+        this.editor.data = this.data;
+        this.unitAbove = this.getParent(this.unitAbove);
+        if (!this.getParent(this.unitAbove)) {
+          this.disableUpButton = true;
+        }
+
+      });
       this.updateJson(false);
     } else {
       this.disableUpButton = true;
@@ -264,7 +272,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private validRelations(): boolean {
     let valid = true;
-    this.data.forEach((relation: VisibleRelation) => {
+    this.data.relations.forEach((relation: VisibleRelation) => {
       if ((valid) && (Object.values(RelationType).indexOf(relation.relationType) === -1)) {
         valid = false;
       }
@@ -307,7 +315,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const newOutgoingRelations = new Map<number, Relation[]>();
 
     let i = 0;
-    this.data.forEach((visibleRelation: VisibleRelation) => {
+    this.data.relations.forEach((visibleRelation: VisibleRelation) => {
       const relation: Relation = {
         id: null,
         relationType: visibleRelation.relationType,
@@ -342,7 +350,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         visibleUnits.set(+outgoing.id, outgoing);
 
         i++;
-        if (i === this.data.length) {
+        if (i === this.data.relations.length) {
 
           newIncomingRelations.forEach((relations: Relation[], key: number) => {
             const unit = visibleUnits.get(+key);
@@ -387,7 +395,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const element: any = this.umlDiv.nativeElement;
     element.innerHTML = '';
     try {
-      const uml = this.jsonToUml(this.data);
+      const uml = this.jsonToUml(this.data.relations);
       mermaid.render('uml', uml, (svgCode, bindFunctions) => {
         element.innerHTML = svgCode;
         if (this.showUmlNodeOptions) {
@@ -631,15 +639,35 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         case RelationType.USE: { connector = '--'; break; }
         default: { throw new Error('Unrecognized uml relation type'); }
       }
-      let incomingId = this.getUnitId(relation.incoming);
-      if (incomingId === this.focusedUnit.id) { incomingId = 'f' + incomingId; } else { incomingId = 'd' + incomingId; }
-      let outgoingId = this.getUnitId(relation.outgoing);
-      if (outgoingId === this.focusedUnit.id) { outgoingId = 'f' + outgoingId; } else { outgoingId = 'd' + outgoingId; }
-      uml += incomingId + relation.incoming + connector + outgoingId + relation.outgoing + '\n';
+      uml += this.parseUnitName(relation.incoming.toString()) + connector + this.parseUnitName(relation.outgoing.toString()) + '\n';
     });
     return uml;
   }
 
+  private parseUnitName(id: string): string {
+    let name = '';
+    if (id === this.focusedUnit.id) {
+      name = 'f' + id;
+    } else {
+      name = 'd' + id;
+    }
+    name += this.getAbsoluteName(this.getUnitById(id.toString()));
+    if ((id.toString().substring(0, 1) === '0') && (id.toString() !== '00')) {
+      name += ' (' + (+id) + ')';
+    }
+    return name;
+  }
+
+}
+
+class VisibleUnit implements Unit {
+  id: string;
+  name: string;
+
+  constructor(id: string, name: string) {
+    this.id = id;
+    this.name = name;
+  }
 }
 
 class VisibleRelation implements Relation {
