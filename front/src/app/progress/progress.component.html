@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <div class="unit-header">
+        <div class="progress-header">
           <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
             Fichas
           </button>
 
           <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
             Seguimiento
+          </button>
+
+          <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
+            Ejercicios
           </button>
 
           <div *ngFor="let itinerary of itineraries">

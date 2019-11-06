@@ -3,11 +3,11 @@
     display: flex;
     float: right;
   }
-  
-  .unit-header {
+
+  .progress-header {
     height: 3rem;
     background-color: #5382ce;
     color: white;
     font-size: 0.8rem;
   }
-  
+

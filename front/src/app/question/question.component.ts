@@ -11,7 +11,10 @@ import {TestQuestion} from './testQuestion/testQuestion.model';
 import {TestQuestionService} from './testQuestion/testQuestion.service';
 
 @Component({
-  templateUrl: './question.component.html'
+  templateUrl: './question.component.html',
+  styleUrls: [
+    './question.component.css'
+  ]
 })
 
 export class QuestionComponent implements OnInit {

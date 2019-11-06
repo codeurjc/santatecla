@@ -48,6 +48,10 @@ export class ProgressComponent implements OnInit {
   }
 
   navigateToUnitItinerary(itineraryId: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
+    this.router.navigate(['units', this.unitId, 'itineraries', itineraryId]);
+  }
+
+  navigateToUnitQuestions() {
+    this.router.navigate(['units', this.unitId, 'question']);
   }
 }
