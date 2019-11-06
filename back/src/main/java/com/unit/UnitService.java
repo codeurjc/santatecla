@@ -100,4 +100,9 @@ public class UnitService {
 		return name.split(UNIT_NAME_SPLITTER).length - 1;
 	}
 
+	public int getUserDistinctAnswer(Long unitId, Long userId){
+		return this.unitRepository.findUserListAnswerDistinctCount(unitId, userId) + this.unitRepository.findUserDefinitionAnswerDistinctCount(unitId, userId) +
+				this.unitRepository.findUserTestAnswerDistinctCount(unitId, userId);
+	}
+
 }

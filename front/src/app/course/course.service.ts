@@ -8,4 +8,8 @@ export class CourseService {
   getCourse(id: number) {
     return this.http.get('/api/course/' + id);
   }
+
+  getUserDistinctAnswerCount(unitId: number, userId: number) {
+    return this.http.get('api/units/' + unitId + '/question/answer/' + userId + '/distinct');
+  }
 }

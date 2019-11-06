@@ -6,12 +6,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
 
 @Component({
-  templateUrl: './course.component.html'
+  templateUrl: './course.component.html',
+  styleUrls: ['./course.component.css']
 })
 
 export class CourseComponent implements OnInit {
   course: Course;
   id: number;
+  questionDoneCount: number[] = [];
 
   constructor(private loginService: LoginService,
               private courseService: CourseService,
@@ -24,8 +26,19 @@ export class CourseComponent implements OnInit {
       this.id = params.courseId;
       this.courseService.getCourse(this.id).subscribe((data: Course) => {
         this.course = data;
+        for (let unit of this.course.units) {
+          this.courseService.getUserDistinctAnswerCount(unit.id, this.loginService.getCurrentUser().id).subscribe((data2: number) => {
+            unit.questionsDone = data2;
+          }, error => { console.log(error); } );
+        }
       }, error => {console.log(error); });
     });
+  }
+
+  userDistinctAnswers(unitId: number, userId: number){
+    this.courseService.getUserDistinctAnswerCount(unitId, userId).subscribe((data: number) => {
+      return data;
+    }, error => {return 0; } );
   }
 
   navigateUnit(id: number) {

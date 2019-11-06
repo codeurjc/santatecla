@@ -6,4 +6,5 @@ export interface DefinitionAnswer {
     correct?: boolean;
     justification?: string;
     user?: User;
+    unitId?: number;
 }

@@ -1,14 +1,32 @@
 <!DOCTYPE HTML>
 <html>
 <body>
+<h1 align="center">{{course?.name}}</h1>
+<div class="row">
+  <div class="column">
+    <div align="center">
+      <div>
+        <h3>Unidades</h3>
+        <span *ngFor="let unit of course?.units">
+          <mat-button-toggle [routerLink]="['/units', unit.id, 'cards']" (click)="tabService.addTab('units', unit.id, unit.name, this.id)">{{unit.name}}</mat-button-toggle>
+          {{unit.questionsDone}} / {{unit.definitionQuestions.length + unit.testQuestions.length + unit.listQuestions.length}} preguntas realizadas
+          <p></p>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div align="center">
+      <h3>Mi seguimiento del curso</h3>
+      <p>Mi mejor unidad es</p>
+      <p>Mi peor unidad es</p>
+      <p>Nota de la unidad x: </p>
+      <p>Intentos de la unidad y relacion bien/mal </p>
+    </div>
+  </div>
+</div>
 <div align="center">
-  <h1>{{course?.name}}</h1>
-  <h3>Unidades</h3>
-  <span *ngFor="let unit of course?.units">
-    <mat-button-toggle [routerLink]="['/units', unit.id, 'cards']" (click)="tabService.addTab('units', unit.id, unit.name, this.id)">{{unit.name}}</mat-button-toggle>
-    <p></p>
-  </span>
-  <mat-button-toggle style="margin-top: 10%; background-color: lightgrey" (click)="navigateHome()">Volver a Mis Cursos</mat-button-toggle>
+  <mat-button-toggle align="center" style="margin-top: 10%; background-color: lightgrey" (click)="navigateHome()">Volver a Mis Cursos</mat-button-toggle>
 </div>
 </body>
 </html>
