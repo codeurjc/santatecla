@@ -4,6 +4,7 @@ import {LoginService} from '../auth/login.service';
 import {CourseService} from './course.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
+import {Unit} from '../unit/unit.model';
 
 @Component({
   templateUrl: './course.component.html',
@@ -13,7 +14,8 @@ import {TabService} from '../tab/tab.service';
 export class CourseComponent implements OnInit {
   course: Course;
   id: number;
-  questionDoneCount: number[] = [];
+  bestUnit: Unit;
+  worstUnit: Unit;
 
   constructor(private loginService: LoginService,
               private courseService: CourseService,
@@ -31,6 +33,14 @@ export class CourseComponent implements OnInit {
             unit.questionsDone = data2;
           }, error => { console.log(error); } );
         }
+
+        this.courseService.getUserBestUnit(this.id, this.loginService.getCurrentUser().id).subscribe((best: Unit) => {
+          this.bestUnit = best;
+        }, error => { console.log(error); });
+
+        this.courseService.getUserWorstUnit(this.id, this.loginService.getCurrentUser().id).subscribe((worst: Unit) => {
+          this.worstUnit = worst;
+        }, error => {console.log(error); });
       }, error => {console.log(error); });
     });
   }

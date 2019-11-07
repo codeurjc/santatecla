@@ -28,5 +28,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
             "join question_test_answers on test_question.id = question_test_answers.test_question_id join test_answer on question_test_answers.test_answers_id = test_answer.id" +
             " join user on test_answer.user_id = user.id where unit_test_questions.unit_id = ?1 and user.id = ?2 and test_answer.unit_id = ?1", nativeQuery = true)
     Integer findUserTestAnswerDistinctCount(Long unitId, Long userId);
+
+
     
 }

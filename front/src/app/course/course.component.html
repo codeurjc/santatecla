@@ -6,7 +6,8 @@
   <div class="column">
     <div align="center">
       <div>
-        <h3>Unidades</h3>
+        <h2>Unidades</h2>
+        <p></p>
         <span *ngFor="let unit of course?.units">
           <mat-button-toggle [routerLink]="['/units', unit.id, 'cards']" (click)="tabService.addTab('units', unit.id, unit.name, this.id)">{{unit.name}}</mat-button-toggle>
           {{unit.questionsDone}} / {{unit.definitionQuestions.length + unit.testQuestions.length + unit.listQuestions.length}} preguntas realizadas
@@ -17,11 +18,10 @@
   </div>
   <div class="column">
     <div align="center">
-      <h3>Mi seguimiento del curso</h3>
-      <p>Mi mejor unidad es</p>
-      <p>Mi peor unidad es</p>
-      <p>Nota de la unidad x: </p>
-      <p>Intentos de la unidad y relacion bien/mal </p>
+      <h2>Mi seguimiento del curso</h2>
+      <p></p>
+      <p> <mat-icon style="color: green">check</mat-icon> Mi mejor unidad es {{this.bestUnit.name}}</p>
+      <p> <mat-icon style="color: red">close</mat-icon> Mi peor unidad es {{this.worstUnit.name}}</p>
     </div>
   </div>
 </div>

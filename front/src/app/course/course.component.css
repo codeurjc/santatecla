@@ -10,4 +10,7 @@
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
+  border:1px solid lightblue;
+  margin-left: 5%;
+  margin-right: 5%;
 }

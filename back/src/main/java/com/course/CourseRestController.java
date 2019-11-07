@@ -1,6 +1,7 @@
 package com.course;
 
 import com.GeneralRestController;
+import com.unit.Unit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -39,6 +40,40 @@ public class CourseRestController extends GeneralRestController {
         Optional<Course> optional = this.courseService.findOne(id);
         if(optional.isPresent()){
             return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value="/{courseId}/user/{userId}/best")
+    public ResponseEntity<Unit> getBestUnit(@PathVariable long courseId, @PathVariable long userId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        double aux = 0;
+        Unit best = new Unit();
+        if(optional.isPresent()){
+            for(Unit u : optional.get().getUnits()){
+                if(this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId) > aux){
+                    aux = this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId);
+                    best = u;
+                }
+            }
+            return new ResponseEntity<>(best, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value="/{courseId}/user/{userId}/worst")
+    public ResponseEntity<Unit> getWorstUnit(@PathVariable long courseId, @PathVariable long userId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        double aux = 1;
+        Unit worst = new Unit();
+        if(optional.isPresent()){
+            for(Unit u : optional.get().getUnits()){
+                if(this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId) < aux){
+                    aux = this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId);
+                    worst = u;
+                }
+            }
+            return new ResponseEntity<>(worst, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
