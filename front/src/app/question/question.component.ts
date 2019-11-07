@@ -9,6 +9,9 @@ import {DefinitionQuestion} from './definitionQuestion/definitionQuestion.model'
 import {ListQuestion} from './listQuestion/listQuestion.model';
 import {TestQuestion} from './testQuestion/testQuestion.model';
 import {TestQuestionService} from './testQuestion/testQuestion.service';
+import {Unit} from '../unit/unit.model';
+import {ViewService} from '../view/view.service';
+import {Itineray} from '../itinerary/itinerary.model';
 
 @Component({
   templateUrl: './question.component.html',
@@ -24,12 +27,21 @@ export class QuestionComponent implements OnInit {
   testQuestion: TestQuestion;
   subtype: string;
 
+  possibleAnswers: string[];
+  correctAnswers: string[];
+
+  unit: Unit;
+  unitId: number;
+  itinerariesTabs: Itineray[];
+
   constructor(
     private questionService: QuestionService,
     private definitionQuestionService: DefinitionQuestionService,
     private listQuestionService: ListQuestionService,
     private testQuestionService: TestQuestionService,
-    private activatedRoute: ActivatedRoute) {
+    private viewService: ViewService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -39,44 +51,74 @@ export class QuestionComponent implements OnInit {
     },
       (error) => console.log(error)
     );
+    this.activatedRoute.params.subscribe(params => {
+      this.unitId = params['unitId'];
+    });
+
+    this.viewService.getUnit(this.unitId).subscribe((data: Unit) => {
+      this.unit = {
+        id: data['id'],
+        name: data['name'],
+        itineraries: data['itineraries']
+      };
+      this.itinerariesTabs = this.unit.itineraries;
+    });
   }
 
-  sendQuestion(text: string) {
-    switch (this.subtype) {
-      case 'DefinitionQuestion':
-        this.definitionQuestion = {
-          questionText: text,
-          subtype: 'DefinitionQuestion'
-        };
-        this.definitionQuestionService.addDefinitionQuestion(this.definitionQuestion).subscribe(
-          (_) => {},
-          (error) => console.log(error)
-        );
-        break;
-      case 'ListQuestion':
-          this.listQuestion = {
-            questionText: text,
-            subtype: 'ListQuestion',
-            possibleAnswers: ['TODO']
-          };
-          this.listQuestionService.addListQuestion(this.listQuestion).subscribe(
-            (_) => {},
-            (error) => console.log(error)
-          );
-          break;
-      case 'TestQuestion':
-        this.testQuestion = {
-          questionText: text,
-          subtype: 'TestQuestion',
-          possibleAnswers: ['TODO']
-        };
-        this.testQuestionService.addTestQuestion(this.testQuestion).subscribe(
-          (_) => {},
-          (error) => console.log(error)
-        );
-        break;
-      default:
-        break;
-    }
+  sendDefinitionQuestion(text: string) {
+    this.definitionQuestion = {
+      questionText: text,
+      subtype: 'DefinitionQuestion'
+    };
+    this.definitionQuestionService.addDefinitionQuestion(this.definitionQuestion).subscribe(
+      (_) => {},
+      (error) => console.log(error)
+    );
   }
+
+  sendListQuestion(text: string) {
+    this.listQuestion = {
+      questionText: text,
+      subtype: 'ListQuestion',
+      possibleAnswers: this.possibleAnswers,
+      correctAnswers: this.correctAnswers
+    };
+    this.listQuestionService.addListQuestion(this.listQuestion).subscribe(
+      (_) => {},
+      (error) => console.log(error)
+    );
+  }
+
+  sendTestQuestion(text: string) {
+    this.testQuestion = {
+      questionText: text,
+      subtype: 'TestQuestion',
+      possibleAnswers: ['TODO']
+    };
+    this.testQuestionService.addTestQuestion(this.testQuestion).subscribe(
+      (_) => {},
+      (error) => console.log(error)
+    );
+  }
+
+  addPossibleAnswer(answer: string) {
+    this.possibleAnswers.concat(answer);
+  }
+
+  navigateToUnitCards() {
+    this.router.navigate(['/units/' + this.unitId + '/cards']);
+  }
+
+  navigateToUnitProgress() {
+    this.router.navigate(['/units/' + this.unitId + '/progress']);
+  }
+
+  navigateToUnitItinerary(itineraryId: number) {
+    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
+  }
+
+  navigateToUnitQuestions() {
+    this.router.navigate(['units', this.unitId, 'question']);
+  }
+
 }

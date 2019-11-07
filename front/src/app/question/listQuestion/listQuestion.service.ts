@@ -21,7 +21,7 @@ export class ListQuestionService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<DefinitionQuestion>('/api/question/', body, {headers});
+    return this.http.post<DefinitionQuestion>('/api/list/', body, {headers});
   }
 
   addAnswer(id: number, listAnswer: ListAnswer): Observable<ListQuestion> {
