@@ -22,6 +22,9 @@ import {Itineray} from '../itinerary/itinerary.model';
 
 export class QuestionComponent implements OnInit {
   questions: Question[];
+  definitionQuestions: DefinitionQuestion[];
+  listQuestions: ListQuestion[];
+  testQuestions: TestQuestion[];
   definitionQuestion: DefinitionQuestion;
   listQuestion: ListQuestion;
   testQuestion: TestQuestion;
@@ -46,11 +49,7 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit() {
     this.subtype = 'DefinitionQuestion';
-    this.questionService.getQuestions().subscribe((data: Question[]) => {
-      this.questions = data;
-    },
-      (error) => console.log(error)
-    );
+    this.questions = [];
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params['unitId'];
     });
@@ -62,6 +61,21 @@ export class QuestionComponent implements OnInit {
         itineraries: data['itineraries']
       };
       this.itinerariesTabs = this.unit.itineraries;
+    });
+
+    this.viewService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
+      this.definitionQuestions = data;
+      this.questions = this.questions.concat(data);
+    });
+
+    this.viewService.getUnitListQuestions(this.unitId).subscribe((data: ListQuestion[]) => {
+      this.listQuestions = data;
+      this.questions = this.questions.concat(data);
+    });
+
+    this.viewService.getUnitTestQuestions(this.unitId).subscribe((data: TestQuestion[]) => {
+      this.testQuestions = data;
+      this.questions = this.questions.concat(data);
     });
   }
 
@@ -101,9 +115,9 @@ export class QuestionComponent implements OnInit {
     );
   }
 
-  addPossibleAnswer(answer: string) {
+  /*addPossibleAnswer(answer: string) {
     this.possibleAnswers.concat(answer);
-  }
+  }*/
 
   navigateToUnitCards() {
     this.router.navigate(['/units/' + this.unitId + '/cards']);

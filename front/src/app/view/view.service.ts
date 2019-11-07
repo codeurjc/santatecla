@@ -17,6 +17,18 @@ export class ViewService {
     return this.http.get(this.baseUrl + id);
   }
 
+  getUnitDefinitionQuestions(id: number) {
+    return this.http.get(this.baseUrl + id + '/question/definition');
+  }
+
+  getUnitListQuestions(id: number) {
+    return this.http.get(this.baseUrl + id + '/question/list');
+  }
+
+  getUnitTestQuestions(id: number) {
+    return this.http.get(this.baseUrl + id + '/question/test');
+  }
+
   searchByNameContaining(name: string) {
     return this.http.get(this.baseUrl + 'search/' + name);
   }

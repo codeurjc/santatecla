@@ -7,6 +7,10 @@ import com.GeneralRestController;
 import com.card.Card;
 import com.card.CardService;
 import com.itinerary.Itinerary;
+import com.question.Question;
+import com.question.definition.definition_question.DefinitionQuestion;
+import com.question.list.list_question.ListQuestion;
+import com.question.test.test_question.TestQuestion;
 import com.relation.Relation;
 import com.relation.RelationService;
 
@@ -95,6 +99,24 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
         return (unit.isPresent())?(new ResponseEntity<Iterable<Card>>(unit.get().getCards(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value="/{unitId}/question/definition")
+    public ResponseEntity<List<DefinitionQuestion>> getDefinitionQuestions(@PathVariable int unitId) {
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+        return (unit.isPresent())?(new ResponseEntity<>(unit.get().getDefinitionQuestions(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value="/{unitId}/question/list")
+    public ResponseEntity<List<ListQuestion>> getListQuestions(@PathVariable int unitId) {
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+        return (unit.isPresent())?(new ResponseEntity<>(unit.get().getListQuestions(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value="/{unitId}/question/test")
+    public ResponseEntity<List<TestQuestion>> getTestQuestions(@PathVariable int unitId) {
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+        return (unit.isPresent())?(new ResponseEntity<>(unit.get().getTestQuestions(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping(value = "/{unitId}/cards/{cardId}")
