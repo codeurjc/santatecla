@@ -119,6 +119,12 @@ public class Unit {
     public void addDefinitionQuestion(DefinitionQuestion definitionQuestion) {
         this.definitionQuestions.add(definitionQuestion);
     }
+    public void addListQuestion(ListQuestion listQuestion) {
+        this.listQuestions.add(listQuestion);
+    }
+    public void addTestQuestion(TestQuestion testQuestion) {
+        this.testQuestions.add(testQuestion);
+    }
 
     public void setDefinitionQuestions(List<DefinitionQuestion> definitionQuestions){
         this.definitionQuestions = definitionQuestions;

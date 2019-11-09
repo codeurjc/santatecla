@@ -84,8 +84,10 @@ export class QuestionComponent implements OnInit {
       questionText: text,
       subtype: 'DefinitionQuestion'
     };
-    this.definitionQuestionService.addDefinitionQuestion(this.definitionQuestion).subscribe(
-      (_) => {},
+    this.viewService.addUnitDefinitionQuestion(this.unitId, this.definitionQuestion).subscribe(
+      (_) => {
+          this.ngOnInit();
+        },
       (error) => console.log(error)
     );
   }
@@ -97,7 +99,7 @@ export class QuestionComponent implements OnInit {
       possibleAnswers: this.possibleAnswers,
       correctAnswers: this.correctAnswers
     };
-    this.listQuestionService.addListQuestion(this.listQuestion).subscribe(
+    this.viewService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
       (_) => {},
       (error) => console.log(error)
     );
@@ -109,7 +111,7 @@ export class QuestionComponent implements OnInit {
       subtype: 'TestQuestion',
       possibleAnswers: ['TODO']
     };
-    this.testQuestionService.addTestQuestion(this.testQuestion).subscribe(
+    this.viewService.addUnitTestQuestion(this.unitId, this.testQuestion).subscribe(
       (_) => {},
       (error) => console.log(error)
     );
