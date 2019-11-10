@@ -11,6 +11,7 @@ import { ViewService } from '../view/view.service';
 
 import Asciidoctor from 'asciidoctor';
 import {Slide} from '../slide/slide.model';
+import {Card} from '../card/card.model';
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -27,6 +28,10 @@ export class ItineraryComponent implements OnInit {
 
   contentHTML: any;
   itineraryContent: any;
+  itineraryContentExtended: string;
+
+  extractedData: string[];
+  position: number[];
 
   unit: Unit;
   itinerary: Itineray;
@@ -67,15 +72,67 @@ export class ItineraryComponent implements OnInit {
         slides: data.slides
       };
       this.itineraryContent = '== ' + this.itinerary.name + '\n';
+      this.itineraryContentExtended = '';
       this.slidesToContent(this.itinerary.slides);
-      this.contentHTML = convertToHTML(this.itineraryContent);
+      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
+        this.viewHTMLVersion();
+      });
     });
+  }
 
+  viewHTMLVersion() {
+    this.contentHTML = convertToHTML(this.itineraryContentExtended);
   }
 
   slidesToContent(slides: Slide[]) {
     slides.forEach((slide: Slide) => {
       this.itineraryContent = this.itineraryContent + slide.content + '// ' + slide.id + '\n\n';
+    });
+  }
+
+  resolveAfterSeconds(x) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(x);
+      }, 1000);
+    });
+  }
+
+  extendContent(content: string) {
+    this.extractedData = [];
+    this.position = [];
+    let counter = 0;
+    let lines: string[];
+    lines = content.split('\n');
+    lines.forEach((line: string) => {
+      let words: string[];
+      words = line.split('.');
+      if (words[0] === 'assert') {
+        let parameters: string[];
+        parameters = words[1].split('/');
+        if (parameters[0] === 'card') {
+          this.position.push(counter);
+          this.viewService.getCardByName(parameters[1], Number(parameters[2])).subscribe((data: Card) => {
+            this.extractedData.push(data.content);
+            this.addExtractedData(content);
+          });
+        }
+      } else {
+        this.addExtractedData(content);
+      }
+      counter = counter + 1;
+    });
+  }
+
+  addExtractedData(content: string) {
+    this.itineraryContentExtended = '';
+    let lines: string[];
+    lines = content.split('\n');
+    for (let i = 0; i < this.position.length; i ++) {
+      lines[this.position[i]] = this.extractedData[i];
+    }
+    lines.forEach((line: string) => {
+      this.itineraryContentExtended = this.itineraryContentExtended + line + '\n';
     });
   }
 
@@ -98,7 +155,6 @@ export class ItineraryComponent implements OnInit {
       slide = { name: '', content: ''};
       let lines: string[];
       lines = content[i].split('\n');
-      console.log(lines);
       slide.name = lines[0];
       slide.content = '=== ' + slide.name + '\n';
       for (let j = 1; j < lines.length; j ++) {
@@ -116,13 +172,14 @@ export class ItineraryComponent implements OnInit {
       }
       this.itinerary.slides.push(slide);
     }
-    console.log(this.itinerary.slides);
   }
 
   updateHTMLView() {
     this.contentToItinerary(this.itineraryContent);
     this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
-      this.contentHTML = convertToHTML(this.itineraryContent);
+      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
+        this.viewHTMLVersion();
+      });
     }, (error) => {
       console.error(error);
     });

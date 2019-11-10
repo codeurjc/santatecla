@@ -32,6 +32,10 @@ public class Slide {
 
     public void update(Slide slide) { }
 
+    public void addContent(String content) {
+        this.content = this.content + content;
+    }
+
     /********************
      * GETTER AND SETTER *
      ********************/

@@ -1,7 +1,9 @@
 package com.unit;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.card.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,5 +15,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     
     @Query(value = "select unit.id, unit.name from unit left join unit_relations on unit.id = unit_relations.unit_id left join relation on unit_relations.relations_id = relation.id where related_to_id = ?1", nativeQuery = true)
     public Unit getParent(Long id);
-    
+
+    //@Query(value = "SELECT card.id, card.name, card.content FROM unit_cards JOIN card ON unit_cards.cards_id = card.id WHERE ((card.name = ?1) AND (unit_cards.unit_id = ?2))", nativeQuery = true)
+    //public Optional<Card> getCardByName(String cardName, Long unitId);
 }

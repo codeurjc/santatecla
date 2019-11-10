@@ -17,6 +17,10 @@ export class ViewService {
     return this.http.get(this.baseUrl + id);
   }
 
+  getCardByName(cardName: string, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/cards/' + cardName);
+  }
+
   searchByNameContaining(name: string) {
     return this.http.get(this.baseUrl + 'search/' + name);
   }

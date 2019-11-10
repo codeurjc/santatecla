@@ -16,9 +16,6 @@ public class Card {
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
-    @Lob
-    private Byte[] image;
-
     public Card() {}
 
     public Card(String name) {
@@ -51,10 +48,6 @@ public class Card {
         return this.content;
     }
 
-    public Byte[] getImage() {
-        return this.image;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -66,9 +59,5 @@ public class Card {
     public void setContent(String content) {
         this.content = content;
     }
-
-    public void setImage(Byte[] image) {
-        this.image = image;
-    }
-
+    
 }

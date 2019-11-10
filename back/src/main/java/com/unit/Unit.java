@@ -151,4 +151,13 @@ public class Unit {
     public void setTestQuestions(List<TestQuestion> testQuestions) {
         this.testQuestions = testQuestions;
     }
+
+    public Card getCardByName(String name) {
+        for (Card card: this.getCards()) {
+            if (card.getName().equals(name)) {
+                return card;
+            }
+        }
+        return new Card(name);
+    }
 }

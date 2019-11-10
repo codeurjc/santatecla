@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.card.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 @Service
@@ -99,5 +100,10 @@ public class UnitService {
 	private int getLevel(String name) {
 		return name.split(UNIT_NAME_SPLITTER).length - 1;
 	}
+
+	/*public Optional<Card> getCardByName(String cardName, Long unitId) {
+		Optional<Card> card = unitRepository.getCardByName(cardName, unitId);
+		return card;
+	}*/
 
 }

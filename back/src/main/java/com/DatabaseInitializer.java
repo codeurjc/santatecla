@@ -69,6 +69,11 @@ public class DatabaseInitializer {
                 Card card3 = new Card("Cuando");
                 Card card4 = new Card("Cuando");
 
+                card1.setContent("*¿Que es un lenguaje de programación?*\n\nUn lenguaje de programación es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de instrucciones o secuencias de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina programa.");
+                card2.setContent("*¿Que es java?*\n");
+                card4.setContent("*¿Cuando se creo el primer lenguaje de programación?*\n\nA finales de 1953, John Backus sometió una propuesta a sus superiores en IBM para desarrollar una alternativa más práctica al lenguaje ensamblador, para programar la computadora central IBM 704. El histórico equipo Fortran de Backus consistió en los programadores Richard Goldberg, Sheldon F. Best, Harlan Herrick, Peter Sheridan, Roy Nutt, Robert Nelson, Irving Ziller, Lois Haibt y David Sayre.");
+                card3.setContent("*¿Cuando se creo java?*\n");
+
                 cardRepository.save(card1);
                 cardRepository.save(card2);
                 cardRepository.save(card3);
@@ -106,14 +111,32 @@ public class DatabaseInitializer {
                 Slide slide1 = new Slide("Concepto");
                 Slide slide2 = new Slide("Tipos");
 
+                slide1.addContent("assert.card/Que/12\n\nassert.card/Cuando/12\n\n");
+                slide2.addContent("* Lenguaje Maquina\n" +
+                        "\n" +
+                        "Es el más primitivo de los códigos y se basa en la numeración binaria, todo en 0 y 1. Este lenguaje es utilizado directamente por máquinas o computadora.\n" +
+                        "\n" +
+                        "* Lenguajes de programación de bajo nivel\n" +
+                        "\n" +
+                        "Es un lenguaje un poco más fácil de interpretar, pero puede variar de acuerdo a la máquina o computadora que se esté programando.\n" +
+                        "\n" +
+                        "* Lenguajes de programación de alto nivel\n" +
+                        "\n" +
+                        "- Primera generación: el lenguaje máquina y el ensamblador.\n" +
+                        "- Segunda generación: aquí encontramos los primeros lenguajes de programación de alto nivel, ejemplos de ellos son FORTRAN, COBOL.\n" +
+                        "- Tercera generación: en esta generación encontramos los lenguajes de programación de alto nivel imperativo, pero mucho más utilizados y vigentes en la actualidad (ALGOL 8, PL/I, PASCAL, MODULA).\n" +
+                        "- Cuarta generación: más cercanos a la época actual, es común encontrarlos en aplicaciones de gestión y manejo de bases de datos (NATURAL, SQL).\n" +
+                        "- Quinta generación: estos son los más avanzados y fueron pensado para la inteligencia artificial y para el procesamiento de lenguajes naturales (LISP, PROLOG).\n" +
+                        "\n");
+
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
 
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
 
-                itinerary1.getSlides().add(slide2);
                 itinerary1.getSlides().add(slide1);
+                itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
   
