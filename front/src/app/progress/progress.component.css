@@ -3,11 +3,7 @@
     display: flex;
     float: right;
   }
-  
-  .unit-header {
-    height: 3rem;
-    background-color: #5382ce;
-    color: white;
-    font-size: 0.8rem;
-  }
-  
+
+#courseName{
+  border: 0;
+}

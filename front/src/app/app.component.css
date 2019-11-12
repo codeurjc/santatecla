@@ -34,6 +34,13 @@
   margin-top: -0.15rem;
 }
 
+#progress-button {
+  position: absolute;
+  top: 0;
+  right: 3%;
+  margin-top: -0.15rem;
+}
+
 .mat-icon {
   padding: 0;
   margin: 0;

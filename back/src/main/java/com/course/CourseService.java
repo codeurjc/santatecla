@@ -27,6 +27,10 @@ public class CourseService {
         courseRepository.deleteById(id);
     }
 
+    public List<Course> findTeachingCourses(long teacherId){
+        return this.courseRepository.findByTeacherId(teacherId);
+    }
+
     public List<Long> findUserCourses(long id){
         return this.courseRepository.findUserCourses(id);
     }

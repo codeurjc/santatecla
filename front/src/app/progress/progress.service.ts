@@ -5,7 +5,7 @@ import { HttpClient} from '@angular/common/http';
 export class ProgressService {
   constructor(private http: HttpClient) {}
 
-  getUnit(id:number){
-    return this.http.get('api/units/'+id);
+  getTeacherCourses(id: number) {
+    return this.http.get('api/course/teacher/' + id);
   }
 }

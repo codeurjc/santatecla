@@ -1,59 +1,20 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <div class="unit-header">
-          <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
-            Fichas
-          </button>
+    <h1 align="center">Seguimiento</h1>
+    <div align="center">
+      Seguimiento del curso: {{this.chosenCourse?.name}}
+      <mat-menu #appMenu="matMenu">
+        <span *ngFor="let course of courses">
+          <button mat-menu-item (click)="chosenCourse = course">{{course.name}}</button>
+        </span>
+      </mat-menu>
 
-          <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
-            Seguimiento
-          </button>
-
-          <div *ngFor="let itinerary of itineraries">
-            <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-              Itinerario {{itinerary.id}}
-            </button>
-          </div>
-        </div>
-
-        <mat-card class="question" *ngFor = "let question of unit?.definitionQuestions">
-            <p>{{question.questionText}}</p>
-            <div style="border: solid; color: gray;">
-                <p>Respuestas Correctas : {{question.totalCorrectAnswers}}</p>
-                <p>Respuestas Incorectas: {{question.totalWrongAnswers}}</p>
-                <span *ngIf= "question.totalWrongAnswers > 0.75 * (question.totalWrongAnswers + question.totalCorrectAnswers)">
-                    <p style="color: red;">CUIDADO REVISAR</p>
-                    <i class="material-icons">warning</i>
-                </span>
-                <p></p>
-            </div>
-        </mat-card>
-
-        <mat-card class="questionList" *ngFor = "let listQuestion of unit?.listQuestions">
-            <p>{{listQuestion.questionText}}</p>
-            <div style="border: solid; color: gray;">
-                <p>Respuestas Correctas: {{listQuestion.totalCorrectAnswers}}</p>
-                <p>Respuestas Incorectas: {{listQuestion.totalWrongAnswers}}</p>
-                <span *ngIf= "listQuestion.totalWrongAnswers > 0.75 * (listQuestion.totalWrongAnswers + listQuestion.totalCorrectAnswers)">
-                    <p style="color: red;">CUIDADO REVISAR</p>
-                    <i class="material-icons">warning</i>
-                </span>
-                <p></p>
-            </div>
-        </mat-card>
-
-        <mat-card class="questionTest" *ngFor = "let testQuestion of unit?.testQuestions">
-          <p>{{testQuestion.questionText}}</p>
-          <div style="border: solid; color: gray;">
-            <p>Respuestas Correctas: {{testQuestion.totalCorrectAnswers}}</p>
-            <p>Respuestas Incorectas: {{testQuestion.totalWrongAnswers}}</p>
-            <span *ngIf= "testQuestion.totalWrongAnswers > 0.75 * (testQuestion.totalWrongAnswers + testQuestion.totalCorrectAnswers)">
-                    <p style="color: red;">CUIDADO REVISAR</p>
-                    <i class="material-icons">warning</i>
-                </span>
-            <p></p>
-          </div>
-        </mat-card>
+      <button mat-icon-button [matMenuTriggerFor]="appMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+    <p> POR UNIDADES </p>
+    <p> POR ALUMNOS </p>
     </body>
 </html>

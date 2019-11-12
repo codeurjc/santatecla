@@ -109,4 +109,8 @@ public class User {
 			}
 		}
 	}
+
+	public void setOpenTabs(ArrayList<TabElement> openTabs) {
+		this.openTabs = openTabs;
+	}
 }

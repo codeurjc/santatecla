@@ -242,17 +242,18 @@ public class DatabaseInitializer {
                 User user2 = new User("David", "alumno");
                 userRepository.save(user1);
                 userRepository.save(user2);
-                userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"));
+                User teacher = new User("profesor", "profesor", "ROLE_ADMIN");
+                userRepository.save(teacher);
 
                 // Courses
-                Course course = new Course("Lenguajes de programación");
+                Course course = new Course("Lenguajes de programación", teacher);
                 course.addStudent(user1);
                 course.addStudent(user2);
                 course.addUnit(unit1);
                 course.addUnit(unit2);
                 courseRepository.save(course);
 
-                Course course2 = new Course("Curso de Java");
+                Course course2 = new Course("Curso de Java", teacher);
                 course2.addStudent(user1);
                 course2.addUnit(unit1);
                 courseRepository.save(course2);

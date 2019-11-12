@@ -35,6 +35,11 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
+    @GetMapping(value="/teacher/{id}")
+    public ResponseEntity<List<Course>> getTeacherCourses(@PathVariable long id){
+        return new ResponseEntity<>(this.courseService.findTeachingCourses(id), HttpStatus.OK);
+    }
+
     @GetMapping(value="/{id}")
     public ResponseEntity<Course> getCourse(@PathVariable long id){
         Optional<Course> optional = this.courseService.findOne(id);

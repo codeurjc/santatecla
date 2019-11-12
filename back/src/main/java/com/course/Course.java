@@ -21,15 +21,19 @@ public class Course {
     @ManyToMany
     private List<User> students;
 
+    @ManyToOne
+    private User teacher;
+
     public Course(){
         this.units = new ArrayList<>();
         this.students = new ArrayList<>();
     }
 
-    public Course(String name){
+    public Course(String name, User teacher){
         this.units = new ArrayList<>();
         this.students = new ArrayList<>();
         this.name = name;
+        this.teacher = teacher;
     }
 
     public void addUnit(Unit unit){
@@ -56,6 +60,10 @@ public class Course {
         return students;
     }
 
+    public User getTeacher() {
+        return teacher;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -70,5 +78,9 @@ public class Course {
 
     public void setStudents(List<User> students) {
         this.students = students;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
     }
 }
