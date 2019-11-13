@@ -4,7 +4,7 @@ import { CardService } from './card.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Card } from './card.model';
-import { UnitService } from '../unit/unit.service';
+import { ViewService } from '../view/view.service';
 
 @Component({
   templateUrl: './card.component.html',
@@ -21,12 +21,12 @@ export class CardComponent implements OnInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private cardService: CardService,
-              private unitService: UnitService) {}
+              private viewService: ViewService) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params['unitId'];
-      this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
+      this.viewService.getUnit(this.unitId).subscribe((data: Unit) => {
         this.unit = {
           id: data['id'],
           name: data['name'],

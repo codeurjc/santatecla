@@ -42,6 +42,7 @@ import { QuestionService } from './question/question.service';
 import { TestQuestionComponent } from './question/testQuestion/testQuestion.component';
 import { TestQuestionService } from './question/testQuestion/testQuestion.service';
 import { RelationService } from './relation/relation.service';
+import { ViewService } from "./view/view.service";
 
 @NgModule({
   declarations: [
@@ -104,7 +105,7 @@ import { RelationService } from './relation/relation.service';
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, UnitService, TestQuestionService, RelationService,
+    ProgressService, ViewService, TestQuestionService, RelationService, UnitService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
