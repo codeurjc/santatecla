@@ -12,6 +12,7 @@ import {TestQuestionService} from './testQuestion/testQuestion.service';
 import {Unit} from '../unit/unit.model';
 import {ViewService} from '../view/view.service';
 import {Itineray} from '../itinerary/itinerary.model';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   templateUrl: './question.component.html',
@@ -30,8 +31,8 @@ export class QuestionComponent implements OnInit {
   testQuestion: TestQuestion;
   subtype: string;
 
-  possibleAnswers: string[];
-  correctAnswers: string[];
+  possibleAnswers: Map<string, boolean>;
+  correct: boolean;
 
   unit: Unit;
   unitId: number;
@@ -50,6 +51,7 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {
     this.subtype = 'DefinitionQuestion';
     this.questions = [];
+    this.possibleAnswers = new Map();
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params['unitId'];
     });
@@ -93,14 +95,22 @@ export class QuestionComponent implements OnInit {
   }
 
   sendListQuestion(text: string) {
+    let ca = [];
+    this.possibleAnswers.forEach((value: boolean, key: string) => {
+      if (value) {
+        ca = ca.concat(key);
+      }
+    });
     this.listQuestion = {
       questionText: text,
       subtype: 'ListQuestion',
-      possibleAnswers: this.possibleAnswers,
-      correctAnswers: this.correctAnswers
+      possibleAnswers: Array.from(this.possibleAnswers.keys()),
+      correctAnswers: ca
     };
     this.viewService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
-      (_) => {},
+      (_) => {
+        this.ngOnInit();
+      },
       (error) => console.log(error)
     );
   }
@@ -117,9 +127,9 @@ export class QuestionComponent implements OnInit {
     );
   }
 
-  /*addPossibleAnswer(answer: string) {
-    this.possibleAnswers.concat(answer);
-  }*/
+  addPossibleAnswer(answer: string) {
+    this.possibleAnswers = this.possibleAnswers.set(answer, this.correct);
+  }
 
   navigateToUnitCards() {
     this.router.navigate(['/units/' + this.unitId + '/cards']);

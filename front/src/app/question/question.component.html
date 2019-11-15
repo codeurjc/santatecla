@@ -60,18 +60,19 @@
             required
           />
           <br>
-          <!--<input  placeholder="Respuestas posibles" #pAnswersInput type="text" name="question"/>
+          <input  placeholder="Respuesta posible" #pAnswerInput type="text" name="question"/>
+          <input type="checkbox" name="correct" [(ngModel)]="correct" value="false"> Correcta
            <button class="button" color="primary"
-                   (click)="addPossibleAnswer(pAnswersInput.value)">
+                   (click)="addPossibleAnswer(pAnswerInput.value); pAnswerInput.value=''">
             Añadir
            </button>
           <br>
-          <input  placeholder="Respuestas correctas" #cAnswersInput type="text" name="question"/>
-          -->
+          <!--<input  placeholder="Respuestas correctas" #cAnswersInput type="text" name="question"/>-->
         </form>
+        <div *ngFor="let answer of possibleAnswers.keys()">{{answer}}<br></div>
         <button class="button" color="primary"
                 (click)="sendListQuestion(questionInput.value);
-                questionInput.value=''; pAnswersInput.value=''; cAnswersInput=''">
+                questionInput.value=''; pAnswerInput.value=''">
           Guardar
         </button>
       </span>
