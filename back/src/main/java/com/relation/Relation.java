@@ -25,6 +25,7 @@ public class Relation {
     public Relation() {}
 
     public Relation(RelationType relationType, Long incoming, Long outgoing) {
+        this();
         this.relationType = relationType;
         this.incoming = incoming;
         this.outgoing = outgoing;

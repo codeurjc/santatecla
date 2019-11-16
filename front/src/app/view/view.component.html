@@ -3,15 +3,11 @@
   <body>
 
     <div id="json-editor-container">
-      <json-editor [options]="editorOptions" [(ngModel)]="data" (change)="updateJson(true)"></json-editor>
+      <json-editor [options]="editorOptions" [(ngModel)]="data"></json-editor>
     </div>
 
-    <button id="save-button" mat-icon-button color="primary" [disabled]="!validChange" (click)="save()">
+    <button id="save-button" mat-icon-button color="primary" [disabled]="!changed" (click)="save()">
       <mat-icon>save</mat-icon>
-    </button>
-
-    <button id="up-button" mat-icon-button color="primary" [disabled]="disableUpButton" (click)="upLevelAbove()">
-      <mat-icon>keyboard_arrow_up</mat-icon>
     </button>
 
     <mat-form-field appearance="outline" id="search">

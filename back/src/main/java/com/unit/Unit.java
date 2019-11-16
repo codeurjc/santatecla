@@ -109,7 +109,19 @@ public class Unit {
     }
 
     public void addIncomingRelation(Relation incomingRelation) {
-        this.incomingRelations.add(incomingRelation);
+        if (!this.incomingRelations.contains(incomingRelation)) {
+            int index = 0;
+            for (Relation relation : this.incomingRelations) {
+                if (Relation.compareType(incomingRelation.getRelationType(), relation.getRelationType()) <= 0) {
+                    index++;
+                    break;
+                }
+            }
+            ArrayList<Relation> sublist = new ArrayList<>(this.incomingRelations.subList(index, this.incomingRelations.size()));
+            this.incomingRelations.removeAll(sublist);
+            this.incomingRelations.add(incomingRelation);
+            this.incomingRelations.addAll(sublist);
+        }
     }
 
     public List<Relation> getOutgoingRelations() {
@@ -158,21 +170,6 @@ public class Unit {
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    public void update(Unit unit) {
-        this.name = unit.getName();
-        this.incomingRelations.clear();
-        for (Relation relation : unit.incomingRelations) {
-            if (relation.getId() > 0) {
-                addIncomingRelation(relation);
-            }
-        }
-        for (Relation relation : unit.outgoingRelations) {
-            if (relation.getId() > 0) {
-                addOutgoingRelation(relation);
-            }
-        }
     }
 
     public List<TestQuestion> getTestQuestions() {

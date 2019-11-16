@@ -104,4 +104,14 @@ public class UnitService {
 		return findOne(unit.getOutgoingRelations().get(0).getIncoming()).get();
 	}
 
+	public String getAbsoluteName(Unit unit) {
+		Unit parent = unit;
+		String absoluteName = "";
+		while (parent != null) {
+			absoluteName = this.UNIT_NAME_SEPARATOR + parent.getName()  + absoluteName;
+			parent = getParent(parent);
+		}
+		return absoluteName;
+	}
+
 }

@@ -10,6 +10,8 @@ import com.itinerary.Itinerary;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.relation.Relation;
+import com.relation.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,6 +35,9 @@ public class UnitRestController extends GeneralRestController {
     @Autowired
     protected UnitService unitService;
 
+    @Autowired
+    protected RelationService relationService;
+
 	@Autowired
     protected CardService cardService;
 
@@ -51,22 +56,60 @@ public class UnitRestController extends GeneralRestController {
         }
     }
 
-    @PutMapping(value="/")
-    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
-        Unit savedUnit;
-        if (!this.unitService.findOne(unit.getId()).isPresent()) {
-            savedUnit = new Unit();
-        } else {
-            Optional<Unit> u = this.unitService.findOne(unit.getId());
-            if (u.isPresent()) {
-                savedUnit = u.get();
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-        savedUnit.update(unit);
+    @PostMapping(value="/")
+    public ResponseEntity<Unit> createUnit(@RequestBody Unit unit) {
+        Unit savedUnit = new Unit();
+        updateUnit(savedUnit, unit);
         this.unitService.save(savedUnit);
         return new ResponseEntity<>(savedUnit, HttpStatus.OK);
+    }
+
+    @PutMapping(value="/")
+    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
+        Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
+        if (savedUnit.isPresent()) {
+            updateUnit(savedUnit.get(), unit);
+            this.unitService.save(savedUnit.get());
+            return new ResponseEntity<>(savedUnit.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private void updateUnit(Unit savedUnit, Unit unit) {
+        savedUnit.setName(unit.getName());
+        for (Relation relation : unit.getIncomingRelations()) {
+            if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
+                if (relation.getId() > 0) {
+                    savedUnit.addIncomingRelation(relation);
+                } else {
+                    Relation r;
+                    Optional<Relation> relationByIncomingAndOutgoing = relationService.findRelationByIncomingAndOutgoing(relation.getIncoming(), relation.getOutgoing());
+                    r = relationByIncomingAndOutgoing.orElseGet(() -> new Relation(relation.getRelationType(), relation.getIncoming(), relation.getOutgoing()));
+                    relationService.save(r);
+                    savedUnit.addIncomingRelation(r);
+                }
+            }
+        }
+        for (Relation relation : unit.getOutgoingRelations()) {
+            if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
+                if (relation.getId() > 0) {
+                    savedUnit.addOutgoingRelation(relation);
+                } else {
+                    Relation r;
+                    Optional<Relation> relationByIncomingAndOutgoing = relationService.findRelationByIncomingAndOutgoing(relation.getIncoming(), relation.getOutgoing());
+                    r = relationByIncomingAndOutgoing.orElseGet(() -> new Relation(relation.getRelationType(), relation.getIncoming(), relation.getOutgoing()));
+                    relationService.save(r);
+                    savedUnit.addOutgoingRelation(r);
+                }
+            }
+        }
+    }
+
+    @GetMapping(value="/{id}/absoluteName")
+    public ResponseEntity<Unit> getUnitAbsoluteName(@PathVariable int id) {
+        Optional<Unit> unit = this.unitService.findOne(id);
+        return unit.map(value -> new ResponseEntity<>(new Unit(unitService.getAbsoluteName(value)), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(value="/search/{name}")

@@ -15,6 +15,10 @@ public class RelationService {
 		return relationRepository.findById(id);
 	}
 
+	public Optional<Relation> findRelationByIncomingAndOutgoing(Long incoming, Long outgoing) {
+		return relationRepository.findRelationByIncomingAndOutgoing(incoming, outgoing);
+	};
+
 	public void save(Relation relation) {
 		relationRepository.save(relation);
 	}

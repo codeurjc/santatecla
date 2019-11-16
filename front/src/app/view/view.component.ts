@@ -5,7 +5,6 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
-import { RelationService } from "../relation/relation.service";
 
 declare var mermaid: any;
 
@@ -28,24 +27,20 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
   private editorOptions: JsonEditorOptions;
-
-  private data;
-  private relations = new Map<string, Relation>();
-  private relationIds = new Map<string, string>();
+  private data = {
+    units: [],
+    relations: []
+  };
 
   private units: Map<string, Unit> = new Map<string, Unit>();
-  private changedUnits: Map<string, Unit> = new Map<string, Unit>();
-
-  private unitAbove: Unit;
-  private disableUpButton = false;
+  private relations = new Map<string, Relation>();
+  private loadingUnits = 0;
 
   private newUnitId = 0;
   private newRelationId = 0;
 
-  private validChange = false;
+  private changed = false;
   private showSpinner = false;
-
-  private visited = new Set<number>();
 
   @ViewChild('uml') umlDiv;
 
@@ -54,17 +49,15 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private showUmlNodeOptions = false;
   private showGoToUnit = true;
 
-  private focusedUnit: Unit;
 
 
-
-  constructor(private router: Router, private unitService: UnitService, private relationService: RelationService) {}
+  constructor(private router: Router, private unitService: UnitService) {}
 
   ngOnInit() {
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
-    this.initialize();
+    this.getUnit(15);
   }
 
   ngAfterContentInit() {
@@ -81,305 +74,166 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     window.document.body.style.overflow = 'auto';
   }
 
-  private initialize() {
-    this.unitService.getUnits().subscribe((units: Unit[]) => {
-      units.forEach((unit: Unit) => {
-        this.addUnit(unit);
-        unit.incomingRelations.forEach((relation: Relation) => {
-          this.addRelation(relation.id, relation);
-        });
-        unit.outgoingRelations.forEach((relation: Relation) => {
-          this.addRelation(relation.id, relation);
-        });
-      });
-
-      this.focusUnit(15);
-
-    });
-  }
-
-  private addRelation(id: string, relation: Relation) {
-    if (!this.relationIds.get(this.getRelationHash(relation))) {
-      this.relations.set(id.toString(), relation);
-      this.relationIds.set(this.getRelationHash(relation), id.toString());
-    }
-  }
-
-  private addUnit(data: Unit) {
-    this.units.set(data.id.toString(), {
-      id: data.id.toString(),
-      name: data.name,
-      incomingRelations: data.incomingRelations,
-      outgoingRelations: data.outgoingRelations
-    });
-  }
 
 
+  // Data
 
-  // Data (json)
-
-  private focusUnit(id: number) {
-    this.emptyResults();
+  private getUnit(id: number) {
     this.showSpinner = true;
-    this.focusedUnit = this.getUnitById(id.toString());
-    this.setData(this.focusedUnit, false);
-    this.unitAbove = this.focusedUnit;
-    this.disableUpButton = false;
-    this.upLevelAbove();
-    this.showSpinner = false;
+    this.units.clear();
+    this.relations.clear();
+    this.loadingUnits = 0;
+    this.getUnitAndUpdateUml(id);
   }
 
-  private setData(data: Unit, changed: boolean) {
-    this.data = {
-      units: [],
-      relations: []
-    };
-    this.relations = new Map();
-    this.visited = new Set<number>();
-    this.getIncomingRelations(data);
-    this.getOutgoingRelations(data);
-    this.updateJson(changed);
-  }
+  private getUnitAndUpdateUml(id: number) {
+    this.loadingUnits--;
+    this.unitService.getUnit(id).subscribe((data: Unit) => {
+      this.addUnit(data);
+      this.loadingUnits += data.incomingRelations.length + 1;
+      data.incomingRelations.forEach((relation: Relation) => {
+        this.loadingUnits--;
+        const id = relation.id.toString();
+        if (!this.getRelationById(id)) {
+          const outgoing = relation.outgoing.toString();
+          if (!this.getUnitById(outgoing)) {
+            this.getUnitAndUpdateUml(+outgoing);
+          }
+          this.addRelation(relation);
+        }
+      });
+      /*data.outgoingRelations.forEach((relation: Relation) => {
+        const incoming = relation.incoming.toString();
+        const id = relation.id.toString();
+        if (!this.getRelationById(id)) {
+          if (!this.getUnitById(incoming)) {
+            this.getUnitAndUpdateUml(+incoming);
+          }
+          this.addRelation(relation);
+        }
+      });*/
+      if (this.loadingUnits === 0) {
+        this.updateUml();
+        this.emptyResults();
+        this.showSpinner = false;
 
-  private getIncomingRelations(data: Unit) {
-    this.visited.add(+data.id);
-    this.data.units.push(new VisibleUnit(data.id, this.getAbsoluteName(data)))
-    data.incomingRelations.forEach((relation: any) => {
-      const outgoing = relation.outgoing;
-      let key = relation.id;
-      if (!key) {
-        key = this.getNewRelationId();
+        let i = 0;
+        this.units.forEach((unit: Unit) => {
+          this.unitService.getAbsoluteName(+unit.id).subscribe((u: Unit) => {
+            this.data.units.push(new VisibleUnit(data.id, u.name));
+
+            i++;
+            if (i === this.units.size) {
+              this.relations.forEach((relation: Relation) => {
+                this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming, relation.outgoing));
+              });
+              this.editor.data = this.data;
+            }
+
+          }, error => {
+            console.log(error);
+          });
+        });
+
       }
-      if (!this.relations.get(key)) {
-        this.addRelation(key, relation);
-        this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming.toString(), outgoing.toString()));
-      }
-      if (!this.visited.has(+outgoing)) {
-        this.getIncomingRelations(this.getUnitById(outgoing));
-      }
+    }, error => {
+      console.log(error);
     });
   }
 
-  private getOutgoingRelations(data: any) {
-    this.visited.add(+data.id);
-    if (data.outgoingRelations.length < 0) {
-      const relation = data.outgoingRelations[0];
-      let key = relation.id;
-      if (!key) {
-        key = this.getNewRelationId();
-      }
-      this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming.toString(), relation.outgoing.toString()));
-      this.addRelation(key, relation);
-      if (!this.visited.has(+relation.incoming)) {
-        this.getOutgoingRelations(this.getUnitById(relation.incoming));
-      }
-    }
-  }
-
-  private upLevelAbove() {
-    if (this.unitAbove.outgoingRelations[0]) {
-      this.unitAbove.outgoingRelations.forEach((relation: Relation) => {
-        this.data.units.push(new VisibleUnit(relation.incoming.toString(), this.getAbsoluteName(this.getUnitById(relation.incoming.toString()))));
-        this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming.toString(), relation.outgoing.toString()));
-        this.editor.data = this.data;
-        this.unitAbove = this.getParent(this.unitAbove);
-        if (!this.getParent(this.unitAbove)) {
-          this.disableUpButton = true;
-        }
-
-      });
-      this.updateJson(false);
-    } else {
-      this.disableUpButton = true;
-    }
-  }
-
-  private getParent(unit: Unit): Unit {
-    if (unit.outgoingRelations[0]) {
-      return this.units.get(unit.outgoingRelations[0].incoming.toString());
-    } else {
-      return null;
-    }
-  }
-
-  getAbsoluteName(unit: Unit): string {
-    if (unit) {
-      return this.getAbsoluteName(this.getParent(unit)) + this.UNIT_NAME_SEPARATOR + unit.name;
-    } else {
-      return '';
-    }
-  }
-
-  private getRelationHash(relation: Relation): string {
-    return relation.relationType + '-' + relation.incoming + '-' + relation.outgoing;
+  private addUnit(unit: Unit) {
+    this.units.set(unit.id.toString(), unit);
   }
 
   private getUnitById(id: string): Unit {
-    id = id.toString();
-    let unit = this.units.get(id);
-    if (unit) {
-      return unit;
-    } else {
-      unit = this.changedUnits.get(id);
-      if (unit) {
-        return unit;
-      } else {
-        return null;
-      }
-    }
+    return this.units.get(id);
   }
 
-  private getUnitId(unitAbsoluteName: string): string {
-    // TODO upload algorithm
-    let id: string;
-    let found = false;
-    this.changedUnits.forEach((unit) => {
-      if ((!found) && (this.getAbsoluteName(unit) === unitAbsoluteName)) {
-        found = true;
-        id = unit.id;
-      }
-    });
-    if (!found) {
-      this.units.forEach((unit) => {
-        if ((!found) && (this.getAbsoluteName(unit) === unitAbsoluteName)) {
-          found = true;
-          id = unit.id;
-        }
-      });
-    }
-    return id;
+  private addRelation(relation: Relation) {
+    this.relations.set(relation.id.toString(), relation);
+  }
+
+  private getRelationById(id: string): Relation {
+    return this.relations.get(id);
   }
 
   private getNewUnitId() {
-    return this.newUnitId++;
+    return '0' + this.newUnitId++;
   }
 
   private getNewRelationId(): string {
     return '0' + this.newRelationId++;
   }
 
-  private updateJson(changed: boolean) {
-    const isValidJson = this.isValidJson();
-    this.validChange = (changed && isValidJson);
-    if (isValidJson) {
-      this.updateUml();
+  private save() {
+    if (this.changed) {
+      this.changed = false;
+      this.showSpinner = true;
+      this.saveAll();
     }
   }
 
-  private isValidJson(): boolean {
-    return ((this.validRelations()) && (this.editor.isValidJson()));
-  }
+  private saveAll() {
+    let i = 0;
+    let createdUnits = 0;
+    this.units.forEach((unit: Unit) => {
+      i++;
 
-  private validRelations(): boolean {
-    let valid = true;
-    this.data.relations.forEach((relation: VisibleRelation) => {
-      if ((valid) && (Object.values(RelationType).indexOf(relation.relationType) === -1)) {
-        valid = false;
+      if (unit.id.toString().substring(0, 1) === '0') {
+        createdUnits++;
+        const unitToSave = {
+          id: unit.id,
+          name: unit.name,
+          outgoingRelations: unit.outgoingRelations,
+          incomingRelations: unit.incomingRelations,
+          itineraries: [],
+          definitionQuestions: [],
+          listQuestions: [],
+          testQuestions: []
+        };
+        unitToSave.id = '0';
+        this.unitService.createUnit(unitToSave).subscribe((data: Unit) => {
+
+          unit.id = data.id;
+          unit.name = data.name;
+          unit.incomingRelations.forEach((relation: Relation) => {
+            relation.incoming = data.id.toString();
+          });
+          unit.outgoingRelations.forEach((relation: Relation) => {
+            relation.outgoing = data.id.toString();
+          });
+
+          if (i === this.units.size) {
+            this.saveUnitsAndRelations();
+          }
+        }, error => {
+          console.log(error);
+        });
       }
     });
-    return valid;
-  }
-
-  private save() {
-    if (this.validChange) {
-      this.showSpinner = true;
-      if (this.changedUnits.size > 0) {
-        this.saveUnitsAndRelations();
-      } else {
-        this.saveRelations();
-      }
+    if (createdUnits === 0) {
+      this.saveUnitsAndRelations();
     }
   }
 
   private saveUnitsAndRelations() {
     let i = 0;
-    this.changedUnits.forEach((unit: Unit) => {
-      this.unitService.saveUnit(unit).subscribe((data: Unit) => {
-        unit.id = data.id.toString();
-        this.addUnit(unit);
-
-        i++;
-        if (i === this.changedUnits.size) {
-          this.saveRelations();
-        }
-      }, error => {
-        console.log(error);
-      });
-    });
-  }
-
-  private saveRelations() {
-
-    const visibleUnits = new Map<number, Unit>();
-    const newIncomingRelations = new Map<number, Relation[]>();
-    const newOutgoingRelations = new Map<number, Relation[]>();
-
-    let i = 0;
-    this.data.relations.forEach((visibleRelation: VisibleRelation) => {
-      const relation: Relation = {
-        id: null,
-        relationType: visibleRelation.relationType,
-        incoming: this.getUnitId(visibleRelation.incoming),
-        outgoing: this.getUnitId(visibleRelation.outgoing)
+    this.units.forEach((unit: Unit) => {
+      const unitToSave = {
+        id: unit.id,
+        name: unit.name,
+        outgoingRelations: unit.outgoingRelations,
+        incomingRelations: unit.incomingRelations,
+        itineraries: [],
+        definitionQuestions: [],
+        listQuestions: [],
+        testQuestions: []
       };
-      const relationId = this.relationIds.get(this.getRelationHash(relation));
-      if ((relationId) && (relationId.toString().substring(0, 1) !== '0')) {
-        relation.id = relationId;
-      } else {
-        relation.id = '0';
-      }
-
-      this.relationService.saveRelation(relation).subscribe((data: Relation) => {
-
-        const incoming = this.getUnitById(data.incoming);
-        const outgoing = this.getUnitById(data.outgoing);
-        const newIncomingRelation = newIncomingRelations.get(+incoming.id);
-        if (!newIncomingRelation) {
-          newIncomingRelations.set(+incoming.id, [data]);
-        } else {
-          newIncomingRelation.push(data);
-        }
-        const newOutgoingRelation = newOutgoingRelations.get(+outgoing.id);
-        if (!newOutgoingRelation) {
-          newOutgoingRelations.set(+outgoing.id, [data]);
-        } else {
-          newOutgoingRelation.push(data);
-        }
-
-        visibleUnits.set(+incoming.id, incoming);
-        visibleUnits.set(+outgoing.id, outgoing);
-
+      this.unitService.saveUnit(unitToSave).subscribe(() => {
         i++;
-        if (i === this.data.relations.length) {
-
-          newIncomingRelations.forEach((relations: Relation[], key: number) => {
-            const unit = visibleUnits.get(+key);
-            unit.incomingRelations = relations;
-          });
-          newOutgoingRelations.forEach((relations: Relation[], key: number) => {
-            const unit = visibleUnits.get(+key);
-            unit.outgoingRelations = relations;
-          });
-
-          let j = 0;
-          visibleUnits.forEach((unit: Unit) => {
-            this.unitService.saveUnit(unit).subscribe((data: Unit) => {
-              this.getUnitById(data.id.toString()).name = data.name;
-              this.getUnitById(data.id.toString()).incomingRelations = data.incomingRelations;
-              this.getUnitById(data.id.toString()).outgoingRelations = data.outgoingRelations;
-
-              j++;
-              if (j === visibleUnits.size) {
-                this.changedUnits.clear();
-                this.setData(this.focusedUnit, false);
-                this.showSpinner = false;
-                this.validChange = false;
-              }
-
-            }, error => {
-              console.log(error);
-            });
-          });
+        if (i === this.units.size) {
+          this.getUnit(15);
+          this.updateUml();
         }
       }, error => {
         console.log(error);
@@ -389,17 +243,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
 
-  // Data (uml)
+  // Uml
 
   private updateUml() {
     const element: any = this.umlDiv.nativeElement;
     element.innerHTML = '';
     try {
-      const uml = this.jsonToUml(this.data.relations);
+      const uml = this.parseUml(this.relations);
       mermaid.render('uml', uml, (svgCode, bindFunctions) => {
         element.innerHTML = svgCode;
         if (this.showUmlNodeOptions) {
-          this.selectedTarget = this.findUnitTarget(this.selectedTarget.id.toString().substring(1, this.selectedTarget.id.length));
+          this.selectedTarget = this.findUnitTarget(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
           this.drawUmlNodeOptions();
         }
       });
@@ -409,28 +263,34 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private updateUnitName() {
-    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(1, this.selectedTarget.id.length));
+    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
     selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
-    this.units.delete(selectedUnit.id);
-    this.changedUnits.set(selectedUnit.id, selectedUnit);
-    this.setData(this.focusedUnit, true);
+    this.updateUml();
     this.setShowUmlNodeOptions(false);
+    this.changed = true;
   }
 
   private createRelation(relationType): Unit {
-    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(1, this.selectedTarget.id.length));
+    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
     const newUnitName = 'Nueva unidad';
     const newUnit: Unit = {
-      id: '0' + this.getNewUnitId(),
+      id: this.getNewUnitId().toString(),
       name: newUnitName,
       incomingRelations: [],
       outgoingRelations: []
     };
-    const newRelation = new VisibleRelation(relationType, this.selectedTarget.id.toString().substring(1, this.selectedTarget.id.length), newUnit.id.toString());
+    const newRelation: Relation = {
+      id: this.getNewRelationId().toString(),
+      relationType,
+      incoming: this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length),
+      outgoing: newUnit.id.toString()
+    };
     newUnit.outgoingRelations.push(newRelation);
-    this.changedUnits.set(newUnit.id.toString(), newUnit);
+    this.addUnit(newUnit);
     selectedUnit.incomingRelations.push(newRelation);
-    this.setData(this.focusedUnit, true);
+    this.addRelation(newRelation);
+    this.updateUml();
+    this.changed = true;
     return newUnit;
   }
 
@@ -439,7 +299,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     let target: HTMLInputElement = null;
     this.umlDiv.nativeElement.firstChild.childNodes.forEach((childNode) => {
       const firstChild = childNode.firstChild as HTMLInputElement;
-      if ((!found) && (firstChild) && (firstChild.id) && (firstChild.id.toString().substring(1, firstChild.id.length) === id.toString())) {
+      if ((!found) && (firstChild) && (firstChild.id) && (firstChild.id.toString().substring(0, firstChild.id.length) === id.toString())) {
         target = firstChild;
         found = true;
       }
@@ -448,7 +308,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private drawUmlNodeOptions() {
-    this.showGoToUnit = (this.selectedTarget.id.toString().substring(1, 2) !== '0');
+    this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
     const input = this.umlNodeOptions.nativeElement.firstChild;
     input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
     input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
@@ -487,7 +347,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
     // Search
     if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
-      this.focusUnit(+this.results[this.arrowKeyLocation].id);
+      this.getUnit(+this.results[this.arrowKeyLocation].id);
     } else if ((target.attributes) && (target.attributes['class']) &&
       ((target.attributes['class'].nodeValue === 'mat-form-field-flex') ||
         (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
@@ -585,7 +445,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private keyDown(event: KeyboardEvent) {
     if ((event.key === this.ENTER_KEY) && (this.results.length > 0)) {
-      this.focusUnit(+this.results[this.arrowKeyLocation].id);
+      this.getUnit(+this.results[this.arrowKeyLocation].id);
     } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowKeyLocation > 0)) {
       this.arrowKeyLocation--;
     } else if ((event.key === this.ARROW_DOWN_KEY) && (this.arrowKeyLocation < (this.results.length - 1))) {
@@ -618,12 +478,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // Uml parser
 
-  private jsonToUml(json: any) {
-    const relations = this.getRelationsDiagram(json);
-    if (relations === '') {
+  private parseUml(relations: any) {
+    const parsedRelations = this.getRelationsDiagram(relations);
+    if (parsedRelations === '') {
       throw new Error('Invalid data. Unable to display uml');
     } else {
-      return 'classDiagram\n' + relations;
+      return 'classDiagram\n' + parsedRelations;
     }
   }
 
@@ -645,15 +505,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private parseUnitName(id: string): string {
-    let name = '';
-    if (id === this.focusedUnit.id) {
-      name = 'f' + id;
-    } else {
-      name = 'd' + id;
-    }
-    name += this.getAbsoluteName(this.getUnitById(id.toString()));
-    if ((id.toString().substring(0, 1) === '0') && (id.toString() !== '00')) {
-      name += ' (' + (+id) + ')';
+    let name = id;
+    const unit = this.getUnitById(id);
+    if (unit) {
+      name += unit.name;
     }
     return name;
   }
