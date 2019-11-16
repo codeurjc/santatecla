@@ -33,6 +33,7 @@ export class QuestionComponent implements OnInit {
 
   possibleAnswers: Map<string, boolean>;
   correct: boolean;
+  correctTestAnswerSelected: boolean;
 
   unit: Unit;
   unitId: number;
@@ -52,6 +53,8 @@ export class QuestionComponent implements OnInit {
     this.subtype = 'DefinitionQuestion';
     this.questions = [];
     this.possibleAnswers = new Map();
+    this.correct = false;
+    this.correctTestAnswerSelected = false;
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params['unitId'];
     });
@@ -116,19 +119,39 @@ export class QuestionComponent implements OnInit {
   }
 
   sendTestQuestion(text: string) {
+    let ca = [];
+    this.possibleAnswers.forEach((value: boolean, key: string) => {
+      if (value) {
+        ca = ca.concat(key);
+      }
+    });
     this.testQuestion = {
       questionText: text,
       subtype: 'TestQuestion',
-      possibleAnswers: ['TODO']
+      possibleAnswers: Array.from(this.possibleAnswers.keys()),
+      correctAnswer: ca[0]
     };
     this.viewService.addUnitTestQuestion(this.unitId, this.testQuestion).subscribe(
-      (_) => {},
+      (_) => {
+        this.ngOnInit();
+      },
       (error) => console.log(error)
     );
   }
 
   addPossibleAnswer(answer: string) {
     this.possibleAnswers = this.possibleAnswers.set(answer, this.correct);
+  }
+
+  addPossibleTestAnswer(answer: string) {
+    if (!this.correctTestAnswerSelected && this.correct) {
+      this.possibleAnswers.set(answer, true)
+      this.correctTestAnswerSelected = true;
+    } else if (!this.correctTestAnswerSelected && !this.correct) {
+      this.possibleAnswers.set(answer, false);
+    } else {
+      this.possibleAnswers.set(answer, false);
+    }
   }
 
   navigateToUnitCards() {
