@@ -106,16 +106,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         }
       });
 
-      /*data.outgoingRelations.forEach((relation: Relation) => {
-        const incoming = relation.incoming.toString();
-        const id = relation.id.toString();
-        if (!this.getRelationById(id)) {
-          if (!this.getUnitById(incoming)) {
-            this.getUnitAndUpdateUml(+incoming);
-          }
-          this.addRelation(relation);
-        }
-      });*/
       if (this.remainingUnits === 0) {
         this.updateUml();
         this.emptyResults();
@@ -311,11 +301,14 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private drawUmlNodeOptions() {
     this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
     const input = this.umlNodeOptions.nativeElement.firstChild;
-    input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
+    const padding = '0.5rem';
+    input.style.left = 'calc(' + (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px + ' + padding + ')';
+    input.style.width = 'calc(' + (this.selectedTarget.getBoundingClientRect().width) + 'px - ' + padding + ' - ' + padding + ')';
     input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
-    input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
     input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
-    input.value = (this.selectedTarget.nextSibling as HTMLInputElement).innerHTML;
+    const text = (this.selectedTarget.nextSibling as HTMLInputElement);
+    if (text.innerHTML) { input.value = text.innerHTML; }
+    text.innerHTML = '';
     input.focus();
     input.setSelectionRange(0, input.value.length);
     const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
@@ -327,8 +320,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.showUmlNodeOptions) {
       this.drawUmlNodeOptions();
     } else {
-      this.umlNodeOptions.nativeElement.firstChild.style.top = '100%';
-      this.umlNodeOptions.nativeElement.lastChild.style.top = '100%';
+      this.umlNodeOptions.nativeElement.firstChild.style.top = '120%';
+      this.umlNodeOptions.nativeElement.lastChild.style.top = '120%';
     }
   }
 
@@ -404,6 +397,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else if (target.id === 'use-outgoing-button') {
 
     } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
+      if (this.showUmlNodeOptions) {
+        this.updateUnitName();
+      }
       this.setShowUmlNodeOptions(false);
       this.updateUmlNodeOptions();
     }
