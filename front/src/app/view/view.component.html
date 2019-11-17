@@ -25,13 +25,11 @@
 
     <div #uml [hidden]="showSpinner"></div>
 
-    <div #umlNodeOptions [hidden]="!showUmlNodeOptions" (window:resize)="updateUmlNodeOptions()">
-
+    <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">
-
       <div id="uml-node-options">
         <div *ngIf="showGoToUnit">
-          <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id.toString().substring(1, selectedTarget.id.toString().length))">
+          <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id.toString().substring(0, selectedTarget.id.toString().length))">
             <mat-icon class="uml-option-icon">call_made</mat-icon>
           </button>
           <br>
@@ -51,7 +49,6 @@
         <button><img id="use-incoming-button" src="../../assets/img/add-use-incoming.png" height="15"></button>
         <button><img id="use-outgoing-button" src="../../assets/img/add-use-outgoing.png" height="15"></button>
       </div>
-
     </div>
 
   </body>

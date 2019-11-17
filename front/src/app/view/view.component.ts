@@ -256,10 +256,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       const uml = this.parseUml(this.relations);
       mermaid.render('uml', uml, (svgCode, bindFunctions) => {
         element.innerHTML = svgCode;
-        if (this.showUmlNodeOptions) {
-          this.selectedTarget = this.findUnitTarget(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
-          this.drawUmlNodeOptions();
-        }
+        this.updateUmlNodeOptions();
       });
     } catch (error) {
       console.log(error);
@@ -269,8 +266,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private updateUnitName() {
     const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
     selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
-    this.updateUml();
     this.setShowUmlNodeOptions(false);
+    this.updateUml();
     this.changed = true;
   }
 
@@ -312,24 +309,26 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private drawUmlNodeOptions() {
-    if (this.showUmlNodeOptions) {
-      this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
-      const input = this.umlNodeOptions.nativeElement.firstChild;
-      input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
-      input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
-      input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
-      input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
-      input.value = (this.selectedTarget.nextSibling as HTMLInputElement).innerHTML;
-      input.setSelectionRange(0, input.value.length);
-      const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
-      optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
-      optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
-    }
+    this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
+    const input = this.umlNodeOptions.nativeElement.firstChild;
+    input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
+    input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
+    input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
+    input.value = (this.selectedTarget.nextSibling as HTMLInputElement).innerHTML;
+    input.focus();
+    input.setSelectionRange(0, input.value.length);
+    const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
+    optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
+    optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
   }
 
   private updateUmlNodeOptions() {
     if (this.showUmlNodeOptions) {
       this.drawUmlNodeOptions();
+    } else {
+      this.umlNodeOptions.nativeElement.firstChild.style.top = '100%';
+      this.umlNodeOptions.nativeElement.lastChild.style.top = '100%';
     }
   }
 
@@ -406,6 +405,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
     } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
       this.setShowUmlNodeOptions(false);
+      this.updateUmlNodeOptions();
     }
   }
 
