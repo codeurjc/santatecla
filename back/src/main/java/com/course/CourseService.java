@@ -36,8 +36,12 @@ public class CourseService {
     }
 
     public double findUserCorrectWrongAnswerRelation(long courseId, long unitId, long userId){
-        return ((double) (this.courseRepository.findUserCorrectDefinitionAnswers(courseId, unitId, userId) + this.courseRepository.findUserCorrectListAnswers(courseId, unitId, userId) +
+        double result = ((double) (this.courseRepository.findUserCorrectDefinitionAnswers(courseId, unitId, userId) + this.courseRepository.findUserCorrectListAnswers(courseId, unitId, userId) +
                 this.courseRepository.findUserCorrectTestAnswers(courseId, unitId, userId))) / (this.courseRepository.findUserDefinitionAnswers(courseId, unitId, userId) +
                 this.courseRepository.findUserListAnswers(userId, unitId, userId) + this.courseRepository.findUserTestAnswers(courseId, unitId, userId));
+        if(Double.isNaN(result)){
+            return 0;
+        }
+        return result;
     }
 }

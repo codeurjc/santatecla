@@ -1,7 +1,17 @@
 <!DOCTYPE HTML>
 <html>
 <body>
-<h1 align="center">{{course?.name}}</h1>
+<h1 align="center">
+  {{course?.name}}
+  <mat-button-toggle>
+    <mat-icon (click)="this.showInfo = !this.showInfo">more_vert</mat-icon>
+  </mat-button-toggle>
+</h1>
+<div class="info" *ngIf="this.showInfo" align="center">
+  <h2>Información del curso</h2>
+  <h4>{{course.description}}</h4>
+  <h4>Profesor : {{course.teacher?.name}}</h4>
+</div>
 <div class="row">
   <div class="column">
     <div align="center">
@@ -20,8 +30,13 @@
     <div align="center">
       <h2>Mi seguimiento del curso</h2>
       <p></p>
-      <p> <mat-icon style="color: green">check</mat-icon> Mi mejor unidad es {{this.bestUnit?.name}}</p>
-      <p> <mat-icon style="color: red">close</mat-icon> Mi peor unidad es {{this.worstUnit?.name}}</p>
+      <span *ngIf="this.bestUnit?.name == null || this.worstUnit?.name==null">
+        <p>No hay información para mostrar</p>
+      </span>
+      <span *ngIf="this.bestUnit?.name != null && this.worstUnit?.name!=null">
+        <p> <mat-icon style="color: green">check</mat-icon> Mi mejor unidad es {{this.bestUnit?.name}}</p>
+        <p> <mat-icon style="color: red">close</mat-icon> Mi peor unidad es {{this.worstUnit?.name}}</p>
+      </span>
     </div>
   </div>
 </div>

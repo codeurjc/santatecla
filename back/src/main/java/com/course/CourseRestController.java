@@ -2,6 +2,7 @@ package com.course;
 
 import com.GeneralRestController;
 import com.unit.Unit;
+import com.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -79,6 +80,71 @@ public class CourseRestController extends GeneralRestController {
                 }
             }
             return new ResponseEntity<>(worst, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value="/{courseId}/user/best")
+    public ResponseEntity<User> getBestStudent(@PathVariable long courseId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        double aux = 0;
+        User best = new User();
+        double sumUnitPoints = 0;
+        if(optional.isPresent()){
+            for(User user : optional.get().getStudents()) {
+                System.out.println(user.getName());
+                for (Unit unit : optional.get().getUnits()) {
+                    sumUnitPoints += this.courseService.findUserCorrectWrongAnswerRelation(courseId, unit.getId(), user.getId());
+                }
+                if(sumUnitPoints > aux){
+                    aux = sumUnitPoints;
+                    best = user;
+                }
+                sumUnitPoints = 0;
+            }
+            return new ResponseEntity<>(best, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value="/{courseId}/user/worst")
+    public ResponseEntity<User> getWorstStudent(@PathVariable long courseId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        double aux = Double.MAX_VALUE;
+        User worst = new User();
+        double sumUnitPoints = 0;
+        if(optional.isPresent()){
+            for(User user : optional.get().getStudents()) {
+                System.out.println(user.getName());
+                for (Unit unit : optional.get().getUnits()) {
+                    sumUnitPoints += this.courseService.findUserCorrectWrongAnswerRelation(courseId, unit.getId(), user.getId());
+                }
+                if(sumUnitPoints < aux){
+                    aux = sumUnitPoints;
+                    worst = user;
+                }
+                sumUnitPoints = 0;
+            }
+            return new ResponseEntity<>(worst, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value="/{courseId}/class/points")
+    public ResponseEntity<List<UserProgressItem>> getStudentProgress(@PathVariable long courseId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        ArrayList<Double> points;
+        ArrayList<UserProgressItem> result = new ArrayList<>();
+        if(optional.isPresent()){
+            for (User user : optional.get().getStudents()){
+                points = new ArrayList<>();
+                for(Unit unit : optional.get().getUnits()){
+                    points.add(this.courseService.findUserCorrectWrongAnswerRelation(courseId,unit.getId(), user.getId())*10);
+                }
+                UserProgressItem item = new UserProgressItem(user.getName(), points);
+                result.add(item);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

@@ -16,6 +16,7 @@ export class CourseComponent implements OnInit {
   id: number;
   bestUnit: Unit;
   worstUnit: Unit;
+  showInfo = false;
 
   constructor(private loginService: LoginService,
               private courseService: CourseService,
@@ -43,16 +44,6 @@ export class CourseComponent implements OnInit {
         }, error => {console.log(error); });
       }, error => {console.log(error); });
     });
-  }
-
-  userDistinctAnswers(unitId: number, userId: number){
-    this.courseService.getUserDistinctAnswerCount(unitId, userId).subscribe((data: number) => {
-      return data;
-    }, error => {return 0; } );
-  }
-
-  navigateUnit(id: number) {
-    this.router.navigate(['units/' + id + '/cards']);
   }
 
   navigateHome() {

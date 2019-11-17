@@ -4,6 +4,8 @@ import {User} from '../auth/login.service';
 export interface Course {
   id?: number;
   name: string;
+  description: string;
   units?: Unit[];
-  users?: User[];
+  students?: User[];
+  teacher?: User;
 }
