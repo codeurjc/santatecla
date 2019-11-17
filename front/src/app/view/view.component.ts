@@ -32,9 +32,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     relations: []
   };
 
+  private focusedUnit;
   private units: Map<string, Unit> = new Map<string, Unit>();
   private relations = new Map<string, Relation>();
-  private loadingUnits = 0;
+  private remainingUnits = 0;
 
   private newUnitId = 0;
   private newRelationId = 0;
@@ -80,28 +81,31 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private getUnit(id: number) {
     this.showSpinner = true;
+    this.focusedUnit = id;
     this.units.clear();
     this.relations.clear();
-    this.loadingUnits = 0;
-    this.getUnitAndUpdateUml(id);
+    this.remainingUnits = 0;
+    this.getUnitAndUpdateUml(this.focusedUnit, new Set<number>());
   }
 
-  private getUnitAndUpdateUml(id: number) {
-    this.loadingUnits--;
+  private getUnitAndUpdateUml(id: number, visited: Set<number>) {
+    this.remainingUnits--;
+    visited.add(id);
     this.unitService.getUnit(id).subscribe((data: Unit) => {
       this.addUnit(data);
-      this.loadingUnits += data.incomingRelations.length + 1;
+      this.remainingUnits += data.incomingRelations.length + 1;
       data.incomingRelations.forEach((relation: Relation) => {
-        this.loadingUnits--;
+        this.remainingUnits--;
         const id = relation.id.toString();
         if (!this.getRelationById(id)) {
-          const outgoing = relation.outgoing.toString();
-          if (!this.getUnitById(outgoing)) {
-            this.getUnitAndUpdateUml(+outgoing);
+          const outgoing = +relation.outgoing;
+          if (!visited.has(outgoing)) {
+            this.getUnitAndUpdateUml(outgoing, visited);
           }
           this.addRelation(relation);
         }
       });
+
       /*data.outgoingRelations.forEach((relation: Relation) => {
         const incoming = relation.incoming.toString();
         const id = relation.id.toString();
@@ -112,15 +116,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           this.addRelation(relation);
         }
       });*/
-      if (this.loadingUnits === 0) {
+      if (this.remainingUnits === 0) {
         this.updateUml();
         this.emptyResults();
         this.showSpinner = false;
 
+
         let i = 0;
         this.units.forEach((unit: Unit) => {
           this.unitService.getAbsoluteName(+unit.id).subscribe((u: Unit) => {
-            this.data.units.push(new VisibleUnit(data.id, u.name));
+            this.data.units.push(new VisibleUnit(unit.id, u.name));
 
             i++;
             if (i === this.units.size) {
@@ -129,11 +134,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
               });
               this.editor.data = this.data;
             }
-
           }, error => {
             console.log(error);
           });
         });
+
 
       }
     }, error => {
@@ -174,50 +179,41 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private saveAll() {
-    let i = 0;
-    let createdUnits = 0;
+    const unitsToCreate: Unit[] = [];
     this.units.forEach((unit: Unit) => {
-      i++;
-
       if (unit.id.toString().substring(0, 1) === '0') {
-        createdUnits++;
-        const unitToSave = {
-          id: unit.id,
-          name: unit.name,
-          outgoingRelations: unit.outgoingRelations,
-          incomingRelations: unit.incomingRelations,
-          itineraries: [],
-          definitionQuestions: [],
-          listQuestions: [],
-          testQuestions: []
-        };
-        unitToSave.id = '0';
-        this.unitService.createUnit(unitToSave).subscribe((data: Unit) => {
-
-          unit.id = data.id;
-          unit.name = data.name;
-          unit.incomingRelations.forEach((relation: Relation) => {
-            relation.incoming = data.id.toString();
-          });
-          unit.outgoingRelations.forEach((relation: Relation) => {
-            relation.outgoing = data.id.toString();
-          });
-
-          if (i === this.units.size) {
-            this.saveUnitsAndRelations();
-          }
-        }, error => {
-          console.log(error);
-        });
+        unitsToCreate.push(unit);
       }
     });
-    if (createdUnits === 0) {
+
+    let i = 0;
+    unitsToCreate.forEach((unit: Unit) => {
+      const unitToCreate = { id: '0', name: unit.name, outgoingRelations: [], incomingRelations: [], itineraries: [], definitionQuestions: [], listQuestions: [], testQuestions: [] };
+      this.unitService.createUnit(unitToCreate).subscribe((data: Unit) => {
+        unit.id = data.id;
+        unit.name = data.name;
+        unit.incomingRelations.forEach((relation: Relation) => {
+          relation.incoming = data.id.toString();
+        });
+        unit.outgoingRelations.forEach((relation: Relation) => {
+          relation.outgoing = data.id.toString();
+        });
+
+        i++;
+        if (i === unitsToCreate.length) {
+          this.saveUnitsAndRelations();
+        }
+      }, error => {
+        console.log(error);
+      });
+    });
+    if (unitsToCreate.length === 0) {
       this.saveUnitsAndRelations();
     }
   }
 
   private saveUnitsAndRelations() {
-    let i = 0;
+    const unitsToSave: Unit[] = [];
     this.units.forEach((unit: Unit) => {
       const unitToSave = {
         id: unit.id,
@@ -229,15 +225,23 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         listQuestions: [],
         testQuestions: []
       };
-      this.unitService.saveUnit(unitToSave).subscribe(() => {
-        i++;
-        if (i === this.units.size) {
-          this.getUnit(15);
-          this.updateUml();
+      unitToSave.incomingRelations.forEach((relation: Relation) => {
+        if (relation.id.toString().substring(0, 1) === '0') {
+          relation.id = '0';
         }
-      }, error => {
-        console.log(error);
       });
+      unitToSave.outgoingRelations.forEach((relation: Relation) => {
+        if (relation.id.toString().substring(0, 1) === '0') {
+          relation.id = '0';
+        }
+      });
+      unitsToSave.push(unitToSave);
+    });
+    this.unitService.saveUnits(unitsToSave).subscribe(() => {
+      this.getUnit(this.focusedUnit);
+      this.updateUml();
+    }, error => {
+      console.log(error);
     });
   }
 
@@ -308,17 +312,25 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private drawUmlNodeOptions() {
-    this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
-    const input = this.umlNodeOptions.nativeElement.firstChild;
-    input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
-    input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
-    input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
-    input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
-    input.value = (this.selectedTarget.nextSibling as HTMLInputElement).innerHTML;
-    input.setSelectionRange(0, input.value.length);
-    const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
-    optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
-    optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    if (this.showUmlNodeOptions) {
+      this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
+      const input = this.umlNodeOptions.nativeElement.firstChild;
+      input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
+      input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+      input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
+      input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
+      input.value = (this.selectedTarget.nextSibling as HTMLInputElement).innerHTML;
+      input.setSelectionRange(0, input.value.length);
+      const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
+      optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
+      optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    }
+  }
+
+  private updateUmlNodeOptions() {
+    if (this.showUmlNodeOptions) {
+      this.drawUmlNodeOptions();
+    }
   }
 
   private setShowUmlNodeOptions(showUmlNodeOptions: boolean) {

@@ -25,11 +25,11 @@ export class UnitService {
     return this.http.post<Unit>(this.baseUrl, unit, { headers });
   }
 
-  saveUnit(unit: Unit) {
+  saveUnits(units: Unit[]) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.put<Unit>(this.baseUrl, unit, { headers });
+    return this.http.put<Unit[]>(this.baseUrl, units, { headers });
   }
 
   getAbsoluteName(id: number) {

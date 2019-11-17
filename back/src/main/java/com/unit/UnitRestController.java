@@ -1,5 +1,6 @@
 package com.unit;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,15 +66,19 @@ public class UnitRestController extends GeneralRestController {
     }
 
     @PutMapping(value="/")
-    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
-        Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
-        if (savedUnit.isPresent()) {
-            updateUnit(savedUnit.get(), unit);
-            this.unitService.save(savedUnit.get());
-            return new ResponseEntity<>(savedUnit.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<Unit>> updateUnits(@RequestBody List<Unit> units) {
+        List<Unit> savedUnits = new ArrayList<>();
+        for (Unit unit : units) {
+            Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
+            if (savedUnit.isPresent()) {
+                updateUnit(savedUnit.get(), unit);
+                this.unitService.save(savedUnit.get());
+                savedUnits.add(savedUnit.get());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
+        return new ResponseEntity<>(savedUnits, HttpStatus.OK);
     }
 
     private void updateUnit(Unit savedUnit, Unit unit) {

@@ -25,7 +25,7 @@
 
     <div #uml [hidden]="showSpinner"></div>
 
-    <div #umlNodeOptions [hidden]="!showUmlNodeOptions" (window:resize)="drawUmlNodeOptions()">
+    <div #umlNodeOptions [hidden]="!showUmlNodeOptions" (window:resize)="updateUmlNodeOptions()">
 
       <input id="uml-edit-input" (change)="updateUnitName()">
 
