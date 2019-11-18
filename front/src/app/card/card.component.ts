@@ -96,4 +96,8 @@ export class CardComponent implements OnInit {
     this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
   }
 
+  navigateToUnitQuestions() {
+    this.router.navigate(['units', this.unitId, 'question']);
+  }
+
 }

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ViewComponent } from './view/view.component';
 import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
-import {QuestionComponent} from './question/question.component';
+import { QuestionComponent } from './question/question.component';
 import { ProgressComponent } from './progress/progress.component';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {StudentHomeComponent} from './course/studentHome.component';
@@ -15,7 +15,7 @@ const appRoutes = [
   { path: '' , component: ViewComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
   { path: 'units/:unitId/itineraries/:itineraryId', component: ItineraryComponent },
-  // { path: 'units/:unitId/question/:questionId', component: QuestionComponent },
+  { path: 'units/:unitId/question', component: QuestionComponent },
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/listQuestion/:questionId', component: ListQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},
