@@ -221,7 +221,7 @@ div.jsoneditor-outer.has-status-bar {
 div.jsoneditor-outer.has-main-menu-bar {
   margin-top: -35px;
   padding-top: 35px;
-  height: 40.5rem;
+  height: calc(100vh - 3rem - 2px);
 }
 div.jsoneditor-busy {
   position: absolute;

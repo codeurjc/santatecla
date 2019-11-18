@@ -31,7 +31,7 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
 import { QuestionComponent } from './question/question.component';
-import { ViewService } from './view/view.service';
+import { UnitService } from './unit/unit.service';
 import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
 import { DefinitionQuestionService } from './question/definitionQuestion/definitionQuestion.service';
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
@@ -46,6 +46,7 @@ import {StudentHomeService} from './course/studentHome.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
 import {TabService} from './tab/tab.service';
+import { ViewService } from "./view/view.service";
 
 @NgModule({
   declarations: [
@@ -110,7 +111,7 @@ import {TabService} from './tab/tab.service';
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, ViewService, TestQuestionService, StudentHomeService, CourseService, TabService,
+    ProgressService, ViewService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

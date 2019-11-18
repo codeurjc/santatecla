@@ -1,5 +1,6 @@
 package com.unit;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,8 @@ import com.relation.RelationService;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.relation.Relation;
+import com.relation.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,60 +37,91 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/units")
 public class UnitRestController extends GeneralRestController {
-    
-	@Autowired
+
+    @Autowired
     protected UnitService unitService;
+
+    @Autowired
+    protected RelationService relationService;
 
 	@Autowired
     protected CardService cardService;
-    
-	@Autowired
-    protected RelationService relationService;
-    
-    @PutMapping(value="/")
-    public ResponseEntity<Unit> updateUnit(@RequestBody Unit unit) {
-        Unit savedUnit;
-        if (!this.unitService.findOne(unit.getId()).isPresent()) {
-            savedUnit = new Unit(unit.getName());
-        } else {
-            Optional<Unit> u = this.unitService.findOne(unit.getId());
-            if (u.isPresent()) {
-                savedUnit = this.unitService.findOne(unit.getId()).get();
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-        savedUnit.update(unit);
-        for (Relation relation : unit.getRelations()) {
-            Relation savedRelation;
-            boolean newRelation = !this.relationService.findOne(relation.getId()).isPresent();
-            if (newRelation) {
-                savedRelation = new Relation(relation.getRelationType(), relation.getRelatedTo());
-            } else {
-                savedRelation = this.relationService.findOne(relation.getId()).get();
-                savedRelation.update(relation);
-            }
-            savedRelation.setRelatedTo(updateUnit(relation.getRelatedTo()).getBody());
-            this.relationService.save(savedRelation);
-            if (newRelation) {
-                savedUnit.addRelation(savedRelation);
-            }
-        }
-        this.unitService.save(savedUnit);
-        return new ResponseEntity<>(savedUnit, HttpStatus.OK);
+
+    @GetMapping(value="/")
+    public ResponseEntity<List<Unit>> getUnits() {
+        return new ResponseEntity<>(this.unitService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(value="/{id}")
     public ResponseEntity<Unit> getUnit(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
-        return (unit.isPresent())?(new ResponseEntity<>(unit.get(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (unit.isPresent()) {
+            return new ResponseEntity<>(unit.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @GetMapping(value="/")
-    public ResponseEntity<List<Unit>> getUnits() {
-        return new ResponseEntity<List<Unit>>(this.unitService.findAll(), HttpStatus.OK);
+    @PostMapping(value="/")
+    public ResponseEntity<Unit> createUnit(@RequestBody Unit unit) {
+        Unit savedUnit = new Unit();
+        updateUnit(savedUnit, unit);
+        this.unitService.save(savedUnit);
+        return new ResponseEntity<>(savedUnit, HttpStatus.OK);
     }
-    
+
+    @PutMapping(value="/")
+    public ResponseEntity<List<Unit>> updateUnits(@RequestBody List<Unit> units) {
+        List<Unit> savedUnits = new ArrayList<>();
+        for (Unit unit : units) {
+            Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
+            if (savedUnit.isPresent()) {
+                updateUnit(savedUnit.get(), unit);
+                this.unitService.save(savedUnit.get());
+                savedUnits.add(savedUnit.get());
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        return new ResponseEntity<>(savedUnits, HttpStatus.OK);
+    }
+
+    private void updateUnit(Unit savedUnit, Unit unit) {
+        savedUnit.setName(unit.getName());
+        for (Relation relation : unit.getIncomingRelations()) {
+            if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
+                if (relation.getId() > 0) {
+                    savedUnit.addIncomingRelation(relation);
+                } else {
+                    Relation r;
+                    Optional<Relation> relationByIncomingAndOutgoing = relationService.findRelationByIncomingAndOutgoing(relation.getIncoming(), relation.getOutgoing());
+                    r = relationByIncomingAndOutgoing.orElseGet(() -> new Relation(relation.getRelationType(), relation.getIncoming(), relation.getOutgoing()));
+                    relationService.save(r);
+                    savedUnit.addIncomingRelation(r);
+                }
+            }
+        }
+        for (Relation relation : unit.getOutgoingRelations()) {
+            if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
+                if (relation.getId() > 0) {
+                    savedUnit.addOutgoingRelation(relation);
+                } else {
+                    Relation r;
+                    Optional<Relation> relationByIncomingAndOutgoing = relationService.findRelationByIncomingAndOutgoing(relation.getIncoming(), relation.getOutgoing());
+                    r = relationByIncomingAndOutgoing.orElseGet(() -> new Relation(relation.getRelationType(), relation.getIncoming(), relation.getOutgoing()));
+                    relationService.save(r);
+                    savedUnit.addOutgoingRelation(r);
+                }
+            }
+        }
+    }
+
+    @GetMapping(value="/{id}/absoluteName")
+    public ResponseEntity<Unit> getUnitAbsoluteName(@PathVariable int id) {
+        Optional<Unit> unit = this.unitService.findOne(id);
+        return unit.map(value -> new ResponseEntity<>(new Unit(unitService.getAbsoluteName(value)), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @GetMapping(value="/search/{name}")
     public ResponseEntity<List<Unit>> searchUnits(@PathVariable String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);
@@ -97,7 +131,11 @@ public class UnitRestController extends GeneralRestController {
     @GetMapping(value="/{unitId}/cards")
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent())?(new ResponseEntity<Iterable<Card>>(unit.get().getCards(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (unit.isPresent()) {
+            return new ResponseEntity<Iterable<Card>>(unit.get().getCards(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(value = "/{unitId}/cards/{cardId}")
@@ -127,7 +165,7 @@ public class UnitRestController extends GeneralRestController {
         }
         cardService.setImage(card, image);
         cardService.save(card);
-        return new ResponseEntity<Card>(card, HttpStatus.OK);	
+        return new ResponseEntity<Card>(card, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{unitId}/cards/{cardId}", method = RequestMethod.GET)

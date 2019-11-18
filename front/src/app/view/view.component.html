@@ -3,10 +3,10 @@
   <body>
 
     <div id="json-editor-container">
-      <json-editor [options]="editorOptions" [(ngModel)]="data" (keydown.control.s)="save($event)" (change)="updateJson(true)"></json-editor>
+      <json-editor [options]="editorOptions" [(ngModel)]="data"></json-editor>
     </div>
 
-    <button id="save-button" mat-icon-button color="primary" [disabled]="!changed" (click)="save(null)">
+    <button id="save-button" mat-icon-button color="primary" [disabled]="!changed" (click)="save()">
       <mat-icon>save</mat-icon>
     </button>
 
@@ -21,36 +21,34 @@
       </div>
     </mat-form-field>
 
-    <img src="../../assets/img/spinner.gif" *ngIf="showSpinner">
+    <img src="../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
 
     <div #uml [hidden]="showSpinner"></div>
 
-    <div #umlNodeOptions [hidden]="!showUmlNodeOptions" (window:resize)="drawUmlNodeOptions()">
-
+    <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">
-
       <div id="uml-node-options">
-        <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id)">
-          <mat-icon class="uml-option-icon">call_made</mat-icon>
-        </button>
+        <div *ngIf="showGoToUnit">
+          <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id.toString().substring(0, selectedTarget.id.toString().length))">
+            <mat-icon class="uml-option-icon">call_made</mat-icon>
+          </button>
+          <br>
+        </div>
+        <button><img id="composition-incoming-button" src="../../assets/img/add-composition-incoming.png" height="15"></button>
+        <button><img id="composition-outgoing-button" src="../../assets/img/add-composition-outgoing.png" height="15"></button>
         <br>
-        <button id="create-association-button">
-          association
-        </button>
+        <button><img id="inheritance-incoming-button" src="../../assets/img/add-inheritance-incoming.png" height="15"></button>
+        <button><img id="inheritance-outgoing-button" src="../../assets/img/add-inheritance-outgoing.png" height="15"></button>
         <br>
-        <button id="create-aggregation-button">
-          aggregation
-        </button>
+        <button><img id="aggregation-incoming-button" src="../../assets/img/add-aggregation-incoming.png" height="15"></button>
+        <button><img id="aggregation-outgoing-button" src="../../assets/img/add-aggregation-outgoing.png" height="15"></button>
         <br>
-        <button id="create-composition-button">
-          composition
-        </button>
+        <button><img id="association-incoming-button" src="../../assets/img/add-association-incoming.png" height="15"></button>
+        <button><img id="association-outgoing-button" src="../../assets/img/add-association-outgoing.png" height="15"></button>
         <br>
-        <button id="create-inheritance-button">
-          inheritance
-        </button>
+        <button><img id="use-incoming-button" src="../../assets/img/add-use-incoming.png" height="15"></button>
+        <button><img id="use-outgoing-button" src="../../assets/img/add-use-outgoing.png" height="15"></button>
       </div>
-
     </div>
 
   </body>

@@ -5,12 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.card.Card;
 import com.question.definition.definition_question.DefinitionQuestion;
@@ -38,7 +33,11 @@ public class Unit {
     private List<Itinerary> itineraries;
 
     @OneToMany
-    private List<Relation> relations;
+    private List<Relation> incomingRelations;
+
+    @OneToMany
+    @OrderColumn
+    private List<Relation> outgoingRelations;
 
     @ManyToMany
     private List<DefinitionQuestion> definitionQuestions;
@@ -56,7 +55,8 @@ public class Unit {
     public Unit() {
         this.cards = new HashMap<>();
         this.itineraries = new ArrayList<>();
-        this.relations = new ArrayList<>();
+        this.incomingRelations = new ArrayList<>();
+        this.outgoingRelations = new ArrayList<>();
         this.definitionQuestions = new ArrayList<>();
         this.listQuestions = new ArrayList<>();
         this.items = new ArrayList<>();
@@ -104,12 +104,44 @@ public class Unit {
         this.itineraries.add(itinerary);
     }
 
-    public List<Relation> getRelations() {
-        return this.relations;
+    public List<Relation> getIncomingRelations() {
+        return this.incomingRelations;
     }
 
-    public void addRelation(Relation relation) {
-        this.relations.add(relation);
+    public void addIncomingRelation(Relation incomingRelation) {
+        if (!this.incomingRelations.contains(incomingRelation)) {
+            int index = 0;
+            for (Relation relation : this.incomingRelations) {
+                if (Relation.compareType(incomingRelation.getRelationType(), relation.getRelationType()) <= 0) {
+                    index++;
+                    break;
+                }
+            }
+            ArrayList<Relation> sublist = new ArrayList<>(this.incomingRelations.subList(index, this.incomingRelations.size()));
+            this.incomingRelations.removeAll(sublist);
+            this.incomingRelations.add(incomingRelation);
+            this.incomingRelations.addAll(sublist);
+        }
+    }
+
+    public List<Relation> getOutgoingRelations() {
+        return this.outgoingRelations;
+    }
+
+    public void addOutgoingRelation(Relation outgoingRelation) {
+        if (!this.outgoingRelations.contains(outgoingRelation)) {
+            int index = 0;
+            for (Relation relation : this.outgoingRelations) {
+                if (Relation.compareType(outgoingRelation.getRelationType(), relation.getRelationType()) <= 0) {
+                    index++;
+                    break;
+                }
+            }
+            ArrayList<Relation> sublist = new ArrayList<>(this.outgoingRelations.subList(index, this.outgoingRelations.size()));
+            this.outgoingRelations.removeAll(sublist);
+            this.outgoingRelations.add(outgoingRelation);
+            this.outgoingRelations.addAll(sublist);
+        }
     }
 
     public List<DefinitionQuestion> getDefinitionQuestions() {
@@ -144,10 +176,6 @@ public class Unit {
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    public void update(Unit unit) {
-        this.name = unit.getName();
     }
 
     public List<TestQuestion> getTestQuestions() {

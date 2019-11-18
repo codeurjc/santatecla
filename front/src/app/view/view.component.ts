@@ -1,7 +1,6 @@
-import { UmlParser } from './uml.parser';
 import { Unit } from '../unit/unit.model';
-import { ViewService } from './view.service';
-import { Component, ViewChild, OnInit, AfterContentInit, ElementRef, HostListener } from '@angular/core';
+import { UnitService } from '../unit/unit.service';
+import { Component, ViewChild, OnInit, AfterContentInit, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
@@ -14,9 +13,9 @@ declare var mermaid: any;
   styleUrls: ['./view.component.css']
 })
 
-export class ViewComponent implements OnInit, AfterContentInit {
+export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  private UNIT_NAME_SEPARATOR = '.';
+  private UNIT_NAME_SEPARATOR = '/';
   private ENTER_KEY = 'Enter';
   private ARROW_UP_KEY = 'ArrowUp';
   private ARROW_DOWN_KEY = 'ArrowDown';
@@ -28,25 +27,37 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
   private editorOptions: JsonEditorOptions;
-  private data: any;
-  private changed: boolean = false;
+  private data = {
+    units: [],
+    relations: []
+  };
+
+  private focusedUnit;
+  private units: Map<string, Unit> = new Map<string, Unit>();
+  private relations = new Map<string, Relation>();
+  private remainingUnits = 0;
+
+  private newUnitId = 0;
+  private newRelationId = 0;
+
+  private changed = false;
+  private showSpinner = false;
 
   @ViewChild('uml') umlDiv;
-  private umlParser: UmlParser;
 
   @ViewChild('umlNodeOptions') umlNodeOptions: ElementRef;
   private selectedTarget: HTMLInputElement;
   private showUmlNodeOptions = false;
+  private showGoToUnit = true;
 
-  private showSpinner = false;
 
-  constructor(private router: Router, private viewService: ViewService) {}
+
+  constructor(private router: Router, private unitService: UnitService) {}
 
   ngOnInit() {
+    window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
-    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
     this.editorOptions.mode = 'code';
-    this.umlParser = new UmlParser();
     this.getUnit(15);
   }
 
@@ -60,126 +71,226 @@ export class ViewComponent implements OnInit, AfterContentInit {
     });
   }
 
+  ngOnDestroy() {
+    window.document.body.style.overflow = 'auto';
+  }
+
+
+
+  // Data
+
   private getUnit(id: number) {
-    this.viewService.getUnit(id).subscribe((data: Unit) => {
-      this.setData(data, false);
-      this.emptyResults();
+    this.showSpinner = true;
+    this.focusedUnit = id;
+    this.units.clear();
+    this.relations.clear();
+    this.remainingUnits = 0;
+    this.getUnitAndUpdateUml(this.focusedUnit, new Set<number>());
+  }
+
+  private getUnitAndUpdateUml(id: number, visited: Set<number>) {
+    this.remainingUnits--;
+    visited.add(id);
+    this.unitService.getUnit(id).subscribe((data: Unit) => {
+      this.addUnit(data);
+      this.remainingUnits += data.incomingRelations.length + 1;
+      data.incomingRelations.forEach((relation: Relation) => {
+        this.remainingUnits--;
+        const id = relation.id.toString();
+        if (!this.getRelationById(id)) {
+          const outgoing = +relation.outgoing;
+          if (!visited.has(outgoing)) {
+            this.getUnitAndUpdateUml(outgoing, visited);
+          }
+          this.addRelation(relation);
+        }
+      });
+
+      if (this.remainingUnits === 0) {
+        this.updateUml();
+        this.emptyResults();
+        this.showSpinner = false;
+
+
+        let i = 0;
+        this.units.forEach((unit: Unit) => {
+          this.unitService.getAbsoluteName(+unit.id).subscribe((u: Unit) => {
+            this.data.units.push(new VisibleUnit(unit.id, u.name));
+
+            i++;
+            if (i === this.units.size) {
+              this.relations.forEach((relation: Relation) => {
+                this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming, relation.outgoing));
+              });
+              this.editor.data = this.data;
+            }
+          }, error => {
+            console.log(error);
+          });
+        });
+
+
+      }
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  private addUnit(unit: Unit) {
+    this.units.set(unit.id.toString(), unit);
+  }
+
+  private getUnitById(id: string): Unit {
+    return this.units.get(id);
+  }
+
+  private addRelation(relation: Relation) {
+    this.relations.set(relation.id.toString(), relation);
+  }
+
+  private getRelationById(id: string): Relation {
+    return this.relations.get(id);
+  }
+
+  private getNewUnitId() {
+    return '0' + this.newUnitId++;
+  }
+
+  private getNewRelationId(): string {
+    return '0' + this.newRelationId++;
+  }
+
+  private save() {
+    if (this.changed) {
+      this.changed = false;
+      this.showSpinner = true;
+      this.saveAll();
+    }
+  }
+
+  private saveAll() {
+    const unitsToCreate: Unit[] = [];
+    this.units.forEach((unit: Unit) => {
+      if (unit.id.toString().substring(0, 1) === '0') {
+        unitsToCreate.push(unit);
+      }
+    });
+
+    let i = 0;
+    unitsToCreate.forEach((unit: Unit) => {
+      const unitToCreate = { id: '0', name: unit.name, outgoingRelations: [], incomingRelations: [], itineraries: [], definitionQuestions: [], listQuestions: [], testQuestions: [] };
+      this.unitService.createUnit(unitToCreate).subscribe((data: Unit) => {
+        unit.id = data.id;
+        unit.name = data.name;
+        unit.incomingRelations.forEach((relation: Relation) => {
+          relation.incoming = data.id.toString();
+        });
+        unit.outgoingRelations.forEach((relation: Relation) => {
+          relation.outgoing = data.id.toString();
+        });
+
+        i++;
+        if (i === unitsToCreate.length) {
+          this.saveUnitsAndRelations();
+        }
+      }, error => {
+        console.log(error);
+      });
+    });
+    if (unitsToCreate.length === 0) {
+      this.saveUnitsAndRelations();
+    }
+  }
+
+  private saveUnitsAndRelations() {
+    const unitsToSave: Unit[] = [];
+    this.units.forEach((unit: Unit) => {
+      const unitToSave = {
+        id: unit.id,
+        name: unit.name,
+        outgoingRelations: unit.outgoingRelations,
+        incomingRelations: unit.incomingRelations,
+        itineraries: [],
+        definitionQuestions: [],
+        listQuestions: [],
+        testQuestions: []
+      };
+      unitToSave.incomingRelations.forEach((relation: Relation) => {
+        if (relation.id.toString().substring(0, 1) === '0') {
+          relation.id = '0';
+        }
+      });
+      unitToSave.outgoingRelations.forEach((relation: Relation) => {
+        if (relation.id.toString().substring(0, 1) === '0') {
+          relation.id = '0';
+        }
+      });
+      unitsToSave.push(unitToSave);
+    });
+    this.unitService.saveUnits(unitsToSave).subscribe(() => {
+      this.getUnit(this.focusedUnit);
+      this.updateUml();
     }, error => {
       console.log(error);
     });
   }
 
 
-  // Data (json)
 
-  private setData(data: any, changed: boolean) {
-    const visibleData = new VisibleUnit(data);
-    this.data = visibleData.getSortedData();
-    this.updateJson(changed);
-  }
-
-  private updateJson(changed: boolean) {
-    this.changed = changed;
-    if (this.isValidJson()) {
-      this.updateUml();
-    }
-  }
-
-  private isValidJson(): boolean {
-    return ((this.validRelations(this.data)) && (this.editor.isValidJson()));
-  }
-
-  private validRelations(data: VisibleUnit): boolean {
-    let valid = true;
-    data.relations.forEach((relation: VisibleRelation) => {
-      if (valid) {
-        if (Object.values(RelationType).indexOf(relation.relationType) === -1) {
-          valid = false;
-        }
-        if (!this.validRelations(relation.relatedTo)) {
-          valid = false;
-        }
-      }
-    });
-    return valid;
-  }
-
-  private save(event: KeyboardEvent) {
-    if (this.changed) {
-      if (event) { event.preventDefault(); }
-      if (this.isValidJson()) {
-        this.showSpinner = true;
-        this.viewService.saveUnit(this.data).subscribe((data) => {
-          this.setData(data, false);
-          this.showSpinner = false;
-        }, error => {
-          console.log(error);
-        });
-      }
-      this.changed = false;
-    }
-  }
-
-  private findUnit(data, id): VisibleUnit {
-    let unit = null;
-    if (data.id.toString() === id) {
-      unit = data;
-    } else {
-      data.relations.forEach((relation: any) => {
-        const u = this.findUnit(relation.relatedTo, id);
-        if (u !== null) {
-          unit = u;
-        }
-      });
-    }
-    return unit;
-  }
-
-
-
-  // Data (uml)
+  // Uml
 
   private updateUml() {
     const element: any = this.umlDiv.nativeElement;
     element.innerHTML = '';
-    mermaid.render('uml', this.umlParser.jsonToUml(this.data), (svgCode, bindFunctions) => {
-      element.innerHTML = svgCode;
-      if (this.showUmlNodeOptions) {
-        this.selectedTarget = this.findUnitTarget(this.selectedTarget.id);
-        this.drawUmlNodeOptions();
-      }
-    });
+    try {
+      const uml = this.parseUml(this.relations);
+      mermaid.render('uml', uml, (svgCode, bindFunctions) => {
+        element.innerHTML = svgCode;
+        this.updateUmlNodeOptions();
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private updateUnitName() {
-    const selectedUnit: VisibleUnit = this.findUnit(this.data, this.selectedTarget.id);
+    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
     selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
-    this.setData(this.data, true);
     this.setShowUmlNodeOptions(false);
+    this.updateUml();
+    this.changed = true;
   }
 
-  private createRelation(relationType): VisibleUnit {
-    const selectedUnit: VisibleUnit = this.findUnit(this.data, this.selectedTarget.id);
-    const newUnit: VisibleUnit = new VisibleUnit({
-      id: 0,
-      name: 'Nueva unidad',
-      relations: []
-    });
-    selectedUnit.relations.push(new VisibleRelation({
-      id: 0,
-      relationType: relationType,
-      relatedTo: newUnit
-    }));
-    this.setData(this.data, true);
+  private createRelation(relationType): Unit {
+    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
+    const newUnitName = 'Nueva unidad';
+    const newUnit: Unit = {
+      id: this.getNewUnitId().toString(),
+      name: newUnitName,
+      incomingRelations: [],
+      outgoingRelations: []
+    };
+    const newRelation: Relation = {
+      id: this.getNewRelationId().toString(),
+      relationType,
+      incoming: this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length),
+      outgoing: newUnit.id.toString()
+    };
+    newUnit.outgoingRelations.push(newRelation);
+    this.addUnit(newUnit);
+    selectedUnit.incomingRelations.push(newRelation);
+    this.addRelation(newRelation);
+    this.updateUml();
+    this.changed = true;
     return newUnit;
   }
 
-  private findUnitTarget(id): HTMLInputElement {
+  private findUnitTarget(id: string): HTMLInputElement {
     let found = false;
     let target: HTMLInputElement = null;
     this.umlDiv.nativeElement.firstChild.childNodes.forEach((childNode) => {
-      const firstChild = <HTMLInputElement>childNode.firstChild;
-      if ((!found) && (firstChild) && (firstChild.id === id.toString())) {
+      const firstChild = childNode.firstChild as HTMLInputElement;
+      if ((!found) && (firstChild) && (firstChild.id) && (firstChild.id.toString().substring(0, firstChild.id.length) === id.toString())) {
         target = firstChild;
         found = true;
       }
@@ -188,16 +299,30 @@ export class ViewComponent implements OnInit, AfterContentInit {
   }
 
   private drawUmlNodeOptions() {
+    this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
     const input = this.umlNodeOptions.nativeElement.firstChild;
-    input.style.left = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px';
+    const padding = '0.5rem';
+    input.style.left = 'calc(' + (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px + ' + padding + ')';
+    input.style.width = 'calc(' + (this.selectedTarget.getBoundingClientRect().width) + 'px - ' + padding + ' - ' + padding + ')';
     input.style.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
-    input.style.width = (this.selectedTarget.getBoundingClientRect().width) + 'px';
     input.style.height = (this.selectedTarget.getBoundingClientRect().height) + 'px';
-    input.value = (<HTMLInputElement>this.selectedTarget.nextSibling).innerHTML;
+    const text = (this.selectedTarget.nextSibling as HTMLInputElement);
+    if (text.innerHTML) { input.value = text.innerHTML; }
+    text.innerHTML = '';
+    input.focus();
     input.setSelectionRange(0, input.value.length);
     const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
     optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
     optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+  }
+
+  private updateUmlNodeOptions() {
+    if (this.showUmlNodeOptions) {
+      this.drawUmlNodeOptions();
+    } else {
+      this.umlNodeOptions.nativeElement.firstChild.style.top = '120%';
+      this.umlNodeOptions.nativeElement.lastChild.style.top = '120%';
+    }
   }
 
   private setShowUmlNodeOptions(showUmlNodeOptions: boolean) {
@@ -206,17 +331,30 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
 
 
-  // Mouse
+  // Key event listener
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyPress($event: KeyboardEvent) {
+    if (($event.metaKey || $event.ctrlKey) && ($event.key == 's')) {
+      $event.preventDefault();
+      this.save();
+    }
+  }
+
+
+
+  // Mouse event listener
 
   @HostListener('document:click', ['$event'])
   public documentClick(event: Event): void {
-    const target = <HTMLInputElement>event.target;
+    const target = event.target as HTMLInputElement;
 
     // Search
     if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
-      this.getUnit(this.results[this.arrowKeyLocation].id);
+      this.getUnit(+this.results[this.arrowKeyLocation].id);
     } else if ((target.attributes) && (target.attributes['class']) &&
-      ((target.attributes['class'].nodeValue === 'mat-form-field-flex') || (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
+      ((target.attributes['class'].nodeValue === 'mat-form-field-flex') ||
+        (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
         (target.attributes['class'].nodeValue === 'mat-form-field-infix') || (target.id === 'search-input'))) {
       this.setShowResults(true);
     } else {
@@ -224,39 +362,56 @@ export class ViewComponent implements OnInit, AfterContentInit {
     }
 
     // Uml
-    if ((target.tagName === 'rect') || (target.tagName ==='text')) {
+    if ((target.tagName === 'rect') || (target.tagName === 'text')) {
       this.selectedTarget = target;
       if (target.tagName === 'text') {
-        this.selectedTarget = <HTMLInputElement>target.previousElementSibling;
+        this.selectedTarget = target.previousElementSibling as HTMLInputElement;
       }
       this.setShowUmlNodeOptions(true);
       this.drawUmlNodeOptions();
     } else if (target.tagName === 'path') {
 
-    } else if (target.id === 'create-association-button') {
+    } else if (target.id === 'association-incoming-button') {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.ASSOCIATION).id);
       this.drawUmlNodeOptions();
-    } else if (target.id === 'create-aggregation-button') {
+    } else if (target.id === 'aggregation-incoming-button') {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.AGGREGATION).id);
       this.drawUmlNodeOptions();
-    } else if (target.id === 'create-composition-button') {
+    } else if (target.id === 'composition-incoming-button') {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.COMPOSITION).id);
       this.drawUmlNodeOptions();
-    } else if (target.id === 'create-inheritance-button') {
+    } else if (target.id === 'inheritance-incoming-button') {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.INHERITANCE).id);
       this.drawUmlNodeOptions();
+    } else if (target.id === 'use-incoming-button') {
+      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.USE).id);
+      this.drawUmlNodeOptions();
+    } else if (target.id === 'association-outgoing-button') {
+
+    } else if (target.id === 'aggregation-outgoing-button') {
+
+    } else if (target.id === 'composition-outgoing-button') {
+
+    } else if (target.id === 'inheritance-outgoing-button') {
+
+    } else if (target.id === 'use-outgoing-button') {
+
     } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
+      if (this.showUmlNodeOptions) {
+        this.updateUnitName();
+      }
       this.setShowUmlNodeOptions(false);
+      this.updateUmlNodeOptions();
     }
   }
 
 
 
-  //Search
+  // Search
 
   private search() {
     if (this.validSearchField()) {
-      this.viewService.searchByNameContaining(this.searchField).subscribe((data: any) => {
+      this.unitService.searchByNameContaining(this.searchField).subscribe((data: any) => {
         this.results = data;
         this.arrowKeyLocation = 0;
       }, error => {
@@ -298,7 +453,7 @@ export class ViewComponent implements OnInit, AfterContentInit {
 
   private keyDown(event: KeyboardEvent) {
     if ((event.key === this.ENTER_KEY) && (this.results.length > 0)) {
-      this.getUnit(this.results[this.arrowKeyLocation].id);
+      this.getUnit(+this.results[this.arrowKeyLocation].id);
     } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowKeyLocation > 0)) {
       this.arrowKeyLocation--;
     } else if ((event.key === this.ARROW_DOWN_KEY) && (this.arrowKeyLocation < (this.results.length - 1))) {
@@ -327,38 +482,65 @@ export class ViewComponent implements OnInit, AfterContentInit {
     this.router.navigate(['/units/' + id + '/cards']);
   }
 
+
+
+  // Uml parser
+
+  private parseUml(relations: any) {
+    const parsedRelations = this.getRelationsDiagram(relations);
+    if (parsedRelations === '') {
+      throw new Error('Invalid data. Unable to display uml');
+    } else {
+      return 'classDiagram\n' + parsedRelations;
+    }
+  }
+
+  private getRelationsDiagram(relations: any): string {
+    let uml = '';
+    let connector = '';
+    relations.forEach((relation: any) => {
+      switch (relation.relationType) {
+        case RelationType.ASSOCIATION: { connector = '<--'; break; }
+        case RelationType.AGGREGATION: { connector = '"1"o--"many"'; break; }
+        case RelationType.COMPOSITION: { connector = '"0"*--"0..n"'; break; }
+        case RelationType.INHERITANCE: { connector = '<|--'; break; }
+        case RelationType.USE: { connector = '--'; break; }
+        default: { throw new Error('Unrecognized uml relation type'); }
+      }
+      uml += this.parseUnitName(relation.incoming.toString()) + connector + this.parseUnitName(relation.outgoing.toString()) + '\n';
+    });
+    return uml;
+  }
+
+  private parseUnitName(id: string): string {
+    let name = id;
+    const unit = this.getUnitById(id);
+    if (unit) {
+      name += unit.name;
+    }
+    return name;
+  }
+
 }
 
 class VisibleUnit implements Unit {
-  id: number;
+  id: string;
   name: string;
-  relations: VisibleRelation[] = [];
 
-  constructor(data: any) {
-    this.id = data.id;
-    this.name = data.name;
-    data.relations.forEach((relation: any) => {
-      this.relations.push(new VisibleRelation(relation));
-    });
-  }
-
-  getSortedData() {
-    return {
-      id: this.id,
-      name: this.name,
-      relations: this.relations
-    }
+  constructor(id: string, name: string) {
+    this.id = id;
+    this.name = name;
   }
 }
 
 class VisibleRelation implements Relation {
-  id: number;
   relationType: string;
-  relatedTo: any;
+  incoming: string;
+  outgoing: string;
 
-  constructor(data: any) {
-    this.id = data.id;
-    this.relationType = data.relationType;
-    this.relatedTo = new VisibleUnit(data.relatedTo).getSortedData();
+  constructor(relationType: string, incoming: string, outgoing: string) {
+    this.relationType = relationType;
+    this.incoming = incoming;
+    this.outgoing = outgoing;
   }
 }
