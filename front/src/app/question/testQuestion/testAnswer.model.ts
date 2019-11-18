@@ -6,4 +6,5 @@ export interface TestAnswer {
   correct?: boolean;
   user?: User;
   possibleAnswers ?: string[];
+  unitId?: number;
 }

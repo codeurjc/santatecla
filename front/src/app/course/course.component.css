@@ -1,0 +1,23 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.info {
+  border:1px solid lightblue;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 5%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+  border:1px solid lightblue;
+  margin-left: 5%;
+  margin-right: 5%;
+}

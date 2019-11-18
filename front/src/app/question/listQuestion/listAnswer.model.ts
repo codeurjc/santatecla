@@ -5,4 +5,5 @@ export interface ListAnswer {
   answerText?: string;
   correct?: boolean;
   user?: User;
+  unitId?: number;
 }
