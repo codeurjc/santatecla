@@ -10,7 +10,7 @@ import {ListQuestion} from './listQuestion/listQuestion.model';
 import {TestQuestion} from './testQuestion/testQuestion.model';
 import {TestQuestionService} from './testQuestion/testQuestion.service';
 import {Unit} from '../unit/unit.model';
-import {ViewService} from '../view/view.service';
+import {UnitService} from '../unit/unit.service';
 import {Itineray} from '../itinerary/itinerary.model';
 import {forEach} from '@angular/router/src/utils/collection';
 
@@ -44,7 +44,7 @@ export class QuestionComponent implements OnInit {
     private definitionQuestionService: DefinitionQuestionService,
     private listQuestionService: ListQuestionService,
     private testQuestionService: TestQuestionService,
-    private viewService: ViewService,
+    private unitService: UnitService,
     private activatedRoute: ActivatedRoute,
     private router: Router) {
   }
@@ -59,7 +59,7 @@ export class QuestionComponent implements OnInit {
       this.unitId = params['unitId'];
     });
 
-    this.viewService.getUnit(this.unitId).subscribe((data: Unit) => {
+    this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
       this.unit = {
         id: data['id'],
         name: data['name'],
@@ -68,17 +68,17 @@ export class QuestionComponent implements OnInit {
       this.itinerariesTabs = this.unit.itineraries;
     });
 
-    this.viewService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
+    this.unitService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
       this.definitionQuestions = data;
       this.questions = this.questions.concat(data);
     });
 
-    this.viewService.getUnitListQuestions(this.unitId).subscribe((data: ListQuestion[]) => {
+    this.unitService.getUnitListQuestions(this.unitId).subscribe((data: ListQuestion[]) => {
       this.listQuestions = data;
       this.questions = this.questions.concat(data);
     });
 
-    this.viewService.getUnitTestQuestions(this.unitId).subscribe((data: TestQuestion[]) => {
+    this.unitService.getUnitTestQuestions(this.unitId).subscribe((data: TestQuestion[]) => {
       this.testQuestions = data;
       this.questions = this.questions.concat(data);
     });
@@ -89,7 +89,7 @@ export class QuestionComponent implements OnInit {
       questionText: text,
       subtype: 'DefinitionQuestion'
     };
-    this.viewService.addUnitDefinitionQuestion(this.unitId, this.definitionQuestion).subscribe(
+    this.unitService.addUnitDefinitionQuestion(this.unitId, this.definitionQuestion).subscribe(
       (_) => {
           this.ngOnInit();
         },
@@ -110,7 +110,7 @@ export class QuestionComponent implements OnInit {
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswers: ca
     };
-    this.viewService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
+    this.unitService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
       (_) => {
         this.ngOnInit();
       },
@@ -131,7 +131,7 @@ export class QuestionComponent implements OnInit {
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswer: ca[0]
     };
-    this.viewService.addUnitTestQuestion(this.unitId, this.testQuestion).subscribe(
+    this.unitService.addUnitTestQuestion(this.unitId, this.testQuestion).subscribe(
       (_) => {
         this.ngOnInit();
       },

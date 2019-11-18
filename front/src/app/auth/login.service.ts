@@ -44,7 +44,6 @@ export class LoginService {
         user.authdata = auth;
         localStorage.setItem(CURRENT_USER_ITEM, JSON.stringify(user));
       }
-      console.log(user);
       return user;
     }));
   }
