@@ -1,6 +1,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from './auth/login.service';
 import { Component } from '@angular/core';
+import {TabService} from './tab/tab.service';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +11,17 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private loginService: LoginService) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private loginService: LoginService, private tabService: TabService) {}
 
   login(event: any, user: string, pass: string) {
     event.preventDefault();
     this.loginService.login(user, pass).subscribe(
       (u) => {
-        this.router.navigate(['/']);
+        if (u.roles.includes('ROLE_ADMIN')) {
+          this.router.navigate(['/']);
+        } else {
+          this.router.navigate(['/student']);
+        }
       },
       (error) => alert('Invalid user or password'),
     );

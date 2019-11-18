@@ -3,7 +3,6 @@
 <body>
 <div align=center>
   <p>{{question?.questionText}}</p>
-  <span *ngIf="!this.alreadyDone">
     <span *ngIf="!questionDone">
       <form name="choosenAnswer">
         <span *ngFor="let answer of question?.possibleAnswers">
@@ -26,17 +25,6 @@
         <mat-button-toggle (click)="this.questionDone=false">Volver a intentar</mat-button-toggle>
       </span>
     </span>
-  </span>
-  <span *ngIf="this.alreadyDone">
-    <span *ngIf="this.correct">
-      <p>{{question?.correctAnswer}}</p>
-      <p style="color: green"> RESPUESTA CORRECTA</p>
-    </span>
-    <span *ngIf="!this.correct">
-      <p style="color: red"> RESPUESTA INCORRECTA</p>
-      <mat-button-toggle (click)="this.questionDone=false ; this.alreadyDone = false">Volver a intentar</mat-button-toggle>
-    </span>
-  </span>
   <mat-button-toggle (click)="return()" style="margin-top: 5%">Volver</mat-button-toggle>
 </div>
 </body>

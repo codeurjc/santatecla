@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <div class="progress-header">
-          <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
-            Fichas
-          </button>
+<body>
+    <h1 align="center">Seguimiento</h1>
+    <div align="center" id="progressType">
+      Seguimiento del curso: {{this.chosenCourse?.name}}
+      <mat-menu #appMenu="matMenu">
+        <span *ngFor="let course of courses">
+          <button mat-menu-item (click)="newChosenCourse(course)">{{course.name}}</button>
+        </span>
+      </mat-menu>
 
-          <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
-            Seguimiento
-          </button>
+      <button mat-icon-button [matMenuTriggerFor]="appMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
 
-          <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
-            Ejercicios
-          </button>
+      <div *ngIf="chosenCourse">
+        Mostrar: {{this.chosenInfoToShow}}
+        <mat-menu #showInfo="matMenu">
+          <button mat-menu-item (click)="this.chosenInfoToShow='Todo'">Todo</button>
+          <button mat-menu-item (click)="this.chosenInfoToShow='Clase'">Seguimiento de clase</button>
+          <button mat-menu-item (click)="this.chosenInfoToShow='Unidades'">Seguimiento por unidades</button>
+        </mat-menu>
 
-          <div *ngFor="let itinerary of itineraries">
-            <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-              Itinerario {{itinerary.id}}
-            </button>
+        <button mat-icon-button [matMenuTriggerFor]="showInfo">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Clase'">
+      <h3 align="center">Seguimiento de la clase</h3>
+      <span *ngIf="chosenCourse && ready">
+        <table mat-table [dataSource]="this.classResults" class="mat-elevation-z8" align="center">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="columnWidth" align="center"> Alumno </th>
+            <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
+          </ng-container>
+          <span *ngFor="let unit of units">
+            <ng-container matColumnDef="{{unit.name}}">
+              <th mat-header-cell *matHeaderCellDef class="columnWidth" align="center">{{unit.name}} </th>
+              <td mat-cell *matCellDef="let element">{{element.points[this.units.indexOf(unit)].toFixed(2)}}</td>
+            </ng-container>
+          </span>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay" align="center"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" class="columnWidth" align="center"></tr>
+        </table>
+        <div *ngIf="worstUser?.name == null || bestUser?.name == null" align="center">
+          <p>No hay información suficiente para mostrar mejor y peor alumno</p>
+        </div>
+        <div *ngIf="worstUser?.name != null && bestUser?.name != null" align="center">
+          <div class="row">
+            <div class="column">
+              <h4>Mejor alumno : {{this.bestUser?.name}}</h4>
+            </div>
+            <div class="column">
+              <h4>Peor alumno : {{this.worstUser?.name}}</h4>
+            </div>
           </div>
         </div>
-
-        <mat-card class="question" *ngFor = "let question of unit?.definitionQuestions">
-            <p>{{question.questionText}}</p>
-            <div style="border: solid; color: gray;">
-                <p>Respuestas Correctas : {{question.totalCorrectAnswers}}</p>
-                <p>Respuestas Incorectas: {{question.totalWrongAnswers}}</p>
-                <span *ngIf= "question.totalWrongAnswers > 0.75 * (question.totalWrongAnswers + question.totalCorrectAnswers)">
-                    <p style="color: red;">CUIDADO REVISAR</p>
-                    <i class="material-icons">warning</i>
-                </span>
-                <p></p>
-            </div>
-        </mat-card>
-
-        <mat-card class="questionList" *ngFor = "let listQuestion of unit?.listQuestions">
-            <p>{{listQuestion.questionText}}</p>
-            <div style="border: solid; color: gray;">
-                <p>Respuestas Correctas: {{listQuestion.totalCorrectAnswers}}</p>
-                <p>Respuestas Incorectas: {{listQuestion.totalWrongAnswers}}</p>
-                <span *ngIf= "listQuestion.totalWrongAnswers > 0.75 * (listQuestion.totalWrongAnswers + listQuestion.totalCorrectAnswers)">
-                    <p style="color: red;">CUIDADO REVISAR</p>
-                    <i class="material-icons">warning</i>
-                </span>
-                <p></p>
-            </div>
-        </mat-card>
-
-        <mat-card class="questionTest" *ngFor = "let testQuestion of unit?.testQuestions">
-          <p>{{testQuestion.questionText}}</p>
-          <div style="border: solid; color: gray;">
-            <p>Respuestas Correctas: {{testQuestion.totalCorrectAnswers}}</p>
-            <p>Respuestas Incorectas: {{testQuestion.totalWrongAnswers}}</p>
-            <span *ngIf= "testQuestion.totalWrongAnswers > 0.75 * (testQuestion.totalWrongAnswers + testQuestion.totalCorrectAnswers)">
-                    <p style="color: red;">CUIDADO REVISAR</p>
-                    <i class="material-icons">warning</i>
-                </span>
-            <p></p>
-          </div>
-        </mat-card>
-    </body>
+      </span>
+    </div>
+    <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Unidades'">
+      Seguimiento de unidades
+    </div>
+</body>
 </html>

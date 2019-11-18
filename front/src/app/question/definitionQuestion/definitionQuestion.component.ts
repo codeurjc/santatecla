@@ -52,6 +52,7 @@ export class DefinitionQuestionComponent implements OnInit {
 
   sendAnswer() {
     this.questionAnswer.user = this.loginService.getCurrentUser();
+    this.questionAnswer.unitId = this.unitId;
     this.questionService.addDefinitionAnswer(this.id, this.questionAnswer).subscribe(
       (_) => {
         this.questionDone = true;
