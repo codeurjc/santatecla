@@ -30,7 +30,7 @@ export class CourseComponent implements OnInit {
       this.courseService.getCourse(this.id).subscribe((data: Course) => {
         this.course = data;
         for (let unit of this.course.units) {
-          this.courseService.getUserDistinctAnswerCount(unit.id, this.loginService.getCurrentUser().id).subscribe((data2: number) => {
+          this.courseService.getUserDistinctAnswerCount(+unit.id, this.loginService.getCurrentUser().id).subscribe((data2: number) => {
             unit.questionsDone = data2;
           }, error => { console.log(error); } );
         }

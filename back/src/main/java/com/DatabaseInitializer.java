@@ -64,7 +64,8 @@ public class DatabaseInitializer {
   
         @Autowired
         private CourseRepository courseRepository;
-  
+
+        @PostConstruct
         public void init() {
 
                 //Cards
