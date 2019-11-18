@@ -38,9 +38,14 @@ import { ListQuestionComponent } from './question/listQuestion/listQuestion.comp
 import { ListQuestionService } from './question/listQuestion/listQuestion.service';
 import { ProgressComponent } from './progress/progress.component';
 import { ProgressService } from './progress/progress.service';
-import { QuestionService } from './question/question.service';
-import { TestQuestionComponent } from './question/testQuestion/testQuestion.component';
-import { TestQuestionService } from './question/testQuestion/testQuestion.service';
+import {QuestionService} from './question/question.service';
+import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
+import {TestQuestionService} from './question/testQuestion/testQuestion.service';
+import {StudentHomeComponent} from './course/studentHome.component';
+import {StudentHomeService} from './course/studentHome.service';
+import {CourseComponent} from './course/course.component';
+import {CourseService} from './course/course.service';
+import {TabService} from './tab/tab.service';
 import { ViewService } from "./view/view.service";
 
 @NgModule({
@@ -53,7 +58,9 @@ import { ViewService } from "./view/view.service";
     ListQuestionComponent,
     QuestionComponent,
     ProgressComponent,
-    TestQuestionComponent
+    TestQuestionComponent,
+    StudentHomeComponent,
+    CourseComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -104,7 +111,7 @@ import { ViewService } from "./view/view.service";
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, ViewService, TestQuestionService, UnitService,
+    ProgressService, ViewService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

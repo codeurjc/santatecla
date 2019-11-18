@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 
 import com.card.Card;
 import com.card.CardRepository;
+import com.course.Course;
+import com.course.CourseRepository;
 import com.itinerary.Itinerary;
 import com.itinerary.ItineraryRepository;
 import com.question.Question;
@@ -59,8 +61,10 @@ public class DatabaseInitializer {
 
         @Autowired
         private TestQuestionRepository testQuestionRepository;
-
-        @PostConstruct
+  
+        @Autowired
+        private CourseRepository courseRepository;
+  
         public void init() {
 
                 //Cards
@@ -276,8 +280,26 @@ public class DatabaseInitializer {
                 unitRepository.save(unit13);
 
                 //Users
-                userRepository.save(new User("alumno", "alumno"));
-                userRepository.save(new User("profesor", "profesor", "ROLE_ADMIN"));
-        }
+                User user1 = new User("alumno", "alumno");
+                User user2 = new User("David", "alumno");
+                userRepository.save(user1);
+                userRepository.save(user2);
+                User teacher = new User("profesor", "profesor", "ROLE_ADMIN");
+                userRepository.save(teacher);
+
+                // Courses
+                Course course = new Course("Lenguajes de programación", teacher, "Aprende lo básico de los lenguajes de programación más usados.");
+                course.addStudent(user1);
+                course.addStudent(user2);
+                course.addUnit(unit1);
+                course.addUnit(unit2);
+                courseRepository.save(course);
+
+                Course course2 = new Course("Curso de Java", teacher, "Aprende todo lo necesario para ser un experto en Java.");
+                course2.addStudent(user1);
+                course2.addUnit(unit1);
+                courseRepository.save(course2);
+
+	}
 
 }

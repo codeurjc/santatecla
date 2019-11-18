@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {TabService} from '../tab/tab.service';
+import {Course} from '../course/course.model';
 
 const LOGIN_URL = 'api/login';
 const LOGOUT_URL = 'api/logout';
@@ -23,7 +25,7 @@ export class LoginService {
   user: User;
   auth: string;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private tabService: TabService) {
     let user = JSON.parse(localStorage.getItem(CURRENT_USER_ITEM));
     if (user) {
       this.setCurrentUser(user);
@@ -55,6 +57,7 @@ export class LoginService {
   logout() {
     return this.http.get(LOGOUT_URL).pipe(map(response => {
       this.removeCurrentUser();
+      this.tabService.removeAllTabs();
       return response;
     }));
   }

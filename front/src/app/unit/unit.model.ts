@@ -13,4 +13,5 @@ export interface Unit {
   definitionQuestions?: DefinitionQuestion[];
   listQuestions?: ListQuestion[];
   testQuestions ?: TestQuestion[];
+  questionsDone ?: number;
 }

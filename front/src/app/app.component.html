@@ -7,14 +7,75 @@
   <body>
 
     <div *ngIf="loginService.isLogged" id="header">
-
+      <div *ngIf="loginService.isAdmin" id="progress-button">
+        <button mat-icon-button [routerLink]="['progress']">
+          <mat-icon>layers</mat-icon>
+        </button>
+      </div>
       <button mat-icon-button id="logout-button" (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
       </button>
+      <span *ngIf="loginService.isAdmin">
+        <button mat-icon-button style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/']">
+          <mat-icon>home</mat-icon>
+        </button>
+      </span>
 
-      <button mat-icon-button style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/']">
-        <mat-icon>home</mat-icon>
-      </button>
+      <span *ngIf="!loginService.isAdmin">
+        <button mat-icon-button style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/student']">
+          <mat-icon>home</mat-icon>
+        </button>
+      </span>
+
+      <span *ngFor = "let tab of tabService._tabs">
+
+      <div class="mat-elevation-z4 tab activeTab" style="display: inline" *ngIf="tab.active">
+        <span *ngIf="tab.type == 'course'">
+          <div [routerLink]="['/course', tab.id]" style="display: inline; cursor: pointer;">
+            Curso {{tab.name}}
+          </div>
+          <button class="closeTab" [routerLink]="['/student']" mat-icon-button (click)="tabService.removeTab(tab.type, tab.id)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </span>
+        <span *ngIf="tab.type == 'units'">
+          <div [routerLink]="['units/', tab.id, 'cards']" style="display: inline; cursor: pointer;">
+            Unidad {{tab.name}}
+          </div>
+          <span *ngIf="!loginService.isAdmin">
+            <button class="closeTab" [routerLink]="['/course', tab.course]" mat-icon-button (click)="tabService.removeTab(tab.type, tab.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </span>
+          <span *ngIf="loginService.isAdmin">
+            <button class="closeTab" [routerLink]="['/']" mat-icon-button (click)="tabService.removeTab(tab.type, tab.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </span>
+        </span>
+
+      </div>
+
+      <div class="mat-elevation-z4 tab" style="display: inline" *ngIf="!tab.active">
+
+        <span *ngIf="tab.type == 'course'">
+          <div [routerLink]="['/course', tab.id]" style="display: inline; cursor: pointer;">
+          Curso {{tab.name}}
+          </div>
+        </span>
+        <span *ngIf="tab.type == 'units'">
+          <div [routerLink]="['units/', tab.id, 'cards']" style="display: inline; cursor: pointer;">
+          Unidad {{tab.name}}
+          </div>
+        </span>
+
+        <button class="closeTab" mat-icon-button (click)="tabService.removeTab(tab.type, tab.id)">
+          <mat-icon>close</mat-icon>
+        </button>
+
+      </div>
+
+    </span>
 
     </div>
 
