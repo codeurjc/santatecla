@@ -149,4 +149,32 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping(value="/{courseId}/units/points")
+    public ResponseEntity<List<UserProgressItem>> getUnitProgress(@PathVariable long courseId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        ArrayList<Double> points;
+        int correctAnswers;
+        int wrongAnswers;
+        ArrayList<UserProgressItem> result = new ArrayList<>();
+        if(optional.isPresent()){
+            for (Unit unit : optional.get().getUnits()){
+                points = new ArrayList<>();
+                correctAnswers = this.courseService.findUnitCorrectAnswers(courseId, unit.getId());
+                points.add((double)correctAnswers);
+                wrongAnswers = this.courseService.findUnitWrongAnswers(courseId, unit.getId());
+                points.add((double)wrongAnswers);
+                if(wrongAnswers > 0.75*(correctAnswers+wrongAnswers)){
+                    points.add(1.0);
+                }
+                else {
+                    points.add(0.0);
+                }
+                UserProgressItem item = new UserProgressItem(unit.getName(), points);
+                result.add(item);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 }

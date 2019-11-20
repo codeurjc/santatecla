@@ -28,12 +28,12 @@
       </div>
     </div>
     <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Clase'">
-      <h3 align="center">Seguimiento de la clase</h3>
+      <h2 align="center" style="margin-top: 5%" >Seguimiento de la clase</h2>
       <span *ngIf="chosenCourse && ready">
         <table mat-table [dataSource]="this.classResults" class="mat-elevation-z8" align="center">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef class="columnWidth" align="center"> Alumno </th>
-            <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
           <span *ngFor="let unit of units">
             <ng-container matColumnDef="{{unit.name}}">
@@ -50,17 +50,49 @@
         <div *ngIf="worstUser?.name != null && bestUser?.name != null" align="center">
           <div class="row">
             <div class="column">
-              <h4>Mejor alumno : {{this.bestUser?.name}}</h4>
+              <p>Mejor alumno : {{this.bestUser?.name}}</p>
             </div>
             <div class="column">
-              <h4>Peor alumno : {{this.worstUser?.name}}</h4>
+              <p>Peor alumno : {{this.worstUser?.name}}</p>
             </div>
           </div>
         </div>
       </span>
     </div>
     <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Unidades'">
-      Seguimiento de unidades
+      <h2 align="center" style="margin-top: 5%">Seguimiento de las unidades</h2>
+
+      <div style="height: 25rem; padding: 0.5rem;">
+        <span *ngIf="chosenCourse && ready">
+          <table mat-table [dataSource]="this.unitResults" class="mat-elevation-z8" align="center">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef class="columnWidth" align="center"> Unidad </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="RightAnswers">
+              <th mat-header-cell *matHeaderCellDef class="columnWidth" align="center">Respuestas correctas</th>
+              <td mat-cell *matCellDef="let element">{{element.points[0]?.toFixed(0)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="WrongAnswers">
+              <th mat-header-cell *matHeaderCellDef class="columnWidth" align="center">Respuestas incorrectas</th>
+              <td mat-cell *matCellDef="let element">{{element.points[1]?.toFixed(0)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Review">
+              <th mat-header-cell *matHeaderCellDef class="columnWidth" align="center">Estado de la unidad</th>
+              <td mat-cell *matCellDef="let element">
+                <span *ngIf="element.points[2]?.toFixed(2) == 0">
+                  <mat-icon style="color: green">done</mat-icon>
+                </span>
+                <span *ngIf="element.points[2]?.toFixed(2) > 0">
+                  <mat-icon style="color: red">close</mat-icon>
+                </span>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="unitColumnsToDisplay" align="center"></tr>
+            <tr mat-row *matRowDef="let row; columns: unitColumnsToDisplay;" class="columnWidth" align="center"></tr>
+          </table>
+        </span>
+      </div>
     </div>
 </body>
 </html>

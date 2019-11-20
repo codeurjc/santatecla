@@ -4,6 +4,7 @@ import { Unit } from '../unit/unit.model';
 import {LoginService, User} from '../auth/login.service';
 import {Course} from '../course/course.model';
 import {UserResult} from './userResult.model';
+import {UnitResult} from './unitResult.model';
 
 @Component({
   templateUrl: './progress.component.html',
@@ -18,7 +19,9 @@ export class ProgressComponent implements OnInit {
   courses: Course[];
   units: Unit[];
   classResults: UserResult[];
+  unitResults: UnitResult[];
   columnsToDisplay;
+  unitColumnsToDisplay = ['name', 'RightAnswers', 'WrongAnswers', 'Review'];
   bestUser: User;
   worstUser: User;
   ready = false;
@@ -45,7 +48,6 @@ export class ProgressComponent implements OnInit {
     }
     this.progressService.getClassProgress(this.chosenCourse.id).subscribe((data: UserResult[]) => {
         this.classResults = data;
-        this.ready = true;
         console.log(this.classResults);
         }, error => {console.log(error); } );
     this.progressService.getBestStudent(this.chosenCourse.id).subscribe((data: User) => {
@@ -54,5 +56,10 @@ export class ProgressComponent implements OnInit {
     this.progressService.getWorstStudent(this.chosenCourse.id).subscribe((data: User) => {
       this.worstUser = data;
     }, error => {console.log(error); });
+    this.progressService.getUnitProgress(this.chosenCourse.id).subscribe((data: UnitResult[]) => {
+      this.unitResults = data;
+      this.ready = true;
+      console.log(this.unitResults);
+    }, error => {console.log(error); } );
   }
 }

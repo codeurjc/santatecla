@@ -1,4 +1,4 @@
-export interface UserResult {
+export interface UnitResult {
   name: string;
   points: number[];
 }
