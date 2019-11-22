@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { ItineraryService } from './itinerary.service';
 import { LoginService } from '../auth/login.service';
-import { ViewService } from '../view/view.service';
+import { UnitService } from '../unit/unit.service';
 
 import Asciidoctor from 'asciidoctor';
 import {Slide} from '../slide/slide.model';
@@ -47,7 +47,7 @@ export class ItineraryComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
               private loginService: LoginService,
-              private viewService: ViewService ) {}
+              private unitService: UnitService ) {}
 
   ngOnInit() {
 
@@ -56,7 +56,7 @@ export class ItineraryComponent implements OnInit {
       this.itineraryId = params.itineraryId;
     });
 
-    this.viewService.getUnit(this.unitId).subscribe((data: Unit) => {
+    this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
       this.unit = {
         id: data.id,
         name: data.name,
@@ -197,15 +197,7 @@ export class ItineraryComponent implements OnInit {
     this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
   }
 
-  navigateQuestion(id: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/definitionQuestion/' + id]);
-  }
-
-  navigateListQuestion(id: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/listQuestion/' + id]);
-  }
-
-  navigateTestQuestion(id: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/testQuestion/' + id]);
+  navigateToUnitQuestions() {
+    this.router.navigate(['units', this.unitId, 'question']);
   }
 }

@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html>
   <body>
+  <div class="question-header">
+    <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
+      Fichas
+    </button>
+
+    <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
+      Seguimiento
+    </button>
+
+    <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
+      Ejercicios
+    </button>
+
+    <div *ngFor="let itinerary of itinerariesTabs">
+      <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
+        Itinerario {{itinerary.id}}
+      </button>
+    </div>
+
+  </div>
     <div align="center">
       <h1>Preguntas</h1>
       <span *ngFor="let question of questions">
@@ -27,7 +47,7 @@
             required
           />
         </form>
-        <button class="button" color="primary" (click)="sendQuestion(questionInput.value); questionInput.value=''">
+        <button class="button" color="primary" (click)="sendDefinitionQuestion(questionInput.value); questionInput.value=''">
           Guardar
         </button>
       </span>
@@ -39,23 +59,47 @@
             name="question"
             required
           />
+          <br>
+          <input  placeholder="Respuesta posible" #pAnswerInput type="text" name="question"/>
+          <input type="checkbox" name="correct" [(ngModel)]="correct" value="false"> Correcta
+           <button class="button" color="primary"
+                   (click)="addPossibleAnswer(pAnswerInput.value); pAnswerInput.value=''">
+            Añadir
+           </button>
+          <br>
         </form>
-        <button class="button" color="primary" (click)="sendQuestion(questionInput.value); questionInput.value=''">
+        <div *ngFor="let answer of possibleAnswers.keys()">{{answer}}<br></div>
+        <button class="button" color="primary"
+                (click)="sendListQuestion(questionInput.value);
+                questionInput.value=''; pAnswerInput.value=''">
           Guardar
         </button>
       </span>
       <span *ngIf="subtype == 'TestQuestion'">
-      <form #textForm="ngForm">
-        <input
-          placeholder="Pregunta"
-          #questionInput type="text"
-          name="question"
-          required
-        />
-      </form>
-      <button class="button" color="primary" (click)="sendQuestion(questionInput.value); questionInput.value=''">
-        Guardar
-      </button>
+        <form #textForm="ngForm">
+          <input
+            placeholder="Pregunta"
+            #questionInput type="text"
+            name="question"
+            required
+          />
+          <br>
+          <input  placeholder="Respuesta posible" #pAnswerInput type="text" name="question"/>
+          <div *ngIf="!correctTestAnswerSelected">
+            <input type="checkbox" name="correct" [(ngModel)]="correct" value="false"> Correcta
+          </div>
+          <button class="button" color="primary"
+                  (click)="addPossibleTestAnswer(pAnswerInput.value); pAnswerInput.value=''">
+            Añadir
+          </button>
+          <br>
+        </form>
+        <div *ngFor="let answer of possibleAnswers.keys()">{{answer}}<br></div>
+        <button class="button" color="primary"
+                (click)="sendTestQuestion(questionInput.value);
+                questionInput.value=''; pAnswerInput.value=''">
+          Guardar
+        </button>
       </span>
     </div>
   </body>

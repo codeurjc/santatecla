@@ -5,11 +5,13 @@ import { Relation } from '../relation/relation.model';
 import { TestQuestion } from '../question/testQuestion/testQuestion.model';
 
 export interface Unit {
-  id?: number;
+  id?: string;
   name: string;
-  relations?: Relation[];
+  outgoingRelations?: Relation[];
+  incomingRelations?: Relation[];
   itineraries?: Itineray[];
   definitionQuestions?: DefinitionQuestion[];
   listQuestions?: ListQuestion[];
   testQuestions ?: TestQuestion[];
+  questionsDone ?: number;
 }

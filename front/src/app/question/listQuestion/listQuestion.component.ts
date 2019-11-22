@@ -81,7 +81,7 @@ export class ListQuestionComponent implements OnInit {
     } else {
       this.questionListCorrect = false;
     }
-    this.questionAnswer = {user: this.loginService.getCurrentUser(), correct: this.questionListCorrect};
+    this.questionAnswer = {user: this.loginService.getCurrentUser(), correct: this.questionListCorrect, unitId: this.unitId};
     this.questionService.addAnswer(this.id, this.questionAnswer).subscribe(
       (_) => {
         this.questionDone = true;

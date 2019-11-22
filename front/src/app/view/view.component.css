@@ -1,7 +1,7 @@
 #json-editor-container {
-  float: left;
+  position: absolute;
   width: 40%;
-  overflow: auto;
+  height: calc(100vh - 3rem);
 }
 
 #unit-representation {
@@ -11,9 +11,11 @@
 }
 
 #search {
+  position: absolute;
+  right: 0;
   margin: 1rem;
-  width: 50rem;
-  z-index: 5;
+  width: calc(60% - 2rem);
+  z-index: 120;
 }
 
 #search-input {
@@ -44,8 +46,18 @@
   position: absolute;
 }
 
+#uml-edit-input {
+  background: transparent;
+  border: none;
+  top: 120%;
+}
+
 #uml-node-options {
   position: absolute;
+  padding: 0.1rem;
+  background-color: #ffffff;
+  border: thin solid #A8A8A8;
+  top: 120%;
 }
 
 .uml-option-icon {
@@ -53,4 +65,16 @@
 }
 
 #save-button {
+  position: absolute;
+  left: 40%;
+  margin: 6rem 1rem 1rem 1rem;
+  z-index: 110;
+}
+
+#spinner {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  left: 65%;
+  top: 40%;
 }

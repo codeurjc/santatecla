@@ -67,7 +67,7 @@ export class TestQuestionComponent implements OnInit {
     } else {
       this.correct = false;
     }
-    this.questionAnswer = {user: this.loginService.getCurrentUser(), correct: this.correct, answerText: this.chosenAnswer};
+    this.questionAnswer = {user: this.loginService.getCurrentUser(), correct: this.correct, answerText: this.chosenAnswer, unitId: this.unitId};
     console.log(this.questionAnswer);
     this.questionService.addTestAnswer(this.id, this.questionAnswer).subscribe(
       (_) => {

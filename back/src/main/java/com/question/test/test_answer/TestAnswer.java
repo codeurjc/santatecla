@@ -15,6 +15,8 @@ public class TestAnswer {
 
     private boolean correct;
 
+    private long unitId;
+
     @OneToOne
     private User user;
 
@@ -56,6 +58,14 @@ public class TestAnswer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public long getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(long unitId) {
+        this.unitId = unitId;
     }
 }
 

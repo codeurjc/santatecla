@@ -7,11 +7,16 @@
         Seguimiento
       </button>
 
+      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
+        Ejercicios
+      </button>
+
       <div *ngFor="let itinerary of itineraries">
         <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
           Itinerario {{itinerary.id}}
         </button>
       </div>
+
     </div>
 
     <h1>{{unit?.name}}</h1>

@@ -4,14 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -46,6 +40,7 @@ public class User {
 		this.roles.add("ROLE_USER");
 	}
 
+
 	public String getName() {
 		return name;
 	}
@@ -60,8 +55,8 @@ public class User {
 
 	public void setPassword(String passwordHash) {
 		this.passwordHash = passwordHash;
-	}	
-	
+	}
+
 	public String getPasswordHash() {
 		return passwordHash;
 	}
