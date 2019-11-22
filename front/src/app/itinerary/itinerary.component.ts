@@ -41,6 +41,8 @@ export class ItineraryComponent implements OnInit {
 
   itineraryTabs: Itineray[];
 
+  cardsCount: number;
+
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
               private router: Router,
@@ -74,9 +76,7 @@ export class ItineraryComponent implements OnInit {
       this.itineraryContent = '== ' + this.itinerary.name + '\n';
       this.itineraryContentExtended = '';
       this.slidesToContent(this.itinerary.slides);
-      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
-        this.viewHTMLVersion();
-      });
+      this.extendContent(this.itineraryContent);
     });
   }
 
@@ -90,18 +90,39 @@ export class ItineraryComponent implements OnInit {
     });
   }
 
-  resolveAfterSeconds(x) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(x);
-      }, 1000);
+  async getEmbebedCards(name: string, id: number, content: string, cardsCounter: number) {
+    let cardContent;
+    cardContent = await this.unitService.getCardByName(name, id).toPromise();
+    this.extractedData.splice(cardsCounter, 1, cardContent.content);
+    this.addExtractedData(content);
+  }
+
+  cardsCounterFunction(content: string) {
+    this.cardsCount = 0;
+    let lines: string[];
+    lines = content.split('\n');
+    lines.forEach((line: string) => {
+      let words: string[];
+      words = line.split('.');
+      if (words[0] === 'assert') {
+        let parameters: string[];
+        parameters = words[1].split('/');
+        if (parameters[0] === 'card') {
+          this.cardsCount = this.cardsCount + 1;
+        }
+      }
     });
   }
 
   extendContent(content: string) {
+    this.cardsCounterFunction(content);
     this.extractedData = [];
+    for (let i = 0; i < this.cardsCount; i++) {
+      this.extractedData.push('');
+    }
     this.position = [];
     let counter = 0;
+    let cardsCounter = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
@@ -112,13 +133,11 @@ export class ItineraryComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.unitService.getCardByName(parameters[1], Number(parameters[2])).subscribe((data: Card) => {
-            this.extractedData.push(data.content);
-            this.addExtractedData(content);
-          });
+          this.getEmbebedCards(parameters[1], Number(parameters[2]), content, cardsCounter);
+          cardsCounter = cardsCounter + 1;
+        } else {
+          this.addExtractedData(content);
         }
-      } else {
-        this.addExtractedData(content);
       }
       counter = counter + 1;
     });
@@ -134,6 +153,7 @@ export class ItineraryComponent implements OnInit {
     lines.forEach((line: string) => {
       this.itineraryContentExtended = this.itineraryContentExtended + line + '\n';
     });
+    this.viewHTMLVersion();
   }
 
   contentToItinerary(content: string) {
@@ -177,9 +197,7 @@ export class ItineraryComponent implements OnInit {
   updateHTMLView() {
     this.contentToItinerary(this.itineraryContent);
     this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
-      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
-        this.viewHTMLVersion();
-      });
+      this.extendContent(this.itineraryContent);
     }, (error) => {
       console.error(error);
     });

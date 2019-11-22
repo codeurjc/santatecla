@@ -115,7 +115,7 @@ public class DatabaseInitializer {
                 Slide slide1 = new Slide("Concepto");
                 Slide slide2 = new Slide("Tipos");
 
-                slide1.addContent("assert.card/Que/12\n\nassert.card/Cuando/12\n\n");
+                slide1.addContent("assert.card/Que/13\n\nassert.card/Cuando/13\n\n");
                 slide2.addContent("* Lenguaje Maquina\n" +
                         "\n" +
                         "Es el más primitivo de los códigos y se basa en la numeración binaria, todo en 0 y 1. Este lenguaje es utilizado directamente por máquinas o computadora.\n" +
