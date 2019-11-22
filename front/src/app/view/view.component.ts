@@ -58,7 +58,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
-    this.getUnit(15);
+    this.getUnit(13);
   }
 
   ngAfterContentInit() {

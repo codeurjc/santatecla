@@ -112,7 +112,7 @@ export class ItineraryComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.viewService.getCardByName(parameters[1], Number(parameters[2])).subscribe((data: Card) => {
+          this.unitService.getCardByName(parameters[1], Number(parameters[2])).subscribe((data: Card) => {
             this.extractedData.push(data.content);
             this.addExtractedData(content);
           });

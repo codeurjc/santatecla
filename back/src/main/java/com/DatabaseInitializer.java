@@ -138,11 +138,13 @@ public class DatabaseInitializer {
 
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
+                Itinerary itinerary2 = new Itinerary("Introducción Java");
 
                 itinerary1.getSlides().add(slide1);
                 itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
+                itineraryRepository.save(itinerary2);
 
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
