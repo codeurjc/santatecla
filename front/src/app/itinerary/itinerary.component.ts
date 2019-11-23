@@ -46,6 +46,8 @@ export class ItineraryComponent implements OnInit {
   showSpinner = false;
   componentsChecker: number;
 
+  subSlide: boolean;
+
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
               private router: Router,
@@ -101,6 +103,7 @@ export class ItineraryComponent implements OnInit {
       contentEmbebed = await this.unitService.getCard(contentId, unitId).toPromise();
       this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
     } else if (type === 'slide') {
+      this.subSlide = true;
       contentEmbebed = await this.unitService.getSlideFormItinerary(contentId, contentId2, unitId).toPromise();
       this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
     }
@@ -121,6 +124,7 @@ export class ItineraryComponent implements OnInit {
   }
 
   extendContent(content: string) {
+    this.subSlide = false;
     this.contentCounterFunction(content);
     this.extractedData = [];
     for (let i = 0; i < this.contentCount; i++) {
@@ -170,8 +174,12 @@ export class ItineraryComponent implements OnInit {
       }
     });
     if (this.componentsChecker === this.contentCount) {
-      this.showSpinner = false;
-      this.viewHTMLVersion();
+      if (this.subSlide) {
+        this.extendContent(this.itineraryContentExtended);
+      } else {
+        this.showSpinner = false;
+        this.viewHTMLVersion();
+      }
     }
   }
 
