@@ -1,5 +1,6 @@
 package com.itinerary;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class Itinerary{
         }
         return diferences;
     }
+
 
     /********************
      * GETTER AND SETTER *

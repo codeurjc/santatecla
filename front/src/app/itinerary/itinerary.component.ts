@@ -43,6 +43,9 @@ export class ItineraryComponent implements OnInit {
 
   cardsCount: number;
 
+  showSpinner = false;
+  componentsChecker: number;
+
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
               private router: Router,
@@ -52,6 +55,8 @@ export class ItineraryComponent implements OnInit {
               private unitService: UnitService ) {}
 
   ngOnInit() {
+
+    this.showSpinner = true;
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
@@ -90,11 +95,11 @@ export class ItineraryComponent implements OnInit {
     });
   }
 
-  async getEmbebedCards(name: string, id: number, content: string, cardsCounter: number) {
+  async getEmbebedCards(cardId: number, unitId: number, content: string, cardsCounter: number) {
     let cardContent;
-    cardContent = await this.unitService.getCardByName(name, id).toPromise();
+    cardContent = await this.unitService.getCardByName(cardId, unitId).toPromise();
     this.extractedData.splice(cardsCounter, 1, cardContent.content);
-    this.addExtractedData(content);
+    this.addExtractedData(content, cardsCounter);
   }
 
   cardsCounterFunction(content: string) {
@@ -133,17 +138,18 @@ export class ItineraryComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.getEmbebedCards(parameters[1], Number(parameters[2]), content, cardsCounter);
+          this.getEmbebedCards(Number(parameters[1]), Number(parameters[2]), content, cardsCounter);
           cardsCounter = cardsCounter + 1;
         } else {
-          this.addExtractedData(content);
+          this.addExtractedData(content, cardsCounter);
         }
       }
       counter = counter + 1;
     });
   }
 
-  addExtractedData(content: string) {
+  addExtractedData(content: string, cardsCounter: number) {
+    this.componentsChecker = 0;
     this.itineraryContentExtended = '';
     let lines: string[];
     lines = content.split('\n');
@@ -153,7 +159,15 @@ export class ItineraryComponent implements OnInit {
     lines.forEach((line: string) => {
       this.itineraryContentExtended = this.itineraryContentExtended + line + '\n';
     });
-    this.viewHTMLVersion();
+    this.extractedData.forEach((component: string) => {
+      if (component !== '') {
+        this.componentsChecker = this.componentsChecker + 1;
+      }
+    });
+    if (this.componentsChecker === this.cardsCount) {
+      this.showSpinner = false;
+      this.viewHTMLVersion();
+    }
   }
 
   contentToItinerary(content: string) {
@@ -196,6 +210,8 @@ export class ItineraryComponent implements OnInit {
 
   updateHTMLView() {
     this.contentToItinerary(this.itineraryContent);
+    this.contentHTML = '';
+    this.showSpinner = true;
     this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
       this.extendContent(this.itineraryContent);
     }, (error) => {
