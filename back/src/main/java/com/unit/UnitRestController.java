@@ -47,15 +47,15 @@ public class UnitRestController extends GeneralRestController {
     @Autowired
     protected RelationService relationService;
 
-	@Autowired
+    @Autowired
     protected CardService cardService;
 
-    @GetMapping(value="/")
+    @GetMapping(value = "/")
     public ResponseEntity<List<Unit>> getUnits() {
         return new ResponseEntity<>(this.unitService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(value="/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Unit> getUnit(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
         if (unit.isPresent()) {
@@ -65,7 +65,7 @@ public class UnitRestController extends GeneralRestController {
         }
     }
 
-    @PostMapping(value="/")
+    @PostMapping(value = "/")
     public ResponseEntity<Unit> createUnit(@RequestBody Unit unit) {
         Unit savedUnit = new Unit();
         updateUnit(savedUnit, unit);
@@ -73,7 +73,7 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(savedUnit, HttpStatus.OK);
     }
 
-    @PutMapping(value="/")
+    @PutMapping(value = "/")
     public ResponseEntity<List<Unit>> updateUnits(@RequestBody List<Unit> units) {
         List<Unit> savedUnits = new ArrayList<>();
         for (Unit unit : units) {
@@ -119,19 +119,19 @@ public class UnitRestController extends GeneralRestController {
         }
     }
 
-    @GetMapping(value="/{id}/absoluteName")
+    @GetMapping(value = "/{id}/absoluteName")
     public ResponseEntity<Unit> getUnitAbsoluteName(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
         return unit.map(value -> new ResponseEntity<>(new Unit(unitService.getAbsoluteName(value)), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value="/search/{name}")
+    @GetMapping(value = "/search/{name}")
     public ResponseEntity<List<Unit>> searchUnits(@PathVariable String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);
         return new ResponseEntity<>(units, HttpStatus.OK);
     }
 
-    @GetMapping(value="/{unitId}/cards")
+    @GetMapping(value = "/{unitId}/cards")
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
         if (unit.isPresent()) {
@@ -142,9 +142,9 @@ public class UnitRestController extends GeneralRestController {
     }
 
     @PutMapping(value = "/{unitId}/cards/{cardId}")
-	public ResponseEntity<Card> uploadCard(@PathVariable long unitId, @PathVariable long cardId, @RequestBody Card card) {
-		Optional<Unit> unit = unitService.findOne(unitId);
-		if (!unit.isPresent()) {
+    public ResponseEntity<Card> uploadCard(@PathVariable long unitId, @PathVariable long cardId, @RequestBody Card card) {
+        Optional<Unit> unit = unitService.findOne(unitId);
+        if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Card updatedCard = unit.get().getCard(cardId);
@@ -157,9 +157,9 @@ public class UnitRestController extends GeneralRestController {
     }
 
     @RequestMapping(value = "/{unitId}/cards/{cardId}/image", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Card> uploadCardImage(@PathVariable long unitId, @PathVariable long cardId, @RequestParam(value = "image") MultipartFile image) {
-		Optional<Unit> unit = unitService.findOne(unitId);
-		if (!unit.isPresent()) {
+    public ResponseEntity<Card> uploadCardImage(@PathVariable long unitId, @PathVariable long cardId, @RequestParam(value = "image") MultipartFile image) {
+        Optional<Unit> unit = unitService.findOne(unitId);
+        if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Card card = unit.get().getCard(cardId);
@@ -172,18 +172,18 @@ public class UnitRestController extends GeneralRestController {
     }
 
     @RequestMapping(value = "/{unitId}/cards/{cardId}", method = RequestMethod.GET)
-	public ResponseEntity<Card> getCardImage(@PathVariable long unitId, @PathVariable long cardId, HttpServletResponse response) {
+    public ResponseEntity<Card> getCardImage(@PathVariable long unitId, @PathVariable long cardId, HttpServletResponse response) {
         Optional<Unit> unit = unitService.findOne(unitId);
-		if (!unit.isPresent()) {
+        if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Card card = unit.get().getCard(cardId);
         return new ResponseEntity<Card>(card, HttpStatus.OK);
     }
 
-    @PostMapping(value="/{unitId}/itineraries")
+    @PostMapping(value = "/{unitId}/itineraries")
     @ResponseStatus(HttpStatus.CREATED)
-    public Itinerary addItinerary(@RequestBody Itinerary itinerary, @PathVariable long unitId){
+    public Itinerary addItinerary(@RequestBody Itinerary itinerary, @PathVariable long unitId) {
 
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
@@ -195,10 +195,10 @@ public class UnitRestController extends GeneralRestController {
         return itinerary;
     }
 
-    @GetMapping(value="/{unitId}/question/definition")
+    @GetMapping(value = "/{unitId}/question/definition")
     public ResponseEntity<List<DefinitionQuestion>> getDefinitionQuestions(@PathVariable long unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent())?(new ResponseEntity<>(unit.get().getDefinitionQuestions(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return (unit.isPresent()) ? (new ResponseEntity<>(unit.get().getDefinitionQuestions(), HttpStatus.OK)) : (new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/{unitId}/question/definition")
@@ -224,7 +224,7 @@ public class UnitRestController extends GeneralRestController {
             Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
 
             if (question.isPresent()) {
-                return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.CREATED);
+                return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -245,10 +245,31 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/{unitId}/question/list")
+    @PutMapping("/{unitId}/question/definition/{qId}/answer/{aId}")
+    public ResponseEntity<DefinitionAnswer> updateDefinitionAnswer(@PathVariable long unitId, @PathVariable long qId, @PathVariable long aId, @RequestBody DefinitionAnswer newAnswer) {
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+        Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(qId);
+        System.out.println(unit.isPresent());
+        System.out.println(question.isPresent());
+
+        if (unit.isPresent() && question.isPresent()) {
+            Optional<DefinitionAnswer> oldAnswer = this.definitionQuestionService.findOneAnswer(question.get(), aId);
+            System.out.println(oldAnswer.isPresent());
+            if (oldAnswer.isPresent()) {
+                oldAnswer.get().update(newAnswer);
+                question.get().getAnswers().remove(oldAnswer.get());
+                question.get().addAnswer(oldAnswer.get());
+                this.definitionQuestionService.save(question.get());
+                return new ResponseEntity<>(oldAnswer.get(), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/{unitId}/question/list")
     public ResponseEntity<List<ListQuestion>> getListQuestions(@PathVariable long unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent())?(new ResponseEntity<>(unit.get().getListQuestions(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return (unit.isPresent()) ? (new ResponseEntity<>(unit.get().getListQuestions(), HttpStatus.OK)) : (new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/{unitId}/question/list")
@@ -266,6 +287,7 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+
     @GetMapping(value = "/{unitId}/question/list/{id}/answer")
     public ResponseEntity<List<ListAnswer>> getListAnswers(@PathVariable long unitId, @PathVariable long id) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
@@ -274,7 +296,7 @@ public class UnitRestController extends GeneralRestController {
             Optional<ListQuestion> question = this.listQuestionService.findOne(id);
 
             if (question.isPresent()) {
-                return new ResponseEntity<>(question.get().getListAnswers(), HttpStatus.CREATED);
+                return new ResponseEntity<>(question.get().getListAnswers(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -295,10 +317,10 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/{unitId}/question/test")
+    @GetMapping(value = "/{unitId}/question/test")
     public ResponseEntity<List<TestQuestion>> getTestQuestions(@PathVariable long unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent())?(new ResponseEntity<>(unit.get().getTestQuestions(), HttpStatus.OK)):(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return (unit.isPresent()) ? (new ResponseEntity<>(unit.get().getTestQuestions(), HttpStatus.OK)) : (new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/{unitId}/question/test")
@@ -324,7 +346,7 @@ public class UnitRestController extends GeneralRestController {
             Optional<TestQuestion> question = this.testQuestionService.findOne(id);
 
             if (question.isPresent()) {
-                return new ResponseEntity<>(question.get().getTestAnswers(), HttpStatus.CREATED);
+                return new ResponseEntity<>(question.get().getTestAnswers(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -345,7 +367,7 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/{unitId}/question/answer/{userId}/distinct")
+    @GetMapping(value = "/{unitId}/question/answer/{userId}/distinct")
     public ResponseEntity<Integer> getUserAnswerDistinctCount(@PathVariable long unitId, @PathVariable long userId) {
         return new ResponseEntity<>(this.unitService.getUserDistinctAnswer(unitId, userId), HttpStatus.OK);
     }

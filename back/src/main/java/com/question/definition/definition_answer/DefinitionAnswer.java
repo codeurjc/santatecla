@@ -34,6 +34,17 @@ public class DefinitionAnswer{
         this.correct = correct;
     }
 
+    public void update(DefinitionAnswer a) {
+        if (getAnswerText() != null) {
+            this.answerText = a.getAnswerText();
+        }
+        if (a.getJustification() != null) {
+            this.justification = a.getJustification();
+        }
+
+        this.correct = a.isCorrect();
+    }
+
     public long getId() {
         return id;
     }
@@ -50,7 +61,7 @@ public class DefinitionAnswer{
         return correct;
     }
 
-    public String getJustifications() {
+    public String getJustification() {
         return justification;
     }
 
