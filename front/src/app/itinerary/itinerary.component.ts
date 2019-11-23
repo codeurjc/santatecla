@@ -41,7 +41,7 @@ export class ItineraryComponent implements OnInit {
 
   itineraryTabs: Itineray[];
 
-  cardsCount: number;
+  contentCount: number;
 
   showSpinner = false;
   componentsChecker: number;
@@ -95,39 +95,40 @@ export class ItineraryComponent implements OnInit {
     });
   }
 
-  async getEmbebedCards(cardId: number, unitId: number, content: string, cardsCounter: number) {
-    let cardContent;
-    cardContent = await this.unitService.getCardByName(cardId, unitId).toPromise();
-    this.extractedData.splice(cardsCounter, 1, cardContent.content);
-    this.addExtractedData(content, cardsCounter);
+  async getEmbebedContent(contentId: number, contentId2: number, unitId: number, content: string, contentCounter: number, type: string) {
+    let contentEmbebed;
+    if (type === 'card') {
+      contentEmbebed = await this.unitService.getCard(contentId, unitId).toPromise();
+      this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
+    } else if (type === 'slide') {
+      contentEmbebed = await this.unitService.getSlideFormItinerary(contentId, contentId2, unitId).toPromise();
+      this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
+    }
+    this.addExtractedData(content);
   }
 
-  cardsCounterFunction(content: string) {
-    this.cardsCount = 0;
+  contentCounterFunction(content: string) {
+    this.contentCount = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
       let words: string[];
       words = line.split('.');
       if (words[0] === 'assert') {
-        let parameters: string[];
-        parameters = words[1].split('/');
-        if (parameters[0] === 'card') {
-          this.cardsCount = this.cardsCount + 1;
-        }
+        this.contentCount = this.contentCount + 1;
       }
     });
   }
 
   extendContent(content: string) {
-    this.cardsCounterFunction(content);
+    this.contentCounterFunction(content);
     this.extractedData = [];
-    for (let i = 0; i < this.cardsCount; i++) {
+    for (let i = 0; i < this.contentCount; i++) {
       this.extractedData.push('');
     }
     this.position = [];
     let counter = 0;
-    let cardsCounter = 0;
+    let contentCounter = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
@@ -138,17 +139,21 @@ export class ItineraryComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.getEmbebedCards(Number(parameters[1]), Number(parameters[2]), content, cardsCounter);
-          cardsCounter = cardsCounter + 1;
+          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[2]), content, contentCounter, 'card');
+          contentCounter = contentCounter + 1;
+        } else if (parameters[0] === 'slide') {
+          this.position.push(counter);
+          this.getEmbebedContent(Number(parameters[1]), Number(parameters[2]), Number(parameters[3]), content, contentCounter, 'slide');
+          contentCounter = contentCounter + 1;
         } else {
-          this.addExtractedData(content, cardsCounter);
+          this.addExtractedData(content);
         }
       }
       counter = counter + 1;
     });
   }
 
-  addExtractedData(content: string, cardsCounter: number) {
+  addExtractedData(content: string) {
     this.componentsChecker = 0;
     this.itineraryContentExtended = '';
     let lines: string[];
@@ -164,7 +169,7 @@ export class ItineraryComponent implements OnInit {
         this.componentsChecker = this.componentsChecker + 1;
       }
     });
-    if (this.componentsChecker === this.cardsCount) {
+    if (this.componentsChecker === this.contentCount) {
       this.showSpinner = false;
       this.viewHTMLVersion();
     }
