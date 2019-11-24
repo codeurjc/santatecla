@@ -156,10 +156,10 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(updatedCard, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{unitId}/cards/{cardId}/image", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Card> uploadCardImage(@PathVariable long unitId, @PathVariable long cardId, @RequestParam(value = "image") MultipartFile image) {
-        Optional<Unit> unit = unitService.findOne(unitId);
-        if (!unit.isPresent()) {
+    /*@RequestMapping(value = "/{unitId}/cards/{cardId}/image", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Card> uploadCardImage(@PathVariable long unitId, @PathVariable long cardId, @RequestParam(value = "image") MultipartFile image) {
+		Optional<Unit> unit = unitService.findOne(unitId);
+		if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Card card = unit.get().getCard(cardId);
@@ -178,6 +178,16 @@ public class UnitRestController extends GeneralRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Card card = unit.get().getCard(cardId);
+        return new ResponseEntity<Card>(card, HttpStatus.OK);
+    }*/
+
+    @RequestMapping(value = "/{unitId}/cards/{cardName}", method = RequestMethod.GET)
+    public ResponseEntity<Card> getCardByName(@PathVariable long unitId, @PathVariable String cardName, HttpServletResponse response) {
+        Optional<Unit> unit = unitService.findOne(unitId);
+        if (!unit.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Card card = unit.get().getCardByName(cardName);
         return new ResponseEntity<Card>(card, HttpStatus.OK);
     }
 

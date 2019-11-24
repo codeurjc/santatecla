@@ -21,12 +21,4 @@ export class SlideService {
     return this.http.delete<Slide>('/api/slides/' + slide.id);
   }
 
-  removeCard(slide: Slide, cardId: number) {
-    return this.http.delete('/api/slides/' + slide.id + '/card/' + cardId);
-  }
-
-  addCard(cardId: number, id: number): Observable<Slide> {
-    return this.http.post<Slide>('/api/slides/' + id + '/card/' + cardId, null);
-  }
-
 }

@@ -79,5 +79,8 @@ export class UnitService {
 
     return this.http.post<TestQuestion>(this.baseUrl + id + '/question/test', body, {headers});
   }
-  
+
+  getCardByName(cardName: string, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/cards/' + cardName);
+  }
 }

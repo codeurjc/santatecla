@@ -1,16 +1,23 @@
-import { Unit } from './../unit/unit.model';
-import { Card } from './../card/card.model';
-import { SlideService } from './../slide/slide.service';
-import { Slide } from './../slide/slide.model';
+import { Unit } from '../unit/unit.model';
+import { SlideService } from '../slide/slide.service';
 import { Itineray } from './itinerary.model';
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { Component, OnInit } from '@angular/core';
 import { TdDialogService } from '@covalent/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { ItineraryService } from './itinerary.service';
 import { LoginService } from '../auth/login.service';
 import { UnitService } from '../unit/unit.service';
+
+import Asciidoctor from 'asciidoctor';
+import {Slide} from '../slide/slide.model';
+import {Card} from '../card/card.model';
+
+function convertToHTML(text) {
+  const asciidoctor = Asciidoctor();
+  const html = asciidoctor.convert(text);
+  return(html);
+}
 
 @Component({
   templateUrl: './itinerary.component.html',
@@ -19,23 +26,20 @@ import { UnitService } from '../unit/unit.service';
 
 export class ItineraryComponent implements OnInit {
 
-  editorTypeJSON: boolean;
-  editorType: string;
+  contentHTML: any;
+  itineraryContent: any;
+  itineraryContentExtended: string;
 
-  public editorOptions: JsonEditorOptions;
-  public data: any;
+  extractedData: string[];
+  position: number[];
 
   unit: Unit;
   itinerary: Itineray;
-  name: string;
-  itineraries: Itineray[];
-  itinerariesTabs: Itineray[];
-  slides: Slide[];
 
   unitId: number;
   itineraryId: number;
 
-  @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
+  itineraryTabs: Itineray[];
 
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
@@ -46,141 +50,139 @@ export class ItineraryComponent implements OnInit {
               private unitService: UnitService ) {}
 
   ngOnInit() {
+
     this.activatedRoute.params.subscribe(params => {
-      this.unitId = params['unitId'];
-      this.itineraryId = params['itineraryId'];
+      this.unitId = params.unitId;
+      this.itineraryId = params.itineraryId;
     });
 
     this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
       this.unit = {
-        id: data['id'],
-        name: data['name'],
-        itineraries: data['itineraries']
+        id: data.id,
+        name: data.name,
+        itineraries: data.itineraries
       };
-      this.itinerariesTabs = this.unit.itineraries;
+      this.itineraryTabs = this.unit.itineraries;
     });
-
-    this.editorTypeJSON = true;
-    this.editorType = 'Botones';
-
-    this.editorOptions = new JsonEditorOptions();
-    this.editorOptions.modes = ['code', 'text', 'tree', 'view'];
-    this.editorOptions.mode = 'code';
-    this.itineraryService.getItinerarySumm(this.itineraryId).subscribe(d => this.data = d);
 
     this.itineraryService.getItinerary(this.itineraryId).subscribe((data: Itineray) => {
       this.itinerary = {
-        id: data['id'],
-        name: data['name'],
-        itineraries: data['itineraries'],
-        slides: data['slides']
+        id: data.id,
+        name: data.name,
+        slides: data.slides
       };
-      this.name = this.itinerary.name;
-      this.itineraries = this.itinerary.itineraries;
-      this.slides = this.itinerary.slides;
+      this.itineraryContent = '== ' + this.itinerary.name + '\n';
+      this.itineraryContentExtended = '';
+      this.slidesToContent(this.itinerary.slides);
+      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
+        this.viewHTMLVersion();
+      });
     });
-
   }
 
-  changeEditorType() {
-    if (this.editorTypeJSON) {
-      this.editorTypeJSON = false;
-      this.editorType = 'JSON';
-    } else {
-      this.editorTypeJSON = true;
-      this.editorType = 'Botones';
+  viewHTMLVersion() {
+    this.contentHTML = convertToHTML(this.itineraryContentExtended);
+  }
+
+  slidesToContent(slides: Slide[]) {
+    slides.forEach((slide: Slide) => {
+      this.itineraryContent = this.itineraryContent + slide.content + '// ' + slide.id + '\n\n';
+    });
+  }
+
+  resolveAfterSeconds(x) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(x);
+      }, 1000);
+    });
+  }
+
+  extendContent(content: string) {
+    this.extractedData = [];
+    this.position = [];
+    let counter = 0;
+    let lines: string[];
+    lines = content.split('\n');
+    lines.forEach((line: string) => {
+      let words: string[];
+      words = line.split('.');
+      if (words[0] === 'assert') {
+        let parameters: string[];
+        parameters = words[1].split('/');
+        if (parameters[0] === 'card') {
+          this.position.push(counter);
+          this.unitService.getCardByName(parameters[1], Number(parameters[2])).subscribe((data: Card) => {
+            this.extractedData.push(data.content);
+            this.addExtractedData(content);
+          });
+        }
+      } else {
+        this.addExtractedData(content);
+      }
+      counter = counter + 1;
+    });
+  }
+
+  addExtractedData(content: string) {
+    this.itineraryContentExtended = '';
+    let lines: string[];
+    lines = content.split('\n');
+    for (let i = 0; i < this.position.length; i ++) {
+      lines[this.position[i]] = this.extractedData[i];
+    }
+    lines.forEach((line: string) => {
+      this.itineraryContentExtended = this.itineraryContentExtended + line + '\n';
+    });
+  }
+
+  contentToItinerary(content: string) {
+    let slidesContent: string[];
+    slidesContent = content.split('=== ');
+    if (slidesContent[0].split(' ')[0] === '==') {
+      this.itinerary.name = '';
+      for (let i = 1; i < slidesContent[0].split(' ').length; i ++) {
+        this.itinerary.name = this.itinerary.name + slidesContent[0].split(' ')[i].split('\n')[0] + ' ';
+      }
+    }
+    this.contentToSlides(slidesContent);
+  }
+
+  contentToSlides(content: string[]) {
+    this.itinerary.slides = [];
+    let slide: Slide;
+    for (let i = 1; i < content.length; i ++) {
+      slide = { name: '', content: ''};
+      let lines: string[];
+      lines = content[i].split('\n');
+      slide.name = lines[0];
+      slide.content = '=== ' + slide.name + '\n';
+      for (let j = 1; j < lines.length; j ++) {
+        if (j < lines.length - 2) {
+          if (!(lines[j].split(' ')[0] === '//')) {
+            slide.content = slide.content + lines[j] + '\n';
+          }
+        } else {
+          if ( (lines.length > 2) && ( j >= 2) ) {
+            if (lines[j - 2].split(' ')[0] === '//') {
+              slide.id = Number(lines[j - 2].split(' ')[1]);
+            }
+          }
+        }
+      }
+      this.itinerary.slides.push(slide);
     }
   }
 
-  removeSlide(slide: Slide) {
-    this.dialogService.openConfirm({
-      message: '¿ Seguro que desea eliminar la vista ' + slide.id + ' del itinerario "' + this.itinerary.name + '" ?',
-      title: 'Confirmación',
-      width: '500px',
-      height: '175px'
-  }).afterClosed().subscribe((accept: boolean) => {
-      if (accept) {
-    this.itineraryService.removeSlide(this.itinerary, slide.id).subscribe(
-      (_) => {
-        this.ngOnInit();
-      }, (error) => {
-        console.error(error);
+  updateHTMLView() {
+    this.contentToItinerary(this.itineraryContent);
+    this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
+      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
+        this.viewHTMLVersion();
       });
-      }
+    }, (error) => {
+      console.error(error);
     });
-  }
-
-  removeSubSlide(slide: Slide, itinerary: Itineray) {
-    this.itineraryService.removeSlide(itinerary, slide.id).subscribe(
-      (_) => {
-      }, (error) => {
-        console.error(error);
-      });
-  }
-
-  removeItinerary(itinerary: Itineray) {
-    this.dialogService.openConfirm({
-      message: '¿ Seguro que desea eliminar el itinerario "' + itinerary.name + '" del itinerario "' + this.itinerary.name + '" ?',
-      title: 'Confirmación',
-      width: '500px',
-      height: '175px'
-  }).afterClosed().subscribe((accept: boolean) => {
-      if (accept) {
-        this.itineraryService.removeItinerary(this.itinerary, itinerary.id).subscribe(
-          (_) => {
-            this.ngOnInit();
-          }, (error) => {
-            console.error(error);
-          });
-      }
-    });
-  }
-
-  deleteItinerary() {
-    this.dialogService.openConfirm({
-      message: '¿ Seguro que desea eliminar el itinerario "' + this.itinerary.name + '" ?',
-      title: 'Confirmación',
-      width: '500px',
-      height: '175px'
-  }).afterClosed().subscribe((accept: boolean) => {
-      if (accept) {
-        this.itineraryService.deleteItinerary(this.itinerary).subscribe((_) => {
-          this.router.navigate(['/']);
-        }, (error) => {
-          console.error(error);
-        });
-      }
-    });
-  }
-
-  removeCard(slide: Slide, card: Card) {
-    this.dialogService.openConfirm({
-      message: '¿ Seguro que desea eliminar la ficha "' + card.name + '" de la vista ' + slide.id + ' ?',
-      title: 'Confirmación',
-      width: '500px',
-      height: '175px'
-  }).afterClosed().subscribe((accept: boolean) => {
-      if (accept) {
-        this.slideService.removeCard(slide, card.id).subscribe(
-          (_) => {
-            this.ngOnInit();
-          }, (error) => {
-            console.error(error);
-          });
-      }
-    });
-  }
-
-  navigateQuestion(id: number){
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/definitionQuestion/' + id]);
-  }
-
-  navigateListQuestion(id: number){
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/listQuestion/' + id]);
-  }
-
-  navigateTestQuestion(id: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + this.itineraryId + '/testQuestion/' + id]);
   }
 
   navigateToUnitCards() {

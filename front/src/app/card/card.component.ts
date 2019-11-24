@@ -1,5 +1,5 @@
-import { Unit } from './../unit/unit.model';
-import { Itineray } from './../itinerary/itinerary.model';
+import { Unit } from '../unit/unit.model';
+import { Itineray } from '../itinerary/itinerary.model';
 import { CardService } from './card.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -32,9 +32,9 @@ export class CardComponent implements OnInit {
       this.unitId = params['unitId'];
       this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
         this.unit = {
-          id: data['id'],
-          name: data['name'],
-          itineraries: data['itineraries']
+          id: data.id,
+          name: data.name,
+          itineraries: data.itineraries
         };
         this.itineraries = this.unit.itineraries;
         if(this.loginService.isAdmin) {
@@ -45,10 +45,10 @@ export class CardComponent implements OnInit {
         this.cards = [];
         data.forEach((card: Card) => {
           this.cards.push({
-            id: card['id'],
-            name: card['name'],
-            text: card['text'],
-            image: (card['image']) ? this.convertImage(card['image']) : ''
+            id: card.id,
+            name: card.name,
+            content: card.content,
+            image: (card.image) ? this.convertImage(card.image) : ''
           });
         });
       }, error => {});
