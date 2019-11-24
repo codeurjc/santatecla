@@ -367,19 +367,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private getRelationTypeEquivalent(relationType: string): string {
+    let equivalent = RelationType.USE;
     if (relationType) {
       if (relationType.includes('composition')) {
-        return RelationType.COMPOSITION;
+        equivalent = RelationType.COMPOSITION;
       } else if (relationType.includes('extension')) {
-        return RelationType.INHERITANCE;
+        equivalent = RelationType.INHERITANCE;
       } else if (relationType.includes('aggregation')) {
-        return RelationType.AGGREGATION;
+        equivalent = RelationType.AGGREGATION;
       } else if (relationType.includes('dependency')) {
-        return RelationType.ASSOCIATION;
+        equivalent = RelationType.ASSOCIATION;
       }
-    } else {
-      return RelationType.USE;
     }
+    return equivalent;
   }
 
 
