@@ -12,6 +12,7 @@ import { UnitService } from '../unit/unit.service';
 import Asciidoctor from 'asciidoctor';
 import {Slide} from '../slide/slide.model';
 import {Card} from '../card/card.model';
+import {DefinitionQuestionService} from "../question/definitionQuestion/definitionQuestion.service";
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -54,6 +55,7 @@ export class ItineraryComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
               private loginService: LoginService,
+              private definitionQuestionService: DefinitionQuestionService,
               private unitService: UnitService ) {}
 
   ngOnInit() {
@@ -106,6 +108,10 @@ export class ItineraryComponent implements OnInit {
       this.subSlide = true;
       contentEmbebed = await this.unitService.getSlideFormItinerary(contentId, contentId2, unitId).toPromise();
       this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
+    } else if (type === 'question') {
+      contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
+      this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText +
+        '\n\n- http://localhost:4200/#/units/13/itineraries/11/definitionQuestion/6[Resolver^]');
     }
     this.addExtractedData(content);
   }
@@ -148,6 +154,10 @@ export class ItineraryComponent implements OnInit {
         } else if (parameters[0] === 'slide') {
           this.position.push(counter);
           this.getEmbebedContent(Number(parameters[1]), Number(parameters[2]), Number(parameters[3]), content, contentCounter, 'slide');
+          contentCounter = contentCounter + 1;
+        } else if (parameters[0] === 'question') {
+          this.position.push(counter);
+          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[3]), content, contentCounter, 'question');
           contentCounter = contentCounter + 1;
         } else {
           this.addExtractedData(content);
