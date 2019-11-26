@@ -65,5 +65,8 @@
   background-color: #9ab1fa;
 }
 
-
-
+.newCourseButton {
+  background-color: #2361c5;
+  border: 0;
+  color: white;
+}

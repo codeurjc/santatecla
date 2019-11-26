@@ -21,3 +21,24 @@
   margin-left: 5%;
   margin-right: 5%;
 }
+
+.saveButton {
+  margin-top: 10%;
+  background-color: lightgrey;
+}
+
+#search {
+  position: absolute;
+  right: 0;
+  margin: 1rem;
+  width: calc(60% - 2rem);
+  z-index: 120;
+}
+
+.result {
+  padding: 1rem;
+  cursor: pointer;
+  margin: 0 -0.6em 0 -0.6em;
+  border-top: 1px solid #e5e9f0;
+  background-color: #ffffff;
+}

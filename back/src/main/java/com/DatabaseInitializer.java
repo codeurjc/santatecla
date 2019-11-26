@@ -281,8 +281,8 @@ public class DatabaseInitializer {
                 unitRepository.save(unit13);
 
                 //Users
-                User user1 = new User("alumno", "alumno");
-                User user2 = new User("David", "alumno");
+                User user1 = new User("alumno", "alumno", "ROLE_USER");
+                User user2 = new User("David", "alumno", "ROLE_USER");
                 userRepository.save(user1);
                 userRepository.save(user2);
                 User teacher = new User("profesor", "profesor", "ROLE_ADMIN");

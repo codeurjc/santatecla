@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+  <h1 align="center">Nuevo curso</h1>
+
+  <form align="center" name="newCourseName">
+    <mat-form-field>
+      <input matInput placeholder="Nombre del curso" [(ngModel)]="courseName" name="name" required>
+    </mat-form-field>
+  </form>
+
+  <form align="center" name="newCourseDesc">
+    <mat-form-field>
+      <textarea matInput placeholder="Descripción del curso" [(ngModel)]="courseDescription" name="description" required></textarea>
+    </mat-form-field>
+  </form>
+
+  <div class="row">
+    <div class="column" align="center">
+      <h3>Alumnos del curso</h3>
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre del alumno</mat-label>
+        <input matInput [(ngModel)]="searchStudentField" (ngModelChange)="searchStudent(); this.showStudentOptions = true" id="search-student-input">
+        <div *ngIf="showStudentOptions">
+          <div class="result" id="user-result" *ngFor="let result of showingStudents; let i = index" (mouseover)="this.arrowStudentKeyLocation = i">
+            <span id="user-name">{{result.name}}</span>
+          </div>
+        </div>
+      </mat-form-field>
+      <h5>Alumnos seleccionados</h5>
+      <span *ngFor="let student of this.chosenStudents">
+        <p>
+          {{student.name}}
+        </p>
+      </span>
+    </div>
+
+    <div class="column" align="center">
+      <h3>Unidades del curso</h3>
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre de la unidad</mat-label>
+        <input matInput [(ngModel)]="searchUnitField" (ngModelChange)="searchUnit(); this.showUnitOptions = true" id="search-unit-input">
+        <div *ngIf="showUnitOptions">
+          <div class="result" id="unit-result" *ngFor="let result of showingUnits; let i = index" (mouseover)="this.arrowUnitKeyLocation = i">
+            <span id="unit-name">{{result.name}}</span>
+          </div>
+        </div>
+      </mat-form-field>
+      <h5>Unidades seleccionadas</h5>
+      <span *ngFor="let unit of this.chosenUnits">
+        <p>
+          {{unit.name}}
+        </p>
+      </span>
+    </div>
+  </div>
+
+  <div align="center">
+    <mat-button-toggle class="saveButton" (click)="save()">Guardar</mat-button-toggle>
+  </div>
+
+</body>
+</html>

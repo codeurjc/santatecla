@@ -37,7 +37,6 @@ public class User {
 		this.name = name;
 		this.passwordHash = new BCryptPasswordEncoder().encode(password);
 		this.roles = new ArrayList<>(Arrays.asList(roles));
-		this.roles.add("ROLE_USER");
 	}
 
 
