@@ -6,6 +6,18 @@
 
   <body>
 
+    <div class="waveWrapper waveAnimation" *ngIf="!loginService.isLogged">
+      <div class="waveWrapperInner bgTop">
+        <div class="wave waveTop" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-top.png')"></div>
+      </div>
+      <div class="waveWrapperInner bgMiddle">
+        <div class="wave waveMiddle" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-mid.png')"></div>
+      </div>
+      <div class="waveWrapperInner bgBottom">
+        <div class="wave waveBottom" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png')"></div>
+      </div>
+    </div>
+
     <div *ngIf="loginService.isLogged" id="header">
       <div *ngIf="loginService.isAdmin" id="progress-button">
         <button mat-icon-button [routerLink]="['progress']">
@@ -81,7 +93,7 @@
 
     <div *ngIf="!loginService.isLogged">
 
-      <h1 id="title">Santa Tecla</h1>
+      <h1 id="title">Santatecla</h1>
 
       <div id="login-container">
         <mat-dialog-content>
