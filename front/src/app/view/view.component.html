@@ -10,6 +10,10 @@
       <mat-icon>save</mat-icon>
     </button>
 
+    <button id="up-button" mat-icon-button color="primary" [disabled]="disableUpButton" (click)="upLevelAbove()">
+      <mat-icon>keyboard_arrow_up</mat-icon>
+    </button>
+
     <mat-form-field appearance="outline" id="search">
       <mat-label>Buscar unidad</mat-label>
       <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)"/>

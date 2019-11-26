@@ -32,10 +32,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     relations: []
   };
 
-  private focusedUnit;
+  private focusedUnitId;
   private units: Map<string, Unit> = new Map<string, Unit>();
   private relations = new Map<string, Relation>();
   private remainingUnits = 0;
+
+  private disableUpButton = false;
 
   private newUnitId = 0;
   private newRelationId = 0;
@@ -84,11 +86,14 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private focusUnit(id: number) {
     this.showSpinner = true;
-    this.focusedUnit = id;
+    this.focusedUnitId = id;
     this.units.clear();
     this.relations.clear();
     this.remainingUnits = 0;
-    this.getUnitAndUpdateUml(this.focusedUnit, new Set<number>());
+    this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>());
+    this.unitService.getParent(id).subscribe((parent: Unit) => {
+      this.disableUpButton = (parent === null);
+    });
   }
 
   private getUnitAndUpdateUml(id: number, visited: Set<number>) {
@@ -99,8 +104,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.remainingUnits += data.incomingRelations.length + 1;
       data.incomingRelations.forEach((relation: Relation) => {
         this.remainingUnits--;
-        const id = relation.id.toString();
-        if (!this.getRelationById(id)) {
+        if (!this.getRelationById(relation.id.toString())) {
           const outgoing = +relation.outgoing;
           if (!visited.has(outgoing)) {
             this.getUnitAndUpdateUml(outgoing, visited);
@@ -115,11 +119,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.showSpinner = false;
 
 
+
+
         let i = 0;
         this.units.forEach((unit: Unit) => {
           this.unitService.getAbsoluteName(+unit.id).subscribe((u: Unit) => {
             this.data.units.push(new VisibleUnit(unit.id, u.name));
-
             i++;
             if (i === this.units.size) {
               this.relations.forEach((relation: Relation) => {
@@ -133,9 +138,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         });
 
 
+
       }
     }, error => {
       console.log(error);
+    });
+  }
+
+  private upLevelAbove() {
+    this.unitService.getParent(this.focusedUnitId).subscribe((parent: Unit) => {
+      this.focusUnit(+parent.id);
     });
   }
 
@@ -231,7 +243,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
-      this.focusUnit(this.focusedUnit);
+      this.focusUnit(this.focusedUnitId);
       this.updateUml();
     }, error => {
       console.log(error);
