@@ -11,3 +11,25 @@
   font-size: 0.8rem;
 }
 
+.add-question-card {
+ margin: 10%;
+}
+
+.add-question-card-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+.add-question-radio-group {
+  display: flex;
+  justify-content: center;
+}
+
+.add-question-radio-group-element {
+  margin: 10px;
+}
+
+.add-question-form {
+  display: flex;
+  justify-content: center;
+}

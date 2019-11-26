@@ -47,56 +47,73 @@
       </span>
     </div>
 
+    <mat-card class="add-question-card">
+      <mat-card-title class="add-question-card-title">Añadir ejercicios</mat-card-title>
+      <mat-card-content>
+        <mat-radio-group [(ngModel)]="subtype" class="add-question-radio-group">
+          <mat-radio-button name="subtype" value="DefinitionQuestion" class="add-question-radio-group-element">Definición</mat-radio-button>
+          <mat-radio-button name="subtype" value="ListQuestion" class="add-question-radio-group-element">Listado</mat-radio-button>
+          <mat-radio-button name="subtype" value="TestQuestion" class="add-question-radio-group-element">Test</mat-radio-button>
+          <!--<mat-radio-button *ngFor="let questionType of questionTypes" name="subtype" [value]="questionType">
+            {{questionType}}
+          </mat-radio-button>-->
+        </mat-radio-group>
+
+        <!-- DEFINITION FORM -->
+        <div *ngIf="subtype == 'DefinitionQuestion'">
+          <form class="add-question-form">
+            <mat-form-field>
+              <input matInput placeholder="Pregunta" #questionInput type="text" required/>
+            </mat-form-field>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button color="primary" (click)="sendDefinitionQuestion(questionInput.value); questionInput.value = ''">
+              Guardar
+            </button>
+          </div>
+        </div>
+
+        <!--LIST FORM -->
+        <div *ngIf="subtype == 'ListQuestion'">
+          <form class="add-question-form">
+            <mat-form-field>
+              <input name="question" matInput placeholder="Pregunta" #questionInput type="text" required/>
+            </mat-form-field>
+            <mat-form-field>
+              <input name="question"matInputplaceholder="Respuesta posible" #pAnswerInput type="text"/>
+            </mat-form-field>
+            <mat-checkbox name="correct" [(ngModel)]="correct" value="false">
+              Correcta
+            </mat-checkbox>
+            <button mat-raised-button color="primary" (click)="addPossibleAnswer(pAnswerInput.value); pAnswerInput.value = ''">
+              Añadir
+            </button>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button class="button" color="primary" (click)="sendListQuestion(questionInput.value); questionInput.value = ''; pAnswerInput.value = ''">
+              Guardar
+            </button>
+          </div>
+        </div>
+
+        <!-- TEST FORM -->
+        <div *ngIf="subtype == 'TestQuestion'">
+          <form class="add-question-form">
+            <mat-form-field>
+              <input matInput placeholder="Pregunta" #questionInput type="text" required/>
+            </mat-form-field>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button color="primary" (click)="sendDefinitionQuestion(questionInput.value); questionInput.value = ''">
+              Guardar
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
     <div align="center">
       <h1>Añadir pregunta</h1>
-      <mat-radio-group>
-      <input
-        type="radio"
-        name="subtype"
-        [(ngModel)]="subtype"
-        value="DefinitionQuestion"
-        default
-      />
-      Definicion
-      <input
-        type="radio"
-        name="subtype"
-        [(ngModel)]="subtype"
-        value="ListQuestion"
-      />
-      Listado
-      <input
-        type="radio"
-        name="subtype"
-        [(ngModel)]="subtype"
-        value="TestQuestion"
-      />
-      Test
-      </mat-radio-group>
-
-      <span *ngIf="subtype == 'DefinitionQuestion'">
-        <form #textForm="ngForm">
-          <mat-form-field>
-            <input matInput
-              placeholder="Pregunta"
-              #questionInput
-              type="text"
-              name="question"
-              required
-            />
-          </mat-form-field>
-        </form>
-        <button mat-raised-button
-          class="button"
-          color="primary"
-          (click)="
-            sendDefinitionQuestion(questionInput.value);
-            questionInput.value = ''
-          "
-        >
-          Guardar
-        </button>
-      </span>
       <span *ngIf="subtype == 'ListQuestion'">
         <form #textForm="ngForm">
           <mat-form-field>

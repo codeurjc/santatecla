@@ -31,6 +31,8 @@ export class QuestionComponent implements OnInit {
   testQuestion: TestQuestion;
   subtype: string;
 
+  questionTypes = ['DefinitionQuestion', 'ListQuestion', 'TestQuestion'];
+
   possibleAnswers: Map<string, boolean>;
   correct: boolean;
   correctTestAnswerSelected: boolean;
