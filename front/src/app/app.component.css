@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+#home-button {
+  position:absolute;
+  margin: 0.2rem;
+}
+
 #login-container {
   text-align: center;
   position: absolute;
@@ -57,12 +62,18 @@
   margin-left: 0.5rem;
   box-shadow: none;
   position: relative;
-  left: 15%;
   top: 10%;
 }
 
 .activeTab {
   background-color: #9ab1fa;
+}
+
+#tab-wrapper {
+  margin-left: 3rem;
+  margin-right: 6rem;
+  display: block ruby;
+  overflow-x: scroll;
 }
 
 .newCourseButton {

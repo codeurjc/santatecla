@@ -30,7 +30,7 @@ public class CardService {
 		cardRepository.deleteById(id);
 	}
 	
-	@Transactional
+	/*@Transactional
 	public void setImage(Card card, MultipartFile file) {
 		try {
 			Byte[] byteObjects = new Byte[file.getBytes().length];
@@ -42,6 +42,6 @@ public class CardService {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-	}
+	}*/
 
 }

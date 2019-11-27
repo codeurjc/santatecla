@@ -38,6 +38,10 @@ export class UnitService {
     return this.http.get(this.baseUrl + id + '/absoluteName');
   }
 
+  getParent(id: number) {
+    return this.http.get(this.baseUrl + id + '/parent');
+  }
+
   getUnitDefinitionQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/definition');
   }
@@ -79,5 +83,8 @@ export class UnitService {
 
     return this.http.post<TestQuestion>(this.baseUrl + id + '/question/test', body, {headers});
   }
-  
+
+  getCardByName(cardName: string, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/cards/' + cardName);
+  }
 }

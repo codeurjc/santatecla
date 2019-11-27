@@ -1,13 +1,6 @@
 package com.card;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-
-import com.JViews.Summary;
-import com.fasterxml.jackson.annotation.JsonView;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,15 +9,12 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView(Summary.class)
     protected long id;
 
     private String name;
 
-    private String text;
-
-    @Lob
-    private Byte[] image;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String content;
 
     public Card() {}
 
@@ -33,45 +23,41 @@ public class Card {
         this.name = name;
     }
 
-    public long getId() {
-        return id;
+    public void update(Card card) {
+        if (StringUtils.isNotBlank(card.getName())) {
+            this.name = card.getName();
+        }
+        if (StringUtils.isNotBlank(card.getContent())) {
+            this.content = card.getContent();
+        }
     }
 
-    public void setId(long id) {
-        this.id = id;
+    /********************
+     * GETTER AND SETTER *
+     ********************/
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {
         return this.name;
     }
 
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getText() {
-        return this.text;
+    public void setContent(String content) {
+        this.content = content;
     }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Byte[] getImage() {
-        return this.image;
-    }
-
-    public void setImage(Byte[] image) {
-        this.image = image;
-    }
-
-    public void update(Card card) {
-        if (StringUtils.isNotBlank(card.getName())) {
-            this.name = card.getName();
-        }
-        if (StringUtils.isNotBlank(card.getText())) {
-            this.text = card.getText();
-        }
-    }
-
+    
 }

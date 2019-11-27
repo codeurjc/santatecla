@@ -3,98 +3,69 @@ package com.itinerary;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.unit.Unit;
-import com.JViews.Summary;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.slide.Slide;
+import com.slide.*;
 
 @Entity
 public class Itinerary{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView(Summary.class)
     protected long id;
 
-    @JsonView(Summary.class)
     private String name;
 
-    // @ManyToMany
-    // private List<Unit> units;
-    @JsonView(Summary.class)
-    @OneToMany
+    @ManyToMany
+    @OrderColumn
     private List<Slide> slides;
 
-    @JsonView(Summary.class)
-    @ManyToMany
-    private List<Itinerary> itineraries;
-
-    public Itinerary(){}
-
-    public Itinerary(String name){
-        this.name = name;
-        // this.units = new ArrayList<>();
-        this.itineraries = new ArrayList<>();
+    public Itinerary(){
         this.slides = new ArrayList<>();
     }
 
-    public void update(Itinerary itinerary) {
-        if (StringUtils.isNotBlank(itinerary.getName())) {
-            this.name = itinerary.getName();
-        }
-    }
-    
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /*
-    public List<Unit> getUnits() {
-        return units;
-    }
-
-    public void setUnits(List<Unit> units) {
-        this.units = units;
-    }
-    */
-
-    public List<Itinerary> getItineraries() {
-        return itineraries;
-    }
-
-    public void setItineraries(List<Itinerary> itineraries) {
-        this.itineraries = itineraries;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Itinerary(String name){
+        this();
         this.name = name;
     }
 
-    public List<Slide> getSlides() {
-        return slides;
+    public void update(Itinerary itinerary) {
+        this.name = itinerary.getName();
+        this.slides = itinerary.getSlides();
     }
 
-    public void setSlides(List<Slide> slides) {
-        this.slides = slides;
+    public List compareId(List<Slide> slides) {
+        List diferences = new ArrayList();
+        List<Long> slidesId = new ArrayList();
+        List<Long> inSlidesId = new ArrayList();
+        for (Slide slide: this.getSlides()) {
+            slidesId.add(slide.getId());
+        }
+        for (Slide slide: slides) {
+            inSlidesId.add(slide.getId());
+        }
+        for (long id: slidesId) {
+            if (!(inSlidesId.contains(id))) {
+                diferences.add(id);
+            }
+        }
+        return diferences;
     }
 
+    /********************
+     * GETTER AND SETTER *
+     ********************/
+
+    public long getId() { return id; }
+
+    public String getName() { return name; }
+
+    public List<Slide> getSlides() { return slides; }
+
+    public void setId(long id) { this.id = id; }
+
+    public void setName(String name) { this.name = name; }
+
+    public void setSlides(List<Slide> slides) { this.slides = slides; }
 
 }

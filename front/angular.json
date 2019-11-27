@@ -29,7 +29,9 @@
               "src/assets/css/mermaid.css"
             ],
             "scripts": [
-              "./src/assets/js/mermaid.js"
+              "node_modules/jquery/dist/jquery.min.js",
+              "./src/assets/js/mermaid.js",
+              "./src/asciidocSample.js"
             ],
             "es5BrowserSupport": true
           },

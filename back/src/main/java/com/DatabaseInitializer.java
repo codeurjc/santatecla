@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.xml.soap.Text;
 
 import com.card.Card;
 import com.card.CardRepository;
@@ -22,8 +23,6 @@ import com.relation.Relation;
 import com.relation.RelationRepository;
 import com.slide.Slide;
 import com.slide.SlideRepository;
-import com.slide.practiceSlide.PracticeSlide;
-import com.slide.theorySlide.TheorySlide;
 import com.unit.Unit;
 import com.unit.UnitRepository;
 import com.user.User;
@@ -69,15 +68,15 @@ public class DatabaseInitializer {
         public void init() {
 
                 //Cards
-                Card card1 = new Card("¿Que?");
-                Card card2 = new Card("¿Que?");
-                Card card3 = new Card("¿Cuándo?");
-                Card card4 = new Card("¿Cuándo?");
+                Card card1 = new Card("Que");
+                Card card2 = new Card("Que");
+                Card card3 = new Card("Cuando");
+                Card card4 = new Card("Cuando");
 
-                card1.setText("Un lenguaje de programación es un lenguaje formal que proporciona una serie de instrucciones...");
-                card4.setText("A finales de 1953, John Backus sometió una propuesta a sus superiores en IBM...");
-                card2.setText("Java es un lenguaje de programación y una plataforma informática...");
-                card3.setText("Comercializada por primera vez en 1995 por Sun Microsystems...");
+                card1.setContent("*¿Que es un lenguaje de programación?*\n\nUn lenguaje de programación es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de instrucciones o secuencias de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina programa.");
+                card2.setContent("*¿Que es java?*\n");
+                card4.setContent("*¿Cuando se creo el primer lenguaje de programación?*\n\nA finales de 1953, John Backus sometió una propuesta a sus superiores en IBM para desarrollar una alternativa más práctica al lenguaje ensamblador, para programar la computadora central IBM 704. El histórico equipo Fortran de Backus consistió en los programadores Richard Goldberg, Sheldon F. Best, Harlan Herrick, Peter Sheridan, Roy Nutt, Robert Nelson, Irving Ziller, Lois Haibt y David Sayre.");
+                card3.setContent("*¿Cuando se creo java?*\n");
 
                 cardRepository.save(card1);
                 cardRepository.save(card2);
@@ -113,50 +112,39 @@ public class DatabaseInitializer {
                 testQuestionRepository.save(test);
 
                 //Slides
-                Slide slide1 = new TheorySlide();
-                Slide slide2 = new PracticeSlide();
-                Slide slide3 = new TheorySlide();
-                Slide slide4 = new PracticeSlide();
+                Slide slide1 = new Slide("Concepto");
+                Slide slide2 = new Slide("Tipos");
 
-                ArrayList<Card> slide1Cards = new ArrayList<>();
-                slide1Cards.add((Card)card1);
-                slide1Cards.add((Card)card4);
-                slide1.setComponents(slide1Cards);
-
-                ArrayList<Question> slide2Questions = new ArrayList<>();
-                slide2Questions.add((DefinitionQuestion)definition1);
-                slide2Questions.add((ListQuestion)list1);
-                slide2.setComponents(slide2Questions);
-
-                ArrayList<Question> slide4Questions = new ArrayList<>();
-                slide4Questions.add((TestQuestion)test);
-                slide4.setComponents(slide4Questions);
-
-                ArrayList<Card> slide3Cards = new ArrayList<>();
-                slide3Cards.add((Card)card2);
-                slide3Cards.add((Card)card3);
-                slide3.setComponents(slide3Cards);
+                slide1.addContent("assert.card/Que/12\n\nassert.card/Cuando/12\n\n");
+                slide2.addContent("* Lenguaje Maquina\n" +
+                        "\n" +
+                        "Es el más primitivo de los códigos y se basa en la numeración binaria, todo en 0 y 1. Este lenguaje es utilizado directamente por máquinas o computadora.\n" +
+                        "\n" +
+                        "* Lenguajes de programación de bajo nivel\n" +
+                        "\n" +
+                        "Es un lenguaje un poco más fácil de interpretar, pero puede variar de acuerdo a la máquina o computadora que se esté programando.\n" +
+                        "\n" +
+                        "* Lenguajes de programación de alto nivel\n" +
+                        "\n" +
+                        "- Primera generación: el lenguaje máquina y el ensamblador.\n" +
+                        "- Segunda generación: aquí encontramos los primeros lenguajes de programación de alto nivel, ejemplos de ellos son FORTRAN, COBOL.\n" +
+                        "- Tercera generación: en esta generación encontramos los lenguajes de programación de alto nivel imperativo, pero mucho más utilizados y vigentes en la actualidad (ALGOL 8, PL/I, PASCAL, MODULA).\n" +
+                        "- Cuarta generación: más cercanos a la época actual, es común encontrarlos en aplicaciones de gestión y manejo de bases de datos (NATURAL, SQL).\n" +
+                        "- Quinta generación: estos son los más avanzados y fueron pensado para la inteligencia artificial y para el procesamiento de lenguajes naturales (LISP, PROLOG).\n" +
+                        "\n");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
-                slideRepository.save(slide3);
-                slideRepository.save(slide4);
 
                 //Itinerary
                 Itinerary itinerary1 = new Itinerary("Introducción");
                 Itinerary itinerary2 = new Itinerary("Introducción Java");
 
-                itinerary2.getSlides().add(slide3);
-                itinerary2.getSlides().add(slide4);
-
-                itineraryRepository.save(itinerary2);
-
-                itinerary1.getItineraries().add(itinerary2);
-
                 itinerary1.getSlides().add(slide1);
                 itinerary1.getSlides().add(slide2);
 
                 itineraryRepository.save(itinerary1);
+                itineraryRepository.save(itinerary2);
 
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
