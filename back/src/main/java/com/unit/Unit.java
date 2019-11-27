@@ -108,8 +108,23 @@ public class Unit {
         return this.incomingRelations;
     }
 
+    public List<Relation> getOutgoingRelations() {
+        return this.outgoingRelations;
+    }
+
+    private Relation getRelation(List<Relation> relations, long id) {
+        for (Relation relation : relations) {
+            if (relation.getId() == id) {
+                return relation;
+            }
+        }
+        return null;
+    }
+
     public void addIncomingRelation(Relation incomingRelation) {
-        if (!this.incomingRelations.contains(incomingRelation)) {
+        if (this.incomingRelations.contains(incomingRelation)) {
+            this.getRelation(this.incomingRelations, incomingRelation.getId()).update(incomingRelation);
+        } else {
             int index = 0;
             for (Relation relation : this.incomingRelations) {
                 if (Relation.compareType(incomingRelation.getRelationType(), relation.getRelationType()) <= 0) {
@@ -124,12 +139,10 @@ public class Unit {
         }
     }
 
-    public List<Relation> getOutgoingRelations() {
-        return this.outgoingRelations;
-    }
-
     public void addOutgoingRelation(Relation outgoingRelation) {
-        if (!this.outgoingRelations.contains(outgoingRelation)) {
+        if (this.outgoingRelations.contains(outgoingRelation)) {
+            this.getRelation(this.outgoingRelations, outgoingRelation.getId()).update(outgoingRelation);
+        } else {
             int index = 0;
             for (Relation relation : this.outgoingRelations) {
                 if (Relation.compareType(outgoingRelation.getRelationType(), relation.getRelationType()) <= 0) {

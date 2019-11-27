@@ -29985,9 +29985,6 @@ function Graph (opts) {
 /* Number of nodes in the graph. Should only be changed by the implementation. */
 Graph.prototype._nodeCount = 0
 
-/* Number of edges in the graph. Should only be changed by the implementation. */
-Graph.prototype._edgeCount = 0
-
 /* === Graph functions ========= */
 
 Graph.prototype.isDirected = function () {
@@ -30254,10 +30251,6 @@ Graph.prototype.setDefaultEdgeLabel = function (newDefault) {
   return this
 }
 
-Graph.prototype.edgeCount = function () {
-  return this._edgeCount
-}
-
 Graph.prototype.edges = function () {
   return _.values(this._edgeObjs)
 }
@@ -30339,7 +30332,6 @@ Graph.prototype.setEdge = function () {
   incrementOrInitEntry(this._sucs[v], w)
   this._in[w][e] = edgeObj
   this._out[v][e] = edgeObj
-  this._edgeCount++
   return this
 }
 
@@ -30371,7 +30363,6 @@ Graph.prototype.removeEdge = function (v, w, name) {
     decrementOrRemoveEntry(this._sucs[v], w)
     delete this._in[w][e]
     delete this._out[v][e]
-    this._edgeCount--
   }
   return this
 }
@@ -49068,7 +49059,6 @@ const insertMarkers = function (elem) {
   elem.append('defs').append('marker').attr('id', 'dependencyEnd').attr('refX', 19).attr('refY', 7).attr('markerWidth', 20).attr('markerHeight', 28).attr('orient', 'auto').append('path').attr('d', 'M 18,7 L9,13 L14,7 L9,1 Z');
 };
 
-let edgeCount = 0;
 let total = 0;
 
 const drawEdge = function (elem, path, relation) {
@@ -49097,7 +49087,14 @@ const drawEdge = function (elem, path, relation) {
   }).y(function (d) {
     return d.y;
   }).curve(d3__WEBPACK_IMPORTED_MODULE_0__["curveBasis"]);
-  const svgPath = elem.append('path').attr('d', lineFunction(lineData)).attr('id', 'edge' + edgeCount).attr('class', 'relation');
+
+
+
+  const relationId = relation.id1.match(/[0-9]+|[^0-9]*/g)[0] + '-' + relation.id2.match(/[0-9]+|[^0-9]*/g)[0] + '-' + getRelationType(relation.relation.type1);
+  const svgPath = elem.append('path').attr('d', lineFunction(lineData)).attr('id', relationId).attr('class', 'relation');
+
+
+
   let url = '';
 
   if (conf.arrowMarkerAbsolute) {
@@ -49136,7 +49133,6 @@ const drawEdge = function (elem, path, relation) {
     g.insert('rect', ':first-child').attr('class', 'box').attr('x', bounds.x - conf.padding / 2).attr('y', bounds.y - conf.padding / 2).attr('width', bounds.width + conf.padding).attr('height', bounds.height + conf.padding);
   }
 
-  edgeCount++;
 };
 
 const drawClass = function (elem, classDef) {

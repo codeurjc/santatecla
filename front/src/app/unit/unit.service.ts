@@ -38,6 +38,10 @@ export class UnitService {
     return this.http.get(this.baseUrl + id + '/absoluteName');
   }
 
+  getParent(id: number) {
+    return this.http.get(this.baseUrl + id + '/parent');
+  }
+
   getUnitDefinitionQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/definition');
   }

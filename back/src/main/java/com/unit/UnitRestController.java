@@ -125,7 +125,13 @@ public class UnitRestController extends GeneralRestController {
         return unit.map(value -> new ResponseEntity<>(new Unit(unitService.getAbsoluteName(value)), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value = "/search/{name}")
+    @GetMapping(value="/{id}/parent")
+    public ResponseEntity<Unit> getUnitParent(@PathVariable int id) {
+        Optional<Unit> unit = this.unitService.findOne(id);
+        return unit.map(value -> new ResponseEntity<>(unitService.getParent(value), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value="/search/{name}")
     public ResponseEntity<List<Unit>> searchUnits(@PathVariable String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);
         return new ResponseEntity<>(units, HttpStatus.OK);

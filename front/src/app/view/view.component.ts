@@ -5,6 +5,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
+import { TdDialogService } from "@covalent/core";
 
 declare var mermaid: any;
 
@@ -32,10 +33,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     relations: []
   };
 
-  private focusedUnit;
+  private focusedUnitId;
   private units: Map<string, Unit> = new Map<string, Unit>();
   private relations = new Map<string, Relation>();
   private remainingUnits = 0;
+
+  private disableUpButton = false;
 
   private newUnitId = 0;
   private newRelationId = 0;
@@ -45,20 +48,22 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @ViewChild('uml') umlDiv;
 
-  @ViewChild('umlNodeOptions') umlNodeOptions: ElementRef;
   private selectedTarget: HTMLInputElement;
+  @ViewChild('umlNodeOptions') umlNodeOptions: ElementRef;
   private showUmlNodeOptions = false;
-  private showGoToUnit = true;
+  @ViewChild('umlPathOptions') umlPathOptions: ElementRef;
+  private showUmlPathOptions = false;
+  private selectedRelationType = '';
 
 
 
-  constructor(private router: Router, private unitService: UnitService) {}
+  constructor(private router: Router, private unitService: UnitService, private _dialogService: TdDialogService) {}
 
   ngOnInit() {
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
-    this.getUnit(13);
+    this.focusUnit(13);
   }
 
   ngAfterContentInit() {
@@ -79,13 +84,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // Data
 
-  private getUnit(id: number) {
+  private focusUnit(id: number) {
     this.showSpinner = true;
-    this.focusedUnit = id;
+    this.focusedUnitId = id;
     this.units.clear();
     this.relations.clear();
     this.remainingUnits = 0;
-    this.getUnitAndUpdateUml(this.focusedUnit, new Set<number>());
+    this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>());
+    this.unitService.getParent(id).subscribe((parent: Unit) => {
+      this.disableUpButton = (parent === null);
+    });
   }
 
   private getUnitAndUpdateUml(id: number, visited: Set<number>) {
@@ -96,8 +104,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.remainingUnits += data.incomingRelations.length + 1;
       data.incomingRelations.forEach((relation: Relation) => {
         this.remainingUnits--;
-        const id = relation.id.toString();
-        if (!this.getRelationById(id)) {
+        if (!this.getRelationById(relation.id.toString())) {
           const outgoing = +relation.outgoing;
           if (!visited.has(outgoing)) {
             this.getUnitAndUpdateUml(outgoing, visited);
@@ -112,11 +119,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.showSpinner = false;
 
 
+
+
         let i = 0;
         this.units.forEach((unit: Unit) => {
           this.unitService.getAbsoluteName(+unit.id).subscribe((u: Unit) => {
             this.data.units.push(new VisibleUnit(unit.id, u.name));
-
             i++;
             if (i === this.units.size) {
               this.relations.forEach((relation: Relation) => {
@@ -130,9 +138,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         });
 
 
+
       }
     }, error => {
       console.log(error);
+    });
+  }
+
+  private upLevelAbove() {
+    this.unitService.getParent(this.focusedUnitId).subscribe((parent: Unit) => {
+      this.focusUnit(+parent.id);
     });
   }
 
@@ -228,7 +243,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
-      this.getUnit(this.focusedUnit);
+      this.focusUnit(this.focusedUnitId);
       this.updateUml();
     }, error => {
       console.log(error);
@@ -257,6 +272,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
     selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
     this.setShowUmlNodeOptions(false);
+    this.setShowUmlPathOptions(false);
     this.updateUml();
     this.changed = true;
   }
@@ -299,7 +315,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private drawUmlNodeOptions() {
-    this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
     const input = this.umlNodeOptions.nativeElement.firstChild;
     const padding = '0.5rem';
     input.style.left = 'calc(' + (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px + ' + padding + ')';
@@ -329,6 +344,55 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.showUmlNodeOptions = showUmlNodeOptions;
   }
 
+  private drawUmlPathOptions() {
+    let relationType;
+    if (this.selectedTarget.attributes[3]) { relationType = this.selectedTarget.attributes[3].nodeValue; }
+    this.selectedRelationType = this.getRelationTypeEquivalent(relationType);
+    const optionsStyle = this.umlPathOptions.nativeElement.firstChild.style;
+    optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
+    optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+  }
+
+  private setShowUmlPathOptions(showUmlNodeOptions: boolean) {
+    this.showUmlPathOptions = showUmlNodeOptions;
+  }
+
+  private changeRelationType(id: string, newRelationType: string) {
+    const splittedRelation: string[] = id.split('-');
+    const incoming = splittedRelation[0];
+    const outgoing = splittedRelation[1];
+    const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
+    this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
+      if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
+        relation.relationType = newRelationType;
+      }
+    });
+    this.units.get(outgoing).outgoingRelations.forEach((relation: Relation) => {
+      if ((relation.incoming.toString() === incoming) && (relation.relationType === relationType)) {
+        relation.relationType = newRelationType;
+      }
+    });
+    this.setShowUmlPathOptions(false);
+    this.updateUml();
+    this.changed = true;
+  }
+
+  private getRelationTypeEquivalent(relationType: string): string {
+    let equivalent = RelationType.USE;
+    if (relationType) {
+      if (relationType.includes('composition')) {
+        equivalent = RelationType.COMPOSITION;
+      } else if (relationType.includes('extension')) {
+        equivalent = RelationType.INHERITANCE;
+      } else if (relationType.includes('aggregation')) {
+        equivalent = RelationType.AGGREGATION;
+      } else if (relationType.includes('dependency')) {
+        equivalent = RelationType.ASSOCIATION;
+      }
+    }
+    return equivalent;
+  }
+
 
 
   // Key event listener
@@ -351,7 +415,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
     // Search
     if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
-      this.getUnit(+this.results[this.arrowKeyLocation].id);
+      this.focusUnit(+this.results[this.arrowKeyLocation].id);
     } else if ((target.attributes) && (target.attributes['class']) &&
       ((target.attributes['class'].nodeValue === 'mat-form-field-flex') ||
         (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
@@ -362,48 +426,93 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     // Uml
-    if ((target.tagName === 'rect') || (target.tagName === 'text')) {
-      this.selectedTarget = target;
-      if (target.tagName === 'text') {
-        this.selectedTarget = target.previousElementSibling as HTMLInputElement;
-      }
-      this.setShowUmlNodeOptions(true);
-      this.drawUmlNodeOptions();
-    } else if (target.tagName === 'path') {
-
-    } else if (target.id === 'association-incoming-button') {
-      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.ASSOCIATION).id);
-      this.drawUmlNodeOptions();
-    } else if (target.id === 'aggregation-incoming-button') {
-      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.AGGREGATION).id);
-      this.drawUmlNodeOptions();
-    } else if (target.id === 'composition-incoming-button') {
+    if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.COMPOSITION).id);
       this.drawUmlNodeOptions();
-    } else if (target.id === 'inheritance-incoming-button') {
+    } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement.id === 'inheritance-incoming-button')) {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.INHERITANCE).id);
       this.drawUmlNodeOptions();
-    } else if (target.id === 'use-incoming-button') {
+    } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement.id === 'aggregation-incoming-button')) {
+      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.AGGREGATION).id);
+      this.drawUmlNodeOptions();
+    } else if ((target.id === 'association-incoming-button') || (target.parentElement.id === 'association-incoming-button')) {
+      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.ASSOCIATION).id);
+      this.drawUmlNodeOptions();
+    } else if ((target.id === 'use-incoming-button') || (target.parentElement.id === 'use-incoming-button')) {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.USE).id);
       this.drawUmlNodeOptions();
-    } else if (target.id === 'association-outgoing-button') {
+    } else if ((target.id === 'association-outgoing-button') || (target.parentElement.id === 'association-outgoing-button')) {
 
-    } else if (target.id === 'aggregation-outgoing-button') {
+    } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement.id === 'aggregation-outgoing-button')) {
 
-    } else if (target.id === 'composition-outgoing-button') {
+    } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
 
-    } else if (target.id === 'inheritance-outgoing-button') {
+    } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement.id === 'inheritance-outgoing-button')) {
 
-    } else if (target.id === 'use-outgoing-button') {
+    } else if ((target.id === 'use-outgoing-button') || (target.parentElement.id === 'use-outgoing-button')) {
 
+    } else if ((target.id === 'composition-relation-button') || (target.parentElement.id === 'composition-relation-button')) {
+      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.COMPOSITION);
+    } else if ((target.id === 'inheritance-relation-button') || (target.parentElement.id === 'inheritance-relation-button')) {
+      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.INHERITANCE);
+    } else if ((target.id === 'aggregation-relation-button') || (target.parentElement.id === 'aggregation-relation-button')) {
+      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.AGGREGATION);
+    } else if ((target.id === 'association-relation-button') || (target.parentElement.id === 'association-relation-button')) {
+      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.ASSOCIATION);
+    } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
+      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
     } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
-      if (this.showUmlNodeOptions) {
-        this.updateUnitName();
-      }
-      this.setShowUmlNodeOptions(false);
-      this.updateUmlNodeOptions();
+      this.closeUmlNodeOptions();
     }
   }
+
+  @HostListener('document:dblclick', ['$event'])
+  public documentDoubleClick(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
+      if (this.changed) {
+        this._dialogService.openAlert({
+          message: 'Se han realizado cambios. Debe guardarlos antes de salir',
+          title: 'Guardar cambios',
+          closeButton: 'Cerrar'
+        });
+      } else {
+        this.goToUnit(target.id.toString().substring(0, target.id.toString().length));
+      }
+    }
+  }
+
+  @HostListener('document:contextmenu', ['$event'])
+  public documentRightClick(event: Event): void {
+    event.preventDefault();
+    const target = event.target as HTMLInputElement;
+    if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text') || (target.tagName === 'path'))) {
+      this.selectedTarget = target;
+      if (target.tagName === 'path') {
+        this.setShowUmlPathOptions(true);
+        this.drawUmlPathOptions();
+      } else {
+        this.setShowUmlPathOptions(false);
+        if (target.tagName === 'text') {
+          this.selectedTarget = target.previousElementSibling as HTMLInputElement;
+        }
+        this.setShowUmlNodeOptions(true);
+        this.drawUmlNodeOptions();
+      }
+    } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
+      this.closeUmlNodeOptions();
+    }
+  }
+
+  private closeUmlNodeOptions() {
+    if (this.showUmlNodeOptions) {
+      this.updateUnitName();
+    }
+    this.setShowUmlNodeOptions(false);
+    this.setShowUmlPathOptions(false);
+    this.updateUmlNodeOptions();
+  }
+
 
 
 
@@ -453,7 +562,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private keyDown(event: KeyboardEvent) {
     if ((event.key === this.ENTER_KEY) && (this.results.length > 0)) {
-      this.getUnit(+this.results[this.arrowKeyLocation].id);
+      this.focusUnit(+this.results[this.arrowKeyLocation].id);
     } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowKeyLocation > 0)) {
       this.arrowKeyLocation--;
     } else if ((event.key === this.ARROW_DOWN_KEY) && (this.arrowKeyLocation < (this.results.length - 1))) {
