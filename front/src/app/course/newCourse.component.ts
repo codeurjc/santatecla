@@ -118,6 +118,11 @@ export class NewCourseComponent implements OnInit {
   save() {
     this.course = {name: this.courseName, description: this.courseDescription};
     this.course.teacher = this.loginService.getCurrentUser();
+
+    for (let unit of this.chosenUnits){
+      unit.itineraries = [];
+    }
+
     this.course.units = this.chosenUnits;
     this.course.students = this.chosenStudents;
     console.log(this.course);
