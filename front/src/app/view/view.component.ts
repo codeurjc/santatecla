@@ -5,6 +5,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
+import { TdDialogService } from "@covalent/core";
 
 declare var mermaid: any;
 
@@ -50,14 +51,13 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private selectedTarget: HTMLInputElement;
   @ViewChild('umlNodeOptions') umlNodeOptions: ElementRef;
   private showUmlNodeOptions = false;
-  private showGoToUnit = true;
   @ViewChild('umlPathOptions') umlPathOptions: ElementRef;
   private showUmlPathOptions = false;
   private selectedRelationType = '';
 
 
 
-  constructor(private router: Router, private unitService: UnitService) {}
+  constructor(private router: Router, private unitService: UnitService, private _dialogService: TdDialogService) {}
 
   ngOnInit() {
     window.document.body.style.overflow = 'hidden';
@@ -315,7 +315,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private drawUmlNodeOptions() {
-    this.showGoToUnit = (this.selectedTarget.id.toString().substring(0, 1) !== '0');
     const input = this.umlNodeOptions.nativeElement.firstChild;
     const padding = '0.5rem';
     input.style.left = 'calc(' + (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset) + 'px + ' + padding + ')';
@@ -427,20 +426,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     }
 
     // Uml
-    if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text') || (target.tagName === 'path'))) {
-      this.selectedTarget = target;
-      if (target.tagName === 'path') {
-        this.setShowUmlPathOptions(true);
-        this.drawUmlPathOptions();
-      } else {
-        this.setShowUmlPathOptions(false);
-        if (target.tagName === 'text') {
-          this.selectedTarget = target.previousElementSibling as HTMLInputElement;
-        }
-        this.setShowUmlNodeOptions(true);
-        this.drawUmlNodeOptions();
-      }
-    } else if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
+    if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
       this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.COMPOSITION).id);
       this.drawUmlNodeOptions();
     } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement.id === 'inheritance-incoming-button')) {
@@ -476,14 +462,57 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
       this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
     } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
-      if (this.showUmlNodeOptions) {
-        this.updateUnitName();
-      }
-      this.setShowUmlNodeOptions(false);
-      this.setShowUmlPathOptions(false);
-      this.updateUmlNodeOptions();
+      this.closeUmlNodeOptions();
     }
   }
+
+  @HostListener('document:dblclick', ['$event'])
+  public documentDoubleClick(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
+      if (this.changed) {
+        this._dialogService.openAlert({
+          message: 'Se han realizado cambios. Debe guardarlos antes de salir',
+          title: 'Guardar cambios',
+          closeButton: 'Cerrar'
+        });
+      } else {
+        this.goToUnit(target.id.toString().substring(0, target.id.toString().length));
+      }
+    }
+  }
+
+  @HostListener('document:contextmenu', ['$event'])
+  public documentRightClick(event: Event): void {
+    event.preventDefault();
+    const target = event.target as HTMLInputElement;
+    if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text') || (target.tagName === 'path'))) {
+      this.selectedTarget = target;
+      if (target.tagName === 'path') {
+        this.setShowUmlPathOptions(true);
+        this.drawUmlPathOptions();
+      } else {
+        this.setShowUmlPathOptions(false);
+        if (target.tagName === 'text') {
+          this.selectedTarget = target.previousElementSibling as HTMLInputElement;
+        }
+        this.setShowUmlNodeOptions(true);
+        this.drawUmlNodeOptions();
+      }
+    } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
+      this.closeUmlNodeOptions();
+    }
+  }
+
+  private closeUmlNodeOptions() {
+    if (this.showUmlNodeOptions) {
+      this.updateUnitName();
+    }
+    this.setShowUmlNodeOptions(false);
+    this.setShowUmlPathOptions(false);
+    this.updateUmlNodeOptions();
+  }
+
 
 
 

@@ -32,12 +32,6 @@
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">
       <div id="uml-node-options">
-        <div *ngIf="showGoToUnit">
-          <button mat-icon-button color="primary" (click)="goToUnit(selectedTarget.id.toString().substring(0, selectedTarget.id.toString().length))">
-            <mat-icon class="uml-option-icon">call_made</mat-icon>
-          </button>
-          <br>
-        </div>
         <button id="composition-incoming-button"><img src="../../assets/img/add-composition-incoming.png" height="15"></button>
         <button id="composition-outgoing-button"><img src="../../assets/img/add-composition-outgoing.png" height="15"></button>
         <br>
