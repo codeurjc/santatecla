@@ -1,7 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {LoginService, User} from '../auth/login.service';
 import {Unit} from '../unit/unit.model';
-import {CourseService} from './course.service';
 import {NewCourseService} from './newCourse.service';
 import {UnitService} from '../unit/unit.service';
 import {Course} from './course.model';
@@ -13,12 +12,10 @@ import {Router} from '@angular/router';
 })
 
 export class NewCourseComponent implements OnInit {
-  courseName: string;
-  courseDescription: string;
+  courseName = '';
+  courseDescription = '';
   showingStudents: User[];
-  students: User[];
   showingUnits: Unit[];
-  units: Unit[];
   chosenUnits: Unit[];
   chosenStudents: User[];
   showStudentOptions = false;
@@ -35,16 +32,7 @@ export class NewCourseComponent implements OnInit {
     this.chosenUnits = [];
   }
 
-  ngOnInit(): void {
-    this.courseService.getUnits().subscribe((data: Unit[]) => {
-      this.units = data;
-    }, error => {console.log(error); } );
-
-    this.courseService.getUsers().subscribe((data: User[]) => {
-      this.students = data;
-      console.log(this.students);
-    }, error => {console.log(error); } );
-  }
+  ngOnInit(): void {}
 
   addStudent(student: User) {
     if (this.checkStudentInclude(student)) {
@@ -56,6 +44,14 @@ export class NewCourseComponent implements OnInit {
     if (this.checkUnitInclude(unit)) {
       this.chosenUnits.push(unit);
     }
+  }
+
+  removeStudent(student: User) {
+    this.chosenStudents.splice(this.chosenStudents.indexOf(student), 1);
+  }
+
+  removeUnit(unit: Unit) {
+    this.chosenUnits.splice(this.chosenUnits.indexOf(unit), 1);
   }
 
   checkStudentInclude(newStudent: User) {
@@ -84,6 +80,8 @@ export class NewCourseComponent implements OnInit {
       }, error => {
         console.log(error);
       });
+    } else {
+      this.showingStudents = [];
     }
   }
 
@@ -95,6 +93,8 @@ export class NewCourseComponent implements OnInit {
       }, error => {
         console.log(error);
       });
+    } else {
+      this.showingUnits = [];
     }
   }
 
@@ -103,12 +103,16 @@ export class NewCourseComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     if ((target.id === 'user-result') || (target.id === 'user-name')) {
       this.addStudent(this.showingStudents[this.arrowStudentKeyLocation]);
+      this.showStudentOptions = false;
     } else if ((target.id === 'unit-result') || (target.id === 'unit-name')){
       this.addUnit(this.showingUnits[this.arrowUnitKeyLocation]);
+      this.showUnitOptions = false;
     } else if (target.id === 'search-student-input') {
       this.showStudentOptions = true;
+      this.showUnitOptions = false;
     } else if (target.id === 'search-unit-input') {
       this.showUnitOptions = true;
+      this.showStudentOptions = false;
     } else {
       this.showStudentOptions = false;
       this.showUnitOptions = false;

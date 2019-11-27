@@ -6,7 +6,7 @@
 
   <body>
 
-    <div *ngIf="loginService.isLogged" id="header">
+    <div *ngIf="loginService.isLogged" id="header" style="overflow: hidden">
       <div *ngIf="loginService.isAdmin" id="progress-button">
         <button mat-icon-button [routerLink]="['progress']">
           <mat-icon>layers</mat-icon>

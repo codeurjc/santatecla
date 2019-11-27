@@ -53,27 +53,31 @@
 }
 
 .tab {
-  background-color: #657dcc;
-  border-radius: 5px 5px 0 0;
-  border-top: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  background-color: #2361c5;
+  border-left: 1px solid #88c5c5;
+  border-right: 1px solid #88c5c5;
   padding: 0.5rem;
-  margin-left: 0.5rem;
   box-shadow: none;
   position: relative;
-  top: 10%;
+  top: 0.2rem;
 }
 
 .activeTab {
-  background-color: #9ab1fa;
+  background-color: #3c7add;
+}
+
+.tab:hover {
+  background-color: #3c7add;
 }
 
 #tab-wrapper {
   margin-left: 3rem;
-  margin-right: 6rem;
-  display: block ruby;
-  overflow-x: scroll;
+  margin-right: 13rem;
+  top: 0.5rem;
+  white-space: nowrap;
+  height: 150%;
+  overflow-x: auto;
+  z-index: 0;
 }
 
 .newCourseButton {
