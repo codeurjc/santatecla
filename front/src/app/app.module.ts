@@ -46,6 +46,9 @@ import {StudentHomeService} from './course/studentHome.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
 import {TabService} from './tab/tab.service';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {NewCourseComponent} from './course/newCourse.component';
+import {NewCourseService} from './course/newCourse.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,8 @@ import {TabService} from './tab/tab.service';
     ProgressComponent,
     TestQuestionComponent,
     StudentHomeComponent,
-    CourseComponent
+    CourseComponent,
+    NewCourseComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -107,10 +111,10 @@ import {TabService} from './tab/tab.service';
     NgJsonEditorModule,
     CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
-    CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
+    CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService,
+    ProgressService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService, NewCourseService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

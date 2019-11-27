@@ -76,4 +76,8 @@
   overflow-x: scroll;
 }
 
-
+.newCourseButton {
+  background-color: #2361c5;
+  border: 0;
+  color: white;
+}

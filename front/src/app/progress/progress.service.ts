@@ -20,4 +20,8 @@ export class ProgressService {
   getWorstStudent(courseId: number) {
     return this.http.get('api/course/' + courseId + '/user/worst');
   }
+
+  getUnitProgress(courseId: number) {
+    return this.http.get('api/course/' + courseId + '/units/points');
+  }
 }

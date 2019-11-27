@@ -6,10 +6,7 @@ import com.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +19,12 @@ public class CourseRestController extends GeneralRestController {
     @GetMapping(value="/")
     public ResponseEntity<List<Course>> getCourses(){
         return new ResponseEntity<>(this.courseService.findAll(), HttpStatus.OK);
+    }
+
+    @PostMapping(value="/")
+    public ResponseEntity<Course> createCourse(@RequestBody Course course){
+        this.courseService.save(course);
+        return new ResponseEntity<>(course, HttpStatus.CREATED);
     }
 
     @GetMapping(value="/user/{id}")
@@ -142,6 +145,34 @@ public class CourseRestController extends GeneralRestController {
                     points.add(this.courseService.findUserCorrectWrongAnswerRelation(courseId,unit.getId(), user.getId())*10);
                 }
                 UserProgressItem item = new UserProgressItem(user.getName(), points);
+                result.add(item);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value="/{courseId}/units/points")
+    public ResponseEntity<List<UserProgressItem>> getUnitProgress(@PathVariable long courseId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        ArrayList<Double> points;
+        int correctAnswers;
+        int wrongAnswers;
+        ArrayList<UserProgressItem> result = new ArrayList<>();
+        if(optional.isPresent()){
+            for (Unit unit : optional.get().getUnits()){
+                points = new ArrayList<>();
+                correctAnswers = this.courseService.findUnitCorrectAnswers(courseId, unit.getId());
+                points.add((double)correctAnswers);
+                wrongAnswers = this.courseService.findUnitWrongAnswers(courseId, unit.getId());
+                points.add((double)wrongAnswers);
+                if(wrongAnswers > 0.75*(correctAnswers+wrongAnswers)){
+                    points.add(1.0);
+                }
+                else {
+                    points.add(0.0);
+                }
+                UserProgressItem item = new UserProgressItem(unit.getName(), points);
                 result.add(item);
             }
             return new ResponseEntity<>(result, HttpStatus.OK);

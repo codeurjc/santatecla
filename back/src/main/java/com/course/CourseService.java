@@ -44,4 +44,14 @@ public class CourseService {
         }
         return result;
     }
+
+    public int findUnitCorrectAnswers(long courseId, long unitId){
+        return this.courseRepository.findUnitDefinitionAnswers(courseId, unitId, true) + this.courseRepository.findUnitListAnswers(courseId, unitId, true) +
+                this.courseRepository.findUnitTestAnswers(courseId, unitId, true);
+    }
+
+    public int findUnitWrongAnswers(long courseId, long unitId){
+        return this.courseRepository.findUnitDefinitionAnswers(courseId, unitId, false) + this.courseRepository.findUnitListAnswers(courseId, unitId, false) +
+                this.courseRepository.findUnitTestAnswers(courseId, unitId, false);
+    }
 }

@@ -36,6 +36,14 @@ public class UserService {
 
 	public User findByName(String name) {
 		return uRepository.findByName(name);
-	} 
+	}
+
+	public List<User> findStudents(){
+		return this.uRepository.findStudents();
+	}
+
+	public List<User> findStudentByNameContaining(String name){
+		return this.uRepository.findStudentByNameContaining(name);
+	}
 
 }
