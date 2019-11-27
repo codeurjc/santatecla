@@ -1,5 +1,6 @@
 package com.unit;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,12 +200,5 @@ public class Unit {
         this.testQuestions = testQuestions;
     }
 
-    public Card getCardByName(String name) {
-        for (Card card: this.getCards()) {
-            if (card.getName().equals(name)) {
-                return card;
-            }
-        }
-        return new Card(name);
-    }
+
 }

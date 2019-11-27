@@ -12,6 +12,7 @@ import { UnitService } from '../unit/unit.service';
 import Asciidoctor from 'asciidoctor';
 import {Slide} from '../slide/slide.model';
 import {Card} from '../card/card.model';
+import {DefinitionQuestionService} from "../question/definitionQuestion/definitionQuestion.service";
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -41,15 +42,25 @@ export class ItineraryComponent implements OnInit {
 
   itineraryTabs: Itineray[];
 
+  contentCount: number;
+
+  showSpinner = false;
+  componentsChecker: number;
+
+  subSlide: boolean;
+
   constructor(private itineraryService: ItineraryService,
               private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
               private loginService: LoginService,
+              private definitionQuestionService: DefinitionQuestionService,
               private unitService: UnitService ) {}
 
   ngOnInit() {
+
+    this.showSpinner = true;
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
@@ -74,9 +85,7 @@ export class ItineraryComponent implements OnInit {
       this.itineraryContent = '== ' + this.itinerary.name + '\n';
       this.itineraryContentExtended = '';
       this.slidesToContent(this.itinerary.slides);
-      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
-        this.viewHTMLVersion();
-      });
+      this.extendContent(this.itineraryContent);
     });
   }
 
@@ -90,18 +99,46 @@ export class ItineraryComponent implements OnInit {
     });
   }
 
-  resolveAfterSeconds(x) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(x);
-      }, 1000);
+  async getEmbebedContent(contentId: number, contentId2: number, unitId: number, content: string, contentCounter: number, type: string) {
+    let contentEmbebed;
+    if (type === 'card') {
+      contentEmbebed = await this.unitService.getCard(contentId, unitId).toPromise();
+      this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
+    } else if (type === 'slide') {
+      this.subSlide = true;
+      contentEmbebed = await this.unitService.getSlideFormItinerary(contentId, contentId2, unitId).toPromise();
+      this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
+    } else if (type === 'question') {
+      contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
+      this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText +
+        '\n\n- http://localhost:4200/#/units/13/itineraries/11/definitionQuestion/6[Resolver^]');
+    }
+    this.addExtractedData(content);
+  }
+
+  contentCounterFunction(content: string) {
+    this.contentCount = 0;
+    let lines: string[];
+    lines = content.split('\n');
+    lines.forEach((line: string) => {
+      let words: string[];
+      words = line.split('.');
+      if (words[0] === 'assert') {
+        this.contentCount = this.contentCount + 1;
+      }
     });
   }
 
   extendContent(content: string) {
+    this.subSlide = false;
+    this.contentCounterFunction(content);
     this.extractedData = [];
+    for (let i = 0; i < this.contentCount; i++) {
+      this.extractedData.push('');
+    }
     this.position = [];
     let counter = 0;
+    let contentCounter = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
@@ -112,19 +149,26 @@ export class ItineraryComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.unitService.getCardByName(parameters[1], Number(parameters[2])).subscribe((data: Card) => {
-            this.extractedData.push(data.content);
-            this.addExtractedData(content);
-          });
+          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[2]), content, contentCounter, 'card');
+          contentCounter = contentCounter + 1;
+        } else if (parameters[0] === 'slide') {
+          this.position.push(counter);
+          this.getEmbebedContent(Number(parameters[1]), Number(parameters[2]), Number(parameters[3]), content, contentCounter, 'slide');
+          contentCounter = contentCounter + 1;
+        } else if (parameters[0] === 'question') {
+          this.position.push(counter);
+          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[3]), content, contentCounter, 'question');
+          contentCounter = contentCounter + 1;
+        } else {
+          this.addExtractedData(content);
         }
-      } else {
-        this.addExtractedData(content);
       }
       counter = counter + 1;
     });
   }
 
   addExtractedData(content: string) {
+    this.componentsChecker = 0;
     this.itineraryContentExtended = '';
     let lines: string[];
     lines = content.split('\n');
@@ -134,6 +178,19 @@ export class ItineraryComponent implements OnInit {
     lines.forEach((line: string) => {
       this.itineraryContentExtended = this.itineraryContentExtended + line + '\n';
     });
+    this.extractedData.forEach((component: string) => {
+      if (component !== '') {
+        this.componentsChecker = this.componentsChecker + 1;
+      }
+    });
+    if (this.componentsChecker === this.contentCount) {
+      if (this.subSlide) {
+        this.extendContent(this.itineraryContentExtended);
+      } else {
+        this.showSpinner = false;
+        this.viewHTMLVersion();
+      }
+    }
   }
 
   contentToItinerary(content: string) {
@@ -176,10 +233,10 @@ export class ItineraryComponent implements OnInit {
 
   updateHTMLView() {
     this.contentToItinerary(this.itineraryContent);
+    this.contentHTML = '';
+    this.showSpinner = true;
     this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
-      this.resolveAfterSeconds(this.extendContent(this.itineraryContent)).then(value => {
-        this.viewHTMLVersion();
-      });
+      this.extendContent(this.itineraryContent);
     }, (error) => {
       console.error(error);
     });

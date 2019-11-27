@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.relation.Relation;
 import com.relation.RelationService;
+import com.slide.Slide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -187,14 +188,39 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<Card>(card, HttpStatus.OK);
     }*/
 
-    @RequestMapping(value = "/{unitId}/cards/{cardName}", method = RequestMethod.GET)
-    public ResponseEntity<Card> getCardByName(@PathVariable long unitId, @PathVariable String cardName, HttpServletResponse response) {
+    @RequestMapping(value = "/{unitId}/cards/{cardId}", method = RequestMethod.GET)
+    public ResponseEntity<Card> getCard(@PathVariable long unitId, @PathVariable long cardId, HttpServletResponse response) {
         Optional<Unit> unit = unitService.findOne(unitId);
         if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Card card = unit.get().getCardByName(cardName);
-        return new ResponseEntity<Card>(card, HttpStatus.OK);
+
+        Optional<Card> card = cardService.findOne(cardId);
+        if (!card.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<Card>(card.get(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{unitId}/itineraries/{itineraryId}/slides/{slideId}", method = RequestMethod.GET)
+    public ResponseEntity<Slide> getSlideFromItinerary(@PathVariable long unitId, @PathVariable long itineraryId, @PathVariable long slideId, HttpServletResponse response) {
+        Optional<Unit> unit = unitService.findOne(unitId);
+        if (!unit.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Optional<Itinerary> itinerary = itineraryService.findOne(itineraryId);
+        if (!itinerary.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Optional<Slide> slide = slideService.findOne(slideId);
+        if (!slide.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<Slide>(slide.get(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/{unitId}/itineraries")

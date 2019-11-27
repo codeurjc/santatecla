@@ -115,7 +115,7 @@ public class DatabaseInitializer {
                 Slide slide1 = new Slide("Concepto");
                 Slide slide2 = new Slide("Tipos");
 
-                slide1.addContent("assert.card/Que/12\n\nassert.card/Cuando/12\n\n");
+                slide1.addContent("assert.card/1/13\n\nassert.card/4/13\n\n");
                 slide2.addContent("* Lenguaje Maquina\n" +
                         "\n" +
                         "Es el más primitivo de los códigos y se basa en la numeración binaria, todo en 0 y 1. Este lenguaje es utilizado directamente por máquinas o computadora.\n" +
@@ -137,7 +137,7 @@ public class DatabaseInitializer {
                 slideRepository.save(slide2);
 
                 //Itinerary
-                Itinerary itinerary1 = new Itinerary("Introducción");
+                Itinerary itinerary1 = new Itinerary("Introduccion");
                 Itinerary itinerary2 = new Itinerary("Introducción Java");
 
                 itinerary1.getSlides().add(slide1);

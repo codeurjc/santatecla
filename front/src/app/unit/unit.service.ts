@@ -84,7 +84,11 @@ export class UnitService {
     return this.http.post<TestQuestion>(this.baseUrl + id + '/question/test', body, {headers});
   }
 
-  getCardByName(cardName: string, unitId: number) {
-    return this.http.get(this.baseUrl + unitId + '/cards/' + cardName);
+  getCard(cardId: number, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
+  }
+
+  getSlideFormItinerary(slideId: number, itineraryId: number, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/itineraries/' + itineraryId + '/slides/' + slideId);
   }
 }

@@ -11,7 +11,7 @@
         Ejercicios
       </button>
 
-      <div *ngFor="let itinerary of itinerariesTabs">
+      <div *ngFor="let itinerary of itineraryTabs">
         <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
           Itinerario {{itinerary.id}}
         </button>
@@ -28,6 +28,7 @@
 
     <!-- HTML REPRESENTATION -->
     <div id="html-itinerary-representation">
+      <img src="../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
       <div [innerHTML]="contentHTML"></div>
     </div>
 
