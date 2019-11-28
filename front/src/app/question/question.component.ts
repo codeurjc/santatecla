@@ -98,6 +98,11 @@ export class QuestionComponent implements OnInit {
     });
   }
 
+  setQuestion(subtype: string) {
+    this.subtype = subtype;
+    this.resetAddQuestionForm();
+  }
+
   sendDefinitionQuestion() {
     this.definitionQuestion = {
       questionText: this.questionInput,

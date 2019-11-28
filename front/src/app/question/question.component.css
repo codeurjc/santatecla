@@ -12,12 +12,23 @@
 }
 
 .add-question-card {
-  margin: 10%;
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 4%;
+  margin-bottom: 5%;
 }
 
 .add-question-card-title {
   text-align: center;
   font-weight: bold;
+}
+.add-question-card-content {
+  text-align: center;
+}
+
+.button-row button,
+.button-row a {
+  margin: 8px;
 }
 
 .add-question-radio-group {
