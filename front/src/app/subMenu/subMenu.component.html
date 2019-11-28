@@ -3,18 +3,20 @@
   <body>
 
     <div class="itinerary-header">
-      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
+      <div class="subMenuButton" (click)="navigateToUnitCards()">
         Fichas
-      </button>
+      </div>
 
-      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
+      <div class="subMenuButton" (click)="navigateToUnitQuestions()">
         Ejercicios
-      </button>
+      </div>
 
-      <div *ngFor="let itinerary of unit.itineraries">
-        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-          Itinerario {{itinerary.id}}
-        </button>
+      <div id="tab-wrapper">
+        <span *ngFor="let itinerary of unit.itineraries" class="subMenuItineraries">
+          <div class="subMenuButton" (click)="navigateToUnitItinerary(itinerary.id)">
+            {{itinerary.name}}
+          </div>
+        </span>
       </div>
     </div>
 

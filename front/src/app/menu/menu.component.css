@@ -4,27 +4,28 @@
 }
 
 #header {
+  position: relative;
+  border-radius: 0.5rem;
+  margin: 0.5rem;
   height: 3rem;
   top: 0;
   right: 0;
   left: 0;
-  background-color: #2361c5;
+  background-color: #27273c;
   color: white;
   font-size: 0.8rem;
 }
 
 #logout-button {
   position: absolute;
-  top: 0;
-  right: 0;
-  margin-top: -0.15rem;
+  right: 0.5vw;
+  margin: 0.2rem;
 }
 
 #progress-button {
   position: absolute;
-  top: 0;
-  right: 3%;
-  margin-top: -0.15rem;
+  right: 4vw;
+  margin-top: 0.2rem;
 }
 
 .mat-icon {
@@ -34,21 +35,21 @@
 }
 
 .tab {
-  background-color: #2361c5;
-  border-left: 1px solid #88c5c5;
-  border-right: 1px solid #88c5c5;
+  border-radius: 0.5rem;
+  background-color: #27273c;
   padding: 0.5rem;
   box-shadow: none;
   position: relative;
-  top: 0.2rem;
+  top: 0.3rem;
+  margin: 0.2rem;
 }
 
 .activeTab {
-  background-color: #3c7add;
+  background-color: #e1afed80;
 }
 
 .tab:hover {
-  background-color: #3c7add;
+  background-color: #e1afed80;
 }
 
 #tab-wrapper {
