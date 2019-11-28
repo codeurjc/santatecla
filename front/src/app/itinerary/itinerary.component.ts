@@ -12,7 +12,7 @@ import { UnitService } from '../unit/unit.service';
 import Asciidoctor from 'asciidoctor';
 import {Slide} from '../slide/slide.model';
 import {Card} from '../card/card.model';
-import {DefinitionQuestionService} from "../question/definitionQuestion/definitionQuestion.service";
+import {DefinitionQuestionService} from '../question/definitionQuestion/definitionQuestion.service';
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -40,8 +40,6 @@ export class ItineraryComponent implements OnInit {
   unitId: number;
   itineraryId: number;
 
-  itineraryTabs: Itineray[];
-
   contentCount: number;
 
   showSpinner = false;
@@ -60,8 +58,6 @@ export class ItineraryComponent implements OnInit {
 
   ngOnInit() {
 
-    this.showSpinner = true;
-
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
       this.itineraryId = params.itineraryId;
@@ -73,8 +69,9 @@ export class ItineraryComponent implements OnInit {
         name: data.name,
         itineraries: data.itineraries
       };
-      this.itineraryTabs = this.unit.itineraries;
     });
+
+    this.showSpinner = true;
 
     this.itineraryService.getItinerary(this.itineraryId).subscribe((data: Itineray) => {
       this.itinerary = {

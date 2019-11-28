@@ -2,22 +2,7 @@
 <html>
   <body>
 
-    <div class="itinerary-header">
-      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
-        Fichas
-      </button>
-
-      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
-        Ejercicios
-      </button>
-
-      <div *ngFor="let itinerary of itineraryTabs">
-        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-          Itinerario {{itinerary.id}}
-        </button>
-      </div>
-
-    </div>
+    <app-submenu></app-submenu>
 
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">

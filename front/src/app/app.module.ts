@@ -49,10 +49,16 @@ import {TabService} from './tab/tab.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NewCourseComponent} from './course/newCourse.component';
 import {NewCourseService} from './course/newCourse.service';
+import {SubMenuComponent} from './subMenu/subMenu.component';
+import {LoginComponent} from './login/login.component';
+import {MenuComponent} from './menu/menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SubMenuComponent,
+    LoginComponent,
+    MenuComponent,
     ViewComponent,
     CardComponent,
     ItineraryComponent,
