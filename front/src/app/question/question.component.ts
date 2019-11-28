@@ -26,13 +26,17 @@ export class QuestionComponent implements OnInit {
   definitionQuestions: DefinitionQuestion[];
   listQuestions: ListQuestion[];
   testQuestions: TestQuestion[];
+
   definitionQuestion: DefinitionQuestion;
   listQuestion: ListQuestion;
   testQuestion: TestQuestion;
-  subtype: string;
 
   questionTypes = ['DefinitionQuestion', 'ListQuestion', 'TestQuestion'];
 
+  // Add Question attributes
+  subtype: string;
+  questionInput: string;
+  answerInput: string;
   possibleAnswers: Map<string, boolean>;
   correct: boolean;
   correctTestAnswerSelected: boolean;
@@ -50,25 +54,33 @@ export class QuestionComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router) {
   }
-
   ngOnInit() {
-    this.subtype = 'DefinitionQuestion';
+
     this.questions = [];
-    this.possibleAnswers = new Map();
-    this.correct = false;
-    this.correctTestAnswerSelected = false;
+
+    // Add Question attributes
+    this.subtype = 'DefinitionQuestion';
+    this.resetAddQuestionForm();
+
     this.activatedRoute.params.subscribe(params => {
-      this.unitId = params['unitId'];
+      this.unitId = params.unitId;
     });
 
     this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
       this.unit = {
-        id: data['id'],
-        name: data['name'],
-        itineraries: data['itineraries']
+        id: data.id,
+        name: data.name,
+        itineraries: data.itineraries
       };
       this.itinerariesTabs = this.unit.itineraries;
     });
+
+    this.getQuestions();
+
+  }
+
+  getQuestions() {
+    this.questions = [];
 
     this.unitService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
       this.definitionQuestions = data;
@@ -86,20 +98,22 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  sendDefinitionQuestion(text: string) {
+  sendDefinitionQuestion() {
     this.definitionQuestion = {
-      questionText: text,
+      questionText: this.questionInput,
       subtype: 'DefinitionQuestion'
     };
     this.unitService.addUnitDefinitionQuestion(this.unitId, this.definitionQuestion).subscribe(
       (_) => {
+          this.resetAddQuestionForm();
+          // TODO Remove it
           this.ngOnInit();
         },
       (error) => console.log(error)
     );
   }
 
-  sendListQuestion(text: string) {
+  sendListQuestion() {
     let ca = [];
     this.possibleAnswers.forEach((value: boolean, key: string) => {
       if (value) {
@@ -107,20 +121,22 @@ export class QuestionComponent implements OnInit {
       }
     });
     this.listQuestion = {
-      questionText: text,
+      questionText: this.questionInput,
       subtype: 'ListQuestion',
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswers: ca
     };
     this.unitService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
       (_) => {
+        this.resetAddQuestionForm();
+        // TODO Remove it
         this.ngOnInit();
       },
       (error) => console.log(error)
     );
   }
 
-  sendTestQuestion(text: string) {
+  sendTestQuestion() {
     let ca = [];
     this.possibleAnswers.forEach((value: boolean, key: string) => {
       if (value) {
@@ -128,32 +144,44 @@ export class QuestionComponent implements OnInit {
       }
     });
     this.testQuestion = {
-      questionText: text,
+      questionText: this.questionInput,
       subtype: 'TestQuestion',
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswer: ca[0]
     };
     this.unitService.addUnitTestQuestion(this.unitId, this.testQuestion).subscribe(
       (_) => {
+        this.resetAddQuestionForm();
+        // TODO Remove it
         this.ngOnInit();
       },
       (error) => console.log(error)
     );
   }
 
-  addPossibleAnswer(answer: string) {
-    this.possibleAnswers = this.possibleAnswers.set(answer, this.correct);
+  addPossibleListAnswer() {
+    this.possibleAnswers = this.possibleAnswers.set(this.answerInput, this.correct);
+    this.answerInput = '';
   }
 
-  addPossibleTestAnswer(answer: string) {
+  addPossibleTestAnswer() {
     if (!this.correctTestAnswerSelected && this.correct) {
-      this.possibleAnswers.set(answer, true)
+      this.possibleAnswers.set(this.answerInput, true);
       this.correctTestAnswerSelected = true;
     } else if (!this.correctTestAnswerSelected && !this.correct) {
-      this.possibleAnswers.set(answer, false);
+      this.possibleAnswers.set(this.answerInput, false);
     } else {
-      this.possibleAnswers.set(answer, false);
+      this.possibleAnswers.set(this.answerInput, false);
     }
+    this.answerInput = '';
+  }
+
+  resetAddQuestionForm() {
+    this.questionInput = '';
+    this.answerInput = '';
+    this.possibleAnswers = new Map();
+    this.correct = false;
+    this.correctTestAnswerSelected = false;
   }
 
   navigateToUnitCards() {

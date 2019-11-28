@@ -12,7 +12,7 @@
 }
 
 .add-question-card {
- margin: 10%;
+  margin: 10%;
 }
 
 .add-question-card-title {
@@ -32,4 +32,17 @@
 .add-question-form {
   display: flex;
   justify-content: center;
+}
+
+.add-question-form-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-answer-button {
+  margin: 10px;
+}
+
+.add-answer-list {
+  text-align: center;
 }
