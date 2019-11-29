@@ -10,8 +10,8 @@
 .node circle,
 .node ellipse,
 .node polygon {
-  fill: #fafcff;
-  stroke: #003e80;
+  fill: #efd5f6;
+  stroke: #27273c;
   stroke-width: 1px;
 }
 
@@ -57,7 +57,7 @@ div.mermaidTooltip {
 
 .actor {
   stroke: #CCCCFF;
-  fill: #fafcff;
+  fill: #efd5f6;
 }
 
 text.actor {
@@ -103,7 +103,7 @@ text.actor {
 
 .labelBox {
   stroke: #CCCCFF;
-  fill: #fafcff;
+  fill: #efd5f6;
 }
 
 .labelText {
@@ -377,8 +377,8 @@ g.classGroup text {
 }
 
 g.classGroup rect {
-  fill: #fafcff;
-  stroke: #006fe6;
+  fill: #efd5f6;
+  stroke: #9e2abb;
   cursor: pointer;
 }
 
@@ -389,74 +389,74 @@ g.classGroup rect[id^="0"] {
 }
 
 g.classGroup line {
-  stroke: #006fe6;
+  stroke: #9e2abb;
   stroke-width: 1;
 }
 
 .classLabel .box {
   stroke: none;
   stroke-width: 0;
-  fill: #fafcff;
+  fill: #efd5f6;
   opacity: 0.5;
 }
 
 .classLabel .label {
-  fill: #003e80;
+  fill: #27273c;
   font-size: 10px;
 }
 
 .relation {
   cursor: pointer;
-  stroke: #003e80;
+  stroke: #27273c;
   stroke-width: 1;
   fill: none;
 }
 
 #compositionStart {
-  fill: #003e80;
-  stroke: #003e80;
+  fill: #27273c;
+  stroke: #27273c;
   stroke-width: 1;
 }
 
 #compositionEnd {
-  fill: #003e80;
-  stroke: #003e80;
+  fill: #27273c;
+  stroke: #27273c;
   stroke-width: 1;
 }
 
 #aggregationStart {
   fill: #ffffff;
-  stroke: #003e80;
+  stroke: #27273c;
   stroke-width: 1;
 }
 
 #aggregationEnd {
   fill: #ffffff;
-  stroke: #003e80;
+  stroke: #27273c;
   stroke-width: 1;
 }
 
 #dependencyStart {
-  fill: #003e80;
-  stroke: #003e80;
+  fill: #27273c;
+  stroke: #27273c;
   stroke-width: 1;
 }
 
 #dependencyEnd {
-  fill: #003e80;
-  stroke: #003e80;
+  fill: #27273c;
+  stroke: #27273c;
   stroke-width: 1;
 }
 
 #extensionStart {
   fill: #ffffff;
-  stroke: #003e80;
+  stroke: #27273c;
   stroke-width: 1;
 }
 
 #extensionEnd {
   fill: #ffffff;
-  stroke: #003e80;
+  stroke: #27273c;
   stroke-width: 1;
 }
 

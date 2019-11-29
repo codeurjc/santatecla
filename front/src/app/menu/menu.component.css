@@ -5,8 +5,6 @@
 
 #header {
   position: relative;
-  border-radius: 0.5rem;
-  margin: 0.5rem;
   height: 3rem;
   top: 0;
   right: 0;
@@ -14,6 +12,7 @@
   background-color: #27273c;
   color: white;
   font-size: 0.8rem;
+  overflow: hidden;
 }
 
 #logout-button {
@@ -30,26 +29,30 @@
 
 .mat-icon {
   padding: 0;
-  margin: 0;
-  margin-top: -0.1rem;
+  margin: -0.1rem 0 0 0;
 }
 
 .tab {
-  border-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border: 1px solid #9e2abb;
   background-color: #27273c;
-  padding: 0.5rem;
+  padding: 0.9rem 0.2rem 1rem 0.7rem;
   box-shadow: none;
   position: relative;
   top: 0.3rem;
-  margin: 0.2rem;
+  cursor: pointer;
 }
 
 .activeTab {
-  background-color: #e1afed80;
+  background-color: #e1afed;
+  color: #000000;
+  font-weight: bold;
 }
 
 .tab:hover {
-  background-color: #e1afed80;
+  background-color: #e1afed;
+  color: #000000;
 }
 
 #tab-wrapper {
@@ -59,11 +62,18 @@
   white-space: nowrap;
   height: 150%;
   overflow-x: auto;
-  z-index: 0;
+}
+
+.tab-content {
+  display: inline;
 }
 
 .newCourseButton {
   background-color: #2361c5;
   border: 0;
   color: white;
+}
+
+.close-tab-button:hover {
+  color: #d87497;
 }

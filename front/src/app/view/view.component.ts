@@ -270,11 +270,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private updateUnitName() {
     const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
+    this.changed = ((this.changed) || (selectedUnit.name !== this.umlNodeOptions.nativeElement.firstChild.value));
     selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
     this.setShowUmlNodeOptions(false);
     this.setShowUmlPathOptions(false);
     this.updateUml();
-    this.changed = true;
   }
 
   private createRelation(relationType): Unit {

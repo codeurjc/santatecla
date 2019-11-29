@@ -3,15 +3,16 @@
   <body>
 
     <div class="itinerary-header">
-      <div class="subMenuButton" (click)="navigateToUnitCards()">
-        Fichas
-      </div>
-
-      <div class="subMenuButton" (click)="navigateToUnitQuestions()">
-        Ejercicios
-      </div>
 
       <div id="tab-wrapper">
+        <div class="subMenuButton" (click)="navigateToUnitCards()">
+          Fichas
+        </div>
+
+        <div class="subMenuButton" (click)="navigateToUnitQuestions()">
+          Ejercicios
+        </div>
+
         <span *ngFor="let itinerary of unit.itineraries" class="subMenuItineraries">
           <div class="subMenuButton" (click)="navigateToUnitItinerary(itinerary.id)">
             {{itinerary.name}}

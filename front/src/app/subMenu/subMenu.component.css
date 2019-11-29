@@ -1,8 +1,6 @@
 .itinerary-header {
   height: 4rem;
-  margin: 0.5rem;
   margin-top: -1rem;
-  border-radius: 0.5rem;
   background-color: #e1afed;
   color: white;
   font-size: 0.8rem;
@@ -13,18 +11,20 @@
   background-color: #27273c;
   color: white;
   font-size: 0.8rem;
-  padding: 0.5rem;
+  padding: 0.7rem;
   box-shadow: none;
   position: relative;
   top: 2rem;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   display: inline;
   cursor: pointer;
 }
 
+.subMenuButton:hover {
+  background-color: #9e2abb;
+}
+
 #tab-wrapper {
-  margin-left: 3rem;
-  margin-right: 13rem;
   top: 0.5rem;
   white-space: nowrap;
   height: 150%;
