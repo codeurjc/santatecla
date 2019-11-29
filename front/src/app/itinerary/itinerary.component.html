@@ -4,10 +4,15 @@
 
     <app-submenu></app-submenu>
 
+    <!-- TOOLS BAR -->
+    <div class="toolsBar">
+
+    </div>
+
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <div id="editor-container">
-        <textarea [(ngModel)]="itineraryContent" (change)="updateHTMLView()"></textarea>
+        <textarea class="textAres" [(ngModel)]="itineraryContent" (change)="updateHTMLView()"></textarea>
       </div>
     </div>
 

@@ -1,53 +1,43 @@
+.toolsBar {
+  height: 3rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  color: #27273c;
+  font-size: 0.8rem;
+  border: 0.1rem solid #27273c;
+}
+
 #editor-container {
   float: left;
+  position: absolute;
   width: 45%;
-  min-width: 45%;
-  max-width: 60%;
   overflow: auto;
+  margin: 0.5rem;
+}
+
+.textAres {
+  resize: none;
+  width: 89%;
+  height: 900px;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #27273c;
 }
 
 #html-itinerary-representation {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  border: 0.1rem solid #27273c;
   float: right;
   width: 55%;
   overflow: auto;
+  margin: 0.5rem;
 }
 
-.itinerary-header {
-  height: 3rem;
-  background-color: #5382ce;
-  color: white;
-  font-size: 0.8rem;
-}
-.delete-card {
-  float: right;
-}
-
-.delete-slide {
-  float: right;
-}
-
-.delete-exercise {
-  float: right;
-}
-
-.delete-sub-itinerary {
-  float: right;
-}
-
-.slide-itinerary-adder {
-  left: 0;
-  bottom: 0;
-  margin-left: 1.4%;
-  margin-bottom: 1.4%;
-  float: left;
-  position: fixed;
-  z-index: 200;
-}
-
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
-}
-
-.example-button-row button {
-  margin-right: 8px;
+#spinner {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  left: 65%;
+  top: 40%;
 }

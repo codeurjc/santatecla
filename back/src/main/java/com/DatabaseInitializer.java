@@ -116,28 +116,13 @@ public class DatabaseInitializer {
                 Slide slide2 = new Slide("Tipos");
 
                 slide1.addContent("assert.card/1/13\n\nassert.card/4/13\n\n");
-                slide2.addContent("* Lenguaje Maquina\n" +
-                        "\n" +
-                        "Es el más primitivo de los códigos y se basa en la numeración binaria, todo en 0 y 1. Este lenguaje es utilizado directamente por máquinas o computadora.\n" +
-                        "\n" +
-                        "* Lenguajes de programación de bajo nivel\n" +
-                        "\n" +
-                        "Es un lenguaje un poco más fácil de interpretar, pero puede variar de acuerdo a la máquina o computadora que se esté programando.\n" +
-                        "\n" +
-                        "* Lenguajes de programación de alto nivel\n" +
-                        "\n" +
-                        "- Primera generación: el lenguaje máquina y el ensamblador.\n" +
-                        "- Segunda generación: aquí encontramos los primeros lenguajes de programación de alto nivel, ejemplos de ellos son FORTRAN, COBOL.\n" +
-                        "- Tercera generación: en esta generación encontramos los lenguajes de programación de alto nivel imperativo, pero mucho más utilizados y vigentes en la actualidad (ALGOL 8, PL/I, PASCAL, MODULA).\n" +
-                        "- Cuarta generación: más cercanos a la época actual, es común encontrarlos en aplicaciones de gestión y manejo de bases de datos (NATURAL, SQL).\n" +
-                        "- Quinta generación: estos son los más avanzados y fueron pensado para la inteligencia artificial y para el procesamiento de lenguajes naturales (LISP, PROLOG).\n" +
-                        "\n");
+                slide2.addContent("assert.slide/9/11/13\n\nassert.question/6/13\n\n");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
 
                 //Itinerary
-                Itinerary itinerary1 = new Itinerary("Introduccion");
+                Itinerary itinerary1 = new Itinerary("Introducción");
                 Itinerary itinerary2 = new Itinerary("Introducción Java");
 
                 itinerary1.getSlides().add(slide1);
