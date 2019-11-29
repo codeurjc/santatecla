@@ -22,7 +22,6 @@ export class SubMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
       this.itineraryId = params.itineraryId;

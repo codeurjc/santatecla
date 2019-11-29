@@ -25,9 +25,31 @@
 }
 
 #tab-wrapper {
-  top: 0.5rem;
+  position: absolute;
+  left: 9.8rem;
+  top: 2rem;
+  width: 57%;
   white-space: nowrap;
   height: 150%;
   overflow-x: auto;
   z-index: 0;
+}
+
+#progress-button {
+  border-left: 0.1rem solid #27273c;
+  position: absolute;
+  right: 9.5rem;
+  top: 3.25rem;
+}
+
+.mat-icon {
+  padding: 0;
+  margin: -0.1rem 0 0 0;
+}
+
+#search {
+  position: absolute;
+  width: 8.3rem;
+  margin-right: 10rem;
+  z-index: 120;
 }

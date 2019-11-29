@@ -3,21 +3,30 @@
   <body>
 
     <div class="itinerary-header">
+      <div class="subMenuButton" (click)="navigateToUnitCards()">
+        Fichas
+      </div>
+
+      <div class="subMenuButton" (click)="navigateToUnitQuestions()">
+        Ejercicios
+      </div>
 
       <div id="tab-wrapper">
-        <div class="subMenuButton" (click)="navigateToUnitCards()">
-          Fichas
-        </div>
-
-        <div class="subMenuButton" (click)="navigateToUnitQuestions()">
-          Ejercicios
-        </div>
-
-        <span *ngFor="let itinerary of unit.itineraries" class="subMenuItineraries">
+        <span *ngFor="let itinerary of unit?.itineraries" class="subMenuItineraries">
           <div class="subMenuButton" (click)="navigateToUnitItinerary(itinerary.id)">
             {{itinerary.name}}
           </div>
         </span>
+      </div>
+
+      <div id="progress-button">
+        <button mat-icon-button>
+          <mat-icon>add_to_queue</mat-icon>
+        </button>
+        <mat-form-field appearance="outline" id="search">
+          <mat-label>Buscar itinerario</mat-label>
+          <input id="search-input" matInput/>
+        </mat-form-field>
       </div>
     </div>
 

@@ -1,4 +1,4 @@
-#home-button {
+.home-button {
   position:absolute;
   margin: 0.2rem;
 }
@@ -23,7 +23,7 @@
 
 #progress-button {
   position: absolute;
-  right: 4vw;
+  right: 3.3rem;
   margin-top: 0.2rem;
 }
 

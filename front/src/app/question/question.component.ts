@@ -1,6 +1,5 @@
-import {Component, OnInit, SystemJsNgModuleLoader} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {LoginService} from '../auth/login.service';
 import {Question} from './question.model';
 import {QuestionService} from './question.service';
 import {DefinitionQuestionService} from './definitionQuestion/definitionQuestion.service';
@@ -12,7 +11,6 @@ import {TestQuestionService} from './testQuestion/testQuestion.service';
 import {Unit} from '../unit/unit.model';
 import {UnitService} from '../unit/unit.service';
 import {Itineray} from '../itinerary/itinerary.model';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   templateUrl: './question.component.html',
@@ -22,6 +20,7 @@ import {forEach} from '@angular/router/src/utils/collection';
 })
 
 export class QuestionComponent implements OnInit {
+
   questions: Question[];
   definitionQuestions: DefinitionQuestion[];
   listQuestions: ListQuestion[];
@@ -50,6 +49,7 @@ export class QuestionComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.subtype = 'DefinitionQuestion';
     this.questions = [];
     this.possibleAnswers = new Map();

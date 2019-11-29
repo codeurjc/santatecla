@@ -5,13 +5,13 @@
     <div *ngIf="loginService.isLogged" id="header">
 
       <span *ngIf="loginService.isAdmin">
-        <button id="home-button" mat-icon-button [routerLink]="['/']">
+        <button class="home-button" mat-icon-button [routerLink]="['/']">
           <mat-icon>home</mat-icon>
         </button>
       </span>
 
       <span *ngIf="!loginService.isAdmin">
-        <button mat-icon-button style="position:absolute; left:5rem; margin-top: 0.4rem;" [routerLink]="['/student']">
+        <button class="home-button" mat-icon-button [routerLink]="['/student']">
           <mat-icon>home</mat-icon>
         </button>
       </span>

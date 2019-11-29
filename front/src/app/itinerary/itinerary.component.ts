@@ -11,8 +11,8 @@ import { UnitService } from '../unit/unit.service';
 
 import Asciidoctor from 'asciidoctor';
 import {Slide} from '../slide/slide.model';
-import {Card} from '../card/card.model';
 import {DefinitionQuestionService} from '../question/definitionQuestion/definitionQuestion.service';
+
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -54,7 +54,8 @@ export class ItineraryComponent implements OnInit {
               private dialogService: TdDialogService,
               private loginService: LoginService,
               private definitionQuestionService: DefinitionQuestionService,
-              private unitService: UnitService ) {}
+              private unitService: UnitService ) {
+  }
 
   ngOnInit() {
 
@@ -108,7 +109,7 @@ export class ItineraryComponent implements OnInit {
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
       this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText +
-        '\n\n- /#/units/13/itineraries/11/definitionQuestion/6[Resolver^]');
+        '\n\n- http://localhost:4200/#/units/13/itineraries/11/definitionQuestion/6[Resolver^]');
     }
     this.addExtractedData(content);
   }
@@ -233,7 +234,7 @@ export class ItineraryComponent implements OnInit {
     this.contentHTML = '';
     this.showSpinner = true;
     this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
-      this.extendContent(this.itineraryContent);
+      this.ngOnInit();
     }, (error) => {
       console.error(error);
     });
