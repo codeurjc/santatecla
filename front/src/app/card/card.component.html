@@ -4,23 +4,19 @@
 
     <app-submenu></app-submenu>
 
-    <h1>{{unit?.name}}</h1>
-    <hr>
-    <h3>Fichas</h3>
-
-    <mat-card class="card" *ngFor = "let card of this.cards">
-      <div>{{card.name}}</div>
-      <textarea [(ngModel)]="card.content"></textarea>
-      <div id="image-container">
-        <img *ngIf="card.image" [src]="card.image">
-        <button *ngIf="!card.image" mat-mini-fab color="accent" (click)="fileInput.click()">
-          <input #fileInput type="file" (change)="changeImage(card.id, fileInput)">
-          <mat-icon>insert_photo</mat-icon>
-        </button>
+    <div class="cards">
+      <div class="card" *ngFor = "let card of this.cards">
+        <h3>{{card.name}}</h3>
+        <textarea class="textAres" [(ngModel)]="card.content"></textarea>
+        <div id="image-container">
+          <img *ngIf="card.image" [src]="card.image">
+        </div>
       </div>
-    </mat-card>
 
-    <button (click)="save()">guardar</button>
+      <button mat-button (click)="save()">
+        <mat-icon>save</mat-icon>Guardar
+      </button>
+    </div>
 
   </body>
 </html>

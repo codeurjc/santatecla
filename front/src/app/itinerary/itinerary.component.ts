@@ -108,7 +108,7 @@ export class ItineraryComponent implements OnInit {
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
       this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText +
-        '\n\n- http://localhost:4200/#/units/13/itineraries/11/definitionQuestion/6[Resolver^]');
+        '\n\n- /#/units/13/itineraries/11/definitionQuestion/6[Resolver^]');
     }
     this.addExtractedData(content);
   }

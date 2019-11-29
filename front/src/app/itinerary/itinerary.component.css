@@ -5,6 +5,11 @@
   color: #27273c;
   font-size: 0.8rem;
   border: 0.1rem solid #27273c;
+  padding-left: 1rem;
+}
+
+#units-button {
+  margin-left: 6rem;
 }
 
 #editor-container {
@@ -22,6 +27,7 @@
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 0.1rem solid #27273c;
+  font-size: 15px;
 }
 
 #html-itinerary-representation {
