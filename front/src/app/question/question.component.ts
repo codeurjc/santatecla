@@ -31,7 +31,8 @@ export class QuestionComponent implements OnInit {
   listQuestion: ListQuestion;
   testQuestion: TestQuestion;
 
-  questionTypes = ['DefinitionQuestion', 'ListQuestion', 'TestQuestion'];
+  questionTypes: string[];
+  questionTypeNames: Map<string, string>;
 
   // Add Question attributes
   subtype: string;
@@ -57,6 +58,7 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {
 
     this.questions = [];
+    this.initQuestionTypes();
 
     // Add Question attributes
     this.subtype = 'DefinitionQuestion';
@@ -77,6 +79,15 @@ export class QuestionComponent implements OnInit {
 
     this.getQuestions();
 
+  }
+
+  initQuestionTypes() {
+    this.questionTypes = ['DefinitionQuestion', 'ListQuestion', 'TestQuestion'];
+
+    this.questionTypeNames = new Map<string, string>();
+    this.questionTypeNames.set('DefinitionQuestion', 'Definición');
+    this.questionTypeNames.set('ListQuestion', 'Listado');
+    this.questionTypeNames.set('TestQuestion', 'Test');
   }
 
   getQuestions() {

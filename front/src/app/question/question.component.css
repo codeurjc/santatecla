@@ -11,18 +11,30 @@
   font-size: 0.8rem;
 }
 
+.questions-group {
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.questions-card {
+  margin: 0%
+}
+
 .add-question-card {
   margin-right: 10%;
   margin-left: 10%;
-  margin-top: 4%;
+  margin-top: 2%;
   margin-bottom: 5%;
 }
 
-.add-question-card-title {
+.card-title {
   text-align: center;
   font-weight: bold;
 }
-.add-question-card-content {
+
+.card-content {
   text-align: center;
 }
 
