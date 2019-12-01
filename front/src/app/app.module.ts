@@ -21,6 +21,7 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 
 import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppComponent } from './app.component';
 import { LoginService } from './auth/login.service';
@@ -46,22 +47,35 @@ import {StudentHomeService} from './course/studentHome.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
 import {TabService} from './tab/tab.service';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {NewCourseComponent} from './course/newCourse.component';
+import {NewCourseService} from './course/newCourse.service';
+import {SubMenuComponent} from './subMenu/subMenu.component';
+import {LoginComponent} from './login/login.component';
+import {MenuComponent} from './menu/menu.component';
+import {UnitsComponent} from './itinerary/tools/units.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SubMenuComponent,
+    LoginComponent,
+    MenuComponent,
     ViewComponent,
     CardComponent,
     ItineraryComponent,
+    UnitsComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
     ProgressComponent,
     TestQuestionComponent,
     StudentHomeComponent,
-    CourseComponent
+    CourseComponent,
+    NewCourseComponent
   ],
   imports: [
+    ClipboardModule,
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
@@ -107,10 +121,10 @@ import {TabService} from './tab/tab.service';
     NgJsonEditorModule,
     CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
-    CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule
+    CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService,
+    ProgressService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService, NewCourseService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

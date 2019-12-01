@@ -3,20 +3,20 @@ package com.course;
 import java.util.List;
 
 public class UserProgressItem {
-    private String studentName;
+    private String name;
     private List<Double> points;
 
     public UserProgressItem(String studentName, List<Double> points){
-        this.studentName = studentName;
+        this.name = studentName;
         this.points = points;
     }
 
-    public String getStudentName() {
-        return studentName;
+    public String getName() {
+        return name;
     }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setName(String studentName) {
+        this.name = studentName;
     }
 
     public List<Double> getPoints() {

@@ -3,10 +3,12 @@ import { DefinitionQuestion } from '../question/definitionQuestion/definitionQue
 import { ListQuestion } from '../question/listQuestion/listQuestion.model';
 import { Relation } from '../relation/relation.model';
 import { TestQuestion } from '../question/testQuestion/testQuestion.model';
+import {Card} from '../card/card.model';
 
 export interface Unit {
   id?: string;
   name: string;
+  cards?: Card[];
   outgoingRelations?: Relation[];
   incomingRelations?: Relation[];
   itineraries?: Itineray[];

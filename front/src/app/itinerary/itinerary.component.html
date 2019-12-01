@@ -2,36 +2,32 @@
 <html>
   <body>
 
-    <div class="itinerary-header">
-      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
-        Fichas
-      </button>
+    <app-submenu></app-submenu>
 
-      <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
-        Seguimiento
-      </button>
-
-      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
-        Ejercicios
-      </button>
-
-      <div *ngFor="let itinerary of itinerariesTabs">
-        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-          Itinerario {{itinerary.id}}
-        </button>
-      </div>
-
+    <!-- TOOLS BAR -->
+    <div class="toolsBar">
+      <mat-chip-list class="tools">
+        <mat-chip>
+          <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
+        </mat-chip>
+        <mat-chip (click)="openBottomSheet()">
+          <mat-icon>assignment</mat-icon>Buscar fichas
+        </mat-chip>
+          <mat-chip><mat-icon>assignment</mat-icon>Buscar slides
+        </mat-chip>
+      </mat-chip-list>
     </div>
 
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <div id="editor-container">
-        <textarea [(ngModel)]="itineraryContent" (change)="updateHTMLView()"></textarea>
+        <textarea class="textAres" [(ngModel)]="itineraryContent" (change)="updateHTMLView()"></textarea>
       </div>
     </div>
 
     <!-- HTML REPRESENTATION -->
     <div id="html-itinerary-representation">
+      <img src="../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
       <div [innerHTML]="contentHTML"></div>
     </div>
 

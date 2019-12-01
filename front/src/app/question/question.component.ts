@@ -1,6 +1,5 @@
-import {Component, OnInit, SystemJsNgModuleLoader} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {LoginService} from '../auth/login.service';
 import {Question} from './question.model';
 import {QuestionService} from './question.service';
 import {DefinitionQuestionService} from './definitionQuestion/definitionQuestion.service';
@@ -12,7 +11,6 @@ import {TestQuestionService} from './testQuestion/testQuestion.service';
 import {Unit} from '../unit/unit.model';
 import {UnitService} from '../unit/unit.service';
 import {Itineray} from '../itinerary/itinerary.model';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   templateUrl: './question.component.html',
@@ -22,6 +20,7 @@ import {forEach} from '@angular/router/src/utils/collection';
 })
 
 export class QuestionComponent implements OnInit {
+
   questions: Question[];
   definitionQuestions: DefinitionQuestion[];
   listQuestions: ListQuestion[];
@@ -57,7 +56,7 @@ export class QuestionComponent implements OnInit {
     private router: Router) {
   }
   ngOnInit() {
-
+    
     this.questions = [];
     this.initQuestionTypes();
 
@@ -67,15 +66,6 @@ export class QuestionComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
-    });
-
-    this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-      this.unit = {
-        id: data.id,
-        name: data.name,
-        itineraries: data.itineraries
-      };
-      this.itinerariesTabs = this.unit.itineraries;
     });
 
     this.getQuestions();
@@ -256,20 +246,5 @@ export class QuestionComponent implements OnInit {
     );
   }
 
-  navigateToUnitCards() {
-    this.router.navigate(['/units/' + this.unitId + '/cards']);
-  }
-
-  navigateToUnitProgress() {
-    this.router.navigate(['/units/' + this.unitId + '/progress']);
-  }
-
-  navigateToUnitItinerary(itineraryId: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
-  }
-
-  navigateToUnitQuestions() {
-    this.router.navigate(['units', this.unitId, 'question']);
-  }
 
 }

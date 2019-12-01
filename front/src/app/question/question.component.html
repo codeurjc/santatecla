@@ -2,24 +2,8 @@
 <html>
   <!-- ADMIN -->
   <body *ngIf="loginService.isAdmin">
-    <div class="question-header">
-      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
-        Fichas
-      </button>
-      <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
-        Seguimiento
-      </button>
-
-      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
-        Ejercicios
-      </button>
-
-      <div *ngFor="let itinerary of itinerariesTabs">
-        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-          Itinerario {{ itinerary.id }}
-        </button>
-      </div>
-    </div>
+    
+    <app-submenu></app-submenu>
 
     <mat-grid-list cols="3" rowHeight="2:1" class="questions-group">
 
@@ -159,24 +143,7 @@
 
   <!-- NOT ADMIN -->
   <body *ngIf="!loginService.isAdmin">
-    <div class="question-header">
-      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
-        Fichas
-      </button>
-      <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
-        Seguimiento
-      </button>
-
-      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
-        Ejercicios
-      </button>
-
-      <div *ngFor="let itinerary of itinerariesTabs">
-        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
-          Itinerario {{ itinerary.id }}
-        </button>
-      </div>
-    </div>
+    <app-submenu></app-submenu>
 
     <mat-card class="question-card">
       <mat-card-title class="card-title">Preguntas de definición</mat-card-title>

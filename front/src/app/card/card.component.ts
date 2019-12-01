@@ -2,11 +2,12 @@ import { Unit } from '../unit/unit.model';
 import { Itineray } from '../itinerary/itinerary.model';
 import { CardService } from './card.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { Card } from './card.model';
 import { UnitService } from '../unit/unit.service';
 import {TabService} from '../tab/tab.service';
 import {LoginService} from '../auth/login.service';
+import {SubMenuComponent} from '../subMenu/subMenu.component';
 
 @Component({
   templateUrl: './card.component.html',
@@ -14,6 +15,8 @@ import {LoginService} from '../auth/login.service';
 })
 
 export class CardComponent implements OnInit {
+
+  @ViewChild('subMenu') private subMenu: SubMenuComponent;
 
   unitId: number;
   cards: Card[];
@@ -25,10 +28,17 @@ export class CardComponent implements OnInit {
               private cardService: CardService,
               private unitService: UnitService,
               private tabService: TabService,
-              private loginService: LoginService) {}
+              private loginService: LoginService) {
+    router.events.subscribe(event => {
+      if (event instanceof CardComponent) {
+        this.ngOnInit();
+      }
+    });
+  }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
+      this.subMenu.ngOnInit();
       this.unitId = params['unitId'];
       this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
         this.unit = {
@@ -86,18 +96,6 @@ export class CardComponent implements OnInit {
         );
       }
     });
-  }
-
-  navigateToUnitProgress() {
-    this.router.navigate(['/units/' + this.unitId + '/progress']);
-  }
-
-  navigateToUnitItinerary(itineraryId: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
-  }
-
-  navigateToUnitQuestions() {
-    this.router.navigate(['units', this.unitId, 'question']);
   }
 
 }

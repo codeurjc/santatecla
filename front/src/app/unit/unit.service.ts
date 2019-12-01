@@ -4,6 +4,7 @@ import { Unit } from './unit.model';
 import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
 import { ListQuestion } from '../question/listQuestion/listQuestion.model';
 import { TestQuestion } from '../question/testQuestion/testQuestion.model';
+import {Itineray} from "../itinerary/itinerary.model";
 
 @Injectable()
 export class UnitService {
@@ -11,6 +12,10 @@ export class UnitService {
   baseUrl = '/api/units/';
 
   constructor(private http: HttpClient) {}
+
+  getUnits() {
+    return this.http.get(this.baseUrl);
+  }
 
   getUnit(id: number) {
     return this.http.get(this.baseUrl + id);
@@ -38,8 +43,26 @@ export class UnitService {
     return this.http.get(this.baseUrl + id + '/absoluteName');
   }
 
-  getCardByName(cardName: string, unitId: number) {
-    return this.http.get(this.baseUrl + unitId + '/cards/' + cardName);
+  getParent(id: number) {
+    return this.http.get(this.baseUrl + id + '/parent');
+  }
+  
+  getCard(cardId: number, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
+  }
+  
+  getSlideFormItinerary(slideId: number, itineraryId: number, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/itineraries/' + itineraryId + '/slides/' + slideId);
+  }
+
+  addItinerary(unitId: number, itinerary: Itineray) {
+    const body = JSON.stringify(itinerary);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<Itineray>(this.baseUrl + unitId + '/itineraries', body, { headers });
   }
 
   getUnitDefinitionQuestions(id: number) {
@@ -98,10 +121,11 @@ export class UnitService {
 
   addUnitDefinitionAnswer(unitID, questionID: number, answer) {
     const body = JSON.stringify(answer);
-
+    
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
+    
     return this.http.post(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer', body, {headers});
-  }
+  } 
 }
