@@ -24,9 +24,13 @@ In the itinerary manager you can edit the different itineraries of a unit. These
 
 You can put exercises in the itineraries, these exercises can be of two types: definitions and listings. Each exercise wants to manage the different responses of the students.
 
+### Course and progress
+
+The teacher can join a group of units into a personalized course for a group of students. In order to check the progress of the students, teacher can consult some personalized tables for each course. This progress check is divided into student progress and unit progress.
+
 #### Student profile
 
-The student's profile can consult the units and their itineraries, answer the exercises and track their progress
+The student's profile can consult the courses the student is in. In this courses the student can do exercises and read itineraries and views.
 
 ### Statecla document 📄
 
