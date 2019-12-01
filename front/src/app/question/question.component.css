@@ -11,3 +11,68 @@
   font-size: 0.8rem;
 }
 
+.questions-group {
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.questions-card {
+  margin: 0%
+}
+
+.question-card {
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.add-question-card {
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  margin-bottom: 5%;
+}
+
+.card-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+.card-content {
+  text-align: center;
+}
+
+.button-row button,
+.button-row a {
+  margin: 8px;
+}
+
+.add-question-radio-group {
+  display: flex;
+  justify-content: center;
+}
+
+.add-question-radio-group-element {
+  margin: 10px;
+}
+
+.add-question-form {
+  display: flex;
+  justify-content: center;
+}
+
+.add-question-form-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-answer-button {
+  margin: 10px;
+}
+
+.add-answer-list {
+  text-align: center;
+}

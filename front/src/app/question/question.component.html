@@ -1,173 +1,187 @@
 <!DOCTYPE html>
 <html>
-  <body>
-
+  <!-- ADMIN -->
+  <body *ngIf="loginService.isAdmin">
+    
     <app-submenu></app-submenu>
 
-    <div align="center">
-      <h1>Preguntas</h1>
-      <span *ngFor="let question of questions">
-        <p>{{ question.questionText }}</p>
-      </span>
-    </div>
+    <mat-grid-list cols="3" rowHeight="2:1" class="questions-group">
 
-    <div align="center">
-      <h1>Añadir pregunta</h1>
-      <mat-radio-group>
-      <input
-        type="radio"
-        name="subtype"
-        [(ngModel)]="subtype"
-        value="DefinitionQuestion"
-        default
-      />
-      Definicion
-      <input
-        type="radio"
-        name="subtype"
-        [(ngModel)]="subtype"
-        value="ListQuestion"
-      />
-      Listado
-      <input
-        type="radio"
-        name="subtype"
-        [(ngModel)]="subtype"
-        value="TestQuestion"
-      />
-      Test
-      </mat-radio-group>
+      <!-- DEFINITION QUESTION LIST -->
+      <mat-grid-tile>
+        <mat-card class="questions-card">
+          <mat-card-title class="card-title">Definición</mat-card-title>
+          <mat-card-content class="card-content">
+            <div *ngFor="let question of definitionQuestions">
+              {{ question.questionText }}
+              <button mat-button (click)="deleteDefinitionQuestion(question.id)">
+                <mat-icon color="red">delete_outline</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
 
-      <span *ngIf="subtype == 'DefinitionQuestion'">
-        <form #textForm="ngForm">
-          <mat-form-field>
-            <input matInput
-              placeholder="Pregunta"
-              #questionInput
-              type="text"
-              name="question"
-              required
-            />
-          </mat-form-field>
-        </form>
-        <button mat-raised-button
-          class="button"
-          color="primary"
-          (click)="
-            sendDefinitionQuestion(questionInput.value);
-            questionInput.value = ''
-          "
-        >
-          Guardar
-        </button>
-      </span>
-      <span *ngIf="subtype == 'ListQuestion'">
-        <form #textForm="ngForm">
-          <mat-form-field>
-            <input matInput
-              placeholder="Pregunta"
-              #questionInput
-              type="text"
-              name="question"
-              required
-            />
-          </mat-form-field>
-          <br />
-          <mat-form-field>
-            <input matInput
-              placeholder="Respuesta posible"
-              #pAnswerInput
-              type="text"
-              name="question"
-            />
-          </mat-form-field>
-          <mat-checkbox
-            name="correct"
-            [(ngModel)]="correct"
-            value="false">
-            Correcta
-          </mat-checkbox>
-          <button mat-raised-button
-            color="primary"
-            (click)="
-              addPossibleAnswer(pAnswerInput.value); pAnswerInput.value = ''
-            "
-          >
-            Añadir
-          </button>
-          <br />
-        </form>
-        <div *ngFor="let answer of possibleAnswers.keys()">
-          {{ answer }}<br />
+      <!-- LIST QUESTION LIST -->
+      <mat-grid-tile>
+        <mat-card class="questions-card">
+          <mat-card-title class="card-title">Listado</mat-card-title>
+          <mat-card-content class="card-content">
+            <div *ngFor="let question of listQuestions">
+              {{ question.questionText }}
+              <button mat-button (click)="deleteListQuestion(question.id)">
+                <mat-icon color="red">delete_outline</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+
+      <!-- TEST QUESTION LIST -->
+      <mat-grid-tile>
+        <mat-card class="questions-card">
+          <mat-card-title class="card-title">Test</mat-card-title>
+          <mat-card-content class="card-content">
+            <div *ngFor="let question of testQuestions">
+              {{ question.questionText }}
+              <button mat-button (click)="deleteTestQuestion(question.id)">
+                <mat-icon color="red">delete_outline</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-card class="add-question-card">
+      <mat-card-title class="card-title">Añadir ejercicios</mat-card-title>
+      <mat-card-content class="card-content">
+        <div class="button-row">
+          <button *ngFor="let type of questionTypes"  mat-raised-button color="primary" (click)="setQuestion(type)">{{questionTypeNames.get(type)}}</button>
         </div>
-        <button mat-raised-button
-          class="button"
-          color="primary"
-          (click)="
-            sendListQuestion(questionInput.value);
-            questionInput.value = '';
-            pAnswerInput.value = ''
-          "
-        >
-          Guardar
-        </button>
-      </span>
-      <span *ngIf="subtype == 'TestQuestion'">
-        <form #textForm="ngForm">
-          <mat-form-field>
-          <input matInput
-            placeholder="Pregunta"
-            #questionInput
-            type="text"
-            name="question"
-            required
-          />
-          </mat-form-field>
-          <br />
-          <mat-form-field>
-          <input matInput
-            placeholder="Respuesta posible"
-            #pAnswerInput
-            type="text"
-            name="question"
-          />
-          </mat-form-field>
-          <div *ngIf="!correctTestAnswerSelected">
-             <mat-checkbox
-              name="correct"
-              [(ngModel)]="correct"
-              value="false"
-            >
-            Correcta
-             </mat-checkbox>
+
+        <!-- DEFINITION FORM -->
+        <div *ngIf="subtype == 'DefinitionQuestion'">
+          <form class="add-question-form">
+            <mat-form-field>
+              <input matInput name="question" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required/>
+            </mat-form-field>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button color="primary" (click)="sendDefinitionQuestion()">
+              Guardar
+            </button>
           </div>
-          <button mat-raised-button
-            class="button"
-            color="primary"
-            (click)="
-              addPossibleTestAnswer(pAnswerInput.value); pAnswerInput.value = ''
-            "
-          >
-            Añadir
-          </button>
-          <br />
-        </form>
-        <div *ngFor="let answer of possibleAnswers.keys()">
-          {{ answer }}<br />
         </div>
-        <br>
-        <button mat-raised-button
-          class="button"
-          color="primary"
-          (click)="
-            sendTestQuestion(questionInput.value);
-            questionInput.value = '';
-            pAnswerInput.value = ''
-          "
-        >
-          Guardar
-        </button>
-      </span>
-    </div>
+
+        <!--LIST FORM -->
+        <div *ngIf="subtype == 'ListQuestion'">
+          <form class="add-question-form">
+            <div class="add-question-form-list">
+              <mat-form-field>
+                <input matInput name="question" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required/>
+              </mat-form-field>
+              <div>
+                <mat-form-field>
+                  <input matInput name="answer" placeholder="Respuesta posible" [(ngModel)]="answerInput" type="text"/>
+                </mat-form-field>
+                <mat-checkbox name="correct" [(ngModel)]="correct" value="false">
+                  Correcta
+                </mat-checkbox>
+                <button mat-raised-button color="primary" (click)="addPossibleListAnswer()" class=" add-answer-button">
+                  Añadir
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button color="primary" (click)="sendListQuestion()">
+              Guardar
+            </button>
+          </div>
+        </div>
+
+        <!-- TEST FORM -->
+        <div *ngIf="subtype == 'TestQuestion'">
+          <form class="add-question-form">
+            <div class="add-question-form-list">
+              <mat-form-field>
+                <input matInput name="question" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required/>
+              </mat-form-field>
+              <div>
+                <mat-form-field>
+                  <input matInput name="answer" placeholder="Respuesta posible"  [(ngModel)]="answerInput" type="text"/>
+                </mat-form-field>
+                <mat-checkbox name="correct" [(ngModel)]="correct" value="false" [disabled]="correctTestAnswerSelected">
+                  Correcta
+                </mat-checkbox>
+                <button mat-raised-button color="primary" (click)="addPossibleTestAnswer()" class=" add-answer-button">
+                  Añadir
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button color="primary" (click)="sendTestQuestion()">
+              Guardar
+            </button>
+          </div>
+        </div>
+
+        <div class="add-question-form">
+        <mat-list role="list">
+          <mat-list-item role="listitem" *ngFor="let answer of possibleAnswers.keys()">
+            {{answer}}
+            <mat-icon *ngIf="possibleAnswers.get(answer)">done_all</mat-icon>
+          </mat-list-item>
+        </mat-list>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </body>
+
+  <!-- NOT ADMIN -->
+  <body *ngIf="!loginService.isAdmin">
+    <app-submenu></app-submenu>
+
+    <mat-card class="question-card">
+      <mat-card-title class="card-title">Preguntas de definición</mat-card-title>
+      <mat-card-content class="card-content">
+        <div *ngFor="let question of definitionQuestions">
+          {{ question.questionText }}
+          <form class="add-question-form">
+            <mat-form-field>
+              <input matInput name="question" placeholder="Respuesta" [(ngModel)]="answerInput" type="text" required/>
+            </mat-form-field>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button color="primary" (click)="sendDefinitionAnswer(question.id)">
+              Responder
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="question-card">
+      <mat-card-title class="card-title">Preguntas de listado</mat-card-title>
+      <mat-card-content class="card-content">
+        <div *ngFor="let question of listQuestions">
+          {{ question.questionText }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="question-card">
+      <mat-card-title class="card-title">Preguntas de test</mat-card-title>
+      <mat-card-content class="card-content">
+        <div *ngFor="let question of testQuestions">
+          {{ question.questionText }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+
   </body>
 </html>

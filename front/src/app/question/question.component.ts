@@ -25,11 +25,18 @@ export class QuestionComponent implements OnInit {
   definitionQuestions: DefinitionQuestion[];
   listQuestions: ListQuestion[];
   testQuestions: TestQuestion[];
+
   definitionQuestion: DefinitionQuestion;
   listQuestion: ListQuestion;
   testQuestion: TestQuestion;
-  subtype: string;
 
+  questionTypes: string[];
+  questionTypeNames: Map<string, string>;
+
+  // Add Question attributes
+  subtype: string;
+  questionInput: string;
+  answerInput: string;
   possibleAnswers: Map<string, boolean>;
   correct: boolean;
   correctTestAnswerSelected: boolean;
@@ -39,6 +46,7 @@ export class QuestionComponent implements OnInit {
   itinerariesTabs: Itineray[];
 
   constructor(
+    public loginService: LoginService,
     private questionService: QuestionService,
     private definitionQuestionService: DefinitionQuestionService,
     private listQuestionService: ListQuestionService,
@@ -47,26 +55,34 @@ export class QuestionComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router) {
   }
-
   ngOnInit() {
-
-    this.subtype = 'DefinitionQuestion';
+    
     this.questions = [];
-    this.possibleAnswers = new Map();
-    this.correct = false;
-    this.correctTestAnswerSelected = false;
+    this.initQuestionTypes();
+
+    // Add Question attributes
+    this.subtype = 'DefinitionQuestion';
+    this.resetAddQuestionForm();
+
     this.activatedRoute.params.subscribe(params => {
-      this.unitId = params['unitId'];
+      this.unitId = params.unitId;
     });
 
-    this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-      this.unit = {
-        id: data['id'],
-        name: data['name'],
-        itineraries: data['itineraries']
-      };
-      this.itinerariesTabs = this.unit.itineraries;
-    });
+    this.getQuestions();
+
+  }
+
+  initQuestionTypes() {
+    this.questionTypes = ['DefinitionQuestion', 'ListQuestion', 'TestQuestion'];
+
+    this.questionTypeNames = new Map<string, string>();
+    this.questionTypeNames.set('DefinitionQuestion', 'Definición');
+    this.questionTypeNames.set('ListQuestion', 'Listado');
+    this.questionTypeNames.set('TestQuestion', 'Test');
+  }
+
+  getQuestions() {
+    this.questions = [];
 
     this.unitService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
       this.definitionQuestions = data;
@@ -84,20 +100,37 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  sendDefinitionQuestion(text: string) {
+  setQuestion(subtype: string) {
+    this.subtype = subtype;
+    this.resetAddQuestionForm();
+  }
+
+  sendDefinitionQuestion() {
     this.definitionQuestion = {
-      questionText: text,
+      questionText: this.questionInput,
       subtype: 'DefinitionQuestion'
     };
     this.unitService.addUnitDefinitionQuestion(this.unitId, this.definitionQuestion).subscribe(
       (_) => {
+          this.resetAddQuestionForm();
+          // TODO Remove it
           this.ngOnInit();
         },
       (error) => console.log(error)
     );
   }
 
-  sendListQuestion(text: string) {
+  deleteDefinitionQuestion(questionID: number) {
+    this.unitService.deleteUnitDefinitionQuestion(this.unitId, questionID).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  sendListQuestion() {
     let ca = [];
     this.possibleAnswers.forEach((value: boolean, key: string) => {
       if (value) {
@@ -105,20 +138,38 @@ export class QuestionComponent implements OnInit {
       }
     });
     this.listQuestion = {
-      questionText: text,
+      questionText: this.questionInput,
       subtype: 'ListQuestion',
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswers: ca
     };
     this.unitService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
       (_) => {
+        this.resetAddQuestionForm();
+        // TODO Remove it
         this.ngOnInit();
       },
-      (error) => console.log(error)
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
     );
   }
 
-  sendTestQuestion(text: string) {
+  deleteListQuestion(questionID: number) {
+    this.unitService.deleteUnitListQuestion(this.unitId, questionID).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
+    );
+  }
+
+  sendTestQuestion() {
     let ca = [];
     this.possibleAnswers.forEach((value: boolean, key: string) => {
       if (value) {
@@ -126,32 +177,73 @@ export class QuestionComponent implements OnInit {
       }
     });
     this.testQuestion = {
-      questionText: text,
+      questionText: this.questionInput,
       subtype: 'TestQuestion',
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswer: ca[0]
     };
     this.unitService.addUnitTestQuestion(this.unitId, this.testQuestion).subscribe(
       (_) => {
+        this.resetAddQuestionForm();
+        // TODO Remove it
         this.ngOnInit();
       },
       (error) => console.log(error)
     );
   }
 
-  addPossibleAnswer(answer: string) {
-    this.possibleAnswers = this.possibleAnswers.set(answer, this.correct);
+  deleteTestQuestion(questionID: number) {
+    this.unitService.deleteUnitTestQuestion(this.unitId, questionID).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
+    );
   }
 
-  addPossibleTestAnswer(answer: string) {
+  addPossibleListAnswer() {
+    this.possibleAnswers = this.possibleAnswers.set(this.answerInput, this.correct);
+    this.answerInput = '';
+  }
+
+  addPossibleTestAnswer() {
     if (!this.correctTestAnswerSelected && this.correct) {
-      this.possibleAnswers.set(answer, true)
+      this.possibleAnswers.set(this.answerInput, true);
       this.correctTestAnswerSelected = true;
     } else if (!this.correctTestAnswerSelected && !this.correct) {
-      this.possibleAnswers.set(answer, false);
+      this.possibleAnswers.set(this.answerInput, false);
     } else {
-      this.possibleAnswers.set(answer, false);
+      this.possibleAnswers.set(this.answerInput, false);
     }
+    this.answerInput = '';
+  }
+
+  resetAddQuestionForm() {
+    this.questionInput = '';
+    this.answerInput = '';
+    this.possibleAnswers = new Map();
+    this.correct = false;
+    this.correctTestAnswerSelected = false;
+  }
+
+  sendDefinitionAnswer(questionID: number) {
+    let answer = {
+      answerText: this.answerInput
+    };
+    this.unitService.addUnitDefinitionAnswer(this.unitId, questionID, answer).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
+    );
   }
 
 

@@ -9,7 +9,7 @@ import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, Covale
   CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
   CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule } from '@covalent/core';
 
-import { FormsModule } from '@angular/forms';
+import {FormsModule, NgModel} from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

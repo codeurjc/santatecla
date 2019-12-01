@@ -46,6 +46,24 @@ export class UnitService {
   getParent(id: number) {
     return this.http.get(this.baseUrl + id + '/parent');
   }
+  
+  getCard(cardId: number, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
+  }
+  
+  getSlideFormItinerary(slideId: number, itineraryId: number, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/itineraries/' + itineraryId + '/slides/' + slideId);
+  }
+
+  addItinerary(unitId: number, itinerary: Itineray) {
+    const body = JSON.stringify(itinerary);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<Itineray>(this.baseUrl + unitId + '/itineraries', body, { headers });
+  }
 
   getUnitDefinitionQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/definition');
@@ -69,6 +87,10 @@ export class UnitService {
     return this.http.post<DefinitionQuestion>(this.baseUrl + id + '/question/definition', body, {headers});
   }
 
+  deleteUnitDefinitionQuestion(unitID, questionID: number) {
+    return this.http.delete(this.baseUrl + unitID + '/question/definition/' + questionID);
+  }
+
   addUnitListQuestion(id: number, question: ListQuestion) {
     const body = JSON.stringify(question);
 
@@ -77,6 +99,10 @@ export class UnitService {
     });
 
     return this.http.post<ListQuestion>(this.baseUrl + id + '/question/list', body, {headers});
+  }
+
+  deleteUnitListQuestion(unitID, questionID: number) {
+    return this.http.delete(this.baseUrl + unitID + '/question/list/' + questionID);
   }
 
   addUnitTestQuestion(id: number, question: TestQuestion) {
@@ -89,20 +115,17 @@ export class UnitService {
     return this.http.post<TestQuestion>(this.baseUrl + id + '/question/test', body, {headers});
   }
 
-  getCard(cardId: number, unitId: number) {
-    return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
+  deleteUnitTestQuestion(unitID, questionID: number) {
+    return this.http.delete(this.baseUrl + unitID + '/question/test/' + questionID);
   }
 
-  getSlideFormItinerary(slideId: number, itineraryId: number, unitId: number) {
-    return this.http.get(this.baseUrl + unitId + '/itineraries/' + itineraryId + '/slides/' + slideId);
-  }
-
-  addItinerary(unitId: number, itinerary: Itineray) {
-    const body = JSON.stringify(itinerary);
-
+  addUnitDefinitionAnswer(unitID, questionID: number, answer) {
+    const body = JSON.stringify(answer);
+    
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.post<Itineray>(this.baseUrl + unitId + '/itineraries', body, { headers });
-  }
+    
+    return this.http.post(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer', body, {headers});
+  } 
 }
