@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
   <body>
-  <div align="center">
+  <div class="center-align">
     <h1>MIS CURSOS</h1>
     <span *ngFor="let course of courses">
       <mat-button-toggle [routerLink]="['/course', course.id]" (click)="tabService.addTab('course', course.id, course.name, 0)">{{course.name}}</mat-button-toggle>

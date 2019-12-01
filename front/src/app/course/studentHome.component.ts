@@ -6,7 +6,8 @@ import {Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
 
 @Component({
-  templateUrl: './studentHome.component.html'
+  templateUrl: './studentHome.component.html',
+  styleUrls: ['./course.component.css']
 })
 
 export class StudentHomeComponent implements OnInit {

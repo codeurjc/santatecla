@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.xml.soap.Text;
 
 import com.card.Card;
 import com.card.CardRepository;

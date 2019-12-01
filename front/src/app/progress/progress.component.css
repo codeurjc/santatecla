@@ -36,3 +36,35 @@
   margin-left: 5%;
   margin-right: 5%;
 }
+
+.green-color {
+  color: green;
+}
+
+.red-color {
+  color: red;
+}
+
+.top-margin {
+  margin-top: 5%;
+  text-align: center;
+}
+
+.letf-margin {
+  margin-left:42%
+}
+
+.progress-table {
+  height: 25rem;
+  padding: 0.5rem;
+}
+
+.center-align {
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+}
+
+.center-table{
+  margin: 0 auto;
+}

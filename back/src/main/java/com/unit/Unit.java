@@ -27,7 +27,7 @@ public class Unit {
     private String name;
     
     @OneToMany
-    private Map<Long, Card> cards;
+    private List<Card> cards;
 
     @ManyToMany
     private List<Itinerary> itineraries;
@@ -53,7 +53,7 @@ public class Unit {
     private List<Item> items;
 
     public Unit() {
-        this.cards = new HashMap<>();
+        this.cards = new ArrayList<>();
         this.itineraries = new ArrayList<>();
         this.incomingRelations = new ArrayList<>();
         this.outgoingRelations = new ArrayList<>();
@@ -85,15 +85,20 @@ public class Unit {
     }
 
     public Iterable<Card> getCards() {
-        return this.cards.values();
+        return this.cards;
     }
 
     public Card getCard(long id) {
-        return this.cards.get(id);
+        for (Card card: this.cards){
+            if (card.getId() == id){
+                return card;
+            }
+        }
+        return null;
     }
 
     public void addCard(Card card) {
-        this.cards.put(card.getId(), card);
+        this.cards.add(card);
     }
 
     public List<Itinerary> getItineraries() {
