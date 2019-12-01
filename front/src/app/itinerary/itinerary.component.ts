@@ -65,16 +65,12 @@ export class ItineraryComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
       this.itineraryId = params.itineraryId;
+      this.loadItinerary();
     });
 
-    this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-      this.unit = {
-        id: data.id,
-        name: data.name,
-        itineraries: data.itineraries
-      };
-    });
+  }
 
+  loadItinerary() {
     this.showSpinner = true;
 
     this.itineraryService.getItinerary(this.itineraryId).subscribe((data: Itineray) => {
@@ -245,25 +241,10 @@ export class ItineraryComponent implements OnInit {
     this.contentHTML = '';
     this.showSpinner = true;
     this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
-      this.ngOnInit();
+      this.loadItinerary();
     }, (error) => {
       console.error(error);
     });
   }
 
-  navigateToUnitCards() {
-    this.router.navigate(['/units/' + this.unitId + '/cards']);
-  }
-
-  navigateToUnitProgress() {
-    this.router.navigate(['/units/' + this.unitId + '/progress']);
-  }
-
-  navigateToUnitItinerary(itineraryId: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
-  }
-
-  navigateToUnitQuestions() {
-    this.router.navigate(['units', this.unitId, 'question']);
-  }
 }

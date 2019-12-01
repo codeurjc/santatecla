@@ -4,6 +4,7 @@ import { Unit } from './unit.model';
 import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
 import { ListQuestion } from '../question/listQuestion/listQuestion.model';
 import { TestQuestion } from '../question/testQuestion/testQuestion.model';
+import {Itineray} from "../itinerary/itinerary.model";
 
 @Injectable()
 export class UnitService {
@@ -94,5 +95,14 @@ export class UnitService {
 
   getSlideFormItinerary(slideId: number, itineraryId: number, unitId: number) {
     return this.http.get(this.baseUrl + unitId + '/itineraries/' + itineraryId + '/slides/' + slideId);
+  }
+
+  addItinerary(unitId: number, itinerary: Itineray) {
+    const body = JSON.stringify(itinerary);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post<Itineray>(this.baseUrl + unitId + '/itineraries', body, { headers });
   }
 }

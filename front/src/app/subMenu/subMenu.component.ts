@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Unit} from '../unit/unit.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UnitService} from '../unit/unit.service';
+import {Itineray} from '../itinerary/itinerary.model';
 
 
 @Component({
@@ -13,6 +14,8 @@ import {UnitService} from '../unit/unit.service';
 export class SubMenuComponent implements OnInit {
 
   unit: Unit;
+  itinerariesResult: Itineray[];
+
   unitId: number;
   itineraryId: number;
 
@@ -33,8 +36,24 @@ export class SubMenuComponent implements OnInit {
         name: data.name,
         itineraries: data.itineraries
       };
+      this.itinerariesResult = this.unit.itineraries;
     });
 
+  }
+
+  applyFilterItineraries(value: string) {
+    this.itinerariesResult = [];
+    for (let result of this.unit.itineraries) {
+      if (result.name.toLowerCase().includes(value.toLowerCase())) {
+        this.itinerariesResult.push(result);
+      }
+    }
+  }
+
+  addItinerary() {
+    let i: Itineray;
+    i = {name: 'Prueba'};
+    this.unitService.addItinerary(this.unitId, i).subscribe();
   }
 
   navigateToUnitCards() {

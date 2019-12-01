@@ -12,7 +12,7 @@
       </div>
 
       <div id="tab-wrapper">
-        <span *ngFor="let itinerary of unit?.itineraries" class="subMenuItineraries">
+        <span *ngFor="let itinerary of itinerariesResult" class="subMenuItineraries">
           <div class="itineraryButton" (click)="navigateToUnitItinerary(itinerary.id)">
             {{itinerary.name}}
           </div>
@@ -20,12 +20,12 @@
       </div>
 
       <div id="itineraryTools">
-        <button mat-icon-button>
+        <button mat-icon-button (click)="addItinerary()">
           <mat-icon>add_to_queue</mat-icon>
         </button>
         <mat-form-field appearance="outline" id="search">
           <mat-label>Buscar itinerario</mat-label>
-          <input id="search-input" matInput/>
+          <input (keyup)="applyFilterItineraries($event.target.value)" id="search-input" matInput/>
         </mat-form-field>
       </div>
     </div>

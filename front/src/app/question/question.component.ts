@@ -154,20 +154,5 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  navigateToUnitCards() {
-    this.router.navigate(['/units/' + this.unitId + '/cards']);
-  }
-
-  navigateToUnitProgress() {
-    this.router.navigate(['/units/' + this.unitId + '/progress']);
-  }
-
-  navigateToUnitItinerary(itineraryId: number) {
-    this.router.navigate(['/units/' + this.unitId + '/itineraries/' + itineraryId]);
-  }
-
-  navigateToUnitQuestions() {
-    this.router.navigate(['units', this.unitId, 'question']);
-  }
 
 }
