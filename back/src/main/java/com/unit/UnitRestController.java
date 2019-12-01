@@ -25,16 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -226,6 +217,21 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping("/{unitId}/question/definition/{id}")
+    public ResponseEntity<DefinitionQuestion> deleteDefinitionQuestion(@PathVariable long unitId, @PathVariable long id) {
+
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+
+        if (unit.isPresent()) {
+            Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
+            if (question.isPresent()) {
+                this.definitionQuestionService.delete(id);
+                return new ResponseEntity<>(question.get(), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping(value = "/{unitId}/question/definition/{id}/answer")
     public ResponseEntity<List<DefinitionAnswer>> getDefinitionAnswers(@PathVariable long unitId, @PathVariable long id) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
@@ -283,7 +289,7 @@ public class UnitRestController extends GeneralRestController {
     }
 
     @PostMapping("/{unitId}/question/list")
-    public ResponseEntity<ListQuestion> addDefinitionQuestion(@PathVariable long unitId, @RequestBody ListQuestion question) {
+    public ResponseEntity<ListQuestion> addListQuestion(@PathVariable long unitId, @RequestBody ListQuestion question) {
 
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
@@ -294,6 +300,21 @@ public class UnitRestController extends GeneralRestController {
             return new ResponseEntity<>(question, HttpStatus.CREATED);
         }
 
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{unitId}/question/list/{id}")
+    public ResponseEntity<ListQuestion> deleteListQuestion(@PathVariable long unitId, @PathVariable long id) {
+
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+
+        if (unit.isPresent()) {
+            Optional<ListQuestion> question = this.listQuestionService.findOne(id);
+            if (question.isPresent()) {
+                this.listQuestionService.delete(id);
+                return new ResponseEntity<>(question.get(), HttpStatus.OK);
+            }
+        }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -334,7 +355,7 @@ public class UnitRestController extends GeneralRestController {
     }
 
     @PostMapping("/{unitId}/question/test")
-    public ResponseEntity<TestQuestion> addDefinitionQuestion(@PathVariable long unitId, @RequestBody TestQuestion question) {
+    public ResponseEntity<TestQuestion> addTestQuestion(@PathVariable long unitId, @RequestBody TestQuestion question) {
 
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
@@ -345,6 +366,21 @@ public class UnitRestController extends GeneralRestController {
             return new ResponseEntity<>(question, HttpStatus.CREATED);
         }
 
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{unitId}/question/test/{id}")
+    public ResponseEntity<TestQuestion> deleteTestQuestion(@PathVariable long unitId, @PathVariable long id) {
+
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+
+        if (unit.isPresent()) {
+            Optional<TestQuestion> question = this.testQuestionService.findOne(id);
+            if (question.isPresent()) {
+                this.testQuestionService.delete(id);
+                return new ResponseEntity<>(question.get(), HttpStatus.OK);
+            }
+        }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
