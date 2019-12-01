@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 import com.question.Question;
 import com.question.list.list_answer.ListAnswer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class ListQuestion extends Question {
@@ -15,10 +17,11 @@ public class ListQuestion extends Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> possibleAnswers;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<String> correctAnswers;
 
     @OneToMany(cascade = CascadeType.ALL)

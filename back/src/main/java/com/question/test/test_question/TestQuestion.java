@@ -14,7 +14,7 @@ public class TestQuestion extends Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> possibleAnswers;
 
     private String correctAnswer;
