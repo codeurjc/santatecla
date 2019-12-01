@@ -76,3 +76,7 @@
 .add-answer-list {
   text-align: center;
 }
+
+.delete-icon {
+  color: indianred;
+}

@@ -2,7 +2,7 @@
 <html>
   <!-- ADMIN -->
   <body *ngIf="loginService.isAdmin">
-    
+
     <app-submenu></app-submenu>
 
     <mat-grid-list cols="3" rowHeight="2:1" class="questions-group">
@@ -15,7 +15,7 @@
             <div *ngFor="let question of definitionQuestions">
               {{ question.questionText }}
               <button mat-button (click)="deleteDefinitionQuestion(question.id)">
-                <mat-icon color="red">delete_outline</mat-icon>
+                <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
             </div>
           </mat-card-content>
@@ -30,7 +30,7 @@
             <div *ngFor="let question of listQuestions">
               {{ question.questionText }}
               <button mat-button (click)="deleteListQuestion(question.id)">
-                <mat-icon color="red">delete_outline</mat-icon>
+                <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
             </div>
           </mat-card-content>
@@ -45,7 +45,7 @@
             <div *ngFor="let question of testQuestions">
               {{ question.questionText }}
               <button mat-button (click)="deleteTestQuestion(question.id)">
-                <mat-icon color="red">delete_outline</mat-icon>
+                <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
             </div>
           </mat-card-content>

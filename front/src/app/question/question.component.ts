@@ -11,6 +11,7 @@ import {TestQuestionService} from './testQuestion/testQuestion.service';
 import {Unit} from '../unit/unit.model';
 import {UnitService} from '../unit/unit.service';
 import {Itineray} from '../itinerary/itinerary.model';
+import {LoginService} from '../auth/login.service';
 
 @Component({
   templateUrl: './question.component.html',
@@ -56,7 +57,7 @@ export class QuestionComponent implements OnInit {
     private router: Router) {
   }
   ngOnInit() {
-    
+
     this.questions = [];
     this.initQuestionTypes();
 
