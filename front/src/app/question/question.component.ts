@@ -47,6 +47,7 @@ export class QuestionComponent implements OnInit {
   itinerariesTabs: Itineray[];
 
   constructor(
+    public loginService: LoginService,
     private questionService: QuestionService,
     private definitionQuestionService: DefinitionQuestionService,
     private listQuestionService: ListQuestionService,
@@ -129,6 +130,16 @@ export class QuestionComponent implements OnInit {
     );
   }
 
+  deleteDefinitionQuestion(questionID: number) {
+    this.unitService.deleteUnitDefinitionQuestion(this.unitId, questionID).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => console.log(error)
+    );
+  }
+
   sendListQuestion() {
     let ca = [];
     this.possibleAnswers.forEach((value: boolean, key: string) => {
@@ -148,7 +159,23 @@ export class QuestionComponent implements OnInit {
         // TODO Remove it
         this.ngOnInit();
       },
-      (error) => console.log(error)
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
+    );
+  }
+
+  deleteListQuestion(questionID: number) {
+    this.unitService.deleteUnitListQuestion(this.unitId, questionID).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
     );
   }
 
@@ -175,6 +202,19 @@ export class QuestionComponent implements OnInit {
     );
   }
 
+  deleteTestQuestion(questionID: number) {
+    this.unitService.deleteUnitTestQuestion(this.unitId, questionID).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
+    );
+  }
+
   addPossibleListAnswer() {
     this.possibleAnswers = this.possibleAnswers.set(this.answerInput, this.correct);
     this.answerInput = '';
@@ -198,6 +238,22 @@ export class QuestionComponent implements OnInit {
     this.possibleAnswers = new Map();
     this.correct = false;
     this.correctTestAnswerSelected = false;
+  }
+
+  sendDefinitionAnswer(questionID: number) {
+    let answer = {
+      answerText: this.answerInput
+    };
+    this.unitService.addUnitDefinitionAnswer(this.unitId, questionID, answer).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
+    );
   }
 
   navigateToUnitCards() {

@@ -1,75 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <body>
+  <!-- ADMIN -->
+  <body *ngIf="loginService.isAdmin">
     <div class="question-header">
-      <button
-        mat-flat-button
-        color="primary"
-        style="position:absolute; left:5rem; margin-top: 0.4rem;"
-        (click)="navigateToUnitCards()"
-      >
+      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
         Fichas
       </button>
-
-      <button
-        mat-flat-button
-        color="primary"
-        style="position:absolute; left:25rem; margin-top: 0.4rem;"
-        (click)="navigateToUnitProgress()"
-      >
+      <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
         Seguimiento
       </button>
 
-      <button
-        mat-flat-button
-        color="primary"
-        style="position:absolute; left:35rem; margin-top: 0.4rem;"
-        (click)="navigateToUnitQuestions()"
-      >
+      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
         Ejercicios
       </button>
 
       <div *ngFor="let itinerary of itinerariesTabs">
-        <button
-          mat-flat-button
-          color="primary"
-          style="position:absolute; left:15rem; margin-top: 0.4rem;"
-          (click)="navigateToUnitItinerary(itinerary.id)"
-        >
+        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
           Itinerario {{ itinerary.id }}
         </button>
       </div>
     </div>
 
-    <mat-grid-list cols="3"rowHeight="2:1" class="questions-group">
+    <mat-grid-list cols="3" rowHeight="2:1" class="questions-group">
+
+      <!-- DEFINITION QUESTION LIST -->
       <mat-grid-tile>
         <mat-card class="questions-card">
           <mat-card-title class="card-title">Definición</mat-card-title>
           <mat-card-content class="card-content">
             <div *ngFor="let question of definitionQuestions">
-              <p>{{ question.questionText }}</p>
+              {{ question.questionText }}
+              <button mat-button (click)="deleteDefinitionQuestion(question.id)">
+                <mat-icon color="red">delete_outline</mat-icon>
+              </button>
             </div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
 
+      <!-- LIST QUESTION LIST -->
       <mat-grid-tile>
         <mat-card class="questions-card">
           <mat-card-title class="card-title">Listado</mat-card-title>
           <mat-card-content class="card-content">
             <div *ngFor="let question of listQuestions">
-              <p>{{ question.questionText }}</p>
+              {{ question.questionText }}
+              <button mat-button (click)="deleteListQuestion(question.id)">
+                <mat-icon color="red">delete_outline</mat-icon>
+              </button>
             </div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
 
+      <!-- TEST QUESTION LIST -->
       <mat-grid-tile>
         <mat-card class="questions-card">
           <mat-card-title class="card-title">Test</mat-card-title>
           <mat-card-content class="card-content">
             <div *ngFor="let question of testQuestions">
-              <p>{{ question.questionText }}</p>
+              {{ question.questionText }}
+              <button mat-button (click)="deleteTestQuestion(question.id)">
+                <mat-icon color="red">delete_outline</mat-icon>
+              </button>
             </div>
           </mat-card-content>
         </mat-card>
@@ -162,5 +155,66 @@
 
       </mat-card-content>
     </mat-card>
+  </body>
+
+  <!-- NOT ADMIN -->
+  <body *ngIf="!loginService.isAdmin">
+    <div class="question-header">
+      <button mat-flat-button color="primary" style="position:absolute; left:5rem; margin-top: 0.4rem;" (click)="navigateToUnitCards()">
+        Fichas
+      </button>
+      <button mat-flat-button color="primary" style="position:absolute; left:25rem; margin-top: 0.4rem;" (click)="navigateToUnitProgress()">
+        Seguimiento
+      </button>
+
+      <button mat-flat-button color="primary" style="position:absolute; left:35rem; margin-top: 0.4rem;" (click)="navigateToUnitQuestions()">
+        Ejercicios
+      </button>
+
+      <div *ngFor="let itinerary of itinerariesTabs">
+        <button mat-flat-button color="primary" style="position:absolute; left:15rem; margin-top: 0.4rem;" (click)="navigateToUnitItinerary(itinerary.id)">
+          Itinerario {{ itinerary.id }}
+        </button>
+      </div>
+    </div>
+
+    <mat-card class="question-card">
+      <mat-card-title class="card-title">Preguntas de definición</mat-card-title>
+      <mat-card-content class="card-content">
+        <div *ngFor="let question of definitionQuestions">
+          {{ question.questionText }}
+          <form class="add-question-form">
+            <mat-form-field>
+              <input matInput name="question" placeholder="Respuesta" [(ngModel)]="answerInput" type="text" required/>
+            </mat-form-field>
+          </form>
+          <div class="add-question-form">
+            <button mat-raised-button color="primary" (click)="sendDefinitionAnswer(question.id)">
+              Responder
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="question-card">
+      <mat-card-title class="card-title">Preguntas de listado</mat-card-title>
+      <mat-card-content class="card-content">
+        <div *ngFor="let question of listQuestions">
+          {{ question.questionText }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="question-card">
+      <mat-card-title class="card-title">Preguntas de test</mat-card-title>
+      <mat-card-content class="card-content">
+        <div *ngFor="let question of testQuestions">
+          {{ question.questionText }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+
   </body>
 </html>
