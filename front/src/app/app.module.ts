@@ -21,6 +21,7 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 
 import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppComponent } from './app.component';
 import { LoginService } from './auth/login.service';
@@ -52,6 +53,7 @@ import {NewCourseService} from './course/newCourse.service';
 import {SubMenuComponent} from './subMenu/subMenu.component';
 import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
+import {UnitsComponent} from './itinerary/tools/units.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +64,7 @@ import {MenuComponent} from './menu/menu.component';
     ViewComponent,
     CardComponent,
     ItineraryComponent,
+    UnitsComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
@@ -72,6 +75,7 @@ import {MenuComponent} from './menu/menu.component';
     NewCourseComponent
   ],
   imports: [
+    ClipboardModule,
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,

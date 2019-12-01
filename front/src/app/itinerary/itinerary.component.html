@@ -6,12 +6,16 @@
 
     <!-- TOOLS BAR -->
     <div class="toolsBar">
-      <button id="add-image-button" mat-icon-button>
-        <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
-      </button>
-      <button id="units-button" mat-icon-button>
-        <mat-icon>assignment</mat-icon>Buscar unidades
-      </button>
+      <mat-chip-list class="tools">
+        <mat-chip>
+          <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
+        </mat-chip>
+        <mat-chip (click)="openBottomSheet()">
+          <mat-icon>assignment</mat-icon>Buscar fichas
+        </mat-chip>
+          <mat-chip><mat-icon>assignment</mat-icon>Buscar slides
+        </mat-chip>
+      </mat-chip-list>
     </div>
 
     <!-- EDITOR -->

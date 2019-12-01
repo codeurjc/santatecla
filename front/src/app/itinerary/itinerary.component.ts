@@ -4,6 +4,7 @@ import { Itineray } from './itinerary.model';
 import { Component, OnInit } from '@angular/core';
 import { TdDialogService } from '@covalent/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
 
 import { ItineraryService } from './itinerary.service';
 import { LoginService } from '../auth/login.service';
@@ -12,6 +13,7 @@ import { UnitService } from '../unit/unit.service';
 import Asciidoctor from 'asciidoctor';
 import {Slide} from '../slide/slide.model';
 import {DefinitionQuestionService} from '../question/definitionQuestion/definitionQuestion.service';
+import {UnitsComponent} from './tools/units.component';
 
 
 function convertToHTML(text) {
@@ -54,7 +56,8 @@ export class ItineraryComponent implements OnInit {
               private dialogService: TdDialogService,
               private loginService: LoginService,
               private definitionQuestionService: DefinitionQuestionService,
-              private unitService: UnitService ) {
+              private unitService: UnitService,
+              private bottomSheet: MatBottomSheet) {
   }
 
   ngOnInit() {
@@ -87,14 +90,22 @@ export class ItineraryComponent implements OnInit {
     });
   }
 
+  openBottomSheet(): void {
+    this.bottomSheet.open(UnitsComponent);
+  }
+
   viewHTMLVersion() {
     this.contentHTML = convertToHTML(this.itineraryContentExtended);
   }
 
   slidesToContent(slides: Slide[]) {
-    slides.forEach((slide: Slide) => {
-      this.itineraryContent = this.itineraryContent + slide.content + '// ' + slide.id + '\n\n';
-    });
+    if (slides.length === 0) {
+      this.showSpinner = false;
+    } else {
+      slides.forEach((slide: Slide) => {
+        this.itineraryContent = this.itineraryContent + slide.content + '// ' + slide.id + '\n\n';
+      });
+    }
   }
 
   async getEmbebedContent(contentId: number, contentId2: number, unitId: number, content: string, contentCounter: number, type: string) {

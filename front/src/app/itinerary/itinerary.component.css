@@ -5,11 +5,12 @@
   color: #27273c;
   font-size: 0.8rem;
   border: 0.1rem solid #27273c;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
 }
 
-#units-button {
-  margin-left: 6rem;
+.tools {
+  position: absolute;
+  margin-top: 0.5rem;
 }
 
 #editor-container {

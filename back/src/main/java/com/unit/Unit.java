@@ -27,7 +27,6 @@ public class Unit {
     private String name;
     
     @OneToMany
-    @JsonIgnore
     private Map<Long, Card> cards;
 
     @ManyToMany
