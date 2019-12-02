@@ -43,12 +43,13 @@
   position: absolute;
   left: 9.8rem;
   top: 2rem;
+  height: 5rem;
   width: 57%;
   white-space: nowrap;
-  height: 150%;
   overflow-x: auto;
   z-index: 0;
 }
+
 
 #itineraryTools {
   border-left: 0.1rem solid #27273c;
