@@ -35,4 +35,4 @@ The student's profile can consult the courses the student is in. In this courses
 
 ### Database model
 
-![Alt text](https://github.com/codeurjc/santatecla/edit/master/resources/DBModel6.png)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/DBModel6.png)
