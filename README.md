@@ -10,8 +10,7 @@ Santa Tecla is a revolutionary teaching tool based on material created with stru
 * **Jesús Borrero Gómez**     | [JesusBorrero](https://github.com/JesusBorrero) | Course and progress
 
 ### Units
-
-You can structure the knowledge in units independent of the size of their content.
+The knowledge is structured as units, which can be related to each other with different types of relationships. The teacher can add new units and relationships and edit existing ones.
 
 ### Itineraries edit and cards
 #### Cards
@@ -34,5 +33,5 @@ The teacher can join a group of units into a personalized course for a group of 
 
 The student's profile can consult the courses the student is in. In this courses the student can do exercises and read itineraries and views.
 
-### BBDD Model
+### Database model
 
