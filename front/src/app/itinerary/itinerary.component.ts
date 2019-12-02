@@ -115,8 +115,8 @@ export class ItineraryComponent implements OnInit {
       this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
-      this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText +
-        '\n\n- http://localhost:4200/#/units/13/itineraries/11/definitionQuestion/6[Resolver^]');
+      let url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;
+      this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]');
     }
     this.addExtractedData(content);
   }
@@ -162,12 +162,11 @@ export class ItineraryComponent implements OnInit {
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[3]), content, contentCounter, 'question');
+          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[2]), content, contentCounter, 'question');
           contentCounter = contentCounter + 1;
-        } else {
-          this.addExtractedData(content);
         }
       }
+      this.addExtractedData(content);
       counter = counter + 1;
     });
   }
