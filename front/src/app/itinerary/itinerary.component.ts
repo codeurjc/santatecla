@@ -86,10 +86,6 @@ export class ItineraryComponent implements OnInit {
     });
   }
 
-  openBottomSheet(): void {
-    this.bottomSheet.open(UnitsComponent);
-  }
-
   viewHTMLVersion() {
     this.contentHTML = convertToHTML(this.itineraryContentExtended);
   }
@@ -243,6 +239,25 @@ export class ItineraryComponent implements OnInit {
       this.loadItinerary();
     }, (error) => {
       console.error(error);
+    });
+  }
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(UnitsComponent);
+  }
+
+  deleteItinerary() {
+    this.dialogService.openConfirm({
+      message: '¿ Seguro que desea eliminar el itinerario ' + this.itinerary.name + ' ?',
+      title: 'Confirmación',
+      width: '400px',
+      height: '200px'
+    }).afterClosed().subscribe((accept: boolean) => {
+      if (accept) {
+        this.unitService.deleteItinerary(this.unitId, this.itineraryId).subscribe(() => {
+          this.router.navigate(['/units/' + this.unitId + '/cards']);
+        });
+      }
     });
   }
 

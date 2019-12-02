@@ -1,12 +1,13 @@
 package com.itinerary;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
 import com.slide.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class Itinerary{
@@ -17,7 +18,7 @@ public class Itinerary{
 
     private String name;
 
-    @ManyToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @OrderColumn
     private List<Slide> slides;
 

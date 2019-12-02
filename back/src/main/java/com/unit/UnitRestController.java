@@ -228,6 +228,24 @@ public class UnitRestController extends GeneralRestController {
         return itinerary;
     }
 
+    @DeleteMapping(value = "/{unitId}/itineraries/{itineraryId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Itinerary> deleteItinerary(@PathVariable long itineraryId, @PathVariable long unitId) {
+
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+
+        if (unit.isPresent()) {
+            Optional<Itinerary> itinerary = this.itineraryService.findOne(itineraryId);
+            if (itinerary.isPresent()) {
+                unit.get().getItineraries().remove(itinerary.get());
+                this.itineraryService.delete(itineraryId);
+                return new ResponseEntity<>(itinerary.get(), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    }
+
     @GetMapping(value = "/{unitId}/question/definition")
     public ResponseEntity<List<DefinitionQuestion>> getDefinitionQuestions(@PathVariable long unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);

@@ -13,6 +13,11 @@
   margin-top: 0.5rem;
 }
 
+.deleteItinerary-button {
+  background-color: indianred;
+  color: white;
+}
+
 #editor-container {
   float: left;
   position: absolute;

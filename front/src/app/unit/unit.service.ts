@@ -46,11 +46,11 @@ export class UnitService {
   getParent(id: number) {
     return this.http.get(this.baseUrl + id + '/parent');
   }
-  
+
   getCard(cardId: number, unitId: number) {
     return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
   }
-  
+
   getSlideFormItinerary(slideId: number, itineraryId: number, unitId: number) {
     return this.http.get(this.baseUrl + unitId + '/itineraries/' + itineraryId + '/slides/' + slideId);
   }
@@ -63,6 +63,10 @@ export class UnitService {
     });
 
     return this.http.post<Itineray>(this.baseUrl + unitId + '/itineraries', body, { headers });
+  }
+
+  deleteItinerary(unitId: number, itineraryId: number) {
+    return this.http.delete<Itineray>(this.baseUrl + unitId + '/itineraries/' + itineraryId);
   }
 
   getUnitDefinitionQuestions(id: number) {
@@ -121,11 +125,11 @@ export class UnitService {
 
   addUnitDefinitionAnswer(unitID, questionID: number, answer) {
     const body = JSON.stringify(answer);
-    
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    
+
     return this.http.post(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer', body, {headers});
-  } 
+  }
 }

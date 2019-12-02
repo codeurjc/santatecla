@@ -29,7 +29,7 @@ public class Unit {
     @OneToMany
     private List<Card> cards;
 
-    @ManyToMany
+    @OneToMany
     @OrderColumn
     private List<Itinerary> itineraries;
 
