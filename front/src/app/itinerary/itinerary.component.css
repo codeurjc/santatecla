@@ -36,7 +36,7 @@
   font-size: 15px;
 }
 
-#html-itinerary-representation {
+#html-itinerary-representation-editor {
   border-radius: 0.5rem;
   padding: 0.5rem;
   border: 0.1rem solid #27273c;
@@ -46,10 +46,25 @@
   margin: 0.5rem;
 }
 
-#spinner {
+#html-itinerary-representation {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  border: 0.1rem solid #27273c;
+  margin: 1rem;
+}
+
+#spinnerEditor {
   position: absolute;
   width: 10rem;
   height: 10rem;
   left: 65%;
+  top: 40%;
+}
+
+#spinner {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  left: 44%;
   top: 40%;
 }

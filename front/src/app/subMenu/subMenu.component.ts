@@ -5,6 +5,7 @@ import {UnitService} from '../unit/unit.service';
 import {Itineray} from '../itinerary/itinerary.model';
 import {MatDialog} from "@angular/material/dialog";
 import {ItineraryFormComponent} from "../itinerary/itineraryForm/itineraryForm.component";
+import {LoginService} from "../auth/login.service";
 
 
 @Component({
@@ -26,6 +27,7 @@ export class SubMenuComponent implements OnInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
+              private loginService: LoginService,
               public dialog: MatDialog) {
   }
 
