@@ -5,6 +5,7 @@ import { DefinitionQuestion } from '../question/definitionQuestion/definitionQue
 import { ListQuestion } from '../question/listQuestion/listQuestion.model';
 import { TestQuestion } from '../question/testQuestion/testQuestion.model';
 import {Itineray} from "../itinerary/itinerary.model";
+import {DefinitionAnswer} from '../question/definitionQuestion/definitionAnswer.model';
 
 @Injectable()
 export class UnitService {
@@ -123,7 +124,7 @@ export class UnitService {
     return this.http.delete(this.baseUrl + unitID + '/question/test/' + questionID);
   }
 
-  addUnitDefinitionAnswer(unitID, questionID: number, answer) {
+  addUnitDefinitionAnswer(unitID, questionID: number, answer: DefinitionAnswer) {
     const body = JSON.stringify(answer);
 
     const headers = new HttpHeaders({

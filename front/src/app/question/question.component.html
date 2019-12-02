@@ -149,17 +149,9 @@
       <mat-card-title class="card-title">Preguntas de definición</mat-card-title>
       <mat-card-content class="card-content">
         <div *ngFor="let question of definitionQuestions">
-          {{ question.questionText }}
-          <form class="add-question-form">
-            <mat-form-field>
-              <input matInput name="question" placeholder="Respuesta" [(ngModel)]="answerInput" type="text" required/>
-            </mat-form-field>
-          </form>
-          <div class="add-question-form">
-            <button mat-raised-button color="primary" (click)="sendDefinitionAnswer(question.id)">
-              Responder
-            </button>
-          </div>
+          <mat-button-toggle (click)="openAnswerDialog(question)">
+            <h3>{{ question.questionText }}</h3>
+          </mat-button-toggle>
         </div>
       </mat-card-content>
     </mat-card>

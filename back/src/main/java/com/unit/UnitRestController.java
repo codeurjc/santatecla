@@ -8,6 +8,7 @@ import com.GeneralRestController;
 import com.card.Card;
 import com.card.CardService;
 import com.itinerary.Itinerary;
+import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.list.list_answer.ListAnswer;
@@ -244,6 +245,19 @@ public class UnitRestController extends GeneralRestController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+    }
+
+    @GetMapping(value = "/{unitId}/question/{qId}")
+    public ResponseEntity<Question> getQuestion(@PathVariable long unitId, @PathVariable long qId) {
+        Optional<Unit> unit = this.unitService.findOne(unitId);
+
+        if (unit.isPresent()) {
+            Optional<Question> question = this.questionService.findOne(qId);
+            if (question.isPresent()) {
+                return new ResponseEntity<>(question.get(), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{unitId}/question/definition")

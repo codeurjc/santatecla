@@ -55,6 +55,7 @@ import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
 import {UnitsComponent} from './itinerary/tools/units.component';
 import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
+import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.co
     TestQuestionComponent,
     StudentHomeComponent,
     CourseComponent,
-    NewCourseComponent
+    NewCourseComponent,
+    AnswerDefinitionDialogComponent,
   ],
   imports: [
     ClipboardModule,

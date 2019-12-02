@@ -12,6 +12,9 @@ import {Unit} from '../unit/unit.model';
 import {UnitService} from '../unit/unit.service';
 import {Itineray} from '../itinerary/itinerary.model';
 import {LoginService} from '../auth/login.service';
+import {MatDialog} from '@angular/material/dialog';
+import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
+import {AnswerDefinitionDialogComponent} from './answerQuestionDialog/answerDefinitionDialog.component';
 
 @Component({
   templateUrl: './question.component.html',
@@ -48,6 +51,7 @@ export class QuestionComponent implements OnInit {
 
   constructor(
     public loginService: LoginService,
+    public dialog: MatDialog,
     private questionService: QuestionService,
     private definitionQuestionService: DefinitionQuestionService,
     private listQuestionService: ListQuestionService,
@@ -107,6 +111,11 @@ export class QuestionComponent implements OnInit {
   }
 
   sendDefinitionQuestion() {
+    if (this.questionInput === '') {
+      // TODO
+      console.log('error: inputs cannot be empty');
+      return;
+    }
     this.definitionQuestion = {
       questionText: this.questionInput,
       subtype: 'DefinitionQuestion'
@@ -132,6 +141,11 @@ export class QuestionComponent implements OnInit {
   }
 
   sendListQuestion() {
+    if (this.questionInput === '') {
+      // TODO
+      console.log('error: inputs cannot be empty');
+      return;
+    }
     let ca = [];
     this.possibleAnswers.forEach((value: boolean, key: string) => {
       if (value) {
@@ -171,6 +185,11 @@ export class QuestionComponent implements OnInit {
   }
 
   sendTestQuestion() {
+    if (this.questionInput === '') {
+      // TODO
+      console.log('error: inputs cannot be empty');
+      return;
+    }
     let ca = [];
     this.possibleAnswers.forEach((value: boolean, key: string) => {
       if (value) {
@@ -207,11 +226,21 @@ export class QuestionComponent implements OnInit {
   }
 
   addPossibleListAnswer() {
+    if (this.answerInput === '') {
+      // TODO
+      console.log('error: inputs cannot be empty');
+      return;
+    }
     this.possibleAnswers = this.possibleAnswers.set(this.answerInput, this.correct);
     this.answerInput = '';
   }
 
   addPossibleTestAnswer() {
+    if (this.answerInput === '') {
+      // TODO
+      console.log('error: inputs cannot be empty');
+      return;
+    }
     if (!this.correctTestAnswerSelected && this.correct) {
       this.possibleAnswers.set(this.answerInput, true);
       this.correctTestAnswerSelected = true;
@@ -232,8 +261,15 @@ export class QuestionComponent implements OnInit {
   }
 
   sendDefinitionAnswer(questionID: number) {
-    let answer = {
-      answerText: this.answerInput
+    if (this.answerInput === '') {
+      // TODO
+      console.log('error: inputs cannot be empty');
+      return;
+    }
+    const answer: DefinitionAnswer = {
+      answerText: this.answerInput,
+      user: this.loginService.getCurrentUser(),
+      unitId: this.unitId
     };
     this.unitService.addUnitDefinitionAnswer(this.unitId, questionID, answer).subscribe(
       (_) => {
@@ -245,6 +281,20 @@ export class QuestionComponent implements OnInit {
         this.ngOnInit();
       }
     );
+  }
+
+  openAnswerDialog(q: Question): void {
+    const dialogRef = this.dialog.open(AnswerDefinitionDialogComponent, {
+      width: '250px',
+      data: {question: q, answerInput: this.answerInput}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.answerInput = result;
+      if ((typeof this.answerInput !== 'undefined') && (this.answerInput !== '')) {
+        this.sendDefinitionAnswer(q.id);
+      }
+    });
   }
 
 
