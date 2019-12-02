@@ -54,11 +54,13 @@ import {SubMenuComponent} from './subMenu/subMenu.component';
 import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
 import {UnitsComponent} from './itinerary/tools/units.component';
+import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SubMenuComponent,
+    ItineraryFormComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,

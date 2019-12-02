@@ -3,6 +3,8 @@ import {Unit} from '../unit/unit.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UnitService} from '../unit/unit.service';
 import {Itineray} from '../itinerary/itinerary.model';
+import {MatDialog} from "@angular/material/dialog";
+import {ItineraryFormComponent} from "../itinerary/itineraryForm/itineraryForm.component";
 
 
 @Component({
@@ -19,9 +21,12 @@ export class SubMenuComponent implements OnInit {
   unitId: number;
   itineraryId: number;
 
+  newItinerary: Itineray;
+
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
-              private unitService: UnitService) {
+              private unitService: UnitService,
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -38,7 +43,6 @@ export class SubMenuComponent implements OnInit {
       };
       this.itinerariesResult = this.unit.itineraries;
     });
-
   }
 
   applyFilterItineraries(value: string) {
@@ -50,10 +54,23 @@ export class SubMenuComponent implements OnInit {
     }
   }
 
-  addItinerary() {
-    let i: Itineray;
-    i = {name: 'Prueba'};
-    this.unitService.addItinerary(this.unitId, i).subscribe();
+  openDialog(): void {
+    this.newItinerary = {name: ''};
+    const dialogRef = this.dialog.open(ItineraryFormComponent, {
+      width: '400px',
+      data: {itinerary: this.newItinerary}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.newItinerary = result;
+      if (typeof this.newItinerary !== 'undefined') {
+        if (this.newItinerary.name !== '') {
+          this.unitService.addItinerary(this.unitId, this.newItinerary).subscribe(() => {
+            this.ngOnInit();
+          });
+        }
+      }
+    });
   }
 
   navigateToUnitCards() {

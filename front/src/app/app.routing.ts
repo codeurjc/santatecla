@@ -11,11 +11,13 @@ import {StudentHomeComponent} from './course/studentHome.component';
 import {CourseComponent} from './course/course.component';
 import {NewCourseComponent} from './course/newCourse.component';
 import {UnitsComponent} from './itinerary/tools/units.component';
+import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
 
 
 const appRoutes = [
   { path: '' , component: ViewComponent },
   { path: 'units', component: UnitsComponent },
+  { path: 'itineraryForm', component: ItineraryFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
   { path: 'units/:unitId/itineraries/:itineraryId', component: ItineraryComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
