@@ -23,7 +23,8 @@ Editing itineraries include operations such as asserting cards, slides of other 
 
 ### Exercises
 
-You can put exercises in the itineraries, these exercises can be of two types: definitions and listings. Each exercise wants to manage the different responses of the students.
+A unit has different exercises. Teacher can manage them adding, deleting and editing questions. Also he can correct it by his own.
+Students are able to answer the questions of the units they belong.
 
 ### Course and progress
 
