@@ -65,8 +65,9 @@ export class SubMenuComponent implements OnInit {
       this.newItinerary = result;
       if (typeof this.newItinerary !== 'undefined') {
         if (this.newItinerary.name !== '') {
-          this.unitService.addItinerary(this.unitId, this.newItinerary).subscribe(() => {
+          this.unitService.addItinerary(this.unitId, this.newItinerary).subscribe((data) => {
             this.ngOnInit();
+            this.router.navigate(['/units/' + this.unit.id + '/itineraries/' + data.id]);
           });
         }
       }

@@ -30,6 +30,7 @@ public class Unit {
     private List<Card> cards;
 
     @ManyToMany
+    @OrderColumn
     private List<Itinerary> itineraries;
 
     @OneToMany
