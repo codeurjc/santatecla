@@ -2,6 +2,8 @@ package com.course;
 
 import com.unit.Unit;
 import com.user.User;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,10 +18,12 @@ public class Course {
     private String name;
     private String description;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Unit> units;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<User> students;
 
     @ManyToOne
@@ -44,6 +48,14 @@ public class Course {
 
     public void addStudent(User user){
         this.students.add(user);
+    }
+
+    public void update(Course course){
+        this.name = course.name;
+        this.description = course.description;
+        this.students = course.students;
+        this.units = course.units;
+        this.teacher = course.teacher;
     }
 
     public long getId() {

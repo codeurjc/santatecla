@@ -11,7 +11,7 @@
       </span>
 
       <span *ngIf="!loginService.isAdmin">
-        <button class="home-button" mat-icon-button [routerLink]="['/student']">
+        <button class="home-button" mat-icon-button [routerLink]="['/courses']">
           <mat-icon>home</mat-icon>
         </button>
       </span>
@@ -20,7 +20,7 @@
         <button mat-icon-button [routerLink]="['progress']">
           <mat-icon>layers</mat-icon>
         </button>
-        <button mat-icon-button [routerLink]="['/newCourse']">
+        <button mat-icon-button [routerLink]="['/courses']">
           <mat-icon>library_add</mat-icon>
         </button>
       </div>
@@ -37,7 +37,7 @@
               <div class="tab-content" [routerLink]="['/course', tab.id]">
                 Curso {{tab.name}}
               </div>
-              <button class="close-tab-button" [routerLink]="['/student']" mat-icon-button (click)="tabService.removeTab(tab.type, tab.id)">
+              <button class="close-tab-button" [routerLink]="['/courses']" mat-icon-button (click)="tabService.removeTab(tab.type, tab.id)">
                 <mat-icon>close</mat-icon>
               </button>
             </span>

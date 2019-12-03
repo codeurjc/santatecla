@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,30 @@ public class CourseRestController extends GeneralRestController {
     public ResponseEntity<Course> createCourse(@RequestBody Course course){
         this.courseService.save(course);
         return new ResponseEntity<>(course, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Course> editCourse(@PathVariable long id, @RequestBody Course course){
+        Optional<Course> optional = this.courseService.findOne(id);
+
+        if(optional.isPresent()){
+            optional.get().update(course);
+            this.courseService.save(optional.get());
+            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Course> deleteCourse(@PathVariable long id){
+        Optional<Course> optional = this.courseService.findOne(id);
+
+        if (optional.isPresent()){
+            this.courseService.delete(id);
+            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value="/user/{id}")

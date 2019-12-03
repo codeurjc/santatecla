@@ -22,7 +22,7 @@ export class LoginComponent {
         if (u.roles.includes('ROLE_ADMIN')) {
           this.router.navigate(['/']);
         } else {
-          this.router.navigate(['/student']);
+          this.router.navigate(['/courses']);
         }
       },
       (error) => alert('Invalid user or password'),

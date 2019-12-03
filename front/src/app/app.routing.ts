@@ -7,7 +7,7 @@ import { ListQuestionComponent } from './question/listQuestion/listQuestion.comp
 import { QuestionComponent } from './question/question.component';
 import { ProgressComponent } from './progress/progress.component';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
-import {StudentHomeComponent} from './course/studentHome.component';
+import {MyCoursesComponent} from './course/myCourses.component';
 import {CourseComponent} from './course/course.component';
 import {NewCourseComponent} from './course/newCourse.component';
 import {UnitsComponent} from './itinerary/tools/units.component';
@@ -27,10 +27,11 @@ const appRoutes = [
   { path: 'units/:unitId/itineraries/:itineraryId/listQuestion/:questionId', component: ListQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},
   { path: 'question', component: QuestionComponent},
-  { path: 'student', component: StudentHomeComponent },
+  { path: 'courses', component: MyCoursesComponent },
   { path: 'course/:courseId', component: CourseComponent },
   { path: 'progress', component: ProgressComponent },
-  { path: 'newCourse', component: NewCourseComponent}
+  { path: 'newCourse', component: NewCourseComponent},
+  { path: 'editCourse/:courseId', component: NewCourseComponent}
 
 ];
 

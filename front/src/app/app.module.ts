@@ -42,8 +42,8 @@ import { ProgressService } from './progress/progress.service';
 import {QuestionService} from './question/question.service';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {TestQuestionService} from './question/testQuestion/testQuestion.service';
-import {StudentHomeComponent} from './course/studentHome.component';
-import {StudentHomeService} from './course/studentHome.service';
+import {MyCoursesComponent} from './course/myCourses.component';
+import {MyCoursesService} from './course/myCourses.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
 import {TabService} from './tab/tab.service';
@@ -73,7 +73,7 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
     QuestionComponent,
     ProgressComponent,
     TestQuestionComponent,
-    StudentHomeComponent,
+    MyCoursesComponent,
     CourseComponent,
     NewCourseComponent,
     AnswerDefinitionDialogComponent,
@@ -128,7 +128,7 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService, NewCourseService,
+    ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
