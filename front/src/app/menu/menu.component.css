@@ -1,30 +1,27 @@
-.home-button {
-  position:absolute;
-  margin: 0.2rem;
-}
-
 #header {
-  position: relative;
+  position: fixed;
+  z-index: 1000;
   height: 3rem;
   top: 0;
   right: 0;
   left: 0;
-  background-color: #27273c;
+  background-color: #1e042f;
   color: white;
   font-size: 0.8rem;
-  overflow: hidden;
+}
+
+#user-name {
+  position: absolute;
+  top: 0.8rem;
+  right: 3rem;
+  margin: 0.2rem;
 }
 
 #logout-button {
   position: absolute;
-  right: 0.5vw;
+  top: 0;
+  right: 0;
   margin: 0.2rem;
-}
-
-#progress-button {
-  position: absolute;
-  right: 3.3rem;
-  margin-top: 0.2rem;
 }
 
 .mat-icon {
@@ -32,48 +29,21 @@
   margin: -0.1rem 0 0 0;
 }
 
-.tab {
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-  border: 1px solid #9e2abb;
-  background-color: #27273c;
-  padding: 0.9rem 0.2rem 1rem 0.7rem;
-  box-shadow: none;
-  position: relative;
-  top: 0.3rem;
+.nav-button {
+  margin-left: 1.5rem;
   cursor: pointer;
+  display: inline;
+  height: 2.5rem;
+  top: 0.25rem;
+  background-color: #5c196e;
 }
 
-.activeTab {
-  background-color: #e1afed;
-  color: #000000;
-  font-weight: bold;
-}
-
-.tab:hover {
-  background-color: #e1afed;
-  color: #000000;
+.nav-button-content {
+  display: inline;
+  margin-left: 0.2rem;
 }
 
 #tab-wrapper {
-  margin-left: 3rem;
   margin-right: 13rem;
   top: 0.5rem;
-  white-space: nowrap;
-  height: 150%;
-  overflow-x: auto;
-}
-
-.tab-content {
-  display: inline;
-}
-
-.newCourseButton {
-  background-color: #2361c5;
-  border: 0;
-  color: white;
-}
-
-.close-tab-button:hover {
-  color: #d87497;
 }

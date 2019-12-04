@@ -2,6 +2,7 @@
   position: absolute;
   width: 40%;
   height: calc(100vh - 3rem);
+  top: 3rem;
 }
 
 #unit-representation {
@@ -16,6 +17,7 @@
   margin: 1rem;
   width: calc(60% - 2rem);
   z-index: 120;
+  top: 3rem;
 }
 
 #search-input {
@@ -74,7 +76,7 @@
 #save-button {
   position: absolute;
   left: 40%;
-  margin: 6rem 1rem 1rem 1rem;
+  margin: 8rem 1rem 1rem 1rem;
   z-index: 110;
 }
 
@@ -85,7 +87,7 @@
 #up-button {
   position: absolute;
   right: 0;
-  margin: 6rem 1rem 1rem 1rem;
+  margin: 8rem 1rem 1rem 1rem;
   z-index: 110;
 }
 

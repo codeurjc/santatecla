@@ -588,7 +588,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Routing
 
   private goToUnit(id) {
-    this.router.navigate(['/units/' + id + '/cards']);
+    this.router.navigate(['/unit/' + id]);
   }
 
 

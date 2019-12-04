@@ -3,8 +3,6 @@
   <!-- ADMIN -->
   <body *ngIf="loginService.isAdmin">
 
-    <app-submenu></app-submenu>
-
     <mat-grid-list cols="3" rowHeight="2:1" class="questions-group">
 
       <!-- DEFINITION QUESTION LIST -->
@@ -143,7 +141,6 @@
 
   <!-- NOT ADMIN -->
   <body *ngIf="!loginService.isAdmin">
-    <app-submenu></app-submenu>
 
     <mat-card class="question-card">
       <mat-card-title class="card-title">Preguntas de definición</mat-card-title>

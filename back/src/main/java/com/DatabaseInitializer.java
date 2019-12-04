@@ -67,15 +67,15 @@ public class DatabaseInitializer {
         public void init() {
 
                 //Cards
-                Card card1 = new Card("Que");
-                Card card2 = new Card("Que");
-                Card card3 = new Card("Cuando");
-                Card card4 = new Card("Cuando");
+                Card card1 = new Card("¿Qué es un lenguaje de programación?");
+                Card card2 = new Card("¿Qué es java?");
+                Card card3 = new Card("¿Cuándo se creó el primer lenguaje de programación?");
+                Card card4 = new Card("¿Cuándo se creó java?");
 
-                card1.setContent("*¿Que es un lenguaje de programación?*\n\nUn lenguaje de programación es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de instrucciones o secuencias de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina programa.");
-                card2.setContent("*¿Que es java?*\n");
-                card4.setContent("*¿Cuando se creo el primer lenguaje de programación?*\n\nA finales de 1953, John Backus sometió una propuesta a sus superiores en IBM para desarrollar una alternativa más práctica al lenguaje ensamblador, para programar la computadora central IBM 704. El histórico equipo Fortran de Backus consistió en los programadores Richard Goldberg, Sheldon F. Best, Harlan Herrick, Peter Sheridan, Roy Nutt, Robert Nelson, Irving Ziller, Lois Haibt y David Sayre.");
-                card3.setContent("*¿Cuando se creo java?*\n");
+                card1.setContent("Un *lenguaje de programación* es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de *instrucciones o secuencias* de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina *programa*.");
+                card2.setContent("Java es...");
+                card4.setContent("*A finales de 1953*, John Backus sometió una propuesta a sus superiores en IBM para desarrollar una alternativa más práctica al lenguaje ensamblador, para programar la computadora central IBM 704. El histórico equipo Fortran de Backus consistió en los programadores Richard Goldberg, Sheldon F. Best, Harlan Herrick, Peter Sheridan, Roy Nutt, Robert Nelson, Irving Ziller, Lois Haibt y David Sayre.");
+                card3.setContent("Java se creó en...");
 
                 cardRepository.save(card1);
                 cardRepository.save(card2);
@@ -92,7 +92,7 @@ public class DatabaseInitializer {
                 // List Questions
                 ArrayList<String> possibleAnswers = new ArrayList<>();
                 possibleAnswers.add("Java");
-                possibleAnswers.add("Javascropt");
+                possibleAnswers.add("Javascript");
                 possibleAnswers.add("Python");
                 ArrayList<String> correctAnswer = new ArrayList<>();
                 correctAnswer.add("Python");

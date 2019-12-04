@@ -1,68 +1,52 @@
-import { Unit } from '../unit/unit.model';
-import { Itineray } from '../itinerary/itinerary.model';
-import { CardService } from './card.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import { Card } from './card.model';
-import { UnitService } from '../unit/unit.service';
-import {TabService} from '../tab/tab.service';
-import {LoginService} from '../auth/login.service';
-import {SubMenuComponent} from '../subMenu/subMenu.component';
+import {Unit } from '../unit/unit.model';
+import {CardService} from './card.service';
+import {Router, ActivatedRoute} from '@angular/router';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {Card} from './card.model';
+import {UnitService} from '../unit/unit.service';
 
 @Component({
+  selector: 'app-cards',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css']
 })
 
 export class CardComponent implements OnInit {
 
-  @ViewChild('subMenu') private subMenu: SubMenuComponent;
-
   unitId: number;
-  cards: Card[];
+  cards: Card[] = [];
   unit: Unit;
-  itineraries: Itineray[];
+  disableSaveButton = true;
+  showSpinner = false;
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private cardService: CardService,
-              private unitService: UnitService,
-              private tabService: TabService,
-              private loginService: LoginService) {
-    router.events.subscribe(event => {
-      if (event instanceof CardComponent) {
-        this.ngOnInit();
-      }
-    });
-  }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private cardService: CardService, private unitService: UnitService) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.subMenu.ngOnInit();
       this.unitId = params['unitId'];
+      this.showSpinner = true;
       this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-        this.unit = {
-          id: data.id,
-          name: data.name,
-          itineraries: data.itineraries
-        };
-        this.itineraries = this.unit.itineraries;
-        if(this.loginService.isAdmin) {
-          this.tabService.addTab('units', this.unitId, this.unit.name, null);
-        }
+        this.unit = data;
+        this.cards = this.unit.cards;
+        this.showSpinner = false;
       });
-      this.cardService.getCards(this.unitId).subscribe((data: Card[]) => {
-        this.cards = [];
-        data.forEach((card: Card) => {
-          this.cards.push({
-            id: card.id,
-            name: card.name,
-            content: card.content,
-            image: (card.image) ? this.convertImage(card.image) : ''
-          });
-        });
-      }, error => {});
     });
+  }
+
+  private enableSaveButton() {
+    this.disableSaveButton = this.emptyField();
+  }
+
+  private emptyField() {
+    let empty = false;
+    this.cards.forEach((card: Card) => {
+      empty = ((empty) || (!card.name) || (!card.content));
+    });
+    return empty;
+  }
+
+  private addCard() {
+
   }
 
   convertImage(bytes: any) {
@@ -85,17 +69,31 @@ export class CardComponent implements OnInit {
   }
 
   save() {
+    this.disableSaveButton = true;
+    this.showSpinner = true;
+    let i = 0;
     this.cards.forEach((card: Card) => {
-      if (card.name !== '') {
-        this.cardService.save(this.unitId, card).subscribe(
-            _ => {
-
-            }, error => {
-              console.error(error);
-            }
-        );
-      }
+      this.cardService.save(this.unitId, card).subscribe(
+        _ => {
+          i++;
+          if (i === this.cards.length) {
+            this.showSpinner = false;
+          }
+        }, error => {
+          console.error(error);
+        }
+      );
     });
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyPress($event: KeyboardEvent) {
+    if (($event.metaKey || $event.ctrlKey) && ($event.key == 's')) {
+      $event.preventDefault();
+      if (!this.disableSaveButton) {
+        this.save();
+      }
+    }
   }
 
 }
