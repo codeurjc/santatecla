@@ -2,35 +2,19 @@
 <html>
 <body>
 
-  <div id="tab-wrapper">
-
-    <div *ngIf="unit">
-      <div class="unit-course-name">Unidad <b>{{unit.name}}</b></div>
-      <div [className]="activeTab == 0 ? 'tab activeTab' : 'tab'" (click)="activateTab(0)">
-        <mat-icon class="tab-icon">view_stream</mat-icon>
-        Fichas
-      </div>
-      <div [className]="activeTab == 1 ? 'tab activeTab' : 'tab'" (click)="activateTab(1)">
-        <mat-icon class="tab-icon">edit</mat-icon>
-        Ejercicios
-      </div>
-      <div [className]="activeTab == 2 ? 'tab activeTab' : 'tab'" (click)="activateTab(2)">
-        <mat-icon class="tab-icon">vertical_split</mat-icon>
-        Itinerarios
-      </div>
+  <div id="tab-wrapper" *ngIf="unit">
+    <div class="unit-course-name">Unidad <b>{{unit.name}}</b></div>
+    <div [className]="activeTab == 0 ? 'tab activeTab' : 'tab'" (click)="activateTab(0)">
+      <mat-icon class="tab-icon">view_stream</mat-icon>
+      Fichas
     </div>
-
-    <div *ngIf="course">
-      <div class="unit-course-name">Curso <b>{{course.name}}</b></div>
-      <div class="tab">
-        <mat-icon class="tab-icon">subject</mat-icon>
-        Contenido
-      </div>
-      <div class="tab">
-        <mat-icon class="tab-icon">bar_chart</mat-icon>
-        Seguimiento
-      </div>
-
+    <div [className]="activeTab == 1 ? 'tab activeTab' : 'tab'" (click)="activateTab(1)">
+      <mat-icon class="tab-icon">edit</mat-icon>
+      Ejercicios
+    </div>
+    <div [className]="activeTab == 2 ? 'tab activeTab' : 'tab'" (click)="activateTab(2)">
+      <mat-icon class="tab-icon">vertical_split</mat-icon>
+      Itinerarios
     </div>
   </div>
 

@@ -7,10 +7,9 @@ import {UserResult} from './userResult.model';
 import {UnitResult} from './unitResult.model';
 
 @Component({
+  selector: 'app-progress',
   templateUrl: './progress.component.html',
-  styleUrls: [
-    './progress.component.css'
-  ]
+  styleUrls: ['./progress.component.css']
 })
 
 export class ProgressComponent implements OnInit {

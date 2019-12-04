@@ -1,12 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Unit} from '../unit/unit.model';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Course} from "../course/course.model";
 import {UnitService} from "./unit.service";
-import {CardService} from "../card/card.service";
-import {TabService} from "../tab/tab.service";
-import {LoginService} from "../auth/login.service";
-import {Card} from "../card/card.model";
 
 @Component({
   templateUrl: './unit.component.html',

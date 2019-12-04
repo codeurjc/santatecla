@@ -1,79 +1,99 @@
 <!DOCTYPE HTML>
 <html>
 <body>
-  <h1 class="center-align">Nuevo curso</h1>
 
-  <form class="center-align" name="newCourseName">
-    <mat-form-field>
-      <input matInput placeholder="Nombre del curso" [(ngModel)]="courseName" name="name" required>
-    </mat-form-field>
-    <div *ngIf="this.courseName == ''">
-      <p class="indianred-color">El nombre del curso no puede estar vacío</p>
-    </div>
-  </form>
+<div id="tab-wrapper" *ngIf="course&&course.id">
+  <div class="unit-course-name">Curso <b>{{course.name}}</b></div>
+  <div [className]="activeTab == 0 ? 'tab activeTab' : 'tab'" (click)="activateTab(0)">
+    <mat-icon class="tab-icon">subject</mat-icon>
+    Contenido
+  </div>
+  <div [className]="activeTab == 1 ? 'tab activeTab' : 'tab'" (click)="activateTab(1)">
+    <mat-icon class="tab-icon">bar_chart</mat-icon>
+    Seguimiento
+  </div>
+</div>
 
-  <form name="newCourseDesc" class="center-align">
-    <mat-form-field>
-      <textarea matInput placeholder="Descripción del curso" [(ngModel)]="courseDescription" name="description" required></textarea>
-    </mat-form-field>
-    <div *ngIf="this.courseDescription == ''">
-      <p class="indianred-color">La descripción del curso no puede estar vacía</p>
-    </div>
-  </form>
+<div class="course-content">
+  <div *ngIf="activeTab==0">
+    <h1 class="center-align title">Nuevo curso</h1>
 
-  <div class="row">
-    <div class="column bottom-margin">
-      <h3>Alumnos del curso</h3>
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre del alumno</mat-label>
-        <input matInput [(ngModel)]="searchStudentField" (ngModelChange)="searchStudent(); this.showStudentOptions = true" id="search-student-input">
-        <div *ngIf="showStudentOptions" class="result-wrapper">
-          <div class="result" id="user-result" *ngFor="let result of showingStudents; let i = index" (mouseover)="this.arrowStudentKeyLocation = i">
-            <span id="user-name">
-              {{result.name}}
-            </span>
-          </div>
-        </div>
+    <form class="center-align" name="newCourseName">
+      <mat-form-field>
+        <input matInput placeholder="Nombre del curso" [(ngModel)]="courseName" name="name" required>
       </mat-form-field>
-      <h5>Alumnos seleccionados</h5>
-      <span *ngFor="let student of this.chosenStudents">
-          {{student.name}}
-          <mat-icon (click)="removeStudent(student)" class="pointer-cursor">close</mat-icon>
-      </span>
-      <div *ngIf="this.chosenStudents.length == 0">
-        <p class="indianred-color">Debe elegir algún estudiante</p>
+      <div *ngIf="this.courseName == ''">
+        <p class="indianred-color">El nombre del curso no puede estar vacío</p>
+      </div>
+    </form>
+
+    <form name="newCourseDesc" class="center-align">
+      <mat-form-field>
+        <textarea matInput placeholder="Descripción del curso" [(ngModel)]="courseDescription" name="description" required></textarea>
+      </mat-form-field>
+      <div *ngIf="this.courseDescription == ''">
+        <p class="indianred-color">La descripción del curso no puede estar vacía</p>
+      </div>
+    </form>
+
+    <div class="row">
+      <div class="column bottom-margin">
+        <h3>Alumnos del curso</h3>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre del alumno</mat-label>
+          <input matInput [(ngModel)]="searchStudentField" (ngModelChange)="searchStudent(); this.showStudentOptions = true" id="search-student-input">
+          <div *ngIf="showStudentOptions" class="result-wrapper">
+            <div class="result" id="user-result" *ngFor="let result of showingStudents; let i = index" (mouseover)="this.arrowStudentKeyLocation = i">
+              <span id="user-name">
+                {{result.name}}
+              </span>
+            </div>
+          </div>
+        </mat-form-field>
+        <h5>Alumnos seleccionados</h5>
+        <span *ngFor="let student of this.chosenStudents">
+            {{student.name}}
+            <mat-icon (click)="removeStudent(student)" class="pointer-cursor">close</mat-icon>
+        </span>
+        <div *ngIf="this.chosenStudents.length == 0">
+          <p class="indianred-color">Debe elegir algún estudiante</p>
+        </div>
+      </div>
+
+      <div class="column bottom-margin">
+        <h3>Unidades del curso</h3>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre de la unidad</mat-label>
+          <input matInput [(ngModel)]="searchUnitField" (ngModelChange)="searchUnit(); this.showUnitOptions = true" id="search-unit-input">
+          <div *ngIf="showUnitOptions" class="result-wrapper">
+            <div class="result" id="unit-result" *ngFor="let result of showingUnits; let i = index" (mouseover)="this.arrowUnitKeyLocation = i">
+              <span id="unit-name">
+                {{result.name}}
+              </span>
+            </div>
+          </div>
+        </mat-form-field>
+        <h5>Unidades seleccionadas</h5>
+        <span *ngFor="let unit of this.chosenUnits">
+            {{unit.name}}
+            <mat-icon (click)="removeUnit(unit)" class="pointer-cursor">close</mat-icon>
+        </span>
+        <div *ngIf="this.chosenUnits.length == 0">
+          <p class="indianred-color">Debe elegir alguna unidad</p>
+        </div>
       </div>
     </div>
 
-    <div class="column bottom-margin">
-      <h3>Unidades del curso</h3>
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre de la unidad</mat-label>
-        <input matInput [(ngModel)]="searchUnitField" (ngModelChange)="searchUnit(); this.showUnitOptions = true" id="search-unit-input">
-        <div *ngIf="showUnitOptions" class="result-wrapper">
-          <div class="result" id="unit-result" *ngFor="let result of showingUnits; let i = index" (mouseover)="this.arrowUnitKeyLocation = i">
-            <span id="unit-name">
-              {{result.name}}
-            </span>
-          </div>
-        </div>
-      </mat-form-field>
-      <h5>Unidades seleccionadas</h5>
-      <span *ngFor="let unit of this.chosenUnits">
-          {{unit.name}}
-          <mat-icon (click)="removeUnit(unit)" class="pointer-cursor">close</mat-icon>
+    <div class="bottom-margin">
+      <span *ngIf="(this.chosenUnits.length !== 0) && (this.chosenStudents.length !== 0) && (this.courseDescription !== '') && (this.courseName !== '')">
+        <mat-button-toggle class="save-button" (click)="save()" >Guardar</mat-button-toggle>
       </span>
-      <div *ngIf="this.chosenUnits.length == 0">
-        <p class="indianred-color">Debe elegir alguna unidad</p>
-      </div>
+      <mat-button-toggle class="save-button" [routerLink]="['/courses']" >Volver</mat-button-toggle>
     </div>
   </div>
 
-  <div class="bottom-margin">
-    <span *ngIf="(this.chosenUnits.length !== 0) && (this.chosenStudents.length !== 0) && (this.courseDescription !== '') && (this.courseName !== '')">
-      <mat-button-toggle class="save-button" (click)="save()" >Guardar</mat-button-toggle>
-    </span>
-    <mat-button-toggle class="save-button" [routerLink]="['/courses']" >Volver</mat-button-toggle>
-  </div>
+  <app-progress *ngIf="activeTab==1"></app-progress>
+
+</div>
 </body>
 </html>
