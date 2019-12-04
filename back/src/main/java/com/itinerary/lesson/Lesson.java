@@ -15,7 +15,7 @@ public class Lesson extends Block {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderColumn
     private List<Slide> slides;
 

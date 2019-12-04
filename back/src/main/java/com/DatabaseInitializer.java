@@ -115,8 +115,8 @@ public class DatabaseInitializer {
                 testQuestionRepository.save(test);
 
                 //Slides
-                Slide slide1 = new Slide("Concepto");
-                Slide slide2 = new Slide("Tipos");
+                Slide slide1 = new Slide("Saludos");
+                Slide slide2 = new Slide("Despedidas");
 
                 slide1.addContent("Hola");
                 slide2.addContent("Adios");
