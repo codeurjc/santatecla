@@ -1,4 +1,6 @@
-package com.itinerary;
+package com.itinerary.module;
+
+import com.itinerary.block.Block;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,7 +9,7 @@ import javax.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Module extends Block{
+public class Module extends Block {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
@@ -16,6 +18,11 @@ public class Module extends Block{
     private List<Block> blocks;
 
     public Module(){
+        this.blocks = new ArrayList<>();
+    }
+
+    public Module(String name){
+        super(name);
         this.blocks = new ArrayList<>();
     }
 

@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 import com.card.Card;
 import com.question.definition.definition_question.DefinitionQuestion;
-import com.itinerary.Lesson;
+import com.itinerary.lesson.Lesson;
 import com.question.list.list_question.ListQuestion;
 import com.question.test.test_question.TestQuestion;
 import com.relation.Relation;

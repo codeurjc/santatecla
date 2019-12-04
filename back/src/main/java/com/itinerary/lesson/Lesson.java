@@ -1,20 +1,19 @@
-package com.itinerary;
+package com.itinerary.lesson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
+import com.itinerary.block.Block;
 import com.slide.*;
 
 @Entity
-public class Lesson {
+public class Lesson extends Block {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
-
-    private String name;
 
     @OneToMany(fetch = FetchType.EAGER)
     @OrderColumn
@@ -25,8 +24,8 @@ public class Lesson {
     }
 
     public Lesson(String name){
-        this();
-        this.name = name;
+        super(name);
+        this.slides = new ArrayList<>();
     }
 
     public void update(Lesson lesson) {

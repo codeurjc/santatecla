@@ -9,8 +9,9 @@ import com.card.Card;
 import com.card.CardRepository;
 import com.course.Course;
 import com.course.CourseRepository;
-import com.itinerary.Lesson;
-import com.itinerary.LessonRepository;
+import com.itinerary.lesson.Lesson;
+import com.itinerary.lesson.LessonRepository;
+import com.itinerary.module.Module;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -113,21 +114,42 @@ public class DatabaseInitializer {
                 Slide slide1 = new Slide("Concepto");
                 Slide slide2 = new Slide("Tipos");
 
-                slide1.addContent("assert.card/1/13\n\nassert.card/4/13\n\n");
-                slide2.addContent("assert.slide/9/11/13\n\nassert.question/6/13\n\n");
+                slide1.addContent("Hola");
+                slide2.addContent("Adios");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
 
                 //Lesson
-                Lesson lesson1 = new Lesson("Introducción");
+                Lesson lesson1 = new Lesson("Introducción a lenguajes de programción");
                 Lesson lesson2 = new Lesson("Introducción Java");
+                Lesson lesson3 = new Lesson("Introducción C++");
 
                 lesson1.getSlides().add(slide1);
                 lesson1.getSlides().add(slide2);
 
+                lesson2.getSlides().add(slide1);
+                lesson2.getSlides().add(slide2);
+
+                lesson3.getSlides().add(slide1);
+                lesson3.getSlides().add(slide2);
+
                 lessonRepository.save(lesson1);
                 lessonRepository.save(lesson2);
+                lessonRepository.save(lesson3);
+
+                //Modules
+                Module module1 = new Module("Tema 1");
+                Module module2 = new Module("Tema 2");
+                Module module3 = new Module("Paradigmas");
+
+                module1.addBlock(lesson1);
+                module2.addBlock(lesson2);
+                module2.addBlock(lesson3);
+
+                module3.addBlock(module1);
+                module3.addBlock(module2);
+                module3.addBlock(lesson1);
 
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");

@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.GeneralRestController;
 import com.card.Card;
 import com.card.CardService;
-import com.itinerary.Lesson;
+import com.itinerary.lesson.Lesson;
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;

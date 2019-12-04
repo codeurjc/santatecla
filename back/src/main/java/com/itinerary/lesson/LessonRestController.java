@@ -1,4 +1,4 @@
-package com.itinerary;
+package com.itinerary.lesson;
 
 import java.util.List;
 import java.util.Optional;

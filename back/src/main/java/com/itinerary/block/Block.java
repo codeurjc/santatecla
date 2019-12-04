@@ -1,4 +1,4 @@
-package com.itinerary;
+package com.itinerary.block;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +9,7 @@ public class Block {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    private String name;
+    protected String name;
 
     public Block(){}
 
