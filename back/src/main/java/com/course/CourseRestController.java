@@ -78,7 +78,7 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/{courseId}/user/{userId}/best")
+    /*@GetMapping(value="/{courseId}/user/{userId}/best")
     public ResponseEntity<Unit> getBestUnit(@PathVariable long courseId, @PathVariable long userId){
         Optional<Course> optional = this.courseService.findOne(courseId);
         double aux = 0;
@@ -203,6 +203,6 @@ public class CourseRestController extends GeneralRestController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
 
 }

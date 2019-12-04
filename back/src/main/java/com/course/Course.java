@@ -1,5 +1,6 @@
 package com.course;
 
+import com.itinerary.Module;
 import com.unit.Unit;
 import com.user.User;
 import org.hibernate.annotations.Fetch;
@@ -18,9 +19,8 @@ public class Course {
     private String name;
     private String description;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    private List<Unit> units;
+    @ManyToOne
+    private Module module;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
@@ -30,20 +30,14 @@ public class Course {
     private User teacher;
 
     public Course(){
-        this.units = new ArrayList<>();
         this.students = new ArrayList<>();
     }
 
     public Course(String name, User teacher, String description){
-        this.units = new ArrayList<>();
         this.students = new ArrayList<>();
         this.name = name;
         this.teacher = teacher;
         this.description = description;
-    }
-
-    public void addUnit(Unit unit){
-        this.units.add(unit);
     }
 
     public void addStudent(User user){
@@ -54,7 +48,7 @@ public class Course {
         this.name = course.name;
         this.description = course.description;
         this.students = course.students;
-        this.units = course.units;
+        this.module = course.module;
         this.teacher = course.teacher;
     }
 
@@ -66,8 +60,8 @@ public class Course {
         return name;
     }
 
-    public List<Unit> getUnits() {
-        return units;
+    public Module getModule() {
+        return module;
     }
 
     public List<User> getStudents() {
@@ -90,8 +84,8 @@ public class Course {
         this.name = name;
     }
 
-    public void setUnits(List<Unit> units) {
-        this.units = units;
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     public void setStudents(List<User> students) {
