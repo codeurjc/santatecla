@@ -7,20 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItineraryService {
+public class LessonService {
 
     @Autowired
-    private ItineraryRepository repository;
+    private LessonRepository repository;
     
-    public Optional<Itinerary> findOne(long id) {
+    public Optional<Lesson> findOne(long id) {
 		return repository.findById(id);
 	}
 
-	public List<Itinerary> findAll() {
+	public List<Lesson> findAll() {
 		return repository.findAll();
 	}
 
-    public void save(Itinerary slide) {
+    public void save(Lesson slide) {
 		repository.save(slide);
   	}
 

@@ -2,7 +2,7 @@ package com;
 
 import com.card.CardService;
 import com.course.CourseService;
-import com.itinerary.ItineraryService;
+import com.itinerary.LessonService;
 import com.question.QuestionService;
 import com.question.definition.definition_question.DefinitionQuestionService;
 import com.question.list.list_question.ListQuestionService;
@@ -29,7 +29,7 @@ public class GeneralRestController {
 	protected SlideService slideService;
 
 	@Autowired
-	protected ItineraryService itineraryService;
+	protected LessonService lessonService;
 
 	@Autowired
 	protected CardService cardService;

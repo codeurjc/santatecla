@@ -9,9 +9,8 @@ import com.card.Card;
 import com.card.CardRepository;
 import com.course.Course;
 import com.course.CourseRepository;
-import com.itinerary.Itinerary;
-import com.itinerary.ItineraryRepository;
-import com.question.Question;
+import com.itinerary.Lesson;
+import com.itinerary.LessonRepository;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -37,7 +36,7 @@ public class DatabaseInitializer {
         private CardRepository cardRepository;
 
         @Autowired
-        private ItineraryRepository itineraryRepository;
+        private LessonRepository lessonRepository;
     
         @Autowired
         private UnitRepository unitRepository;
@@ -120,15 +119,15 @@ public class DatabaseInitializer {
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
 
-                //Itinerary
-                Itinerary itinerary1 = new Itinerary("Introducción");
-                Itinerary itinerary2 = new Itinerary("Introducción Java");
+                //Lesson
+                Lesson lesson1 = new Lesson("Introducción");
+                Lesson lesson2 = new Lesson("Introducción Java");
 
-                itinerary1.getSlides().add(slide1);
-                itinerary1.getSlides().add(slide2);
+                lesson1.getSlides().add(slide1);
+                lesson1.getSlides().add(slide2);
 
-                itineraryRepository.save(itinerary1);
-                itineraryRepository.save(itinerary2);
+                lessonRepository.save(lesson1);
+                lessonRepository.save(lesson2);
 
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
@@ -163,8 +162,8 @@ public class DatabaseInitializer {
                 unit2.addCard(card2);
                 unit2.addCard(card3);
 
-                unit1.addItinerary(itinerary1);
-                unit2.addItinerary(itinerary2);
+                unit1.addLesson(lesson1);
+                unit2.addLesson(lesson2);
 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);

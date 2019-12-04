@@ -2,7 +2,7 @@ package com.itinerary;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ItineraryRepository extends JpaRepository<Itinerary, Long> {
+public interface LessonRepository extends JpaRepository<Lesson, Long> {
     
     
 }

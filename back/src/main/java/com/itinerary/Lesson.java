@@ -6,11 +6,9 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.slide.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
-public class Itinerary{
+public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,18 +20,18 @@ public class Itinerary{
     @OrderColumn
     private List<Slide> slides;
 
-    public Itinerary(){
+    public Lesson(){
         this.slides = new ArrayList<>();
     }
 
-    public Itinerary(String name){
+    public Lesson(String name){
         this();
         this.name = name;
     }
 
-    public void update(Itinerary itinerary) {
-        this.name = itinerary.getName();
-        this.slides = itinerary.getSlides();
+    public void update(Lesson lesson) {
+        this.name = lesson.getName();
+        this.slides = lesson.getSlides();
     }
 
     public List compareId(List<Slide> slides) {

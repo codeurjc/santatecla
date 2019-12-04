@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.GeneralRestController;
 import com.card.Card;
 import com.card.CardService;
-import com.itinerary.Itinerary;
+import com.itinerary.Lesson;
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
@@ -20,15 +20,11 @@ import com.relation.RelationService;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.relation.Relation;
-import com.relation.RelationService;
 import com.slide.Slide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/units")
@@ -195,15 +191,15 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<Card>(card.get(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{unitId}/itineraries/{itineraryId}/slides/{slideId}", method = RequestMethod.GET)
-    public ResponseEntity<Slide> getSlideFromItinerary(@PathVariable long unitId, @PathVariable long itineraryId, @PathVariable long slideId, HttpServletResponse response) {
+    @RequestMapping(value = "/{unitId}/lessons/{lessonId}/slides/{slideId}", method = RequestMethod.GET)
+    public ResponseEntity<Slide> getSlideFromLesson(@PathVariable long unitId, @PathVariable long lessonId, @PathVariable long slideId, HttpServletResponse response) {
         Optional<Unit> unit = unitService.findOne(unitId);
         if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Optional<Itinerary> itinerary = itineraryService.findOne(itineraryId);
-        if (!itinerary.isPresent()) {
+        Optional<Lesson> lesson = lessonService.findOne(lessonId);
+        if (!lesson.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -215,32 +211,32 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<Slide>(slide.get(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{unitId}/itineraries")
+    @PostMapping(value = "/{unitId}/slides")
     @ResponseStatus(HttpStatus.CREATED)
-    public Itinerary addItinerary(@RequestBody Itinerary itinerary, @PathVariable long unitId) {
+    public Lesson addLesson(@RequestBody Lesson lesson, @PathVariable long unitId) {
 
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
-        this.itineraryService.save(itinerary);
+        this.lessonService.save(lesson);
 
-        unit.get().getItineraries().add(itinerary);
+        unit.get().getLessons().add(lesson);
         this.unitService.save(unit.get());
 
-        return itinerary;
+        return lesson;
     }
 
-    @DeleteMapping(value = "/{unitId}/itineraries/{itineraryId}")
+    @DeleteMapping(value = "/{unitId}/slides/{lessonId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Itinerary> deleteItinerary(@PathVariable long itineraryId, @PathVariable long unitId) {
+    public ResponseEntity<Lesson> deleteLesson(@PathVariable long lessonId, @PathVariable long unitId) {
 
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
         if (unit.isPresent()) {
-            Optional<Itinerary> itinerary = this.itineraryService.findOne(itineraryId);
-            if (itinerary.isPresent()) {
-                unit.get().getItineraries().remove(itinerary.get());
-                this.itineraryService.delete(itineraryId);
-                return new ResponseEntity<>(itinerary.get(), HttpStatus.OK);
+            Optional<Lesson> lesson = this.lessonService.findOne(lessonId);
+            if (lesson.isPresent()) {
+                unit.get().getLessons().remove(lesson.get());
+                this.lessonService.delete(lessonId);
+                return new ResponseEntity<>(lesson.get(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

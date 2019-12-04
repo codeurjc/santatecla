@@ -12,56 +12,55 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/itineraries")
-public class ItineraryRestController extends GeneralRestController {
+@RequestMapping("/api/lessons")
+public class LessonRestController extends GeneralRestController {
 
     @GetMapping(value="/")
-    public MappingJacksonValue itineraries(){
-        MappingJacksonValue result = new MappingJacksonValue(this.itineraryService.findAll());
+    public MappingJacksonValue lessons(){
+        MappingJacksonValue result = new MappingJacksonValue(this.lessonService.findAll());
         return result;
     }
 
     @GetMapping(value="/{id}")
-    public ResponseEntity<Itinerary> itinerary(@PathVariable long id){
-        Optional<Itinerary> i = this.itineraryService.findOne(id);
-        if (i.isPresent()) {
-            return new ResponseEntity<>(i.get(), HttpStatus.OK);
+    public ResponseEntity<Lesson> lesson(@PathVariable long id){
+        Optional<Lesson> lesson = this.lessonService.findOne(id);
+        if (lesson.isPresent()) {
+            return new ResponseEntity<>(lesson.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value="/{id}")
-    public ResponseEntity<Itinerary> deleteItinerary(@PathVariable long id){
-        Optional<Itinerary> i = this.itineraryService.findOne(id);
-        if(i.isPresent()){
-            this.itineraryService.delete(id);
-            return new ResponseEntity<>(i.get(), HttpStatus.OK);
+    public ResponseEntity<Lesson> deleteLesson(@PathVariable long id){
+        Optional<Lesson> lesson = this.lessonService.findOne(id);
+        if(lesson.isPresent()){
+            this.lessonService.delete(id);
+            return new ResponseEntity<>(lesson.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<Itinerary> updateItinerary(@PathVariable long id, @RequestBody Itinerary itinerary){
-        for (Slide slide: itinerary.getSlides()) {
+    public ResponseEntity<Lesson> updateLesson(@PathVariable long id, @RequestBody Lesson lesson){
+        for (Slide slide: lesson.getSlides()) {
             Optional<Slide> s = this.slideService.findOne(slide.getId());
             this.slideService.save(slide);
         }
-        Optional<Itinerary> i = this.itineraryService.findOne(id);
-        List<Long> diferences = i.get().compareId(itinerary.getSlides());
+        Optional<Lesson> l = this.lessonService.findOne(id);
+        List<Long> diferences = l.get().compareId(lesson.getSlides());
         for (long diferenceId: diferences) {
             this.slideService.delete(diferenceId);
         }
-        if(i.isPresent()){
-            i.get().update(itinerary);
-            this.itineraryService.save(i.get());
-            return new ResponseEntity<>(i.get(), HttpStatus.OK);
+        if(l.isPresent()){
+            l.get().update(lesson);
+            this.lessonService.save(l.get());
+            return new ResponseEntity<>(l.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
