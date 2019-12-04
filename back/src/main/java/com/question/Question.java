@@ -1,9 +1,10 @@
 package com.question;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.itinerary.module.Module;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -19,16 +20,21 @@ public class Question {
     protected int totalCorrectAnswers;
     protected int totalWrongAnswers;
 
+    @ManyToMany
+    protected List<Module> modules;
+
     public Question() {
         this.subtype = this.getClass().getSimpleName();
         this.totalAnswers = 0;
         this.totalCorrectAnswers = 0;
         this.totalWrongAnswers = 0;
+        this.modules = new ArrayList<>();
     }
 
     public Question(String questionText) {
         this();
         this.questionText = questionText;
+        this.modules = new ArrayList<>();
     }
 
     /**
@@ -63,6 +69,14 @@ public class Question {
         return totalWrongAnswers;
     }
 
+    public List<Module> getModules() {
+        return modules;
+    }
+
+    public void addModule(Module module){
+        this.modules.add(module);
+    }
+
     public void setSubtype(String subtype) {
         this.subtype = subtype;
     }
@@ -81,5 +95,9 @@ public class Question {
 
     public void setTotalWrongAnswers(int totalWrongAnswers) {
         this.totalWrongAnswers = totalWrongAnswers;
+    }
+
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
     }
 }

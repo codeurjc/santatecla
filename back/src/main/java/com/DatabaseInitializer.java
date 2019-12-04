@@ -86,34 +86,6 @@ public class DatabaseInitializer {
                 cardRepository.save(card3);
                 cardRepository.save(card4);
 
-                // Definition Questions
-                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?");
-                DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?");
-
-                definitionQuestionRepository.save(definition1);
-                definitionQuestionRepository.save(definition2);
-
-                // List Questions
-                ArrayList<String> possibleAnswers = new ArrayList<>();
-                possibleAnswers.add("Java");
-                possibleAnswers.add("Javascript");
-                possibleAnswers.add("Python");
-                ArrayList<String> correctAnswer = new ArrayList<>();
-                correctAnswer.add("Python");
-                correctAnswer.add("Java");
-                ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
-                 possibleAnswers, correctAnswer);
-
-                listQuestionRepository.save(list1);
-
-                //Test Questions
-                List<String> testAnswers = new ArrayList<>();
-                testAnswers.add("Sí");
-                testAnswers.add("No");
-                TestQuestion test = new TestQuestion("¿Es Java un lenguaje de programación?", testAnswers, "Sí");
-
-                testQuestionRepository.save(test);
-
                 //Slides
                 Slide slide1 = new Slide("Saludos");
                 Slide slide2 = new Slide("Despedidas");
@@ -158,6 +130,38 @@ public class DatabaseInitializer {
                 moduleRepository.save(module1);
                 moduleRepository.save(module2);
                 moduleRepository.save(module3);
+
+                // Definition Questions
+                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?");
+                definition1.addModule(module1);
+                DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?");
+                definition1.addModule(module2);
+
+                definitionQuestionRepository.save(definition1);
+                definitionQuestionRepository.save(definition2);
+
+                // List Questions
+                ArrayList<String> possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Java");
+                possibleAnswers.add("Javascript");
+                possibleAnswers.add("Python");
+                ArrayList<String> correctAnswer = new ArrayList<>();
+                correctAnswer.add("Python");
+                correctAnswer.add("Java");
+                ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
+                        possibleAnswers, correctAnswer);
+                list1.addModule(module1);
+
+                listQuestionRepository.save(list1);
+
+                //Test Questions
+                List<String> testAnswers = new ArrayList<>();
+                testAnswers.add("Sí");
+                testAnswers.add("No");
+                TestQuestion test = new TestQuestion("¿Es Java un lenguaje de programación?", testAnswers, "Sí");
+                test.addModule(module1);
+
+                testQuestionRepository.save(test);
 
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
