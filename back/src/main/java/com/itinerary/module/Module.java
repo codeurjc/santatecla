@@ -2,13 +2,11 @@ package com.itinerary.module;
 
 import com.itinerary.block.Block;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Module extends Block {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

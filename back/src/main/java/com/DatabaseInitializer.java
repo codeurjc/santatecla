@@ -12,6 +12,7 @@ import com.course.CourseRepository;
 import com.itinerary.lesson.Lesson;
 import com.itinerary.lesson.LessonRepository;
 import com.itinerary.module.Module;
+import com.itinerary.module.ModuleRepository;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -41,6 +42,9 @@ public class DatabaseInitializer {
     
         @Autowired
         private UnitRepository unitRepository;
+
+        @Autowired
+        private ModuleRepository moduleRepository;
     
         @Autowired
         private RelationRepository relationRepository;
@@ -150,6 +154,10 @@ public class DatabaseInitializer {
                 module3.addBlock(module1);
                 module3.addBlock(module2);
                 module3.addBlock(lesson1);
+
+                moduleRepository.save(module1);
+                moduleRepository.save(module2);
+                moduleRepository.save(module3);
 
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
@@ -285,10 +293,12 @@ public class DatabaseInitializer {
                 Course course = new Course("Lenguajes de programación", teacher, "Aprende lo básico de los lenguajes de programación más usados.");
                 course.addStudent(user1);
                 course.addStudent(user2);
+                course.setModule(module3);
                 courseRepository.save(course);
 
                 Course course2 = new Course("Curso de Java", teacher, "Aprende todo lo necesario para ser un experto en Java.");
                 course2.addStudent(user1);
+                course2.setModule(module3);
                 courseRepository.save(course2);
 
 	}

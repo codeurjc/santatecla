@@ -1,6 +1,6 @@
 package com.course;
 
-import com.itinerary.Module;
+import com.itinerary.module.Module;
 import com.unit.Unit;
 import com.user.User;
 import org.hibernate.annotations.Fetch;
