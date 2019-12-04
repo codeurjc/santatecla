@@ -69,9 +69,11 @@
     </div>
   </div>
 
-  <div class="bottom-margin" *ngIf="(this.chosenUnits.length !== 0) && (this.chosenStudents.length !== 0) &&
-      (this.courseDescription !== '') && (this.courseName !== '')">
-    <mat-button-toggle class="saveButton" (click)="save()" >Guardar</mat-button-toggle>
+  <div class="bottom-margin">
+    <span *ngIf="(this.chosenUnits.length !== 0) && (this.chosenStudents.length !== 0) && (this.courseDescription !== '') && (this.courseName !== '')">
+      <mat-button-toggle class="save-button" (click)="save()" >Guardar</mat-button-toggle>
+    </span>
+    <mat-button-toggle class="save-button" [routerLink]="['/courses']" >Volver</mat-button-toggle>
   </div>
 </body>
 </html>

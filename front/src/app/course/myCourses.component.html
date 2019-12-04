@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+  <div class="center-align">
+    <h1>MIS CURSOS</h1>
+    <span *ngIf="!this.loginService.isAdmin">
+      <span *ngFor="let course of courses">
+        <mat-button-toggle [routerLink]="['/course', course.id]" (click)="tabService.addTab('course', course.id, course.name, 0)">{{course.name}}</mat-button-toggle>
+        <p></p>
+      </span>
+    </span>
+    <span *ngIf="this.loginService.isAdmin">
+      <span *ngFor="let course of courses">
+        <mat-button-toggle [routerLink]="['/editCourse', course.id]">{{course.name}}</mat-button-toggle>
+        <mat-icon class="delete-course" (click)="deleteCourse(course)">delete</mat-icon>
+        <p></p>
+      </span>
+      <mat-button-toggle class="save-button" [routerLink]="['/newCourse']">Nuevo Curso</mat-button-toggle>
+    </span>
+  </div>
+  </body>
+</html>

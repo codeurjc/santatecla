@@ -11,6 +11,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "SELECT course.id FROM course JOIN course_students ON course.id = course_students.course_id JOIN user ON course_students.students_id = user.id WHERE user.id = ?1", nativeQuery = true)
     public List<Long> findUserCourses(long userId);
 
+    @Query(value = "SELECT course.id FROM course ON course.id = course_students.course_id JOIN user ON course_students.students_id = user.id WHERE user.id = ?1", nativeQuery = true)
+    public List<Long> findTeacherCourses(long userId);
+
     @Query(value = "select COUNT(course.id) from course join course_units on course.id = course_units.course_id join unit on course_units.units_id = unit.id join unit_test_questions" +
             " on unit.id = unit_test_questions.unit_id join question on unit_test_questions.test_questions_id = question.id " +
             "join question_test_answers on question.id = question_test_answers.test_question_id join test_answer on question_test_answers.test_answers_id = test_answer.id" +

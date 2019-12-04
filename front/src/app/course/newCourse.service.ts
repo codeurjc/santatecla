@@ -17,12 +17,18 @@ export class NewCourseService {
     return this.http.post<Course>('/api/course/', body, {headers});
   }
 
-  getUnits() {
-    return this.http.get('/api/units/');
+  putCourse(course: Course, id: number) {
+    const body = JSON.stringify(course);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put<Course>('/api/course/' + id, body, {headers});
   }
 
-  getUsers() {
-    return this.http.get('api/student/');
+  getCourse(id: number) {
+    return this.http.get('/api/course/' + id);
   }
 
   searchUserByNameContaining(name: string) {

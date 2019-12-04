@@ -19,7 +19,7 @@
         <h2>Unidades</h2>
         <p></p>
         <span *ngFor="let unit of course?.units">
-          <mat-button-toggle [routerLink]="['/units', unit.id, 'cards']" (click)="tabService.addTab('units', unit.id, unit.name, this.id)">{{unit.name}}</mat-button-toggle>
+          <mat-button-toggle [routerLink]="['/units', unit.id]" (click)="tabService.addTab('units', unit.id, unit.name, this.id)">{{unit.name}}</mat-button-toggle>
           {{unit.questionsDone}} / {{unit.definitionQuestions.length + unit.testQuestions.length + unit.listQuestions.length}} preguntas realizadas
           <p></p>
         </span>

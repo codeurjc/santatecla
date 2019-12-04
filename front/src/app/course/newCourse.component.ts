@@ -4,7 +4,7 @@ import {Unit} from '../unit/unit.model';
 import {NewCourseService} from './newCourse.service';
 import {UnitService} from '../unit/unit.service';
 import {Course} from './course.model';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   templateUrl: './newCourse.component.html',
@@ -12,6 +12,7 @@ import {Router} from '@angular/router';
 })
 
 export class NewCourseComponent implements OnInit {
+  courseId: number;
   courseName = '';
   courseDescription = '';
   showingStudents: User[];
@@ -27,12 +28,27 @@ export class NewCourseComponent implements OnInit {
   course: Course;
 
   constructor(private courseService: NewCourseService, private unitService: UnitService,
-              private loginService: LoginService, private routing: Router) {
+              private loginService: LoginService, private routing: Router,
+              private activatedRoute: ActivatedRoute) {
     this.chosenStudents = [];
     this.chosenUnits = [];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.activatedRoute.params.subscribe(params => {
+      if (params.courseId) {
+        this.courseId = params.courseId;
+
+        this.courseService.getCourse(this.courseId).subscribe((data: Course) => {
+          this.course = data;
+          this.courseName = this.course.name;
+          this.courseDescription = this.course.description;
+          this.chosenUnits = this.course.units;
+          this.chosenStudents = this.course.students;
+        }, error => {console.log(error); });
+      }
+    });
+  }
 
   addStudent(student: User) {
     if (this.checkStudentInclude(student)) {
@@ -104,7 +120,7 @@ export class NewCourseComponent implements OnInit {
     if ((target.id === 'user-result') || (target.id === 'user-name')) {
       this.addStudent(this.showingStudents[this.arrowStudentKeyLocation]);
       this.showStudentOptions = false;
-    } else if ((target.id === 'unit-result') || (target.id === 'unit-name')){
+    } else if ((target.id === 'unit-result') || (target.id === 'unit-name')) {
       this.addUnit(this.showingUnits[this.arrowUnitKeyLocation]);
       this.showUnitOptions = false;
     } else if (target.id === 'search-student-input') {
@@ -130,8 +146,14 @@ export class NewCourseComponent implements OnInit {
     this.course.units = this.chosenUnits;
     this.course.students = this.chosenStudents;
     console.log(this.course);
-    this.courseService.postCourse(this.course).subscribe((data: Course) => {
-      this.routing.navigate(['/']);
-    }, error => {console.log(error); } );
+    if (this.courseId === undefined) {
+      this.courseService.postCourse(this.course).subscribe((data: Course) => {
+        this.routing.navigate(['/courses']);
+      }, error => {console.log(error); } );
+    } else {
+      this.courseService.putCourse(this.course, this.courseId).subscribe((data: Course) => {
+        this.routing.navigate(['/courses']);
+      }, error => {console.log(error); } );
+    }
   }
 }
