@@ -27,6 +27,8 @@ export class NewCourseComponent implements OnInit {
   arrowUnitKeyLocation = 0;
   course: Course;
 
+  activeTab = 0;
+
   constructor(private courseService: NewCourseService, private unitService: UnitService,
               private loginService: LoginService, private routing: Router,
               private activatedRoute: ActivatedRoute) {
@@ -156,4 +158,9 @@ export class NewCourseComponent implements OnInit {
       }, error => {console.log(error); } );
     }
   }
+
+  private activateTab(tab: number) {
+    this.activeTab = tab;
+  }
+
 }

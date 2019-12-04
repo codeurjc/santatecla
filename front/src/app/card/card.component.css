@@ -1,13 +1,38 @@
-.textAres {
-  resize: none;
-  width: 89%;
-  height: 100px;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 0.1rem solid #27273c;
-  font-size: 15px;
+.card {
+  left: 0;
+  right: 0;
+  top: 2rem;
+  padding: 2rem;
+  margin: 2rem;
+  background-color: #ffffff;
 }
 
-.cards {
-  margin: 0.5rem;
+.card-input-container {
+  margin-bottom: 1rem;
+}
+
+.card-input {
+  width: 100%;
+  resize: none;
+}
+
+.card-input-area {
+  height: 7rem;
+}
+
+#card-buttons {
+  position: fixed;
+  top: 3.3rem;
+  right: 0;
+  z-index: 1000;
+}
+
+#empty-message {
+  margin-top: 10rem;
+  text-align: center;
+}
+
+#spinner {
+  margin-top: 15rem;
+  text-align: center;
 }

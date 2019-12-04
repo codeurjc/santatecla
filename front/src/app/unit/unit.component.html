@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+  <div id="tab-wrapper" *ngIf="unit">
+    <div class="unit-course-name">Unidad <b>{{unit.name}}</b></div>
+    <div [className]="activeTab == 0 ? 'tab activeTab' : 'tab'" (click)="activateTab(0)">
+      <mat-icon class="tab-icon">view_stream</mat-icon>
+      Fichas
+    </div>
+    <div [className]="activeTab == 1 ? 'tab activeTab' : 'tab'" (click)="activateTab(1)">
+      <mat-icon class="tab-icon">edit</mat-icon>
+      Ejercicios
+    </div>
+    <div [className]="activeTab == 2 ? 'tab activeTab' : 'tab'" (click)="activateTab(2)">
+      <mat-icon class="tab-icon">vertical_split</mat-icon>
+      Itinerarios
+    </div>
+  </div>
+
+  <div class="unit-content">
+    <app-cards *ngIf="activeTab==0"></app-cards>
+    <app-questions *ngIf="activeTab==1"></app-questions>
+    <app-itineraries *ngIf="activeTab==2"></app-itineraries>
+  </div>
+
+</body>
+</html>

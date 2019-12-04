@@ -1,0 +1,69 @@
+#tab-wrapper {
+  background-color: #e1afed;
+  font-size: 0.8rem;
+  position: fixed;
+  z-index: 999;
+  top: 3rem;
+  right: 0;
+  left: 0;
+  height: 3rem;
+  color: #000000;
+}
+
+.unit-course-name {
+  margin: 0 2.5rem 0 1.5rem;
+  top: 0.8rem;
+  position: relative;
+  display: inline;
+  font-size: 1.25rem;
+  color: #601972;;
+}
+
+.tab {
+  border-top-left-radius: 0.1rem;
+  border-top-right-radius: 0.1rem;
+  border: 1px solid #9e2abb;
+  border-bottom: none;
+  background-color: #e1afed;
+  height: 1.8rem;
+  padding: 0.6rem 2rem 0.6rem 4rem;
+  box-shadow: none;
+  position: relative;
+  top: 1rem;
+  display: inline;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #fdf7ff;
+}
+
+.activeTab {
+  background-color: #fdf7ff;
+  border-top: 4px solid #9e2abb;
+}
+
+.tab-icon {
+  position: absolute;
+  left: 2rem;
+  top: 0.34rem;
+}
+
+.unit-content {
+  margin-top: 6rem;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: #1e042f !important;
+}
+
+::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: #e1afed !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+  /*change color of underline when focused*/
+  background-color: #9e2abb !important;
+}
