@@ -11,7 +11,7 @@
     </span>
     <span *ngIf="this.loginService.isAdmin">
       <span *ngFor="let course of courses">
-        <mat-button-toggle [routerLink]="['/editCourse', course.id]">{{course.name}}</mat-button-toggle>
+        <mat-button-toggle [routerLink]="['/course', course.id]">{{course.name}}</mat-button-toggle>
         <mat-icon class="delete-course" (click)="deleteCourse(course)">delete</mat-icon>
         <p></p>
       </span>

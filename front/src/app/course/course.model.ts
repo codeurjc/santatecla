@@ -6,6 +6,6 @@ export interface Course {
   name: string;
   description: string;
   students?: User[];
-  module: Module;
+  module?: Module;
   teacher?: User;
 }

@@ -8,12 +8,11 @@ import { QuestionComponent } from './question/question.component';
 import { ProgressComponent } from './progress/progress.component';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {MyCoursesComponent} from './course/myCourses.component';
-import {CourseComponent} from './course/course.component';
 import {NewCourseComponent} from './course/newCourse.component';
 import {UnitsComponent} from './itinerary/tools/units.component';
 import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
-import {UnitComponent} from "./unit/unit.component";
+import {UnitComponent} from './unit/unit.component';
 
 
 const appRoutes = [
@@ -30,10 +29,9 @@ const appRoutes = [
   { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},
   { path: 'question', component: QuestionComponent},
   { path: 'courses', component: MyCoursesComponent },
-  { path: 'course/:courseId', component: CourseComponent },
   { path: 'progress', component: ProgressComponent },
   { path: 'newCourse', component: NewCourseComponent},
-  { path: 'editCourse/:courseId', component: NewCourseComponent}
+  { path: 'course/:courseId', component: NewCourseComponent}
 
 ];
 

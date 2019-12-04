@@ -59,33 +59,10 @@
           <p class="indianred-color">Debe elegir algún estudiante</p>
         </div>
       </div>
-
-      <div class="column bottom-margin">
-        <h3>Unidades del curso</h3>
-        <mat-form-field appearance="outline">
-          <mat-label>Nombre de la unidad</mat-label>
-          <input matInput [(ngModel)]="searchUnitField" (ngModelChange)="searchUnit(); this.showUnitOptions = true" id="search-unit-input">
-          <div *ngIf="showUnitOptions" class="result-wrapper">
-            <div class="result" id="unit-result" *ngFor="let result of showingUnits; let i = index" (mouseover)="this.arrowUnitKeyLocation = i">
-              <span id="unit-name">
-                {{result.name}}
-              </span>
-            </div>
-          </div>
-        </mat-form-field>
-        <h5>Unidades seleccionadas</h5>
-        <span *ngFor="let unit of this.chosenUnits">
-            {{unit.name}}
-            <mat-icon (click)="removeUnit(unit)" class="pointer-cursor">close</mat-icon>
-        </span>
-        <div *ngIf="this.chosenUnits.length == 0">
-          <p class="indianred-color">Debe elegir alguna unidad</p>
-        </div>
-      </div>
     </div>
 
     <div class="bottom-margin">
-      <span *ngIf="(this.chosenUnits.length !== 0) && (this.chosenStudents.length !== 0) && (this.courseDescription !== '') && (this.courseName !== '')">
+      <span *ngIf="(this.chosenStudents.length !== 0) && (this.courseDescription !== '') && (this.courseName !== '')">
         <mat-button-toggle class="save-button" (click)="save()" >Guardar</mat-button-toggle>
       </span>
       <mat-button-toggle class="save-button" [routerLink]="['/courses']" >Volver</mat-button-toggle>

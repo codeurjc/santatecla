@@ -1,8 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {LoginService, User} from '../auth/login.service';
-import {Unit} from '../unit/unit.model';
 import {NewCourseService} from './newCourse.service';
-import {UnitService} from '../unit/unit.service';
 import {Course} from './course.model';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -16,24 +14,18 @@ export class NewCourseComponent implements OnInit {
   courseName = '';
   courseDescription = '';
   showingStudents: User[];
-  showingUnits: Unit[];
-  chosenUnits: Unit[];
   chosenStudents: User[];
   showStudentOptions = false;
-  showUnitOptions = false;
   searchStudentField: string;
-  searchUnitField: string;
   arrowStudentKeyLocation = 0;
-  arrowUnitKeyLocation = 0;
   course: Course;
 
   activeTab = 0;
 
-  constructor(private courseService: NewCourseService, private unitService: UnitService,
+  constructor(private courseService: NewCourseService,
               private loginService: LoginService, private routing: Router,
               private activatedRoute: ActivatedRoute) {
     this.chosenStudents = [];
-    this.chosenUnits = [];
   }
 
   ngOnInit(): void {
@@ -45,7 +37,6 @@ export class NewCourseComponent implements OnInit {
           this.course = data;
           this.courseName = this.course.name;
           this.courseDescription = this.course.description;
-          this.chosenUnits = this.course.units;
           this.chosenStudents = this.course.students;
         }, error => {console.log(error); });
       }
@@ -58,32 +49,13 @@ export class NewCourseComponent implements OnInit {
     }
   }
 
-  addUnit(unit: Unit) {
-    if (this.checkUnitInclude(unit)) {
-      this.chosenUnits.push(unit);
-    }
-  }
-
   removeStudent(student: User) {
     this.chosenStudents.splice(this.chosenStudents.indexOf(student), 1);
-  }
-
-  removeUnit(unit: Unit) {
-    this.chosenUnits.splice(this.chosenUnits.indexOf(unit), 1);
   }
 
   checkStudentInclude(newStudent: User) {
     for (let student of this.chosenStudents) {
       if (student.id === newStudent.id) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  checkUnitInclude(newUnit: Unit) {
-    for (let unit of this.chosenUnits) {
-      if (unit.id === newUnit.id) {
         return false;
       }
     }
@@ -103,49 +75,23 @@ export class NewCourseComponent implements OnInit {
     }
   }
 
-  searchUnit() {
-    if (this.searchUnitField !== '') {
-      this.unitService.searchByNameContaining(this.searchUnitField).subscribe((data: Unit[]) => {
-        this.showingUnits = data;
-        this.arrowUnitKeyLocation = 0;
-      }, error => {
-        console.log(error);
-      });
-    } else {
-      this.showingUnits = [];
-    }
-  }
-
   @HostListener('document:click', ['$event'])
   public documentClick(event: Event): void {
     const target = event.target as HTMLInputElement;
     if ((target.id === 'user-result') || (target.id === 'user-name')) {
       this.addStudent(this.showingStudents[this.arrowStudentKeyLocation]);
       this.showStudentOptions = false;
-    } else if ((target.id === 'unit-result') || (target.id === 'unit-name')) {
-      this.addUnit(this.showingUnits[this.arrowUnitKeyLocation]);
-      this.showUnitOptions = false;
     } else if (target.id === 'search-student-input') {
       this.showStudentOptions = true;
-      this.showUnitOptions = false;
-    } else if (target.id === 'search-unit-input') {
-      this.showUnitOptions = true;
       this.showStudentOptions = false;
     } else {
       this.showStudentOptions = false;
-      this.showUnitOptions = false;
     }
   }
 
   save() {
     this.course = {name: this.courseName, description: this.courseDescription};
     this.course.teacher = this.loginService.getCurrentUser();
-
-    for (let unit of this.chosenUnits){
-      unit.itineraries = [];
-    }
-
-    this.course.units = this.chosenUnits;
     this.course.students = this.chosenStudents;
     console.log(this.course);
     if (this.courseId === undefined) {
