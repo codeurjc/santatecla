@@ -33,6 +33,7 @@ import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
 import { QuestionComponent } from './question/question.component';
 import { UnitService } from './unit/unit.service';
+import { UnitComponent } from './unit/unit.component';
 import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
 import { DefinitionQuestionService } from './question/definitionQuestion/definitionQuestion.service';
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
@@ -50,7 +51,6 @@ import {TabService} from './tab/tab.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NewCourseComponent} from './course/newCourse.component';
 import {NewCourseService} from './course/newCourse.service';
-import {SubMenuComponent} from './subMenu/subMenu.component';
 import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
 import {UnitsComponent} from './itinerary/tools/units.component';
@@ -60,11 +60,11 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
 @NgModule({
   declarations: [
     AppComponent,
-    SubMenuComponent,
     ItineraryFormComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,
+    UnitComponent,
     CardComponent,
     ItineraryComponent,
     UnitsComponent,
@@ -76,7 +76,7 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
     MyCoursesComponent,
     CourseComponent,
     NewCourseComponent,
-    AnswerDefinitionDialogComponent,
+    AnswerDefinitionDialogComponent
   ],
   imports: [
     ClipboardModule,

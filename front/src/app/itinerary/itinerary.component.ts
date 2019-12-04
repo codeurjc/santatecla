@@ -23,6 +23,7 @@ function convertToHTML(text) {
 }
 
 @Component({
+  selector: 'app-itineraries',
   templateUrl: './itinerary.component.html',
   styleUrls: ['./itinerary.component.css']
 })

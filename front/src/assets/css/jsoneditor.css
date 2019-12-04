@@ -17,7 +17,7 @@
 }
 .jsoneditor {
   color: #1a1a1a;
-  border: thin solid #3883fa;
+  border: thin solid #9e2abb;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -667,7 +667,7 @@ div.jsoneditor td, div.jsoneditor th, div.jsoneditor tr {
   line-height: 30px;
   font-family: arial, sans-serif;
   font-size: 11pt;
-  background: #3883fa;
+  background: #9e2abb;
   color: #fff;
 }
 .jsoneditor-modal table {
@@ -691,7 +691,7 @@ div.jsoneditor td, div.jsoneditor th, div.jsoneditor tr {
   margin-top: 0;
 }
 .jsoneditor-modal a {
-  color: #3883fa;
+  color: #9e2abb;
 }
 .jsoneditor-modal .jsoneditor-jmespath-block {
   margin-bottom: 10px;
@@ -823,7 +823,7 @@ div.jsoneditor td, div.jsoneditor th, div.jsoneditor tr {
   padding: 4px 28px 4px 8px;
 }
 .jsoneditor-modal .selectr-selected .selectr-tag {
-  background-color: #3883fa;
+  background-color: #9e2abb;
   border-radius: 5px;
 }
 .jsoneditor-modal table td, .jsoneditor-modal table th {
@@ -859,8 +859,8 @@ div.jsoneditor td, div.jsoneditor th, div.jsoneditor tr {
   cursor: pointer;
 }
 .jsoneditor-modal .jsoneditor-button-group.jsoneditor-button-group-value-asc input.jsoneditor-button-asc, .jsoneditor-modal .jsoneditor-button-group.jsoneditor-button-group-value-desc input.jsoneditor-button-desc {
-  background: #3883fa;
-  border-color: #3883fa;
+  background: #9e2abb;
+  border-color: #9e2abb;
   color: #fff;
 }
 .jsoneditor-menu {
@@ -872,8 +872,8 @@ div.jsoneditor td, div.jsoneditor th, div.jsoneditor tr {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: #fff;
-  background-color: #3883fa;
-  border-bottom: 1px solid #3883fa;
+  background-color: #9e2abb;
+  border-bottom: 1px solid #9e2abb;
 }
 .jsoneditor-menu > .jsoneditor-modes > button, .jsoneditor-menu > button {
   width: 26px;
