@@ -5,53 +5,56 @@
 
     <app-submenu></app-submenu>
 
-    <mat-grid-list cols="3" rowHeight="2:1" class="questions-group">
-
-      <!-- DEFINITION QUESTION LIST -->
-      <mat-grid-tile>
-        <mat-card class="questions-card">
-          <mat-card-title class="card-title">Definición</mat-card-title>
-          <mat-card-content class="card-content">
-            <div *ngFor="let question of definitionQuestions">
+    <!-- DEFINITION QUESTION LIST -->
+    <mat-card class="questions-card">
+      <mat-card-title class="card-title">Definición</mat-card-title>
+      <mat-card-content class="card-content">
+        <mat-list>
+          <mat-list-item *ngFor="let question of definitionQuestions">
+            <p matLine>
               {{ question.questionText }}
               <button mat-button (click)="deleteDefinitionQuestion(question.id)">
                 <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
+            </p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
 
       <!-- LIST QUESTION LIST -->
-      <mat-grid-tile>
-        <mat-card class="questions-card">
-          <mat-card-title class="card-title">Listado</mat-card-title>
-          <mat-card-content class="card-content">
-            <div *ngFor="let question of listQuestions">
+    <mat-card class="questions-card">
+      <mat-card-title class="card-title">Listado</mat-card-title>
+      <mat-card-content class="card-content">
+        <mat-list>
+          <mat-list-item *ngFor="let question of listQuestions">
+            <p matLine>
               {{ question.questionText }}
               <button mat-button (click)="deleteListQuestion(question.id)">
                 <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
+            </p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
 
-      <!-- TEST QUESTION LIST -->
-      <mat-grid-tile>
-        <mat-card class="questions-card">
-          <mat-card-title class="card-title">Test</mat-card-title>
-          <mat-card-content class="card-content">
-            <div *ngFor="let question of testQuestions">
+    <!-- TEST QUESTION LIST -->
+    <mat-card class="questions-card">
+      <mat-card-title class="card-title">Test</mat-card-title>
+      <mat-card-content class="card-content">
+        <mat-list>
+          <mat-list-item *ngFor="let question of testQuestions">
+            <p matLine>
               {{ question.questionText }}
               <button mat-button (click)="deleteTestQuestion(question.id)">
                 <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-    </mat-grid-list>
+            </p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
 
     <mat-card class="add-question-card">
       <mat-card-title class="card-title">Añadir ejercicios</mat-card-title>
@@ -145,7 +148,7 @@
   <body *ngIf="!loginService.isAdmin">
     <app-submenu></app-submenu>
 
-    <mat-card class="question-card">
+    <mat-card class="questions-card">
       <mat-card-title class="card-title">Preguntas de definición</mat-card-title>
       <mat-card-content class="card-content">
         <div *ngFor="let question of definitionQuestions">
@@ -156,7 +159,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="question-card">
+    <mat-card class="questions-card">
       <mat-card-title class="card-title">Preguntas de listado</mat-card-title>
       <mat-card-content class="card-content">
         <div *ngFor="let question of listQuestions">
@@ -165,7 +168,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="question-card">
+    <mat-card class="questions-card">
       <mat-card-title class="card-title">Preguntas de test</mat-card-title>
       <mat-card-content class="card-content">
         <div *ngFor="let question of testQuestions">

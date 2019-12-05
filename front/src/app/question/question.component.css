@@ -19,10 +19,6 @@
 }
 
 .questions-card {
-  margin: 0%
-}
-
-.question-card {
   margin-right: 10%;
   margin-left: 10%;
   margin-top: 2%;
@@ -43,6 +39,7 @@
 
 .card-content {
   text-align: center;
+  align-content: center;
 }
 
 .button-row button,
