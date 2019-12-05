@@ -56,6 +56,7 @@ import {MenuComponent} from './menu/menu.component';
 import {UnitsComponent} from './itinerary/tools/units.component';
 import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
+import {HomeComponent} from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
     MyCoursesComponent,
     CourseComponent,
     NewCourseComponent,
-    AnswerDefinitionDialogComponent
+    AnswerDefinitionDialogComponent,
+    HomeComponent
   ],
   imports: [
     ClipboardModule,
@@ -128,7 +130,7 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
   providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService,
+    ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService, MenuComponent,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

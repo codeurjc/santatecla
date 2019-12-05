@@ -1,15 +1,3 @@
-#tab-wrapper {
-  background-color: #e1afed;
-  font-size: 0.8rem;
-  position: fixed;
-  z-index: 999;
-  top: 3rem;
-  right: 0;
-  left: 0;
-  height: 3rem;
-  color: #000000;
-}
-
 .unit-course-name {
   margin: 0 2.5rem 0 1.5rem;
   top: 0.8rem;
@@ -20,37 +8,33 @@
 }
 
 .tab {
-  border-top-left-radius: 0.1rem;
-  border-top-right-radius: 0.1rem;
-  border: 1px solid #9e2abb;
-  border-bottom: none;
-  background-color: #e1afed;
-  height: 1.8rem;
-  padding: 0.6rem 2rem 0.6rem 4rem;
-  box-shadow: none;
+  background-color: #6f2b82;
+  color: #ffffff;
+  padding: 0.3rem 0 0.3rem 3.5rem;
   position: relative;
-  top: 1rem;
-  display: inline;
   cursor: pointer;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 .tab:hover {
-  background-color: #fdf7ff;
+  background-color: #a769b8;
 }
 
 .activeTab {
-  background-color: #fdf7ff;
-  border-top: 4px solid #9e2abb;
+  background-color: #a769b8;
 }
 
 .tab-icon {
   position: absolute;
-  left: 2rem;
-  top: 0.34rem;
+  left: 1rem;
+  margin-top: 0.4rem;
 }
 
 .unit-content {
   margin-top: 6rem;
+  margin-left: calc(30% + 1.5rem);
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
@@ -66,4 +50,14 @@
 ::ng-deep.mat-form-field-ripple {
   /*change color of underline when focused*/
   background-color: #9e2abb !important;
+}
+
+#lateral-panel {
+  position: fixed;
+  left: 0;
+  margin: 0.5rem 0.5rem 0 0.5rem;
+  width: calc(30% - 2rem);
+  top: 3rem;
+  bottom: 0.5rem;
+  background-color: #571a69;
 }

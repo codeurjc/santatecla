@@ -13,10 +13,12 @@ import {UnitsComponent} from './itinerary/tools/units.component';
 import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
 import {UnitComponent} from './unit/unit.component';
+import {HomeComponent} from "./home/home.component";
 
 
 const appRoutes = [
-  { path: '' , component: ViewComponent },
+  { path: '' , component: HomeComponent },
+  { path: 'unit' , component: ViewComponent },
   { path: 'unit/:unitId', component: UnitComponent },
   { path: 'units', component: UnitsComponent },
   { path: 'itineraryForm', component: ItineraryFormComponent },

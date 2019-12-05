@@ -6,10 +6,12 @@ import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
 import { TdDialogService } from "@covalent/core";
+import {TabService} from "../tab/tab.service";
 
 declare var mermaid: any;
 
 @Component({
+  selector: 'app-view',
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
@@ -57,9 +59,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
 
-  constructor(private router: Router, private unitService: UnitService, private _dialogService: TdDialogService) {}
+  constructor(private router: Router, private unitService: UnitService, private _dialogService: TdDialogService, private tabService: TabService) {}
 
   ngOnInit() {
+    this.tabService.setUnits();
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';

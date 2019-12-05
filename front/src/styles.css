@@ -1,6 +1,5 @@
 html, body {
   height: 100%;
-  background-color: #fdf7ff;
 }
 
 body {
@@ -14,11 +13,11 @@ body {
 }
 
 #uml {
-  top: 10rem;
-  right: 0;
+  top: 5rem;
+  left: 1rem;
   position: absolute;
-  width: 60%;
-  height: 30rem;
+  width: calc(80% - 3rem);
+  height: calc(100% - 6rem);
 }
 
 #loader {
@@ -171,4 +170,20 @@ body {
   box-shadow: 0 2px 1px -1px #9e2abb,
   0 1px 1px 0 #9e2abb,
   0 1px 3px 0 #9e2abb;
+}
+
+#search-input {
+  margin-bottom: 1em;
+}
+
+#result {
+  padding: 1rem;
+  cursor: pointer;
+  margin: 0 -0.6em 0 -0.6em;
+  border-top: 1px solid #e5e9f0;
+  background-color: #ffffff;
+}
+
+.active {
+  background-color: #e5e9f0 !important;
 }

@@ -1,13 +1,20 @@
-#header {
+.header {
   position: fixed;
   z-index: 1000;
   height: 3rem;
   top: 0;
   right: 0;
   left: 0;
-  background-color: #1e042f;
   color: white;
   font-size: 0.8rem;
+}
+
+.user-header {
+  background-color: #05132f;
+}
+
+.admin-header {
+  background-color: #1e042f;
 }
 
 #user-name {
@@ -30,17 +37,43 @@
 }
 
 .nav-button {
-  margin-left: 1.5rem;
+  margin-left: 0;
+  padding: 0 2rem 0 2rem;
   cursor: pointer;
   display: inline;
-  height: 2.5rem;
-  top: 0.25rem;
-  background-color: #5c196e;
+  height: 3rem;
+  top: 0;
+  -webkit-transform: skewX(-20deg);
+  -moz-transform: skewX(-20deg);
+  -ms-transform: skewX(-20deg);
+  -o-transform: skewX(-20deg);
+  transform: skewX(-20deg);
+}
+
+.user-nav-button {
+  background-image: linear-gradient(to right, #0d2865 0%, #05132f 100%);
+}
+
+.admin-nav-button {
+  background-image: linear-gradient(to right, #571a69 0%, #1e042f 100%);
+}
+
+.nav-button-icon {
+  -webkit-transform: skewX(20deg);
+  -moz-transform: skewX(20deg);
+  -ms-transform: skewX(20deg);
+  -o-transform: skewX(20deg);
+  transform: skewX(20deg);
 }
 
 .nav-button-content {
-  display: inline;
-  margin-left: 0.2rem;
+  display: inline-block;
+  margin-left: 0.5rem;
+  -webkit-transform: skewX(20deg);
+  -moz-transform: skewX(20deg);
+  -ms-transform: skewX(20deg);
+  -o-transform: skewX(20deg);
+  transform: skewX(20deg);
 }
 
 #tab-wrapper {

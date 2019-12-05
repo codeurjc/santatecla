@@ -3,6 +3,7 @@ import {LoginService, User} from '../auth/login.service';
 import {NewCourseService} from './newCourse.service';
 import {Course} from './course.model';
 import {ActivatedRoute, Router} from '@angular/router';
+import {TabService} from "../tab/tab.service";
 
 @Component({
   templateUrl: './newCourse.component.html',
@@ -24,7 +25,8 @@ export class NewCourseComponent implements OnInit {
 
   constructor(private courseService: NewCourseService,
               private loginService: LoginService, private routing: Router,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private tabService: TabService) {
     this.chosenStudents = [];
   }
 
@@ -38,6 +40,7 @@ export class NewCourseComponent implements OnInit {
           this.courseName = this.course.name;
           this.courseDescription = this.course.description;
           this.chosenStudents = this.course.students;
+          this.tabService.setCourse(this.courseName);
         }, error => {console.log(error); });
       }
     });

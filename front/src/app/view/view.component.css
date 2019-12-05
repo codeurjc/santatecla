@@ -3,37 +3,14 @@
   width: 40%;
   height: calc(100vh - 3rem);
   top: 3rem;
+
+  visibility: hidden;
 }
 
 #unit-representation {
   float: right;
   width: 70%;
   overflow: auto;
-}
-
-#search {
-  position: absolute;
-  right: 0;
-  margin: 1rem;
-  width: calc(60% - 2rem);
-  z-index: 120;
-  top: 3rem;
-}
-
-#search-input {
-  margin-bottom: 1em;
-}
-
-#result {
-  padding: 1rem;
-  cursor: pointer;
-  margin: 0 -0.6em 0 -0.6em;
-  border-top: 1px solid #e5e9f0;
-  background-color: #ffffff;
-}
-
-.active {
-  background-color: #e5e9f0 !important;
 }
 
 #unit-prefix {
@@ -75,26 +52,66 @@
 
 #save-button {
   position: absolute;
-  left: 40%;
-  margin: 8rem 1rem 1rem 1rem;
+  right: 16%;
+  margin: 6rem 1rem 1rem 1rem;
   z-index: 110;
-}
-
-#save-button:enabled {
-  color: #9e2abb;
 }
 
 #up-button {
   position: absolute;
-  right: 0;
-  margin: 8rem 1rem 1rem 1rem;
+  right: 16%;
+  margin: 10rem 1rem 1rem 1rem;
   z-index: 110;
+}
+
+button:enabled {
+  color: #9e2abb;
 }
 
 #spinner {
   position: absolute;
-  width: 10rem;
-  height: 10rem;
-  left: 65%;
+  width: 8rem;
+  height: 8rem;
+  left: 40%;
   top: 40%;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #9e2abb !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #9e2abb !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick{
+  color: #9e2abb !important;
+}
+
+::ng-deep .mat-input-element {
+  caret-color: #9e2abb !important;
+}
+
+::ng-deep .mat-form-field-invalid .mat-input-element, .mat-warn .mat-input-element {
+  caret-color: #9e2abb !important;
+}
+
+::ng-deep .mat-form-field-label {
+  color: rgba(0,0,0,.6)!important;
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+  color: #9e2abb !important;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: #9e2abb !important;
+}
+
+#search {
+  width: 20%;
+  z-index: 120;
+  position: absolute;
+  top: 15rem;
+  right: 1rem;
 }

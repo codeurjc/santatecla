@@ -5,6 +5,7 @@ import {Course} from './course.model';
 import {Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
 import {TdDialogService} from '@covalent/core';
+import {MenuComponent} from "../menu/menu.component";
 
 @Component({
   templateUrl: './myCourses.component.html',
@@ -13,6 +14,7 @@ import {TdDialogService} from '@covalent/core';
 
 export class MyCoursesComponent implements OnInit {
   courses: Course[];
+  searchField = '';
 
   constructor(private loginService: LoginService,
               private courseService: MyCoursesService,
@@ -22,7 +24,8 @@ export class MyCoursesComponent implements OnInit {
     this.courses = [];
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.tabService.setCourses();
     if (this.loginService.isAdmin) {
       this.courseService.getTeacherCourses(this.loginService.getCurrentUser().id).subscribe((data: Course[]) => {
         this.courses = data;
@@ -48,4 +51,9 @@ export class MyCoursesComponent implements OnInit {
       }
     });
   }
+
+  search() {
+    // TODO
+  }
+
 }

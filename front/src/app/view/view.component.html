@@ -8,14 +8,16 @@
 
     <button id="save-button" mat-icon-button color="primary" [disabled]="!changed" (click)="save()">
       <mat-icon>save</mat-icon>
+      Guardar
     </button>
 
     <button id="up-button" mat-icon-button color="primary" [disabled]="disableUpButton" (click)="upLevelAbove()">
       <mat-icon>keyboard_arrow_up</mat-icon>
+      Focalizar padre
     </button>
 
     <mat-form-field appearance="outline" id="search">
-      <mat-label>Buscar unidad</mat-label>
+      <mat-label>Focalizar unidad</mat-label>
       <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)"/>
       <div id="result-list" *ngIf="showResults">
         <div id="result" *ngFor="let result of results; let i = index" [class.active]="i==arrowKeyLocation" (mouseover)="setActive(i)">

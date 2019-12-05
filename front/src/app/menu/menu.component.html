@@ -2,22 +2,29 @@
 <html>
   <body>
 
-    <div *ngIf="loginService.isLogged" id="header">
+    <div *ngIf="loginService.isLogged" [ngClass]="loginService.isAdmin ? 'header admin-header' : 'header user-header'">
 
       <div id="tab-wrapper">
 
-        <button mat-button *ngIf="loginService.isAdmin" class="nav-button" [routerLink]="['/']">
-          <img src="../../assets/img/uml-icon.png" height="15">
-          <div class="nav-button-content">Unidades</div>
-        </button>
-        <button mat-button *ngIf="!loginService.isAdmin" class="nav-button" [routerLink]="['/student']">
-          <mat-icon>class</mat-icon>
-          <div class="nav-button-content">Cursos</div>
+        <button mat-button *ngIf="loginService.isAdmin" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/']">
+          <mat-icon class="nav-button-icon">home</mat-icon>
+          <div class="nav-button-content">Inicio</div>
         </button>
 
-        <button mat-button class="nav-button" [routerLink]="['/courses']">
-          <mat-icon>class</mat-icon>
+        <button mat-button *ngIf="loginService.isAdmin && tabService.units" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/unit']">
+          <img class="nav-button-icon" src="../../assets/img/uml-icon.png" height="15">
+          <div class="nav-button-content">Unidades</div>
+        </button>
+        <button mat-button *ngIf="loginService.isAdmin && tabService.unit" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+          <div class="nav-button-content">{{tabService.unit}}</div>
+        </button>
+
+        <button mat-button *ngIf="tabService.courses" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/courses']">
+          <mat-icon class="nav-button-icon">class</mat-icon>
           <div class="nav-button-content">Cursos</div>
+        </button>
+        <button mat-button *ngIf="tabService.course" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+          <div class="nav-button-content">{{tabService.course}}</div>
         </button>
       </div>
 
