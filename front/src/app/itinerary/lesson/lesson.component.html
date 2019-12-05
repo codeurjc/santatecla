@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+
+    <div id="course-search">
+      <mat-form-field appearance="outline" id="search">
+        <mat-label>Buscar curso</mat-label>
+        <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()"/>
+      </mat-form-field>
+    </div>
+    <button mat-button *ngIf="this.loginService.isAdmin" id="new-lesson-button">
+      <mat-icon>add</mat-icon>
+      Nueva Lección
+    </button>
+
+    <div class="lessons-list center-align">
+        <span *ngFor="let lesson of lessons">
+          <button mat-button [ngClass]="loginService.isAdmin ? 'lesson-button admin-lesson-button' : 'lesson-button user-lesson-button'">
+            {{lesson.name}}
+          </button>
+          <!--mat-icon *ngIf="this.loginService.isAdmin" class="delete-course" (click)="deleteCourse(course)">delete</mat-icon-->
+        </span>
+    </div>
+
+  </body>
+</html>

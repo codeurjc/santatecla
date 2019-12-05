@@ -15,8 +15,13 @@
     </button>
 
     <button [className]="activeTab == 2 ? 'tab activeTab mat-button' : 'tab mat-button'" (click)="activateTab(2)">
+      <mat-icon class="tab-icon">slideshow</mat-icon>
+      Leciones
+    </button>
+
+    <button [className]="activeTab == 3 ? 'tab activeTab mat-button' : 'tab mat-button'" (click)="activateTab(3)">
       <mat-icon class="tab-icon">vertical_split</mat-icon>
-      Itinerarios
+      Modulos
     </button>
 
   </mat-card>
@@ -24,7 +29,7 @@
   <div class="unit-content">
     <app-cards *ngIf="activeTab==0"></app-cards>
     <app-questions *ngIf="activeTab==1"></app-questions>
-    <app-itineraries *ngIf="activeTab==2"></app-itineraries>
+    <app-lessons *ngIf="activeTab==2"></app-lessons>
   </div>
 
 </body>

@@ -25,10 +25,10 @@ import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppComponent } from './app.component';
 import { LoginService } from './auth/login.service';
-import { ItineraryService } from './itinerary/itinerary.service';
+import { LessonService } from './itinerary/lesson/lesson.service';
 import { ViewComponent } from './view/view.component';
 import { CardComponent } from './card/card.component';
-import { ItineraryComponent } from './itinerary/itinerary.component';
+import { LessonEditorComponent } from './itinerary/lesson/lessonEditor/lesson-editor.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
 import { QuestionComponent } from './question/question.component';
@@ -53,22 +53,24 @@ import {NewCourseComponent} from './course/newCourse.component';
 import {NewCourseService} from './course/newCourse.service';
 import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
-import {UnitsComponent} from './itinerary/tools/units.component';
-import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
+import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
+import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.component';
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
 import {HomeComponent} from './home/home.component';
+import {LessonComponent} from './itinerary/lesson/lesson.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ItineraryFormComponent,
+    LessonFormComponent,
+    LessonComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,
     UnitComponent,
     CardComponent,
-    ItineraryComponent,
-    UnitsComponent,
+    LessonEditorComponent,
+    UnitsCardsToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
@@ -129,7 +131,7 @@ import {HomeComponent} from './home/home.component';
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
+  providers: [LoginService, LessonService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
     ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService, MenuComponent,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

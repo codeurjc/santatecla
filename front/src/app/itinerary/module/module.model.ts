@@ -1,4 +1,4 @@
-import {Block} from './block.model';
+import {Block} from '../block.model';
 
 export interface Module extends Block {
   id?: number;

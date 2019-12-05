@@ -1,19 +1,19 @@
-import { Unit } from '../unit/unit.model';
-import { SlideService } from '../slide/slide.service';
-import { Itineray } from './itinerary.model';
+import { Unit } from '../../../unit/unit.model';
+import { SlideService } from '../../../slide/slide.service';
+import { Lesson } from '../lesson.model';
 import { Component, OnInit } from '@angular/core';
 import { TdDialogService } from '@covalent/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 
-import { ItineraryService } from './itinerary.service';
-import { LoginService } from '../auth/login.service';
-import { UnitService } from '../unit/unit.service';
+import { LessonService } from '../lesson.service';
+import { LoginService } from '../../../auth/login.service';
+import { UnitService } from '../../../unit/unit.service';
 
 import Asciidoctor from 'asciidoctor';
-import {Slide} from '../slide/slide.model';
-import {DefinitionQuestionService} from '../question/definitionQuestion/definitionQuestion.service';
-import {UnitsComponent} from './tools/units.component';
+import {Slide} from '../../../slide/slide.model';
+import {DefinitionQuestionService} from '../../../question/definitionQuestion/definitionQuestion.service';
+import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
 
 
 function convertToHTML(text) {
@@ -24,11 +24,11 @@ function convertToHTML(text) {
 
 @Component({
   selector: 'app-itineraries',
-  templateUrl: './itinerary.component.html',
-  styleUrls: ['./itinerary.component.css']
+  templateUrl: './lesson-editor.component.html',
+  styleUrls: ['./lesson-editor.component.css']
 })
 
-export class ItineraryComponent implements OnInit {
+export class LessonEditorComponent implements OnInit {
 
   contentHTML: any;
   itineraryContent: any;
@@ -38,7 +38,7 @@ export class ItineraryComponent implements OnInit {
   position: number[];
 
   unit: Unit;
-  itinerary: Itineray;
+  itinerary: Lesson;
 
   unitId: number;
   itineraryId: number;
@@ -50,7 +50,7 @@ export class ItineraryComponent implements OnInit {
 
   subSlide: boolean;
 
-  constructor(private itineraryService: ItineraryService,
+  constructor(private itineraryService: LessonService,
               private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -74,7 +74,7 @@ export class ItineraryComponent implements OnInit {
   loadItinerary() {
     this.showSpinner = true;
 
-    this.itineraryService.getItinerary(this.itineraryId).subscribe((data: Itineray) => {
+    this.itineraryService.getLesson(this.itineraryId).subscribe((data: Lesson) => {
       this.itinerary = {
         id: data.id,
         name: data.name,
@@ -236,7 +236,7 @@ export class ItineraryComponent implements OnInit {
     this.contentToItinerary(this.itineraryContent);
     this.contentHTML = '';
     this.showSpinner = true;
-    this.itineraryService.updateItinerary(this.itinerary).subscribe((_) => {
+    this.itineraryService.updateLesson(this.itinerary).subscribe((_) => {
       this.loadItinerary();
     }, (error) => {
       console.error(error);
@@ -244,7 +244,7 @@ export class ItineraryComponent implements OnInit {
   }
 
   openBottomSheet(): void {
-    this.bottomSheet.open(UnitsComponent);
+    this.bottomSheet.open(UnitsCardsToolComponent);
   }
 
   deleteItinerary() {

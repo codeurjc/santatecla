@@ -1,5 +1,5 @@
 import {User} from '../auth/login.service';
-import {Module} from '../itinerary/module.model';
+import {Module} from '../itinerary/module/module.model';
 
 export interface Course {
   id?: number;

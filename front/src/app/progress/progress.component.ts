@@ -8,7 +8,7 @@ import {UnitResult} from './unitResult.model';
 import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../course/course.service';
 import {Block} from '../itinerary/block.model';
-import {Itineray} from '../itinerary/itinerary.model';
+import {Lesson} from '../itinerary/lesson/lesson.model';
 
 @Component({
   selector: 'app-progress',

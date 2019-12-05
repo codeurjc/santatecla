@@ -10,7 +10,7 @@ import {TestQuestion} from './testQuestion/testQuestion.model';
 import {TestQuestionService} from './testQuestion/testQuestion.service';
 import {Unit} from '../unit/unit.model';
 import {UnitService} from '../unit/unit.service';
-import {Itineray} from '../itinerary/itinerary.model';
+import {Lesson} from '../itinerary/lesson/lesson.model';
 import {LoginService} from '../auth/login.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
@@ -46,7 +46,7 @@ export class QuestionComponent implements OnInit {
 
   unit: Unit;
   unitId: number;
-  itinerariesTabs: Itineray[];
+  itinerariesTabs: Lesson[];
 
   constructor(
     public loginService: LoginService,

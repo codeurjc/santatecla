@@ -32,12 +32,12 @@
 
     <!-- HTML REPRESENTATION -->
     <div id="html-itinerary-representation-editor" *ngIf="loginService.isAdmin">
-      <img src="../../assets/img/spinner.gif" id="spinnerEditor" *ngIf="showSpinner">
+      <img src="../../../../assets/img/spinner.gif" id="spinnerEditor" *ngIf="showSpinner">
       <div [innerHTML]="contentHTML"></div>
     </div>
 
     <div id="html-itinerary-representation" *ngIf="!loginService.isAdmin">
-      <img src="../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
+      <img src="../../../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
       <div [innerHTML]="contentHTML"></div>
     </div>
 

@@ -1,4 +1,4 @@
-import { ItineraryComponent } from './itinerary/itinerary.component';
+import { LessonEditorComponent } from './itinerary/lesson/lessonEditor/lesson-editor.component';
 import { CardComponent } from './card/card.component';
 import { RouterModule } from '@angular/router';
 import { ViewComponent } from './view/view.component';
@@ -9,21 +9,22 @@ import { ProgressComponent } from './progress/progress.component';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {MyCoursesComponent} from './course/myCourses.component';
 import {NewCourseComponent} from './course/newCourse.component';
-import {UnitsComponent} from './itinerary/tools/units.component';
-import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
+import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
+import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.component';
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
 import {UnitComponent} from './unit/unit.component';
-import {HomeComponent} from "./home/home.component";
+import {HomeComponent} from './home/home.component';
+import {LessonComponent} from './itinerary/lesson/lesson.component';
 
 
 const appRoutes = [
   { path: '' , component: HomeComponent },
   { path: 'unit' , component: ViewComponent },
   { path: 'unit/:unitId', component: UnitComponent },
-  { path: 'units', component: UnitsComponent },
-  { path: 'itineraryForm', component: ItineraryFormComponent },
+  { path: 'units', component: UnitsCardsToolComponent },
+  { path: 'lessonForm', component: LessonFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
-  { path: 'units/:unitId/itineraries/:itineraryId', component: ItineraryComponent },
+  { path: 'units/:unitId/lessons', component: LessonComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},

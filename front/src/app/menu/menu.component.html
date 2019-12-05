@@ -6,7 +6,7 @@
 
       <div id="tab-wrapper">
 
-        <button mat-button *ngIf="loginService.isAdmin" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/']">
+        <button mat-button *ngIf="loginService.isAdmin" class="nav-button admin-nav-button home-button" [routerLink]="['/']">
           <mat-icon class="nav-button-icon">home</mat-icon>
           <div class="nav-button-content">Inicio</div>
         </button>
@@ -19,7 +19,7 @@
           <div class="nav-button-content">{{tabService.unit}}</div>
         </button>
 
-        <button mat-button *ngIf="tabService.courses" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/courses']">
+        <button mat-button *ngIf="tabService.courses" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button home-button' : 'nav-button user-nav-button home-button'" [routerLink]="['/courses']">
           <mat-icon class="nav-button-icon">class</mat-icon>
           <div class="nav-button-content">Cursos</div>
         </button>

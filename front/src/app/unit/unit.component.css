@@ -34,7 +34,7 @@
 
 .unit-content {
   margin-top: 6rem;
-  margin-left: calc(30% + 1.5rem);
+  margin-left: calc(20% + 1.5rem);
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
@@ -56,7 +56,7 @@
   position: fixed;
   left: 0;
   margin: 0.5rem 0.5rem 0 0.5rem;
-  width: calc(30% - 2rem);
+  width: calc(20% - 2rem);
   top: 3rem;
   bottom: 0.5rem;
   background-color: #571a69;

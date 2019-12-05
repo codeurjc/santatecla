@@ -9,6 +9,10 @@
   font-size: 0.8rem;
 }
 
+.home-button {
+  margin-left: -0.5rem !important;
+}
+
 .user-header {
   background-color: #05132f;
 }

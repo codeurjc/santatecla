@@ -1,0 +1,41 @@
+#course-search {
+  position: absolute;
+  top: 7rem;
+  width: 37%;
+  left: 35%;
+}
+
+#search {
+  width: 100%;
+}
+
+#new-lesson-button {
+  position: absolute;
+  background-color: #efe1fd;
+  top: 7rem;
+  left: 70.5%;
+  right: 19.5%;
+  margin: 1rem 2% 0 2%;
+}
+
+.lessons-list {
+  position: absolute;
+  top: 13rem;
+  width: 50%;
+  left: 35%;
+}
+
+.lesson-button {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 1rem 0 1rem 2rem;
+  text-align: left;
+}
+
+.admin-lesson-button {
+  background-color: #f9f2fd;
+}
+
+.user-lesson-button {
+  background-color: #eaeefd;
+}

@@ -1,18 +1,18 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Itineray} from '../itinerary.model';
+import {Lesson} from '../lesson.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {UnitComponent} from "../../unit/unit.component";
+import {UnitComponent} from '../../../unit/unit.component';
 
 export interface DialogData {
-  itinerary: Itineray;
+  itinerary: Lesson;
 }
 
 @Component({
-  templateUrl: './itineraryForm.component.html',
-  styleUrls: ['./itineraryForm.component.css']
+  templateUrl: './lesson-form.component.html',
+  styleUrls: ['./lesson-form.component.css']
 })
 
-export class ItineraryFormComponent {
+export class LessonFormComponent {
 
   constructor(
     public dialogRef: MatDialogRef<UnitComponent>,

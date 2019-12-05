@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Unit} from '../../unit/unit.model';
-import {UnitService} from '../../unit/unit.service';
+import {Unit} from '../../../unit/unit.model';
+import {UnitService} from '../../../unit/unit.service';
 import {MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import { ClipboardService } from 'ngx-clipboard';
 
 
 @Component({
-  templateUrl: './units.component.html',
-  styleUrls: ['./units.component.css']
+  templateUrl: './units-cards-tool.component.html',
+  styleUrls: ['./units-cards-tool.component.css']
 })
 
-export class UnitsComponent implements OnInit {
+export class UnitsCardsToolComponent implements OnInit {
 
   units: Unit[];
   unitsResult: Unit[];
@@ -21,7 +21,7 @@ export class UnitsComponent implements OnInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
-              private bottomSheetRef: MatBottomSheetRef<UnitsComponent>,
+              private bottomSheetRef: MatBottomSheetRef<UnitsCardsToolComponent>,
               private clipboardService: ClipboardService) {
   }
 
