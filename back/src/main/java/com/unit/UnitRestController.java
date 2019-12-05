@@ -6,42 +6,23 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 import com.card.Card;
-import com.card.CardService;
 import com.itinerary.Itinerary;
-import com.question.Question;
-import com.question.definition.definition_answer.DefinitionAnswer;
-import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.list.list_answer.ListAnswer;
 import com.question.list.list_question.ListQuestion;
 import com.question.test.test_answer.TestAnswer;
 import com.question.test.test_question.TestQuestion;
 import com.relation.Relation;
-import com.relation.RelationService;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.relation.Relation;
-import com.relation.RelationService;
 import com.slide.Slide;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/units")
 public class UnitRestController extends GeneralRestController {
-
-    @Autowired
-    protected UnitService unitService;
-
-    @Autowired
-    protected RelationService relationService;
-
-    @Autowired
-    protected CardService cardService;
 
     @GetMapping(value = "/")
     public ResponseEntity<List<Unit>> getUnits() {
@@ -245,236 +226,6 @@ public class UnitRestController extends GeneralRestController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-    }
-
-    @GetMapping(value = "/{unitId}/question/{qId}")
-    public ResponseEntity<Question> getQuestion(@PathVariable long unitId, @PathVariable long qId) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<Question> question = this.questionService.findOne(qId);
-            if (question.isPresent()) {
-                return new ResponseEntity<>(question.get(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value = "/{unitId}/question/definition")
-    public ResponseEntity<List<DefinitionQuestion>> getDefinitionQuestions(@PathVariable long unitId) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent()) ? (new ResponseEntity<>(unit.get().getDefinitionQuestions(), HttpStatus.OK)) : (new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @PostMapping("/{unitId}/question/definition")
-    public ResponseEntity<DefinitionQuestion> addDefinitionQuestion(@PathVariable long unitId, @RequestBody DefinitionQuestion question) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            this.definitionQuestionService.save(question);
-            unit.get().addDefinitionQuestion(question);
-            this.unitService.save(unit.get());
-            return new ResponseEntity<>(question, HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @DeleteMapping("/{unitId}/question/definition/{id}")
-    public ResponseEntity<DefinitionQuestion> deleteDefinitionQuestion(@PathVariable long unitId, @PathVariable long id) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
-            if (question.isPresent()) {
-                this.definitionQuestionService.delete(id);
-                return new ResponseEntity<>(question.get(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value = "/{unitId}/question/definition/{id}/answer")
-    public ResponseEntity<List<DefinitionAnswer>> getDefinitionAnswers(@PathVariable long unitId, @PathVariable long id) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
-
-            if (question.isPresent()) {
-                return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/{unitId}/question/definition/{id}/answer")
-    public ResponseEntity<DefinitionAnswer> addDefinitionAnswer(@PathVariable long unitId, @PathVariable long id, @RequestBody DefinitionAnswer answer) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(id);
-            if (question.isPresent()) {
-                question.get().addAnswer(answer);
-                this.definitionQuestionService.save(question.get());
-                return new ResponseEntity<>(answer, HttpStatus.CREATED);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PutMapping("/{unitId}/question/definition/{qId}/answer/{aId}")
-    public ResponseEntity<DefinitionAnswer> updateDefinitionAnswer(@PathVariable long unitId, @PathVariable long qId, @PathVariable long aId, @RequestBody DefinitionAnswer newAnswer) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-        Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(qId);
-        System.out.println(unit.isPresent());
-        System.out.println(question.isPresent());
-
-        if (unit.isPresent() && question.isPresent()) {
-            Optional<DefinitionAnswer> oldAnswer = this.definitionQuestionService.findOneAnswer(question.get(), aId);
-            System.out.println(oldAnswer.isPresent());
-            if (oldAnswer.isPresent()) {
-                oldAnswer.get().update(newAnswer);
-                question.get().getAnswers().remove(oldAnswer.get());
-                question.get().addAnswer(oldAnswer.get());
-                this.definitionQuestionService.save(question.get());
-                return new ResponseEntity<>(oldAnswer.get(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value = "/{unitId}/question/list")
-    public ResponseEntity<List<ListQuestion>> getListQuestions(@PathVariable long unitId) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent()) ? (new ResponseEntity<>(unit.get().getListQuestions(), HttpStatus.OK)) : (new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @PostMapping("/{unitId}/question/list")
-    public ResponseEntity<ListQuestion> addListQuestion(@PathVariable long unitId, @RequestBody ListQuestion question) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            this.listQuestionService.save(question);
-            unit.get().addListQuestion(question);
-            this.unitService.save(unit.get());
-            return new ResponseEntity<>(question, HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @DeleteMapping("/{unitId}/question/list/{id}")
-    public ResponseEntity<ListQuestion> deleteListQuestion(@PathVariable long unitId, @PathVariable long id) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<ListQuestion> question = this.listQuestionService.findOne(id);
-            if (question.isPresent()) {
-                this.listQuestionService.delete(id);
-                return new ResponseEntity<>(question.get(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-
-    @GetMapping(value = "/{unitId}/question/list/{id}/answer")
-    public ResponseEntity<List<ListAnswer>> getListAnswers(@PathVariable long unitId, @PathVariable long id) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<ListQuestion> question = this.listQuestionService.findOne(id);
-
-            if (question.isPresent()) {
-                return new ResponseEntity<>(question.get().getListAnswers(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/{unitId}/question/list/{id}/answer")
-    public ResponseEntity<ListAnswer> addListAnswer(@PathVariable long unitId, @PathVariable long id, @RequestBody ListAnswer answer) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<ListQuestion> question = this.listQuestionService.findOne(id);
-            if (question.isPresent()) {
-                question.get().addAnswer(answer);
-                this.listQuestionService.save(question.get());
-                return new ResponseEntity<>(answer, HttpStatus.CREATED);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value = "/{unitId}/question/test")
-    public ResponseEntity<List<TestQuestion>> getTestQuestions(@PathVariable long unitId) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-        return (unit.isPresent()) ? (new ResponseEntity<>(unit.get().getTestQuestions(), HttpStatus.OK)) : (new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @PostMapping("/{unitId}/question/test")
-    public ResponseEntity<TestQuestion> addTestQuestion(@PathVariable long unitId, @RequestBody TestQuestion question) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            this.testQuestionService.save(question);
-            unit.get().addTestQuestion(question);
-            this.unitService.save(unit.get());
-            return new ResponseEntity<>(question, HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @DeleteMapping("/{unitId}/question/test/{id}")
-    public ResponseEntity<TestQuestion> deleteTestQuestion(@PathVariable long unitId, @PathVariable long id) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<TestQuestion> question = this.testQuestionService.findOne(id);
-            if (question.isPresent()) {
-                this.testQuestionService.delete(id);
-                return new ResponseEntity<>(question.get(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value = "/{unitId}/question/test/{id}/answer")
-    public ResponseEntity<List<TestAnswer>> getTestAnswers(@PathVariable long unitId, @PathVariable long id) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<TestQuestion> question = this.testQuestionService.findOne(id);
-
-            if (question.isPresent()) {
-                return new ResponseEntity<>(question.get().getTestAnswers(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/{unitId}/question/test/{id}/answer")
-    public ResponseEntity<TestAnswer> addTestAnswer(@PathVariable long unitId, @PathVariable long id, @RequestBody TestAnswer answer) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<TestQuestion> question = this.testQuestionService.findOne(id);
-            if (question.isPresent()) {
-                question.get().addAnswer(answer);
-                this.testQuestionService.save(question.get());
-                return new ResponseEntity<>(answer, HttpStatus.CREATED);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{unitId}/question/answer/{userId}/distinct")

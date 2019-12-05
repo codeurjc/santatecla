@@ -39,7 +39,7 @@ public class DefinitionQuestionService {
         return Optional.empty();
     }
 
-    public List<Object> findUserAnswers(long userId, long questionId){
+    public List<Object> findUserAnswers(long userId, long questionId) {
         return this.definitionRepository.findUserAnswers(userId, questionId);
     }
 
