@@ -93,12 +93,4 @@ public class CourseService {
 
         return result*10;
     }
-
-    public double userAverage(List<Double> values){
-        double sum = 0;
-        for (double d: values){
-            sum += d;
-        }
-        return sum/values.size();
-    }
 }

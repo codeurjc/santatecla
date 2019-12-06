@@ -1,18 +1,19 @@
 package com.course;
 
 import com.GeneralRestController;
+import com.course.items.ModuleProgress;
+import com.course.items.ProgressItem;
+import com.course.items.ModuleFormat;
+import com.course.items.StudentProgressItem;
 import com.itinerary.block.Block;
 import com.itinerary.lesson.Lesson;
 import com.itinerary.module.Module;
 import com.question.Question;
-import com.unit.Unit;
 import com.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -125,29 +126,66 @@ public class CourseRestController extends GeneralRestController {
     }
 
     @GetMapping(value = "/{courseId}/students/progress")
-    public ResponseEntity<List<ProgressItem>> getStudentsProgress(@PathVariable long courseId){
+    public ResponseEntity<List<StudentProgressItem>> getStudentsProgress(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
         ArrayList<Module> questionModules = new ArrayList<>();
+        double sumQuestionAux;
+        double sumModuleAux;
         List<Question> questions;
-        ArrayList<ProgressItem> result = new ArrayList<>();
-        ArrayList<Double> values;
+        StudentProgressItem item;
+        ModuleProgress moduleProgress;
+        ModuleFormat questionProgressItem;
+        ArrayList<StudentProgressItem> result = new ArrayList<>();
 
         if(optional.isPresent()){
             findModulesWithQuestionRecursive(optional.get().getModule(), questionModules);
 
             for (User u : optional.get().getStudents()){
-                values = new ArrayList<>();
-
+                item = new StudentProgressItem(u.getName());
+                sumModuleAux = 0;
                 for (Module m : questionModules){
+                    moduleProgress = new ModuleProgress(m.getName());
                     questions = this.questionService.findQuestionsByModuleId(m.getId());
-
+                    sumQuestionAux = 0;
                     for (Question q: questions){
-                        values.add(this.courseService.findUserQuestionGrade(u.getId(), m.getId(), courseId, q));
+                        /*questionProgressItem = new ModuleFormat(q.getQuestionText());
+                        questionProgressItem.setQuestionAverage(this.courseService.findUserQuestionGrade(u.getId(), m.getId(), courseId, q));*/
+                        sumQuestionAux += this.courseService.findUserQuestionGrade(u.getId(), m.getId(), courseId, q);
                     }
+                    moduleProgress.setModuleAverage(sumQuestionAux / questions.size());
+                    sumModuleAux += moduleProgress.getModuleAverage();
+                    item.addModuleGrade(sumQuestionAux / questions.size());
                 }
-                values.add(this.courseService.userAverage(values));
-                result.add(new ProgressItem(u.getName(), values));
+                item.setTotalAverage(sumModuleAux / questionModules.size());
+                result.add(item);
             }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/{courseId}/module/format")
+    public ResponseEntity<List<ModuleFormat>> getModuleQuestions(@PathVariable long courseId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        ArrayList<Module> questionModules = new ArrayList<>();
+        List<Question> questions;
+        ArrayList<ModuleFormat> result = new ArrayList<>();
+        ModuleFormat item;
+
+        if(optional.isPresent()){
+            findModulesWithQuestionRecursive(optional.get().getModule(), questionModules);
+
+            for (Module m : questionModules){
+                item = new ModuleFormat(m.getName());
+                questions = this.questionService.findQuestionsByModuleId(m.getId());
+
+                for (Question q: questions){
+                    item.addQuestion(q.getQuestionText());
+                }
+                result.add(item);
+            }
+
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
 

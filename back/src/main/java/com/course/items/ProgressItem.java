@@ -1,4 +1,4 @@
-package com.course;
+package com.course.items;
 
 import java.util.List;
 
