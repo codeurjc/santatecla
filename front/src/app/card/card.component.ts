@@ -4,6 +4,8 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {Component, HostListener, OnInit} from '@angular/core';
 import {Card} from './card.model';
 import {UnitService} from '../unit/unit.service';
+import {MatDialog} from "@angular/material/dialog";
+import {CardConfirmComponent} from "./confirm/card-confirm.component";
 
 @Component({
   selector: 'app-cards',
@@ -19,7 +21,8 @@ export class CardComponent implements OnInit {
   disableSaveButton = true;
   showSpinner = false;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private cardService: CardService, private unitService: UnitService) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private cardService: CardService,
+              private unitService: UnitService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -49,23 +52,26 @@ export class CardComponent implements OnInit {
 
   }
 
-  convertImage(bytes: any) {
-    return 'data:image/png;base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(bytes)));
+  private getCardIndex(id: number): number {
+    let index = -1;
+    this.cards.forEach((card, i) => {
+      if (card.id === id) {
+        index = i;
+      }
+    });
+    return index;
   }
 
-  changeImage(cardId: number, fileInput: any) {
-    const image: File = fileInput.files[0];
-    const reader = new FileReader();
-    reader.addEventListener('load', (event: any) => {
-      this.cardService.putImage(this.unitId, cardId, image).subscribe(
-        _ => {
-          this.ngOnInit();
-        }, (error: Error) => {
-          console.error('Error creating new image: ' + error);
-        }
-      );
+  private deleteCard(id: number) {
+    this.dialog.open(CardConfirmComponent, {}).afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.showSpinner = true;
+        this.cardService.deleteCard(this.unitId, id).subscribe(() => {
+          this.cards.splice(this.getCardIndex(id), 1);
+          this.showSpinner = false;
+        });
+      }
     });
-    reader.readAsDataURL(image);
   }
 
   save() {

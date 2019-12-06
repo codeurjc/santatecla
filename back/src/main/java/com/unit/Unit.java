@@ -88,6 +88,13 @@ public class Unit {
         return null;
     }
 
+    public void deleteCard(long id) {
+        Card card = getCard(id);
+        if (card != null) {
+            this.cards.remove(card);
+        }
+    }
+
     public void addCard(Card card) {
         this.cards.add(card);
     }

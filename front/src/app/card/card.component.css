@@ -36,29 +36,34 @@
   text-align: center;
 }
 
-#spinner {
-  margin-top: 15rem;
-  text-align: center;
-}
-
 #add-button {
   position: fixed;
-  color: #ffffff;
-  right: 12rem;
-  top: 3.3rem;
-  z-index: 1000;
-  width: 10rem;
-}
-
-#save-button {
-  position: fixed;
-  color: #89718f;
   right: 1rem;
   top: 3.3rem;
   z-index: 1000;
   width: 10rem;
 }
 
-#save-button:enabled {
+#spinner-container {
+  position: fixed;
+  width: calc(100% - 30rem);
+  right: 8rem;
+  top: 3.6rem;
+  z-index: 9999;
+  text-align: center;
+}
+
+#spinner {
+  display: inline;
+  z-index: 10000;
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+#spinner-text {
+  position: fixed;
+  display: inline;
+  z-index: 10000;
   color: #ffffff;
+  margin: 0.35rem 0.5rem 0.35rem 0.5rem;
 }

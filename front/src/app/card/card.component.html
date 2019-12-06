@@ -6,20 +6,18 @@
       <mat-icon>add</mat-icon>
       Añadir ficha
     </button>
-    <button id="save-button" mat-button [disabled]="disableSaveButton" (click)="save()">
-      <mat-icon>save</mat-icon>
-      Guardar
-    </button>
 
-    <div *ngIf="showSpinner" id="spinner">
-      <img src="../../assets/img/spinner.gif">
+    <div id="spinner-container" *ngIf="showSpinner">
+      <img id="spinner" src="../../assets/img/spinner1.gif">
+      <span id="spinner-text">Cargando...</span>
     </div>
-    <div *ngIf="!showSpinner">
+
+    <div>
       <mat-card class="card" *ngFor = "let card of cards">
         <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
-          <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="enableSaveButton()">
+          <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save()">
         </mat-form-field>
-        <mat-icon id="delete-card-button">delete</mat-icon>
+        <mat-icon id="delete-card-button" (click)="deleteCard(card.id)">delete</mat-icon>
         <mat-form-field class="example-full-width card-input card-input-area">
           <textarea matInput class="card-input card-input-area" required (change)="enableSaveButton()" [(ngModel)]="card.content"></textarea>
         </mat-form-field>

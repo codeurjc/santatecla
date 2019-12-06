@@ -2,13 +2,13 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {Component, Inject} from "@angular/core";
 
 @Component({
-  templateUrl: 'view-changes.component.html',
-  styleUrls: ['./view-changes.component.css']
+  templateUrl: 'card-confirm.component.html',
+  styleUrls: ['./card-confirm.component.css']
 })
 
-export class ViewChangesComponent {
+export class CardConfirmComponent {
 
-  constructor(public dialogRef: MatDialogRef<ViewChangesComponent>) {}
+  constructor(public dialogRef: MatDialogRef<CardConfirmComponent>) {}
 
   onNoClick() {
     this.dialogRef.close();

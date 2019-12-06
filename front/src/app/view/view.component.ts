@@ -8,7 +8,7 @@ import { RelationType } from '../relation/relation.type';
 import { TdDialogService } from "@covalent/core";
 import {TabService} from "../tab/tab.service";
 import {MatDialog} from "@angular/material/dialog";
-import {ViewChangesComponent} from "./dialog/view-changes.component";
+import {ViewConfirmComponent} from "./confirm/view-confirm.component";
 
 declare var mermaid: any;
 
@@ -486,7 +486,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
       if (this.changed) {
-        this.dialog.open(ViewChangesComponent, {}).afterClosed().subscribe(result => {
+        this.dialog.open(ViewConfirmComponent, {}).afterClosed().subscribe(result => {
           if (result === 1) {
             this.goToUnit(target.id.toString().substring(0, target.id.toString().length));
           } else if (result === 2) {
