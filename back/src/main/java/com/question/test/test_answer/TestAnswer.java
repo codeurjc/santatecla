@@ -16,6 +16,8 @@ public class TestAnswer {
     private boolean correct;
 
     private long unitId;
+    private long moduleId;
+    private long courseId;
 
     @OneToOne
     private User user;
@@ -66,6 +68,22 @@ public class TestAnswer {
 
     public void setUnitId(long unitId) {
         this.unitId = unitId;
+    }
+
+    public long getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(long moduleId) {
+        this.moduleId = moduleId;
+    }
+
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
     }
 }
 
