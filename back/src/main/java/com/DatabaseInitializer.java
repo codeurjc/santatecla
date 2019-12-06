@@ -71,10 +71,10 @@ public class DatabaseInitializer {
         public void init() {
 
                 //Cards
-                Card card1 = new Card("¿Qué es un lenguaje de programación?");
-                Card card2 = new Card("¿Qué es java?");
-                Card card3 = new Card("¿Cuándo se creó el primer lenguaje de programación?");
-                Card card4 = new Card("¿Cuándo se creó java?");
+                Card card1 = new Card("Qué es");
+                Card card2 = new Card("Qué es");
+                Card card3 = new Card("Cuándo se creó");
+                Card card4 = new Card("Cuándo se creó");
 
                 card1.setContent("Un *lenguaje de programación* es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de *instrucciones o secuencias* de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina *programa*.");
                 card2.setContent("Java es...");

@@ -115,3 +115,12 @@ button:enabled {
   top: 15rem;
   right: 1rem;
 }
+
+.uml-options-button {
+  border-radius: 0.2rem;
+  background-color: #fdf7ff;
+}
+
+.uml-options-button:hover {
+  background-color: #ebe5ed;
+}

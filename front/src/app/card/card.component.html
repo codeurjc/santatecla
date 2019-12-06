@@ -2,33 +2,27 @@
 <html>
   <body>
 
-    <div id="card-buttons">
-      <button mat-button>
-        <mat-icon>add</mat-icon>
-        Añadir ficha
-      </button>
-
-      <button mat-button [disabled]="disableSaveButton" (click)="save()">
-        <mat-icon>save</mat-icon>
-        Guardar
-      </button>
-    </div>
+    <button id="add-button" mat-button>
+      <mat-icon>add</mat-icon>
+      Añadir ficha
+    </button>
+    <button id="save-button" mat-button [disabled]="disableSaveButton" (click)="save()">
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
 
     <div *ngIf="showSpinner" id="spinner">
       <img src="../../assets/img/spinner.gif">
     </div>
     <div *ngIf="!showSpinner">
       <mat-card class="card" *ngFor = "let card of cards">
-        <div>
-          <mat-form-field class="example-full-width card-input card-input-container">
-            <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="enableSaveButton()">
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-form-field class="example-full-width card-input card-input-area">
-            <textarea matInput class="card-input card-input-area" required (change)="enableSaveButton()" [(ngModel)]="card.content"></textarea>
-          </mat-form-field>
-        </div>
+        <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
+          <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="enableSaveButton()">
+        </mat-form-field>
+        <mat-icon id="delete-card-button">delete</mat-icon>
+        <mat-form-field class="example-full-width card-input card-input-area">
+          <textarea matInput class="card-input card-input-area" required (change)="enableSaveButton()" [(ngModel)]="card.content"></textarea>
+        </mat-form-field>
       </mat-card>
       <div *ngIf="cards.length == 0" id="empty-message">
         Esta unidad no tiene ninguna ficha

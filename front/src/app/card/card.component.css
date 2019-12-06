@@ -4,7 +4,7 @@
   top: 2rem;
   padding: 2rem;
   margin: 2rem;
-  background-color: #ffffff;
+  background-color: #fdf7ff;
 }
 
 .card-input-container {
@@ -16,15 +16,19 @@
   resize: none;
 }
 
-.card-input-area {
-  height: 7rem;
+#card-title {
+  width: 80%;
 }
 
-#card-buttons {
-  position: fixed;
-  top: 3.3rem;
-  right: 0;
-  z-index: 1000;
+#delete-card-button {
+  color: indianred;
+  position: absolute;
+  right: 2rem;
+  cursor: pointer;
+}
+
+.card-input-area {
+  height: 7rem;
 }
 
 #empty-message {
@@ -35,4 +39,26 @@
 #spinner {
   margin-top: 15rem;
   text-align: center;
+}
+
+#add-button {
+  position: fixed;
+  color: #ffffff;
+  right: 12rem;
+  top: 3.3rem;
+  z-index: 1000;
+  width: 10rem;
+}
+
+#save-button {
+  position: fixed;
+  color: #89718f;
+  right: 1rem;
+  top: 3.3rem;
+  z-index: 1000;
+  width: 10rem;
+}
+
+#save-button:enabled {
+  color: #ffffff;
 }

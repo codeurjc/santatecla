@@ -13,6 +13,7 @@ export class UnitComponent implements OnInit {
 
   unit: Unit;
   activeTab = 0;
+  showMenu = true;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private unitService: UnitService, private tabService: TabService) {}
 
@@ -30,6 +31,10 @@ export class UnitComponent implements OnInit {
 
   private activateTab(tab: number) {
     this.activeTab = tab;
+  }
+
+  private setShowMenu(showMenu: boolean) {
+    this.showMenu = showMenu;
   }
 
 }
