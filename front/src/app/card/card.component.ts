@@ -1,7 +1,7 @@
 import {Unit } from '../unit/unit.model';
 import {CardService} from './card.service';
 import {Router, ActivatedRoute} from '@angular/router';
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Card} from './card.model';
 import {UnitService} from '../unit/unit.service';
 import {MatDialog} from "@angular/material/dialog";
@@ -18,7 +18,6 @@ export class CardComponent implements OnInit {
   unitId: number;
   cards: Card[] = [];
   unit: Unit;
-  disableSaveButton = true;
   showSpinner = false;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private cardService: CardService,
@@ -36,20 +35,19 @@ export class CardComponent implements OnInit {
     });
   }
 
-  private enableSaveButton() {
-    this.disableSaveButton = this.emptyField();
-  }
-
-  private emptyField() {
-    let empty = false;
-    this.cards.forEach((card: Card) => {
-      empty = ((empty) || (!card.name) || (!card.content));
-    });
-    return empty;
-  }
-
   private addCard() {
+    if ((this.cards.length === 0) || (this.cards[0].id !== 0)) {
+      this.cards.unshift({
+        id: 0,
+        name: '',
+        content: ''
+      });
+    }
+    this.focusNewCard();
+  }
 
+  private focusNewCard() {
+    window.scroll(0, 0);
   }
 
   private getCardIndex(id: number): number {
@@ -66,38 +64,33 @@ export class CardComponent implements OnInit {
     this.dialog.open(CardConfirmComponent, {}).afterClosed().subscribe(result => {
       if (result === 1) {
         this.showSpinner = true;
-        this.cardService.deleteCard(this.unitId, id).subscribe(() => {
-          this.cards.splice(this.getCardIndex(id), 1);
+        if (id === 0) {
+          this.cards.splice(0, 1);
           this.showSpinner = false;
-        });
+        } else {
+          this.cardService.deleteCard(this.unitId, id).subscribe(() => {
+            this.cards.splice(this.getCardIndex(id), 1);
+            this.showSpinner = false;
+          });
+        }
       }
     });
   }
 
-  save() {
-    this.disableSaveButton = true;
-    this.showSpinner = true;
-    let i = 0;
-    this.cards.forEach((card: Card) => {
-      this.cardService.save(this.unitId, card).subscribe(
-        _ => {
-          i++;
-          if (i === this.cards.length) {
-            this.showSpinner = false;
-          }
+  save(card: Card) {
+    if (card.name && card.content) {
+      this.showSpinner = true;
+      if (card.id === 0) {
+        this.cardService.create(this.unitId, card).subscribe((createdCard) => {
+          card.id = createdCard.id;
+          this.showSpinner = false;
+        });
+      } else {
+        this.cardService.save(this.unitId, card).subscribe(() => {
+          this.showSpinner = false;
         }, error => {
           console.error(error);
-        }
-      );
-    });
-  }
-
-  @HostListener('window:keydown', ['$event'])
-  onKeyPress($event: KeyboardEvent) {
-    if (($event.metaKey || $event.ctrlKey) && ($event.key == 's')) {
-      $event.preventDefault();
-      if (!this.disableSaveButton) {
-        this.save();
+        });
       }
     }
   }

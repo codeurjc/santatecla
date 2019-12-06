@@ -26,11 +26,21 @@ public class CardRestController extends GeneralRestController {
     @GetMapping(value = "/{unitId}/cards")
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
-        if (unit.isPresent()) {
-            return new ResponseEntity<>(unit.get().getCards(), HttpStatus.OK);
-        } else {
+        return unit.map(value -> new ResponseEntity<>(value.getCards(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping(value = "/{unitId}/cards")
+    public ResponseEntity<Card> createCard(@PathVariable long unitId, @RequestBody Card card) {
+        Optional<Unit> unit = unitService.findOne(unitId);
+        if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        Card newCard = new Card();
+        newCard.update(card);
+        cardService.save(newCard);
+        unit.get().addCard(newCard);
+        unitService.save(unit.get());
+        return new ResponseEntity<>(newCard, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{unitId}/cards/{cardId}")
@@ -45,6 +55,7 @@ public class CardRestController extends GeneralRestController {
         }
         updatedCard.update(card);
         cardService.save(updatedCard);
+        unitService.save(unit.get());
         return new ResponseEntity<>(updatedCard, HttpStatus.OK);
     }
 

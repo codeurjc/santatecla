@@ -11,6 +11,14 @@ export class CardService {
     return this.http.delete('/api/units/' + unitId + '/cards/' + cardId);
   }
 
+  create(unitId: number, card: Card) {
+    const body = JSON.stringify(card);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post<Card>('/api/units/' + unitId + '/cards/', body, { headers });
+  }
+
   save(unitId: number, card: Card) {
     const body = JSON.stringify(card);
     const headers = new HttpHeaders({

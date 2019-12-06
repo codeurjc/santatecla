@@ -2,7 +2,7 @@
 <html>
   <body>
 
-    <button id="add-button" mat-button>
+    <button id="add-button" mat-button (click)="addCard()">
       <mat-icon>add</mat-icon>
       Añadir ficha
     </button>
@@ -15,11 +15,11 @@
     <div>
       <mat-card class="card" *ngFor = "let card of cards">
         <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
-          <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save()">
+          <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save(card)">
         </mat-form-field>
         <mat-icon id="delete-card-button" (click)="deleteCard(card.id)">delete</mat-icon>
         <mat-form-field class="example-full-width card-input card-input-area">
-          <textarea matInput class="card-input card-input-area" required (change)="enableSaveButton()" [(ngModel)]="card.content"></textarea>
+          <textarea matInput class="card-input card-input-area" required (change)="save(card)" [(ngModel)]="card.content"></textarea>
         </mat-form-field>
       </mat-card>
       <div *ngIf="cards.length == 0" id="empty-message">
