@@ -52,22 +52,22 @@ export class UnitService {
     return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
   }
 
-  getSlideFormItinerary(slideId: number, itineraryId: number, unitId: number) {
-    return this.http.get(this.baseUrl + unitId + '/itineraries/' + itineraryId + '/slides/' + slideId);
+  getSlideFormLesson(slideId: number, lessonId: number, unitId: number) {
+    return this.http.get(this.baseUrl + unitId + '/lessons/' + lessonId + '/slides/' + slideId);
   }
 
-  addItinerary(unitId: number, itinerary: Lesson) {
-    const body = JSON.stringify(itinerary);
+  addLesson(unitId: number, lesson: Lesson) {
+    const body = JSON.stringify(lesson);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<Lesson>(this.baseUrl + unitId + '/itineraries', body, { headers });
+    return this.http.post<Lesson>(this.baseUrl + unitId + '/lessons', body, { headers });
   }
 
-  deleteItinerary(unitId: number, itineraryId: number) {
-    return this.http.delete<Lesson>(this.baseUrl + unitId + '/itineraries/' + itineraryId);
+  deleteLesson(unitId: number, lessonId: number) {
+    return this.http.delete<Lesson>(this.baseUrl + unitId + '/lessons/' + lessonId);
   }
 
   getUnitDefinitionQuestions(id: number) {

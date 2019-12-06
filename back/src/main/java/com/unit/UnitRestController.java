@@ -211,7 +211,7 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<Slide>(slide.get(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{unitId}/slides")
+    @PostMapping(value = "/{unitId}/lessons")
     @ResponseStatus(HttpStatus.CREATED)
     public Lesson addLesson(@RequestBody Lesson lesson, @PathVariable long unitId) {
 
@@ -225,7 +225,7 @@ public class UnitRestController extends GeneralRestController {
         return lesson;
     }
 
-    @DeleteMapping(value = "/{unitId}/slides/{lessonId}")
+    @DeleteMapping(value = "/{unitId}/lessons/{lessonId}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Lesson> deleteLesson(@PathVariable long lessonId, @PathVariable long unitId) {
 

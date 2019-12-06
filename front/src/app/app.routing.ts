@@ -25,6 +25,7 @@ const appRoutes = [
   { path: 'lessonForm', component: LessonFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
   { path: 'units/:unitId/lessons', component: LessonComponent },
+  { path: 'units/:unitId/lessons/:lessonId', component: LessonEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},

@@ -87,8 +87,8 @@ public class DatabaseInitializer {
                 cardRepository.save(card4);
 
                 //Slides
-                Slide slide1 = new Slide("Saludos");
-                Slide slide2 = new Slide("Despedidas");
+                Slide slide1 = new Slide("Saludos\n\n");
+                Slide slide2 = new Slide("Despedidas\n\n");
 
                 slide1.addContent("Hola");
                 slide2.addContent("Adios");

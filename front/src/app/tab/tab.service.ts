@@ -5,8 +5,13 @@ export class TabService {
 
   units = false;
   unit = '';
+  unitId: number;
+
   courses = false;
   course = '';
+
+  lessons = false;
+  lesson = '';
 
   constructor() {}
 
@@ -15,6 +20,8 @@ export class TabService {
     this.unit = '';
     this.courses = false;
     this.course = '';
+    this.lessons = false;
+    this.lesson = '';
   }
 
   setUnits() {
@@ -22,13 +29,18 @@ export class TabService {
     this.unit = '';
     this.courses = false;
     this.course = '';
+    this.lessons = false;
+    this.lesson = '';
   }
 
-  setUnit(unitName: string) {
+  setUnit(unitName: string, unitId) {
     this.units = true;
     this.unit = unitName;
+    this.unitId = unitId;
     this.courses = false;
     this.course = '';
+    this.lessons = false;
+    this.lesson = '';
   }
 
   setCourses() {
@@ -36,6 +48,8 @@ export class TabService {
     this.unit = '';
     this.courses = true;
     this.course = '';
+    this.lessons = false;
+    this.lesson = '';
   }
 
   setCourse(courseName: string) {
@@ -43,6 +57,17 @@ export class TabService {
     this.unit = '';
     this.courses = true;
     this.course = courseName;
+    this.lessons = false;
+    this.lesson = '';
+  }
+
+  setLesson(unitName: string, unitId: number, lessonName: string) {
+    this.units = true;
+    this.unit = unitName;
+    this.unitId = unitId;
+    this.courses = false;
+    this.lessons = true;
+    this.lesson = lessonName;
   }
 
 }

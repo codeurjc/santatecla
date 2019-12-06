@@ -15,8 +15,11 @@
           <img class="nav-button-icon" src="../../assets/img/uml-icon.png" height="15">
           <div class="nav-button-content">Unidades</div>
         </button>
-        <button mat-button *ngIf="loginService.isAdmin && tabService.unit" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+        <button mat-button *ngIf="loginService.isAdmin && tabService.unit" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/unit/', tabService.unitId]">
           <div class="nav-button-content">{{tabService.unit}}</div>
+        </button>
+        <button mat-button *ngIf="loginService.isAdmin && tabService.lesson" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+          <div class="nav-button-content">{{tabService.lesson}}</div>
         </button>
 
         <button mat-button *ngIf="tabService.courses" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button home-button' : 'nav-button user-nav-button home-button'" [routerLink]="['/courses']">

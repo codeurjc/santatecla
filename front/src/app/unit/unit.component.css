@@ -29,14 +29,14 @@
 
 .tab-icon {
   position: absolute;
-  left: 1rem;
+  left: 1.25rem;
   margin-top: 0.4rem;
 }
 
 .tab-icon-without-menu {
   position: absolute;
   top: 0.78rem;
-  left: 1rem;
+  right: 1.45rem;
 }
 
 #unit-content {

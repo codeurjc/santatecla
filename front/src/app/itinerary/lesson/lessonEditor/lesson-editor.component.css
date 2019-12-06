@@ -1,16 +1,22 @@
 .toolsBar {
-  height: 3rem;
-  margin: 0.5rem;
-  border-radius: 0.5rem;
-  color: #27273c;
-  font-size: 0.8rem;
-  border: 0.1rem solid #27273c;
+  height: 6rem;
   padding-left: 0.5rem;
+  background-color: #5d306a;
 }
 
 .tools {
+  color: white;
   position: absolute;
-  margin-top: 0.5rem;
+  top: 3.6rem;
+}
+
+.tool {
+  margin-left: 0.5rem;
+  background-color: #7d3c90;
+}
+
+.tool:hover {
+  background-color: #a769b8;
 }
 
 .deleteItinerary-button {
