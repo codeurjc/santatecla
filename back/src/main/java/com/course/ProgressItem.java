@@ -2,12 +2,12 @@ package com.course;
 
 import java.util.List;
 
-public class UserProgressItem {
+public class ProgressItem {
     private String name;
     private List<Double> points;
 
-    public UserProgressItem(String studentName, List<Double> points){
-        this.name = studentName;
+    public ProgressItem(String name, List<Double> points){
+        this.name = name;
         this.points = points;
     }
 

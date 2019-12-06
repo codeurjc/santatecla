@@ -20,6 +20,8 @@ public class ListAnswer {
     private boolean correct;
 
     private long unitId;
+    private long moduleId;
+    private long courseId;
 
     @OneToOne
     private User user;
@@ -71,5 +73,13 @@ public class ListAnswer {
 
     public void setUnitId(long unitId) {
         this.unitId = unitId;
+    }
+
+    public long getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(long moduleId) {
+        this.moduleId = moduleId;
     }
 }
