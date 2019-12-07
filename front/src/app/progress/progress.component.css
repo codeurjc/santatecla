@@ -72,3 +72,18 @@
 .title {
   margin-top: 8rem;
 }
+
+.extended-info{
+  cursor: pointer;
+}
+
+#spinner{
+  position: relative;
+  width: 8rem;
+  height: 8rem;
+  left: 40%;
+  top: 40%;
+}
+
+.histogram{
+}

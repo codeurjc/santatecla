@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleFormat {
+    private Long id;
     private String moduleName;
     private List<String> questions;
 
@@ -30,5 +31,13 @@ public class ModuleFormat {
 
     public void setQuestions(List<String> questions) {
         this.questions = questions;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

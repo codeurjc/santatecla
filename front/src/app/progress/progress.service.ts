@@ -5,10 +5,6 @@ import { HttpClient} from '@angular/common/http';
 export class ProgressService {
   constructor(private http: HttpClient) {}
 
-  getTeacherCourses(id: number) {
-    return this.http.get('api/course/teacher/' + id);
-  }
-
   getModuleProgress(courseId: number) {
     return this.http.get('api/course/' + courseId + '/module/progress');
   }
@@ -21,15 +17,11 @@ export class ProgressService {
     return this.http.get('api/course/' + courseId + '/module/format');
   }
 
-  getBestStudent(courseId: number) {
-    return this.http.get('api/course/' + courseId + '/user/best');
+  getExtendedModuleInfo(courseId: number, moduleId: number) {
+    return this.http.get('api/course/' + courseId + '/module/' + moduleId + '/extended');
   }
 
-  getWorstStudent(courseId: number) {
-    return this.http.get('api/course/' + courseId + '/user/worst');
-  }
-
-  getUnitProgress(courseId: number) {
-    return this.http.get('api/course/' + courseId + '/units/points');
+  getHistogramInfo(courseId: number) {
+    return this.http.get('api/course/' + courseId + '/histogram/');
   }
 }

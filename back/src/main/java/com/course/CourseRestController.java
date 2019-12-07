@@ -1,7 +1,6 @@
 package com.course;
 
 import com.GeneralRestController;
-import com.course.items.ModuleProgress;
 import com.course.items.ProgressItem;
 import com.course.items.ModuleFormat;
 import com.course.items.StudentProgressItem;
@@ -133,8 +132,6 @@ public class CourseRestController extends GeneralRestController {
         double sumModuleAux;
         List<Question> questions;
         StudentProgressItem item;
-        ModuleProgress moduleProgress;
-        ModuleFormat questionProgressItem;
         ArrayList<StudentProgressItem> result = new ArrayList<>();
 
         if(optional.isPresent()){
@@ -144,19 +141,44 @@ public class CourseRestController extends GeneralRestController {
                 item = new StudentProgressItem(u.getName());
                 sumModuleAux = 0;
                 for (Module m : questionModules){
-                    moduleProgress = new ModuleProgress(m.getName());
                     questions = this.questionService.findQuestionsByModuleId(m.getId());
                     sumQuestionAux = 0;
                     for (Question q: questions){
-                        /*questionProgressItem = new ModuleFormat(q.getQuestionText());
-                        questionProgressItem.setQuestionAverage(this.courseService.findUserQuestionGrade(u.getId(), m.getId(), courseId, q));*/
                         sumQuestionAux += this.courseService.findUserQuestionGrade(u.getId(), m.getId(), courseId, q);
                     }
-                    moduleProgress.setModuleAverage(sumQuestionAux / questions.size());
-                    sumModuleAux += moduleProgress.getModuleAverage();
-                    item.addModuleGrade(sumQuestionAux / questions.size());
+                    sumModuleAux += sumQuestionAux / questions.size();
+                    item.addGrade(sumQuestionAux / questions.size());
                 }
-                item.setTotalAverage(sumModuleAux / questionModules.size());
+                item.setAverage(sumModuleAux / questionModules.size());
+                result.add(item);
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/{courseId}/module/{moduleId}/extended")
+    public ResponseEntity<List<StudentProgressItem>> getExtendedStudentsProgress(@PathVariable long courseId, @PathVariable long moduleId){
+        Optional<Course> course = this.courseService.findOne(courseId);
+        Optional<Module> module = this.moduleService.findOne(moduleId);
+        double grade;
+        double sumModuleAux;
+        List<Question> questions;
+        StudentProgressItem item;
+        ArrayList<StudentProgressItem> result = new ArrayList<>();
+
+        if(course.isPresent() && module.isPresent()){
+            for (User u : course.get().getStudents()){
+                item = new StudentProgressItem(u.getName());
+                sumModuleAux = 0;
+                questions = this.questionService.findQuestionsByModuleId(moduleId);
+                for (Question q: questions){
+                    grade = this.courseService.findUserQuestionGrade(u.getId(), moduleId, courseId, q);
+                    item.addGrade(grade);
+                    sumModuleAux += grade;
+                }
+                item.setAverage(sumModuleAux / questions.size());
                 result.add(item);
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -178,6 +200,7 @@ public class CourseRestController extends GeneralRestController {
 
             for (Module m : questionModules){
                 item = new ModuleFormat(m.getName());
+                item.setId(m.getId());
                 questions = this.questionService.findQuestionsByModuleId(m.getId());
 
                 for (Question q: questions){
@@ -191,7 +214,7 @@ public class CourseRestController extends GeneralRestController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+    
     /*@GetMapping(value="/{courseId}/user/{userId}/worst")
     public ResponseEntity<Unit> getWorstUnit(@PathVariable long courseId, @PathVariable long userId){
         Optional<Course> optional = this.courseService.findOne(courseId);

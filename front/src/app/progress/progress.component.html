@@ -16,7 +16,7 @@
     </div>
     <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Seguimiento del Módulo'">
       <h2 class="top-margin" >Seguimiento del módulo</h2>
-      <span *ngIf="ready">
+      <span *ngIf="moduleResultsReady">
 
         <!--<mat-form-field class="letf-margin">
           <input matInput (keyup)="applyFilterStudent($event.target.value)" placeholder="Nombre del alumno">
@@ -42,43 +42,35 @@
           <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" class="columnWidth center-align"></tr>
         </table>
 
-        <!--<div *ngIf="worstUser?.name == null || bestUser?.name == null" class="center-align">
-          <p>No hay información suficiente para mostrar mejor y peor alumno</p>
-        </div>
-        <div *ngIf="worstUser?.name != null && bestUser?.name != null" class="center-align">
-          <div class="row">
-            <div class="column">
-              <p>Mejor alumno : {{this.bestUser?.name}}</p>
-            </div>
-            <div class="column">
-              <p>Peor alumno : {{this.worstUser?.name}}</p>
-            </div>
-          </div>
-        </div>!-->
-
       </span>
     </div>
 
     <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Seguimiento de la clase'">
-      <h2 class="top-margin" >Seguimiento de la clase</h2>
+      <h2 class="top-margin" >Seguimiento de la clase
+        <span *ngIf="extendedInfo" class="extended-info" (click)="extendedInfo = false; extendedColumnsToDisplay=['name']">
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        </span>
+      </h2>
 
-      <span *ngIf="ready">
+      <img src="../../assets/img/spinner.gif" id="spinner" class="center-align" *ngIf="!classResultsReady">
+
+      <span *ngIf="classResultsReady && !extendedInfo">
         <table mat-table [dataSource]="this.classResults" class="mat-elevation-z8 center-table">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Alumno</th>
             <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
           </ng-container>
 
-          <span *ngFor="let module of this.moduleFormat">
+          <span *ngFor="let module of this.courseFormat">
             <ng-container matColumnDef="{{module.moduleName}}">
-              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> {{module.moduleName}} </th>
-              <td mat-cell *matCellDef="let element">{{element.modulesGrade[this.moduleFormat.indexOf(module)]}}</td>
+              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align extended-info" (click)="showModuleExtendedInfo(module.id, module.moduleName)"> {{module.moduleName}} </th>
+              <td mat-cell *matCellDef="let element">{{element.grades[this.courseFormat.indexOf(module)]}}</td>
             </ng-container>
           </span>
 
           <ng-container matColumnDef="studentAverage">
             <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Media</th>
-            <td mat-cell *matCellDef="let element"> {{element.totalAverage}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.average}} </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="classColumnsToDisplay"></tr>
@@ -86,6 +78,45 @@
         </table>
       </span>
 
+      <span *ngIf="classResultsReady && extendedInfo">
+        <table mat-table [dataSource]="this.moduleExtendedResults" class="mat-elevation-z8 center-table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Alumno</th>
+            <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
+          </ng-container>
+
+          <span *ngFor="let question of this.moduleFormat.questions">
+            <ng-container matColumnDef="{{question}}">
+              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> {{question}} </th>
+              <td mat-cell *matCellDef="let element">{{element.grades[this.moduleFormat.questions.indexOf(question)]}}</td>
+            </ng-container>
+          </span>
+
+          <ng-container matColumnDef="studentAverage">
+            <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Media</th>
+            <td mat-cell *matCellDef="let element"> {{element.average}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="extendedColumnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let row; columns: extendedColumnsToDisplay;" class="columnWidth center-align"></tr>
+        </table>
+      </span>
+
+      <div class="" *ngIf="this.moduleResultsReady">
+        <ngx-charts-bar-vertical
+          [results]="histogram"
+          [gradient]="false"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="false"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel">
+        </ngx-charts-bar-vertical>
+      </div>
+
     </div>
+
 </body>
 </html>

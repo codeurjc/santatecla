@@ -1,22 +1,20 @@
 package com.course.items;
 
-import com.course.items.ModuleProgress;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentProgressItem {
     private String studentName;
-    private List<Double> modulesGrade;
-    private double totalAverage;
+    private List<Double> grades;
+    private double average;
 
     public StudentProgressItem(String studentName){
         this.studentName = studentName;
-        this.modulesGrade = new ArrayList<>();
+        this.grades = new ArrayList<>();
     }
 
-    public void addModuleGrade(Double m){
-        this.modulesGrade.add(m);
+    public void addGrade(Double m){
+        this.grades.add(m);
     }
 
     public String getStudentName() {
@@ -27,19 +25,19 @@ public class StudentProgressItem {
         this.studentName = studentName;
     }
 
-    public List<Double> getModulesGrade() {
-        return modulesGrade;
+    public List<Double> getGrades() {
+        return grades;
     }
 
-    public void setModulesGrade(List<Double> modules) {
-        this.modulesGrade = modules;
+    public void setGrades(List<Double> modules) {
+        this.grades = modules;
     }
 
-    public double getTotalAverage() {
-        return totalAverage;
+    public double getAverage() {
+        return average;
     }
 
-    public void setTotalAverage(double totalAverage) {
-        this.totalAverage = totalAverage;
+    public void setAverage(double totalAverage) {
+        this.average = totalAverage;
     }
 }
