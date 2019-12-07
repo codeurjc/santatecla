@@ -27,10 +27,6 @@
   cursor: pointer;
 }
 
-.card-input-area {
-  height: 7rem;
-}
-
 #empty-message {
   margin-top: 10rem;
   text-align: center;

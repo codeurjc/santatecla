@@ -1,7 +1,7 @@
 import {Unit } from '../unit/unit.model';
 import {CardService} from './card.service';
 import {Router, ActivatedRoute} from '@angular/router';
-import {Component, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Card} from './card.model';
 import {UnitService} from '../unit/unit.service';
 import {MatDialog} from "@angular/material/dialog";
@@ -13,7 +13,9 @@ import {CardConfirmComponent} from "./confirm/card-confirm.component";
   styleUrls: ['./card.component.css']
 })
 
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, AfterViewChecked {
+
+  @ViewChild('cardList') cardList: ElementRef;
 
   unitId: number;
   cards: Card[] = [];
@@ -35,8 +37,16 @@ export class CardComponent implements OnInit {
     });
   }
 
+  ngAfterViewChecked() {console.log('a');
+    this.cardList.nativeElement.childNodes.forEach((card) => {
+      try {
+        this.fitContent(card.childNodes[2].firstChild.firstChild.childNodes[2].firstChild);
+      } catch (e) {}
+    });
+  }
+
   private addCard() {
-    if ((this.cards.length === 0) || (this.cards[0].id !== 0)) {
+    if ((this.cards.length === 0) || (this.cards[0].name && this.cards[0].content)) {
       this.cards.unshift({
         id: 0,
         name: '',
@@ -93,6 +103,16 @@ export class CardComponent implements OnInit {
         });
       }
     }
+  }
+
+  changeTextArea(event: Event) {
+    this.fitContent(event.target as HTMLTextAreaElement);
+  }
+
+  fitContent(textArea: HTMLTextAreaElement) {
+    textArea.style.overflow = 'hidden';
+    textArea.style.height = '0px';
+    textArea.style.height = textArea.scrollHeight + 'px';
   }
 
 }
