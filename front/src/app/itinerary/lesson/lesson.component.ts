@@ -7,6 +7,7 @@ import {Unit} from '../../unit/unit.model';
 import {UnitService} from '../../unit/unit.service';
 import {LessonFormComponent} from './lessonForm/lesson-form.component';
 import {MatDialog} from "@angular/material/dialog";
+import {ConfirmActionComponent} from "../../confirmAction/confirm-action.component";
 
 @Component({
   selector: 'app-lessons',
@@ -25,6 +26,10 @@ export class LessonComponent implements OnInit {
   newLesson: Lesson;
 
   deleteInfoPosition = 'after';
+
+  confirmText = 'Se eliminará la lección permanentemente';
+  button1 = 'Cancelar';
+  button2 = 'Borrar';
 
   constructor(private loginService: LoginService,
               private lessonService: LessonService,
@@ -67,7 +72,7 @@ export class LessonComponent implements OnInit {
     }
   }
 
-  openDialog(): void {
+  addLesson(): void {
     this.newLesson = {name: ''};
     const dialogRef = this.dialog.open(LessonFormComponent, {
       width: '400px',
@@ -82,6 +87,21 @@ export class LessonComponent implements OnInit {
             this.router.navigate(['/units/' + this.unitId + '/lessons/' + data.id]);
           });
         }
+      }
+    });
+  }
+
+  deleteLesson(lessonId: number) {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      width: '400px',
+      data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        this.unitService.deleteLesson(this.unitId, lessonId).subscribe(() => {
+          this.ngOnInit();
+        });
       }
     });
   }

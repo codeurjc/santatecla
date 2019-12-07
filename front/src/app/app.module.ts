@@ -58,8 +58,7 @@ import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.com
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
-import {ViewConfirmComponent} from "./view/confirm/view-confirm.component";
-import {CardConfirmComponent} from "./card/confirm/card-confirm.component";
+import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
 
 @NgModule({
   declarations: [
@@ -83,12 +82,10 @@ import {CardConfirmComponent} from "./card/confirm/card-confirm.component";
     NewCourseComponent,
     AnswerDefinitionDialogComponent,
     HomeComponent,
-    ViewConfirmComponent,
-    CardConfirmComponent
+    ConfirmActionComponent
   ],
   entryComponents: [
-    ViewConfirmComponent,
-    CardConfirmComponent
+    ConfirmActionComponent
   ],
   imports: [
     ClipboardModule,

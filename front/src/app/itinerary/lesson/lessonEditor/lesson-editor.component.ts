@@ -255,19 +255,4 @@ export class LessonEditorComponent implements OnInit {
     this.bottomSheet.open(UnitsCardsToolComponent);
   }
 
-  deleteItinerary() {
-    this.dialogService.openConfirm({
-      message: '¿ Seguro que desea eliminar el itinerario ' + this.lesson.name + ' ?',
-      title: 'Confirmación',
-      width: '400px',
-      height: '200px'
-    }).afterClosed().subscribe((accept: boolean) => {
-      if (accept) {
-        this.unitService.deleteLesson(this.unitId, this.lessonId).subscribe(() => {
-          this.router.navigate(['/units/' + this.unitId + '/cards']);
-        });
-      }
-    });
-  }
-
 }

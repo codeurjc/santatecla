@@ -86,7 +86,7 @@ input:invalid {
 }
 
 #hide-menu-button {
-  z-index: 2000;
+  z-index: 501;
   top: 3rem;
   position: fixed;
   color: #ffffff;
@@ -118,7 +118,7 @@ input:invalid {
   top: 3rem;
   right: 0;
   height: 2.5rem;
-  z-index: 1000;
+  z-index: 500;
   background-color: #5d306a;
   text-align: right;
   padding: 0.3rem 0 0.3rem 0;

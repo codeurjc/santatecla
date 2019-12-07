@@ -34,12 +34,11 @@
 
 #add-button {
   position: fixed;
+  color: white;
   background-color: #7d3c90;
-  color: #ffffff;
+  top: 3.45rem;
+  z-index: 501;
   right: 1rem;
-  top: 3.4rem;
-  z-index: 1000;
-  width: 10rem;
 }
 
 #add-button:hover {

@@ -4,8 +4,8 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Card} from './card.model';
 import {UnitService} from '../unit/unit.service';
-import {MatDialog} from "@angular/material/dialog";
-import {CardConfirmComponent} from "./confirm/card-confirm.component";
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
 
 @Component({
   selector: 'app-cards',
@@ -22,12 +22,16 @@ export class CardComponent implements OnInit, AfterViewChecked {
   unit: Unit;
   showSpinner = false;
 
+  confirmText = 'Se eliminará la ficha permanentemente';
+  button1 = 'Cancelar';
+  button2 = 'Borrar';
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private cardService: CardService,
               private unitService: UnitService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.unitId = params['unitId'];
+      this.unitId = params.unitId;
       this.showSpinner = true;
       this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
         this.unit = data;
@@ -37,7 +41,8 @@ export class CardComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngAfterViewChecked() {console.log('a');
+  ngAfterViewChecked() {
+    console.log('a');
     this.cardList.nativeElement.childNodes.forEach((card) => {
       try {
         this.fitContent(card.childNodes[2].firstChild.firstChild.childNodes[2].firstChild);
@@ -71,7 +76,12 @@ export class CardComponent implements OnInit, AfterViewChecked {
   }
 
   private deleteCard(id: number) {
-    this.dialog.open(CardConfirmComponent, {}).afterClosed().subscribe(result => {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      width: '400px',
+      data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
         this.showSpinner = true;
         if (id === 0) {
