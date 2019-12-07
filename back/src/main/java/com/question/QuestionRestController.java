@@ -8,10 +8,7 @@ import com.GeneralRestController;
 import com.unit.Unit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/units/{unitID}/question")
@@ -34,6 +31,19 @@ public class QuestionRestController extends GeneralRestController {
         Optional<Question> question = this.questionService.findOne(questionID);
 
         if (unit.isPresent() && question.isPresent()) {
+            return new ResponseEntity<>(question.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{questionID}")
+    public ResponseEntity<Question> deleteListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<Question> question = this.questionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent()) {
+            this.listQuestionService.delete(questionID);
             return new ResponseEntity<>(question.get(), HttpStatus.OK);
         }
 

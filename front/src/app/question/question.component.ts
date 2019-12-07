@@ -130,16 +130,6 @@ export class QuestionComponent implements OnInit {
     );
   }
 
-  deleteDefinitionQuestion(questionID: number) {
-    this.unitService.deleteUnitDefinitionQuestion(this.unitId, questionID).subscribe(
-      (_) => {
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => console.log(error)
-    );
-  }
-
   sendListQuestion() {
     if (this.questionInput === '') {
       // TODO
@@ -161,19 +151,6 @@ export class QuestionComponent implements OnInit {
     this.unitService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
       (_) => {
         this.resetAddQuestionForm();
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => {
-        console.log(error);
-        this.ngOnInit();
-      }
-    );
-  }
-
-  deleteListQuestion(questionID: number) {
-    this.unitService.deleteUnitListQuestion(this.unitId, questionID).subscribe(
-      (_) => {
         // TODO Remove it
         this.ngOnInit();
       },
@@ -213,7 +190,7 @@ export class QuestionComponent implements OnInit {
   }
 
   deleteTestQuestion(questionID: number) {
-    this.unitService.deleteUnitTestQuestion(this.unitId, questionID).subscribe(
+    this.unitService.deleteUnitQuestion(this.unitId, questionID).subscribe(
       (_) => {
         // TODO Remove it
         this.ngOnInit();

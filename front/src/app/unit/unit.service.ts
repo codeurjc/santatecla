@@ -92,10 +92,6 @@ export class UnitService {
     return this.http.post<DefinitionQuestion>(this.baseUrl + id + '/question/definition', body, {headers});
   }
 
-  deleteUnitDefinitionQuestion(unitID, questionID: number) {
-    return this.http.delete(this.baseUrl + unitID + '/question/definition/' + questionID);
-  }
-
   addUnitListQuestion(id: number, question: ListQuestion) {
     const body = JSON.stringify(question);
 
@@ -104,10 +100,6 @@ export class UnitService {
     });
 
     return this.http.post<ListQuestion>(this.baseUrl + id + '/question/list', body, {headers});
-  }
-
-  deleteUnitListQuestion(unitID, questionID: number) {
-    return this.http.delete(this.baseUrl + unitID + '/question/list/' + questionID);
   }
 
   addUnitTestQuestion(id: number, question: TestQuestion) {
@@ -120,8 +112,8 @@ export class UnitService {
     return this.http.post<TestQuestion>(this.baseUrl + id + '/question/test', body, {headers});
   }
 
-  deleteUnitTestQuestion(unitID, questionID: number) {
-    return this.http.delete(this.baseUrl + unitID + '/question/test/' + questionID);
+  deleteUnitQuestion(unitID, questionID: number) {
+    return this.http.delete(this.baseUrl + unitID + '/question/' + questionID);
   }
 
   addUnitDefinitionAnswer(unitID, questionID: number, answer: DefinitionAnswer) {
