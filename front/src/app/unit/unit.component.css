@@ -27,22 +27,27 @@
   background-color: #a769b8;
 }
 
+.tab-text {
+  margin-left: 0.5rem;
+}
+
 .tab-icon {
   position: absolute;
-  left: 1.25rem;
+  left: 1.37rem;
   margin-top: 0.4rem;
 }
 
 .tab-icon-without-menu {
   position: absolute;
+  left: 1.37rem;
   top: 0.78rem;
-  right: 1.45rem;
 }
 
 #unit-content {
   margin-top: 4rem;
   position: absolute;
   right: 0;
+  padding-bottom: 2rem;
 }
 
 .with-menu {
@@ -66,6 +71,10 @@
 ::ng-deep.mat-form-field-ripple {
   /*change color of underline when focused*/
   background-color: #9e2abb !important;
+}
+
+input:invalid {
+  background-color: red;
 }
 
 #lateral-panel {
