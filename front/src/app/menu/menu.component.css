@@ -84,7 +84,14 @@
   position: absolute;
   top: -0.6rem;
   font-size: 0.7rem;
+}
+
+.admin-nav-button-title {
   color: #dcc3e3;
+}
+
+.user-nav-button-title {
+  color: #abb8d4;
 }
 
 .nav-button-content {
