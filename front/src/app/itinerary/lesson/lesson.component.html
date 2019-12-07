@@ -19,7 +19,9 @@
           <button mat-button [ngClass]="loginService.isAdmin ? 'lesson-button admin-lesson-button' : 'lesson-button user-lesson-button'" (click)="editLesson(lesson.id)">
             {{lesson.name}}
           </button>
-          <!--mat-icon *ngIf="this.loginService.isAdmin" class="delete-course" (click)="deleteCourse(course)">delete</mat-icon-->
+          <button id="delete-lesson-button" mat-button matTooltip="Opciones" [matTooltipPosition]="deleteInfoPosition">
+            <mat-icon>more_vert</mat-icon>
+          </button>
         </span>
     </div>
 

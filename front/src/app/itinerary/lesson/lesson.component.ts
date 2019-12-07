@@ -24,6 +24,8 @@ export class LessonComponent implements OnInit {
 
   newLesson: Lesson;
 
+  deleteInfoPosition = 'after';
+
   constructor(private loginService: LoginService,
               private lessonService: LessonService,
               private router: Router,
