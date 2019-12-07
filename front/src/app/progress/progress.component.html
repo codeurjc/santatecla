@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <h1 class="center-align">Seguimiento</h1>
+    <h1 class="center-align title">Seguimiento del curso {{this.course?.name}}</h1>
     <div class="center-align" id="progressType">
-      Seguimiento del curso: {{this.chosenCourse?.name}}
-      <mat-menu #appMenu="matMenu">
-        <span *ngFor="let course of courses">
-          <button mat-menu-item (click)="newChosenCourse(course)">{{course.name}}</button>
-        </span>
+      Mostrar: {{this.chosenInfoToShow}}
+      <mat-menu #showInfo="matMenu">
+        <button mat-menu-item (click)="this.chosenInfoToShow='Todo'">Todo</button>
+        <button mat-menu-item (click)="this.chosenInfoToShow='Clase'">Seguimiento de clase</button>
+        <button mat-menu-item (click)="this.chosenInfoToShow='Unidades'">Seguimiento por unidades</button>
       </mat-menu>
 
-      <button mat-icon-button [matMenuTriggerFor]="appMenu">
+      <button mat-icon-button [matMenuTriggerFor]="showInfo">
         <mat-icon>more_vert</mat-icon>
       </button>
-
-      <div *ngIf="chosenCourse">
-        Mostrar: {{this.chosenInfoToShow}}
-        <mat-menu #showInfo="matMenu">
-          <button mat-menu-item (click)="this.chosenInfoToShow='Todo'">Todo</button>
-          <button mat-menu-item (click)="this.chosenInfoToShow='Clase'">Seguimiento de clase</button>
-          <button mat-menu-item (click)="this.chosenInfoToShow='Unidades'">Seguimiento por unidades</button>
-        </mat-menu>
-
-        <button mat-icon-button [matMenuTriggerFor]="showInfo">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-      </div>
     </div>
-    <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Clase'">
+    <!--<div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Clase'">
       <h2 class="top-margin" >Seguimiento de la clase</h2>
       <span *ngIf="chosenCourse && ready">
         <mat-form-field class="letf-margin">
@@ -38,12 +25,6 @@
             <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> Alumno </th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
-          <span *ngFor="let unit of units">
-            <ng-container matColumnDef="{{unit.name}}">
-              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">{{unit.name}} </th>
-              <td mat-cell *matCellDef="let element">{{element.points[this.units.indexOf(unit)]?.toFixed(2)}}</td>
-            </ng-container>
-          </span>
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
           <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" class="columnWidth center-align"></tr>
         </table>
@@ -61,44 +42,6 @@
           </div>
         </div>
       </span>
-    </div>
-    <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Unidades'">
-      <h2 class="top-margin">Seguimiento de las unidades</h2>
-
-      <div class="progress-table">
-        <span *ngIf="chosenCourse && ready">
-          <mat-form-field class="letf-margin">
-            <input matInput (keyup)="applyFilterUnit($event.target.value)" placeholder="Nombre de la unidad">
-          </mat-form-field>
-          <table mat-table [dataSource]="this.showingUnitResults" class="mat-elevation-z8 center-table">
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> Unidad </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-            <ng-container matColumnDef="RightAnswers">
-              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Respuestas correctas</th>
-              <td mat-cell *matCellDef="let element">{{element.points[0]?.toFixed(0)}}</td>
-            </ng-container>
-            <ng-container matColumnDef="WrongAnswers">
-              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Respuestas incorrectas</th>
-              <td mat-cell *matCellDef="let element">{{element.points[1]?.toFixed(0)}}</td>
-            </ng-container>
-            <ng-container matColumnDef="Review">
-              <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Estado de la unidad</th>
-              <td mat-cell *matCellDef="let element">
-                <span *ngIf="element.points[2]?.toFixed(2) == 0">
-                  <mat-icon class="green-color">done</mat-icon>
-                </span>
-                <span *ngIf="element.points[2]?.toFixed(2) > 0">
-                  <mat-icon class="red-color">close</mat-icon>
-                </span>
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="unitColumnsToDisplay"></tr>
-            <tr mat-row *matRowDef="let row; columns: unitColumnsToDisplay;" class="columnWidth center-align"></tr>
-          </table>
-        </span>
-      </div>
-    </div>
+    </div>!-->
 </body>
 </html>

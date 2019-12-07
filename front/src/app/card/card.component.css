@@ -1,13 +1,70 @@
-.textAres {
-  resize: none;
-  width: 89%;
-  height: 100px;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 0.1rem solid #27273c;
-  font-size: 15px;
+.card {
+  left: 0;
+  right: 0;
+  top: 2rem;
+  padding: 2rem;
+  margin: 2rem;
+  background-color: #fdf7ff;
 }
 
-.cards {
-  margin: 0.5rem;
+.card-input-container {
+  margin-bottom: 1rem;
+}
+
+.card-input {
+  width: 100%;
+  resize: none;
+}
+
+#card-title {
+  width: 80%;
+}
+
+#delete-card-button {
+  color: indianred;
+  position: absolute;
+  right: 2rem;
+  cursor: pointer;
+}
+
+#empty-message {
+  margin-top: 10rem;
+  text-align: center;
+}
+
+#add-button {
+  position: fixed;
+  color: white;
+  background-color: #7d3c90;
+  top: 3.45rem;
+  z-index: 501;
+  right: 1rem;
+}
+
+#add-button:hover {
+  background-color: #a769b8;
+}
+
+#spinner-container {
+  position: fixed;
+  width: calc(100% - 30rem);
+  right: 8rem;
+  top: 3.6rem;
+  z-index: 9999;
+  text-align: center;
+}
+
+#spinner {
+  display: inline;
+  z-index: 10000;
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+#spinner-text {
+  position: fixed;
+  display: inline;
+  z-index: 10000;
+  color: #ffffff;
+  margin: 0.35rem 0.5rem 0.35rem 0.5rem;
 }

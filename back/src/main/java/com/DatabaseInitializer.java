@@ -9,9 +9,10 @@ import com.card.Card;
 import com.card.CardRepository;
 import com.course.Course;
 import com.course.CourseRepository;
-import com.itinerary.Itinerary;
-import com.itinerary.ItineraryRepository;
-import com.question.Question;
+import com.itinerary.lesson.Lesson;
+import com.itinerary.lesson.LessonRepository;
+import com.itinerary.module.Module;
+import com.itinerary.module.ModuleRepository;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -37,10 +38,13 @@ public class DatabaseInitializer {
         private CardRepository cardRepository;
 
         @Autowired
-        private ItineraryRepository itineraryRepository;
+        private LessonRepository lessonRepository;
     
         @Autowired
         private UnitRepository unitRepository;
+
+        @Autowired
+        private ModuleRepository moduleRepository;
     
         @Autowired
         private RelationRepository relationRepository;
@@ -67,24 +71,71 @@ public class DatabaseInitializer {
         public void init() {
 
                 //Cards
-                Card card1 = new Card("Que");
-                Card card2 = new Card("Que");
-                Card card3 = new Card("Cuando");
-                Card card4 = new Card("Cuando");
+                Card card1 = new Card("Qué es");
+                Card card2 = new Card("Qué es");
+                Card card3 = new Card("Cuándo se creó");
+                Card card4 = new Card("Cuándo se creó");
 
-                card1.setContent("*¿Que es un lenguaje de programación?*\n\nUn lenguaje de programación es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de instrucciones o secuencias de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina programa.");
-                card2.setContent("*¿Que es java?*\n");
-                card4.setContent("*¿Cuando se creo el primer lenguaje de programación?*\n\nA finales de 1953, John Backus sometió una propuesta a sus superiores en IBM para desarrollar una alternativa más práctica al lenguaje ensamblador, para programar la computadora central IBM 704. El histórico equipo Fortran de Backus consistió en los programadores Richard Goldberg, Sheldon F. Best, Harlan Herrick, Peter Sheridan, Roy Nutt, Robert Nelson, Irving Ziller, Lois Haibt y David Sayre.");
-                card3.setContent("*¿Cuando se creo java?*\n");
+                card1.setContent("Un *lenguaje de programación* es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de *instrucciones o secuencias* de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina *programa*.");
+                card2.setContent("Java es...");
+                card4.setContent("*A finales de 1953*, John Backus sometió una propuesta a sus superiores en IBM para desarrollar una alternativa más práctica al lenguaje ensamblador, para programar la computadora central IBM 704. El histórico equipo Fortran de Backus consistió en los programadores Richard Goldberg, Sheldon F. Best, Harlan Herrick, Peter Sheridan, Roy Nutt, Robert Nelson, Irving Ziller, Lois Haibt y David Sayre.");
+                card3.setContent("Java se creó en...");
 
                 cardRepository.save(card1);
                 cardRepository.save(card2);
                 cardRepository.save(card3);
                 cardRepository.save(card4);
 
+                //Slides
+                Slide slide1 = new Slide("Saludos");
+                Slide slide2 = new Slide("Despedidas");
+
+                slide1.addContent("Hola\n\n");
+                slide2.addContent("Adios\n\n");
+
+                slideRepository.save(slide1);
+                slideRepository.save(slide2);
+
+                //Lesson
+                Lesson lesson1 = new Lesson("Introducción a lenguajes de programción");
+                Lesson lesson2 = new Lesson("Introducción Java");
+                Lesson lesson3 = new Lesson("Introducción C++");
+
+                lesson1.getSlides().add(slide1);
+                lesson1.getSlides().add(slide2);
+
+                lesson2.getSlides().add(slide1);
+                lesson2.getSlides().add(slide2);
+
+                lesson3.getSlides().add(slide1);
+                lesson3.getSlides().add(slide2);
+
+                lessonRepository.save(lesson1);
+                lessonRepository.save(lesson2);
+                lessonRepository.save(lesson3);
+
+                //Modules
+                Module module1 = new Module("Tema 1");
+                Module module2 = new Module("Tema 2");
+                Module module3 = new Module("Paradigmas");
+
+                module1.addBlock(lesson1);
+                module2.addBlock(lesson2);
+                module2.addBlock(lesson3);
+
+                module3.addBlock(module1);
+                module3.addBlock(module2);
+                module3.addBlock(lesson1);
+
+                moduleRepository.save(module1);
+                moduleRepository.save(module2);
+                moduleRepository.save(module3);
+
                 // Definition Questions
                 DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?");
+                definition1.addModule(module1);
                 DefinitionQuestion definition2 = new DefinitionQuestion("¿Qué es Java?");
+                definition1.addModule(module2);
 
                 definitionQuestionRepository.save(definition1);
                 definitionQuestionRepository.save(definition2);
@@ -92,13 +143,14 @@ public class DatabaseInitializer {
                 // List Questions
                 ArrayList<String> possibleAnswers = new ArrayList<>();
                 possibleAnswers.add("Java");
-                possibleAnswers.add("Javascropt");
+                possibleAnswers.add("Javascript");
                 possibleAnswers.add("Python");
                 ArrayList<String> correctAnswer = new ArrayList<>();
                 correctAnswer.add("Python");
                 correctAnswer.add("Java");
                 ListQuestion list1 = new ListQuestion("¿Cuáles de los siguientes son lenguajes de programación?",
-                 possibleAnswers, correctAnswer);
+                        possibleAnswers, correctAnswer);
+                list1.addModule(module1);
 
                 listQuestionRepository.save(list1);
 
@@ -107,28 +159,9 @@ public class DatabaseInitializer {
                 testAnswers.add("Sí");
                 testAnswers.add("No");
                 TestQuestion test = new TestQuestion("¿Es Java un lenguaje de programación?", testAnswers, "Sí");
+                test.addModule(module1);
 
                 testQuestionRepository.save(test);
-
-                //Slides
-                Slide slide1 = new Slide("Concepto");
-                Slide slide2 = new Slide("Tipos");
-
-                slide1.addContent("assert.card/1/13\n\nassert.card/4/13\n\n");
-                slide2.addContent("assert.slide/9/11/13\n\nassert.question/6/13\n\n");
-
-                slideRepository.save(slide1);
-                slideRepository.save(slide2);
-
-                //Itinerary
-                Itinerary itinerary1 = new Itinerary("Introducción");
-                Itinerary itinerary2 = new Itinerary("Introducción Java");
-
-                itinerary1.getSlides().add(slide1);
-                itinerary1.getSlides().add(slide2);
-
-                itineraryRepository.save(itinerary1);
-                itineraryRepository.save(itinerary2);
 
                 //Units
                 Unit unit1 = new Unit("Lenguaje de programación");
@@ -163,8 +196,8 @@ public class DatabaseInitializer {
                 unit2.addCard(card2);
                 unit2.addCard(card3);
 
-                unit1.addItinerary(itinerary1);
-                unit2.addItinerary(itinerary2);
+                unit1.addLesson(lesson1);
+                unit2.addLesson(lesson2);
 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
@@ -264,13 +297,12 @@ public class DatabaseInitializer {
                 Course course = new Course("Lenguajes de programación", teacher, "Aprende lo básico de los lenguajes de programación más usados.");
                 course.addStudent(user1);
                 course.addStudent(user2);
-                course.addUnit(unit1);
-                course.addUnit(unit2);
+                course.setModule(module3);
                 courseRepository.save(course);
 
                 Course course2 = new Course("Curso de Java", teacher, "Aprende todo lo necesario para ser un experto en Java.");
                 course2.addStudent(user1);
-                course2.addUnit(unit1);
+                course2.setModule(module3);
                 courseRepository.save(course2);
 
 	}

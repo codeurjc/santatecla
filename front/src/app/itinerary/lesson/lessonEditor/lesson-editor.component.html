@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+
+    <!-- TOOLS BAR -->
+    <div class="toolsBar" *ngIf="loginService.isAdmin">
+      <mat-chip-list class="tools">
+        <button mat-button class="tool">
+          <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
+        </button>
+        <button mat-button class="tool" (click)="openBottomSheet()">
+          <mat-icon>assignment</mat-icon>Buscar fichas
+        </button>
+        <button mat-button class="tool">
+          <mat-icon>book</mat-icon>Buscar slides
+        </button>
+        <button mat-button class="tool">
+          <mat-icon>description</mat-icon>Buscar ejercicios
+        </button>
+      </mat-chip-list>
+    </div>
+
+    <!-- EDITOR -->
+    <div *ngIf="loginService.isAdmin">
+      <div id="editor-container">
+        <textarea class="textAres" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
+      </div>
+    </div>
+
+    <!-- HTML REPRESENTATION -->
+    <div id="html-itinerary-representation-editor" *ngIf="loginService.isAdmin">
+      <img src="../../../../assets/img/spinner.gif" id="spinnerEditor" *ngIf="showSpinner">
+      <div [innerHTML]="contentHTML"></div>
+    </div>
+
+    <div id="html-itinerary-representation" *ngIf="!loginService.isAdmin">
+      <img src="../../../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
+      <div [innerHTML]="contentHTML"></div>
+    </div>
+
+  </body>
+</html>

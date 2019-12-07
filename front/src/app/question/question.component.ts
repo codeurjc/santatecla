@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Question} from './question.model';
 import {QuestionService} from './question.service';
@@ -10,17 +10,16 @@ import {TestQuestion} from './testQuestion/testQuestion.model';
 import {TestQuestionService} from './testQuestion/testQuestion.service';
 import {Unit} from '../unit/unit.model';
 import {UnitService} from '../unit/unit.service';
-import {Itineray} from '../itinerary/itinerary.model';
+import {Lesson} from '../itinerary/lesson/lesson.model';
 import {LoginService} from '../auth/login.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
 import {AnswerDefinitionDialogComponent} from './answerQuestionDialog/answerDefinitionDialog.component';
 
 @Component({
+  selector: 'app-questions',
   templateUrl: './question.component.html',
-  styleUrls: [
-    './question.component.css'
-  ]
+  styleUrls: ['./question.component.css']
 })
 
 export class QuestionComponent implements OnInit {
@@ -47,7 +46,7 @@ export class QuestionComponent implements OnInit {
 
   unit: Unit;
   unitId: number;
-  itinerariesTabs: Itineray[];
+  itinerariesTabs: Lesson[];
 
   constructor(
     public loginService: LoginService,

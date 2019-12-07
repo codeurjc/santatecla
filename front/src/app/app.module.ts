@@ -25,14 +25,15 @@ import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppComponent } from './app.component';
 import { LoginService } from './auth/login.service';
-import { ItineraryService } from './itinerary/itinerary.service';
+import { LessonService } from './itinerary/lesson/lesson.service';
 import { ViewComponent } from './view/view.component';
 import { CardComponent } from './card/card.component';
-import { ItineraryComponent } from './itinerary/itinerary.component';
+import { LessonEditorComponent } from './itinerary/lesson/lessonEditor/lesson-editor.component';
 import { CardService } from './card/card.service';
 import { SlideService } from './slide/slide.service';
 import { QuestionComponent } from './question/question.component';
 import { UnitService } from './unit/unit.service';
+import { UnitComponent } from './unit/unit.component';
 import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
 import { DefinitionQuestionService } from './question/definitionQuestion/definitionQuestion.service';
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
@@ -42,41 +43,49 @@ import { ProgressService } from './progress/progress.service';
 import {QuestionService} from './question/question.service';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {TestQuestionService} from './question/testQuestion/testQuestion.service';
-import {StudentHomeComponent} from './course/studentHome.component';
-import {StudentHomeService} from './course/studentHome.service';
+import {MyCoursesComponent} from './course/myCourses.component';
+import {MyCoursesService} from './course/myCourses.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
 import {TabService} from './tab/tab.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NewCourseComponent} from './course/newCourse.component';
 import {NewCourseService} from './course/newCourse.service';
-import {SubMenuComponent} from './subMenu/subMenu.component';
 import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
-import {UnitsComponent} from './itinerary/tools/units.component';
-import {ItineraryFormComponent} from './itinerary/itineraryForm/itineraryForm.component';
+import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
+import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.component';
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
+import {HomeComponent} from './home/home.component';
+import {LessonComponent} from './itinerary/lesson/lesson.component';
+import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SubMenuComponent,
-    ItineraryFormComponent,
+    LessonFormComponent,
+    LessonComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,
+    UnitComponent,
     CardComponent,
-    ItineraryComponent,
-    UnitsComponent,
+    LessonEditorComponent,
+    UnitsCardsToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
     ProgressComponent,
     TestQuestionComponent,
-    StudentHomeComponent,
+    MyCoursesComponent,
     CourseComponent,
     NewCourseComponent,
     AnswerDefinitionDialogComponent,
+    HomeComponent,
+    ConfirmActionComponent
+  ],
+  entryComponents: [
+    ConfirmActionComponent
   ],
   imports: [
     ClipboardModule,
@@ -127,8 +136,8 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
-  providers: [LoginService, ItineraryService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, TestQuestionService, StudentHomeService, CourseService, TabService, UnitService, NewCourseService,
+  providers: [LoginService, LessonService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
+    ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService, MenuComponent,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

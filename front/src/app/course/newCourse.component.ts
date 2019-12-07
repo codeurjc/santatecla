@@ -1,10 +1,9 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {LoginService, User} from '../auth/login.service';
-import {Unit} from '../unit/unit.model';
 import {NewCourseService} from './newCourse.service';
-import {UnitService} from '../unit/unit.service';
 import {Course} from './course.model';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TabService} from "../tab/tab.service";
 
 @Component({
   templateUrl: './newCourse.component.html',
@@ -12,27 +11,40 @@ import {Router} from '@angular/router';
 })
 
 export class NewCourseComponent implements OnInit {
+  courseId: number;
   courseName = '';
   courseDescription = '';
   showingStudents: User[];
-  showingUnits: Unit[];
-  chosenUnits: Unit[];
   chosenStudents: User[];
   showStudentOptions = false;
-  showUnitOptions = false;
   searchStudentField: string;
-  searchUnitField: string;
   arrowStudentKeyLocation = 0;
-  arrowUnitKeyLocation = 0;
   course: Course;
 
-  constructor(private courseService: NewCourseService, private unitService: UnitService,
-              private loginService: LoginService, private routing: Router) {
+  activeTab = 0;
+
+  constructor(private courseService: NewCourseService,
+              private loginService: LoginService, private routing: Router,
+              private activatedRoute: ActivatedRoute,
+              private tabService: TabService) {
     this.chosenStudents = [];
-    this.chosenUnits = [];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.activatedRoute.params.subscribe(params => {
+      if (params.courseId) {
+        this.courseId = params.courseId;
+
+        this.courseService.getCourse(this.courseId).subscribe((data: Course) => {
+          this.course = data;
+          this.courseName = this.course.name;
+          this.courseDescription = this.course.description;
+          this.chosenStudents = this.course.students;
+          this.tabService.setCourse(this.courseName);
+        }, error => {console.log(error); });
+      }
+    });
+  }
 
   addStudent(student: User) {
     if (this.checkStudentInclude(student)) {
@@ -40,32 +52,13 @@ export class NewCourseComponent implements OnInit {
     }
   }
 
-  addUnit(unit: Unit) {
-    if (this.checkUnitInclude(unit)) {
-      this.chosenUnits.push(unit);
-    }
-  }
-
   removeStudent(student: User) {
     this.chosenStudents.splice(this.chosenStudents.indexOf(student), 1);
-  }
-
-  removeUnit(unit: Unit) {
-    this.chosenUnits.splice(this.chosenUnits.indexOf(unit), 1);
   }
 
   checkStudentInclude(newStudent: User) {
     for (let student of this.chosenStudents) {
       if (student.id === newStudent.id) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  checkUnitInclude(newUnit: Unit) {
-    for (let unit of this.chosenUnits) {
-      if (unit.id === newUnit.id) {
         return false;
       }
     }
@@ -85,53 +78,38 @@ export class NewCourseComponent implements OnInit {
     }
   }
 
-  searchUnit() {
-    if (this.searchUnitField !== '') {
-      this.unitService.searchByNameContaining(this.searchUnitField).subscribe((data: Unit[]) => {
-        this.showingUnits = data;
-        this.arrowUnitKeyLocation = 0;
-      }, error => {
-        console.log(error);
-      });
-    } else {
-      this.showingUnits = [];
-    }
-  }
-
   @HostListener('document:click', ['$event'])
   public documentClick(event: Event): void {
     const target = event.target as HTMLInputElement;
     if ((target.id === 'user-result') || (target.id === 'user-name')) {
       this.addStudent(this.showingStudents[this.arrowStudentKeyLocation]);
       this.showStudentOptions = false;
-    } else if ((target.id === 'unit-result') || (target.id === 'unit-name')){
-      this.addUnit(this.showingUnits[this.arrowUnitKeyLocation]);
-      this.showUnitOptions = false;
     } else if (target.id === 'search-student-input') {
       this.showStudentOptions = true;
-      this.showUnitOptions = false;
-    } else if (target.id === 'search-unit-input') {
-      this.showUnitOptions = true;
       this.showStudentOptions = false;
     } else {
       this.showStudentOptions = false;
-      this.showUnitOptions = false;
     }
   }
 
   save() {
     this.course = {name: this.courseName, description: this.courseDescription};
     this.course.teacher = this.loginService.getCurrentUser();
-
-    for (let unit of this.chosenUnits){
-      unit.itineraries = [];
-    }
-
-    this.course.units = this.chosenUnits;
     this.course.students = this.chosenStudents;
     console.log(this.course);
-    this.courseService.postCourse(this.course).subscribe((data: Course) => {
-      this.routing.navigate(['/']);
-    }, error => {console.log(error); } );
+    if (this.courseId === undefined) {
+      this.courseService.postCourse(this.course).subscribe((data: Course) => {
+        this.routing.navigate(['/courses']);
+      }, error => {console.log(error); } );
+    } else {
+      this.courseService.putCourse(this.course, this.courseId).subscribe((data: Course) => {
+        this.routing.navigate(['/courses']);
+      }, error => {console.log(error); } );
+    }
   }
+
+  private activateTab(tab: number) {
+    this.activeTab = tab;
+  }
+
 }

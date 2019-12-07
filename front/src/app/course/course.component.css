@@ -26,7 +26,7 @@
 }
 
 .save-button {
-  margin-top: 10%;
+  margin-top: 5%;
   background-color: lightgrey;
 }
 
@@ -62,11 +62,125 @@
   color: indianred
 }
 
+.delete-course {
+  color: indianred;
+  cursor: pointer;
+  padding: 0 0 0 1rem;
+}
+
+.edit-course{
+  cursor: pointer;
+}
+
 .bottom-margin{
   margin-bottom: 10%;
   text-align: center;
 }
 
-.center-align{
+.center-align {
   text-align: center;
+}
+
+.courses-title {
+  margin-top: 5rem;
+}
+
+.title {
+  margin-top: 8rem;
+}
+
+#tab-wrapper {
+  background-color: #e1afed;
+  font-size: 0.8rem;
+  position: fixed;
+  z-index: 999;
+  top: 3rem;
+  right: 0;
+  left: 0;
+  height: 3rem;
+  color: #000000;
+}
+
+.unit-course-name {
+  margin: 0 2.5rem 0 1.5rem;
+  top: 0.8rem;
+  position: relative;
+  display: inline;
+  font-size: 1.25rem;
+  color: #601972;;
+}
+
+.tab {
+  border-top-left-radius: 0.1rem;
+  border-top-right-radius: 0.1rem;
+  border: 1px solid #9e2abb;
+  border-bottom: none;
+  background-color: #e1afed;
+  height: 1.8rem;
+  padding: 0.6rem 2rem 0.6rem 4rem;
+  box-shadow: none;
+  position: relative;
+  top: 1rem;
+  display: inline;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #fdf7ff;
+}
+
+.activeTab {
+  background-color: #fdf7ff;
+  border-top: 4px solid #9e2abb;
+}
+
+.tab-icon {
+  position: absolute;
+  left: 2rem;
+  top: 0.34rem;
+}
+
+.course-content {
+  margin-top: 6rem;
+}
+
+.course-button {
+  width: 90%;
+  padding: 1rem 0 1rem 2rem;
+  text-align: left;
+}
+
+.admin-course-button {
+  background-color: #f9f2fd;
+}
+
+.user-course-button {
+  background-color: #eaeefd;
+}
+
+.courses-list {
+  position: absolute;
+  width: 70%;
+  left: 15%;
+  top: 10rem;
+}
+
+#course-search {
+  position: absolute;
+  top: 4rem;
+  width: 40%;
+  left: 25%;
+}
+
+#new-course-button {
+  position: absolute;
+  background-color: #efe1fd;
+  top: 4rem;
+  left: 65%;
+  right: 25%;
+  margin: 1rem 2% 0 2%;
+}
+
+#search {
+  width: 100%;
 }

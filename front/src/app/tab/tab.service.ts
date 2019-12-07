@@ -1,33 +1,63 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Tab } from './tab.model';
 
 @Injectable()
 export class TabService {
 
-  _tabs: Tab[] = [];
+  units = false;
+  unit = '';
+  unitId: number;
 
-  constructor(private http: HttpClient) {}
+  courses = false;
+  course = '';
 
-  addTab(type: string, id: number, name: string, course: number) {
-    for (const t of this._tabs) {
-      if ((t.type === type) && (t.id === id)) {
-        return;
-      }
-    }
-    this._tabs.push(new Tab(type, id, name, course));
+  lessons = false;
+  lesson = '';
+
+  constructor() {}
+
+  emptyAll() {
+    this.units = false;
+    this.unit = '';
+    this.courses = false;
+    this.course = '';
+    this.lessons = false;
+    this.lesson = '';
   }
 
-  removeTab(type: string, id: number) {
-    this._tabs.forEach((item, index) => {
-      if ((item.type === type) && (item.id === id)) {
-        this._tabs.splice(index, 1);
-      }
-    });
+  setHome() {
+    this.emptyAll();
   }
 
-  removeAllTabs() {
-    this._tabs = [];
+  setUnits() {
+    this.emptyAll();
+    this.units = true;
+  }
+
+  setUnit(unitName: string, unitId) {
+    this.emptyAll();
+    this.units = true;
+    this.unit = unitName;
+    this.unitId = unitId;
+  }
+
+  setCourses() {
+    this.emptyAll();
+    this.courses = true;
+  }
+
+  setCourse(courseName: string) {
+    this.emptyAll();
+    this.courses = true;
+    this.course = courseName;
+  }
+
+  setLesson(unitName: string, unitId: number, lessonName: string) {
+    this.emptyAll();
+    this.units = true;
+    this.unit = unitName;
+    this.unitId = unitId;
+    this.lessons = true;
+    this.lesson = lessonName;
   }
 
 }

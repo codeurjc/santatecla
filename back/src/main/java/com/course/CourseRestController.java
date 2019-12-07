@@ -1,6 +1,10 @@
 package com.course;
 
 import com.GeneralRestController;
+import com.itinerary.block.Block;
+import com.itinerary.lesson.Lesson;
+import com.itinerary.module.Module;
+import com.question.Question;
 import com.unit.Unit;
 import com.user.User;
 import org.springframework.http.HttpStatus;
@@ -8,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +30,30 @@ public class CourseRestController extends GeneralRestController {
     public ResponseEntity<Course> createCourse(@RequestBody Course course){
         this.courseService.save(course);
         return new ResponseEntity<>(course, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Course> editCourse(@PathVariable long id, @RequestBody Course course){
+        Optional<Course> optional = this.courseService.findOne(id);
+
+        if(optional.isPresent()){
+            optional.get().update(course);
+            this.courseService.save(optional.get());
+            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Course> deleteCourse(@PathVariable long id){
+        Optional<Course> optional = this.courseService.findOne(id);
+
+        if (optional.isPresent()){
+            this.courseService.delete(id);
+            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value="/user/{id}")
@@ -53,24 +82,79 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/{courseId}/user/{userId}/best")
-    public ResponseEntity<Unit> getBestUnit(@PathVariable long courseId, @PathVariable long userId){
+    @GetMapping(value="/{courseId}/module/progress")
+    public ResponseEntity<List<ProgressItem>> getModuleProgress(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
-        double aux = 0;
-        Unit best = new Unit();
+        ArrayList<Module> questionModules = new ArrayList<>();
+        ArrayList<ProgressItem> result = new ArrayList<>();
+        ArrayList<Double> values;
+
         if(optional.isPresent()){
-            for(Unit u : optional.get().getUnits()){
-                if(this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId) > aux){
-                    aux = this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId);
-                    best = u;
-                }
+            findModulesWithQuestionRecursive(optional.get().getModule(), questionModules);
+
+            for (Module m : questionModules){
+                values = new ArrayList<>();
+
+                int questionCount = this.questionService.findModuleQuestionCount(m.getId());
+                double moduleRealization = this.courseService.findModuleRealization(optional.get().getStudents(), questionCount, m.getId(), courseId);
+                double moduleGrade = this.courseService.findModuleGrade(optional.get().getStudents(), m.getId(), courseId);
+                values.add(moduleRealization);
+                values.add(moduleGrade);
+
+
+                result.add(new ProgressItem(m.getName(), values));
             }
-            return new ResponseEntity<>(best, HttpStatus.OK);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/{courseId}/user/{userId}/worst")
+    private void findModulesWithQuestionRecursive(Block block, List<Module> result){
+        if (!(block instanceof Lesson)){
+            Module module = (Module)block;
+
+            if(this.questionService.findQuestionsByModuleId(module.getId()).size() > 0){
+                result.add(module);
+            }
+
+            for (Block b : module.getBlocks()){
+                findModulesWithQuestionRecursive(b, result);
+            }
+        }
+    }
+
+    @GetMapping(value = "/{courseId}/students/progress")
+    public ResponseEntity<List<ProgressItem>> getStudentsProgress(@PathVariable long courseId){
+        Optional<Course> optional = this.courseService.findOne(courseId);
+        ArrayList<Module> questionModules = new ArrayList<>();
+        List<Question> questions;
+        ArrayList<ProgressItem> result = new ArrayList<>();
+        ArrayList<Double> values;
+
+        if(optional.isPresent()){
+            findModulesWithQuestionRecursive(optional.get().getModule(), questionModules);
+
+            for (User u : optional.get().getStudents()){
+                values = new ArrayList<>();
+
+                for (Module m : questionModules){
+                    questions = this.questionService.findQuestionsByModuleId(m.getId());
+
+                    for (Question q: questions){
+                        values.add(this.courseService.findUserQuestionGrade(u.getId(), m.getId(), courseId, q));
+                    }
+                }
+                values.add(this.courseService.userAverage(values));
+                result.add(new ProgressItem(u.getName(), values));
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /*@GetMapping(value="/{courseId}/user/{userId}/worst")
     public ResponseEntity<Unit> getWorstUnit(@PathVariable long courseId, @PathVariable long userId){
         Optional<Course> optional = this.courseService.findOne(courseId);
         double aux = 1;
@@ -178,6 +262,6 @@ public class CourseRestController extends GeneralRestController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
 
 }

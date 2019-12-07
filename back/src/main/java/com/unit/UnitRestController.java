@@ -5,12 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
-import com.card.Card;
-import com.itinerary.Itinerary;
-import com.question.list.list_answer.ListAnswer;
-import com.question.list.list_question.ListQuestion;
-import com.question.test.test_answer.TestAnswer;
-import com.question.test.test_question.TestQuestion;
+import com.itinerary.lesson.Lesson;
 import com.relation.Relation;
 
 import javax.servlet.http.HttpServletResponse;
@@ -111,80 +106,15 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(units, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{unitId}/cards")
-    public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-        if (unit.isPresent()) {
-            return new ResponseEntity<Iterable<Card>>(unit.get().getCards(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping(value = "/{unitId}/cards/{cardId}")
-    public ResponseEntity<Card> uploadCard(@PathVariable long unitId, @PathVariable long cardId, @RequestBody Card card) {
-        Optional<Unit> unit = unitService.findOne(unitId);
-        if (!unit.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Card updatedCard = unit.get().getCard(cardId);
-        if (updatedCard == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        updatedCard.update(card);
-        cardService.save(updatedCard);
-        return new ResponseEntity<>(updatedCard, HttpStatus.OK);
-    }
-
-    /*@RequestMapping(value = "/{unitId}/cards/{cardId}/image", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Card> uploadCardImage(@PathVariable long unitId, @PathVariable long cardId, @RequestParam(value = "image") MultipartFile image) {
-		Optional<Unit> unit = unitService.findOne(unitId);
-		if (!unit.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Card card = unit.get().getCard(cardId);
-        if (card == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        cardService.setImage(card, image);
-        cardService.save(card);
-        return new ResponseEntity<Card>(card, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/{unitId}/cards/{cardId}", method = RequestMethod.GET)
-    public ResponseEntity<Card> getCardImage(@PathVariable long unitId, @PathVariable long cardId, HttpServletResponse response) {
-        Optional<Unit> unit = unitService.findOne(unitId);
-        if (!unit.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Card card = unit.get().getCard(cardId);
-        return new ResponseEntity<Card>(card, HttpStatus.OK);
-    }*/
-
-    @RequestMapping(value = "/{unitId}/cards/{cardId}", method = RequestMethod.GET)
-    public ResponseEntity<Card> getCard(@PathVariable long unitId, @PathVariable long cardId, HttpServletResponse response) {
+    @RequestMapping(value = "/{unitId}/lessons/{lessonId}/slides/{slideId}", method = RequestMethod.GET)
+    public ResponseEntity<Slide> getSlideFromLesson(@PathVariable long unitId, @PathVariable long lessonId, @PathVariable long slideId, HttpServletResponse response) {
         Optional<Unit> unit = unitService.findOne(unitId);
         if (!unit.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Optional<Card> card = cardService.findOne(cardId);
-        if (!card.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<Card>(card.get(), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/{unitId}/itineraries/{itineraryId}/slides/{slideId}", method = RequestMethod.GET)
-    public ResponseEntity<Slide> getSlideFromItinerary(@PathVariable long unitId, @PathVariable long itineraryId, @PathVariable long slideId, HttpServletResponse response) {
-        Optional<Unit> unit = unitService.findOne(unitId);
-        if (!unit.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Optional<Itinerary> itinerary = itineraryService.findOne(itineraryId);
-        if (!itinerary.isPresent()) {
+        Optional<Lesson> lesson = lessonService.findOne(lessonId);
+        if (!lesson.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -196,32 +126,32 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<Slide>(slide.get(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{unitId}/itineraries")
+    @PostMapping(value = "/{unitId}/lessons")
     @ResponseStatus(HttpStatus.CREATED)
-    public Itinerary addItinerary(@RequestBody Itinerary itinerary, @PathVariable long unitId) {
+    public Lesson addLesson(@RequestBody Lesson lesson, @PathVariable long unitId) {
 
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
-        this.itineraryService.save(itinerary);
+        this.lessonService.save(lesson);
 
-        unit.get().getItineraries().add(itinerary);
+        unit.get().getLessons().add(lesson);
         this.unitService.save(unit.get());
 
-        return itinerary;
+        return lesson;
     }
 
-    @DeleteMapping(value = "/{unitId}/itineraries/{itineraryId}")
+    @DeleteMapping(value = "/{unitId}/lessons/{lessonId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Itinerary> deleteItinerary(@PathVariable long itineraryId, @PathVariable long unitId) {
+    public ResponseEntity<Lesson> deleteLesson(@PathVariable long lessonId, @PathVariable long unitId) {
 
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
         if (unit.isPresent()) {
-            Optional<Itinerary> itinerary = this.itineraryService.findOne(itineraryId);
-            if (itinerary.isPresent()) {
-                unit.get().getItineraries().remove(itinerary.get());
-                this.itineraryService.delete(itineraryId);
-                return new ResponseEntity<>(itinerary.get(), HttpStatus.OK);
+            Optional<Lesson> lesson = this.lessonService.findOne(lessonId);
+            if (lesson.isPresent()) {
+                unit.get().getLessons().remove(lesson.get());
+                this.lessonService.delete(lessonId);
+                return new ResponseEntity<>(lesson.get(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

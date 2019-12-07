@@ -2,20 +2,29 @@
 <html>
   <body>
 
-    <app-submenu #subMenu></app-submenu>
+    <button id="add-button" mat-button (click)="addCard()">
+      <mat-icon>add</mat-icon>
+      Añadir ficha
+    </button>
 
-    <div class="cards">
-      <div class="card" *ngFor = "let card of this.cards">
-        <h3>{{card.name}}</h3>
-        <textarea class="textAres" [(ngModel)]="card.content"></textarea>
-        <div id="image-container">
-          <img *ngIf="card.image" [src]="card.image">
-        </div>
+    <div id="spinner-container" *ngIf="showSpinner">
+      <img id="spinner" src="../../assets/img/spinner1.gif">
+      <span id="spinner-text">Cargando...</span>
+    </div>
+
+    <div #cardList>
+      <mat-card class="card" *ngFor = "let card of cards">
+        <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
+          <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save(card)">
+        </mat-form-field>
+        <mat-icon id="delete-card-button" (click)="deleteCard(card.id)">delete</mat-icon>
+        <mat-form-field class="example-full-width card-input card-input-area">
+          <textarea matInput class="card-input" placeholder="Contenido" required (change)="save(card)" (input)="changeTextArea($event)" [(ngModel)]="card.content"></textarea>
+        </mat-form-field>
+      </mat-card>
+      <div *ngIf="cards.length == 0" id="empty-message">
+        Esta unidad no tiene ninguna ficha
       </div>
-
-      <button *ngIf="loginService.isAdmin" mat-button (click)="save()">
-        <mat-icon>save</mat-icon>Guardar
-      </button>
     </div>
 
   </body>

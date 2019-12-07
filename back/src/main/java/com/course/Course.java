@@ -1,7 +1,10 @@
 package com.course;
 
+import com.itinerary.module.Module;
 import com.unit.Unit;
 import com.user.User;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,34 +19,37 @@ public class Course {
     private String name;
     private String description;
 
-    @ManyToMany
-    private List<Unit> units;
+    @ManyToOne
+    private Module module;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<User> students;
 
     @ManyToOne
     private User teacher;
 
     public Course(){
-        this.units = new ArrayList<>();
         this.students = new ArrayList<>();
     }
 
     public Course(String name, User teacher, String description){
-        this.units = new ArrayList<>();
         this.students = new ArrayList<>();
         this.name = name;
         this.teacher = teacher;
         this.description = description;
     }
 
-    public void addUnit(Unit unit){
-        this.units.add(unit);
-    }
-
     public void addStudent(User user){
         this.students.add(user);
+    }
+
+    public void update(Course course){
+        this.name = course.name;
+        this.description = course.description;
+        this.students = course.students;
+        this.module = course.module;
+        this.teacher = course.teacher;
     }
 
     public long getId() {
@@ -54,8 +60,8 @@ public class Course {
         return name;
     }
 
-    public List<Unit> getUnits() {
-        return units;
+    public Module getModule() {
+        return module;
     }
 
     public List<User> getStudents() {
@@ -78,8 +84,8 @@ public class Course {
         this.name = name;
     }
 
-    public void setUnits(List<Unit> units) {
-        this.units = units;
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     public void setStudents(List<User> students) {

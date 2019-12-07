@@ -1,6 +1,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../auth/login.service';
+import {Unit} from '../unit/unit.model';
 import {TabService} from '../tab/tab.service';
 
 @Component({
@@ -14,8 +15,7 @@ export class MenuComponent {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private loginService: LoginService,
-              private tabService: TabService) {
-  }
+              private tabService: TabService) {}
 
   logout() {
     this.loginService.logout().subscribe(

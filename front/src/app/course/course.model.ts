@@ -1,11 +1,11 @@
-import {Unit} from '../unit/unit.model';
 import {User} from '../auth/login.service';
+import {Module} from '../itinerary/module/module.model';
 
 export interface Course {
   id?: number;
   name: string;
   description: string;
-  units?: Unit[];
   students?: User[];
+  module?: Module;
   teacher?: User;
 }

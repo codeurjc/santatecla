@@ -1,17 +1,13 @@
 package com.unit;
 
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.*;
 
 import com.card.Card;
 import com.question.definition.definition_question.DefinitionQuestion;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.itinerary.Itinerary;
+import com.itinerary.lesson.Lesson;
 import com.question.list.list_question.ListQuestion;
 import com.question.test.test_question.TestQuestion;
 import com.relation.Relation;
@@ -30,7 +26,7 @@ public class Unit {
 
     @OneToMany
     @OrderColumn
-    private List<Itinerary> itineraries;
+    private List<Lesson> lessons;
 
     @OneToMany
     private List<Relation> incomingRelations;
@@ -50,7 +46,7 @@ public class Unit {
 
     public Unit() {
         this.cards = new ArrayList<>();
-        this.itineraries = new ArrayList<>();
+        this.lessons = new ArrayList<>();
         this.incomingRelations = new ArrayList<>();
         this.outgoingRelations = new ArrayList<>();
         this.definitionQuestions = new ArrayList<>();
@@ -92,16 +88,23 @@ public class Unit {
         return null;
     }
 
+    public void deleteCard(long id) {
+        Card card = getCard(id);
+        if (card != null) {
+            this.cards.remove(card);
+        }
+    }
+
     public void addCard(Card card) {
         this.cards.add(card);
     }
 
-    public List<Itinerary> getItineraries() {
-        return this.itineraries;
+    public List<Lesson> getLessons() {
+        return this.lessons;
     }
 
-    public void addItinerary(Itinerary itinerary) {
-        this.itineraries.add(itinerary);
+    public void addLesson(Lesson lesson) {
+        this.lessons.add(lesson);
     }
 
     public List<Relation> getIncomingRelations() {

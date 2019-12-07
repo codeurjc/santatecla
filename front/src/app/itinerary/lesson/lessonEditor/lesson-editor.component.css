@@ -1,0 +1,76 @@
+.toolsBar {
+  height: 6rem;
+  padding-left: 0.5rem;
+  background-color: #5d306a;
+}
+
+.tools {
+  color: white;
+  position: absolute;
+  top: 3.6rem;
+}
+
+.tool {
+  margin-left: 0.5rem;
+  background-color: #7d3c90;
+}
+
+.tool:hover {
+  background-color: #a769b8;
+}
+
+.deleteItinerary-button {
+  background-color: indianred;
+  color: white;
+}
+
+#editor-container {
+  float: left;
+  position: absolute;
+  width: 45%;
+  overflow: auto;
+  margin: 0.5rem;
+}
+
+.textAres {
+  resize: none;
+  width: 89%;
+  height: 900px;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #27273c;
+  font-size: 15px;
+}
+
+#html-itinerary-representation-editor {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  border: 0.1rem solid #27273c;
+  float: right;
+  width: 55%;
+  overflow: auto;
+  margin: 0.5rem;
+}
+
+#html-itinerary-representation {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  border: 0.1rem solid #27273c;
+  margin: 1rem;
+}
+
+#spinnerEditor {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  left: 65%;
+  top: 40%;
+}
+
+#spinner {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  left: 44%;
+  top: 40%;
+}

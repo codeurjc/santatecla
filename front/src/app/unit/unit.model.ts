@@ -1,4 +1,4 @@
-import { Itineray } from '../itinerary/itinerary.model';
+import { Lesson } from '../itinerary/lesson/lesson.model';
 import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
 import { ListQuestion } from '../question/listQuestion/listQuestion.model';
 import { Relation } from '../relation/relation.model';
@@ -11,7 +11,7 @@ export interface Unit {
   cards?: Card[];
   outgoingRelations?: Relation[];
   incomingRelations?: Relation[];
-  itineraries?: Itineray[];
+  lessons?: Lesson[];
   definitionQuestions?: DefinitionQuestion[];
   listQuestions?: ListQuestion[];
   testQuestions ?: TestQuestion[];

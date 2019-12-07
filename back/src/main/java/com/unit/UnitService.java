@@ -114,10 +114,5 @@ public class UnitService {
 		}
 		return absoluteName;
 	}
-  
-	public int getUserDistinctAnswer(Long unitId, Long userId){
-		return this.unitRepository.findUserListAnswerDistinctCount(unitId, userId) + this.unitRepository.findUserDefinitionAnswerDistinctCount(unitId, userId) +
-				this.unitRepository.findUserTestAnswerDistinctCount(unitId, userId);
-	}
 
 }

@@ -1,101 +1,128 @@
-import { Unit } from '../unit/unit.model';
-import { Itineray } from '../itinerary/itinerary.model';
-import { CardService } from './card.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import { Card } from './card.model';
-import { UnitService } from '../unit/unit.service';
-import {TabService} from '../tab/tab.service';
-import {LoginService} from '../auth/login.service';
-import {SubMenuComponent} from '../subMenu/subMenu.component';
+import {Unit } from '../unit/unit.model';
+import {CardService} from './card.service';
+import {Router, ActivatedRoute} from '@angular/router';
+import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Card} from './card.model';
+import {UnitService} from '../unit/unit.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
 
 @Component({
+  selector: 'app-cards',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css']
 })
 
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, AfterViewChecked {
 
-  @ViewChild('subMenu') private subMenu: SubMenuComponent;
+  @ViewChild('cardList') cardList: ElementRef;
 
   unitId: number;
-  cards: Card[];
+  cards: Card[] = [];
   unit: Unit;
-  itineraries: Itineray[];
+  showSpinner = false;
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private cardService: CardService,
-              private unitService: UnitService,
-              private tabService: TabService,
-              private loginService: LoginService) {
-    router.events.subscribe(event => {
-      if (event instanceof CardComponent) {
-        this.ngOnInit();
-      }
-    });
-  }
+  confirmText = 'Se eliminará la ficha permanentemente';
+  button1 = 'Cancelar';
+  button2 = 'Borrar';
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private cardService: CardService,
+              private unitService: UnitService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      this.subMenu.ngOnInit();
-      this.unitId = params['unitId'];
+      this.unitId = params.unitId;
+      this.showSpinner = true;
       this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-        this.unit = {
-          id: data.id,
-          name: data.name,
-          itineraries: data.itineraries
-        };
-        this.itineraries = this.unit.itineraries;
-        if(this.loginService.isAdmin) {
-          this.tabService.addTab('units', this.unitId, this.unit.name, null);
-        }
+        this.unit = data;
+        this.cards = this.unit.cards;
+        this.showSpinner = false;
       });
-      this.cardService.getCards(this.unitId).subscribe((data: Card[]) => {
-        this.cards = [];
-        data.forEach((card: Card) => {
-          this.cards.push({
-            id: card.id,
-            name: card.name,
-            content: card.content,
-            image: (card.image) ? this.convertImage(card.image) : ''
-          });
-        });
-      }, error => {});
     });
   }
 
-  convertImage(bytes: any) {
-    return 'data:image/png;base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(bytes)));
-  }
-
-  changeImage(cardId: number, fileInput: any) {
-    const image: File = fileInput.files[0];
-    const reader = new FileReader();
-    reader.addEventListener('load', (event: any) => {
-      this.cardService.putImage(this.unitId, cardId, image).subscribe(
-        _ => {
-          this.ngOnInit();
-        }, (error: Error) => {
-          console.error('Error creating new image: ' + error);
-        }
-      );
+  ngAfterViewChecked() {
+    console.log('a');
+    this.cardList.nativeElement.childNodes.forEach((card) => {
+      try {
+        this.fitContent(card.childNodes[2].firstChild.firstChild.childNodes[2].firstChild);
+      } catch (e) {}
     });
-    reader.readAsDataURL(image);
   }
 
-  save() {
-    this.cards.forEach((card: Card) => {
-      if (card.name !== '') {
-        this.cardService.save(this.unitId, card).subscribe(
-            _ => {
+  private addCard() {
+    if ((this.cards.length === 0) || (this.cards[0].name && this.cards[0].content)) {
+      this.cards.unshift({
+        id: 0,
+        name: '',
+        content: ''
+      });
+    }
+    this.focusNewCard();
+  }
 
-            }, error => {
-              console.error(error);
-            }
-        );
+  private focusNewCard() {
+    window.scroll(0, 0);
+  }
+
+  private getCardIndex(id: number): number {
+    let index = -1;
+    this.cards.forEach((card, i) => {
+      if (card.id === id) {
+        index = i;
       }
     });
+    return index;
+  }
+
+  private deleteCard(id: number) {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      width: '400px',
+      data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.showSpinner = true;
+        if (id === 0) {
+          this.cards.splice(0, 1);
+          this.showSpinner = false;
+        } else {
+          this.cardService.deleteCard(this.unitId, id).subscribe(() => {
+            this.cards.splice(this.getCardIndex(id), 1);
+            this.showSpinner = false;
+          });
+        }
+      }
+    });
+  }
+
+  save(card: Card) {
+    if (card.name && card.content) {
+      this.showSpinner = true;
+      if (card.id === 0) {
+        this.cardService.create(this.unitId, card).subscribe((createdCard) => {
+          card.id = createdCard.id;
+          this.showSpinner = false;
+        });
+      } else {
+        this.cardService.save(this.unitId, card).subscribe(() => {
+          this.showSpinner = false;
+        }, error => {
+          console.error(error);
+        });
+      }
+    }
+  }
+
+  changeTextArea(event: Event) {
+    this.fitContent(event.target as HTMLTextAreaElement);
+  }
+
+  fitContent(textArea: HTMLTextAreaElement) {
+    textArea.style.overflow = 'hidden';
+    textArea.style.height = '0px';
+    textArea.style.height = textArea.scrollHeight + 'px';
   }
 
 }

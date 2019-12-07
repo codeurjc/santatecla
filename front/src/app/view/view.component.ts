@@ -5,16 +5,24 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
-import { TdDialogService } from "@covalent/core";
+import { TdDialogService } from '@covalent/core';
+import {TabService} from '../tab/tab.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
 
 declare var mermaid: any;
 
 @Component({
+  selector: 'app-view',
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
 
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
+
+  confirmText = 'Se han realizado cambios';
+  button1 = 'Descartar';
+  button2 = 'Guardar';
 
   private UNIT_NAME_SEPARATOR = '/';
   private ENTER_KEY = 'Enter';
@@ -57,13 +65,15 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
 
-  constructor(private router: Router, private unitService: UnitService, private _dialogService: TdDialogService) {}
+  constructor(private router: Router, private unitService: UnitService, private _dialogService: TdDialogService,
+              private tabService: TabService, public dialog: MatDialog) {}
 
   ngOnInit() {
+    this.tabService.setUnits();
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
-    this.focusUnit(13);
+    this.focusUnit(17);
   }
 
   ngAfterContentInit() {
@@ -175,49 +185,55 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return '0' + this.newRelationId++;
   }
 
-  private save() {
+  private save(goToUnit) {
     if (this.changed) {
       this.changed = false;
       this.showSpinner = true;
-      this.saveAll();
-    }
-  }
 
-  private saveAll() {
-    const unitsToCreate: Unit[] = [];
-    this.units.forEach((unit: Unit) => {
-      if (unit.id.toString().substring(0, 1) === '0') {
-        unitsToCreate.push(unit);
-      }
-    });
-
-    let i = 0;
-    unitsToCreate.forEach((unit: Unit) => {
-      const unitToCreate = { id: '0', name: unit.name, outgoingRelations: [], incomingRelations: [], itineraries: [], definitionQuestions: [], listQuestions: [], testQuestions: [] };
-      this.unitService.createUnit(unitToCreate).subscribe((data: Unit) => {
-        unit.id = data.id;
-        unit.name = data.name;
-        unit.incomingRelations.forEach((relation: Relation) => {
-          relation.incoming = data.id.toString();
-        });
-        unit.outgoingRelations.forEach((relation: Relation) => {
-          relation.outgoing = data.id.toString();
-        });
-
-        i++;
-        if (i === unitsToCreate.length) {
-          this.saveUnitsAndRelations();
+      const unitsToCreate: Unit[] = [];
+      this.units.forEach((unit: Unit) => {
+        if (unit.id.toString().substring(0, 1) === '0') {
+          unitsToCreate.push(unit);
         }
-      }, error => {
-        console.log(error);
       });
-    });
-    if (unitsToCreate.length === 0) {
-      this.saveUnitsAndRelations();
+
+      let i = 0;
+      unitsToCreate.forEach((unit: Unit) => {
+        const unitToCreate = {
+          id: '0',
+          name: unit.name,
+          outgoingRelations: [],
+          incomingRelations: [],
+          itineraries: [],
+          definitionQuestions: [],
+          listQuestions: [],
+          testQuestions: []
+        };
+        this.unitService.createUnit(unitToCreate).subscribe((data: Unit) => {
+          unit.id = data.id;
+          unit.name = data.name;
+          unit.incomingRelations.forEach((relation: Relation) => {
+            relation.incoming = data.id.toString();
+          });
+          unit.outgoingRelations.forEach((relation: Relation) => {
+            relation.outgoing = data.id.toString();
+          });
+
+          i++;
+          if (i === unitsToCreate.length) {
+            this.saveUnitsAndRelations(goToUnit);
+          }
+        }, error => {
+          console.log(error);
+        });
+      });
+      if (unitsToCreate.length === 0) {
+        this.saveUnitsAndRelations(goToUnit);
+      }
     }
   }
 
-  private saveUnitsAndRelations() {
+  private saveUnitsAndRelations(goToUnit) {
     const unitsToSave: Unit[] = [];
     this.units.forEach((unit: Unit) => {
       const unitToSave = {
@@ -245,6 +261,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
       this.focusUnit(this.focusedUnitId);
       this.updateUml();
+      if (goToUnit) {
+        this.goToUnit(goToUnit);
+      }
     }, error => {
       console.log(error);
     });
@@ -401,7 +420,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   onKeyPress($event: KeyboardEvent) {
     if (($event.metaKey || $event.ctrlKey) && ($event.key == 's')) {
       $event.preventDefault();
-      this.save();
+      this.save(null);
     }
   }
 
@@ -471,10 +490,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
       if (this.changed) {
-        this._dialogService.openAlert({
-          message: 'Se han realizado cambios. Debe guardarlos antes de salir',
-          title: 'Guardar cambios',
-          closeButton: 'Cerrar'
+        const dialogRef = this.dialog.open(ConfirmActionComponent, {
+          width: '400px',
+          data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result === 2) {
+            this.goToUnit(target.id.toString().substring(0, target.id.toString().length));
+          } else if (result === 1) {
+            this.save(target.id.toString().substring(0, target.id.toString().length));
+          }
         });
       } else {
         this.goToUnit(target.id.toString().substring(0, target.id.toString().length));
@@ -588,7 +614,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Routing
 
   private goToUnit(id) {
-    this.router.navigate(['/units/' + id + '/cards']);
+    this.router.navigate(['/unit/' + id]);
   }
 
 

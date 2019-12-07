@@ -3,8 +3,6 @@
   <!-- ADMIN -->
   <body *ngIf="loginService.isAdmin">
 
-    <app-submenu></app-submenu>
-
     <!-- DEFINITION QUESTION LIST -->
     <mat-card class="questions-card">
       <mat-card-title class="card-title">Definición</mat-card-title>
@@ -13,7 +11,7 @@
           <mat-list-item *ngFor="let question of definitionQuestions">
             <p matLine>
               {{ question.questionText }}
-              <button mat-button (click)="deleteDefinitionQuestion(question.id)">
+              <button mat-button (click)="deleteQuestion(question.id)">
                 <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
             </p>
@@ -30,7 +28,7 @@
           <mat-list-item *ngFor="let question of listQuestions">
             <p matLine>
               {{ question.questionText }}
-              <button mat-button (click)="deleteListQuestion(question.id)">
+              <button mat-button (click)="deleteQuestion(question.id)">
                 <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
             </p>
@@ -47,7 +45,7 @@
           <mat-list-item *ngFor="let question of testQuestions">
             <p matLine>
               {{ question.questionText }}
-              <button mat-button (click)="deleteTestQuestion(question.id)">
+              <button mat-button (click)="deleteQuestion(question.id)">
                 <mat-icon class="delete-icon">delete_outline</mat-icon>
               </button>
             </p>
@@ -146,7 +144,6 @@
 
   <!-- NOT ADMIN -->
   <body *ngIf="!loginService.isAdmin">
-    <app-submenu></app-submenu>
 
     <mat-card class="questions-card">
       <mat-card-title class="card-title">Preguntas de definición</mat-card-title>

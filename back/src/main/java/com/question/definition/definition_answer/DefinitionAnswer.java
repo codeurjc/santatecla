@@ -23,6 +23,8 @@ public class DefinitionAnswer{
     private String justification;
 
     private long unitId;
+    private long moduleId;
+    private long courseId;
 
     @OneToOne
     private User user;
@@ -83,5 +85,13 @@ public class DefinitionAnswer{
 
     public void setUnitId(long unitId) {
         this.unitId = unitId;
+    }
+
+    public long getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(long moduleId) {
+        this.moduleId = moduleId;
     }
 }
