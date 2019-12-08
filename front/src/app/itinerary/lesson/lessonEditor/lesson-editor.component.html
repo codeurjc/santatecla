@@ -5,28 +5,25 @@
     <!-- TOOLS BAR -->
     <div class="toolsBar" *ngIf="loginService.isAdmin">
       <mat-chip-list class="tools">
-        <mat-chip>
+        <button mat-button class="tool">
           <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
-        </mat-chip>
-        <mat-chip (click)="openBottomSheet()">
+        </button>
+        <button mat-button class="tool" (click)="openBottomSheet()">
           <mat-icon>assignment</mat-icon>Buscar fichas
-        </mat-chip>
-        <mat-chip>
+        </button>
+        <button mat-button class="tool">
           <mat-icon>book</mat-icon>Buscar slides
-        </mat-chip>
-        <mat-chip>
+        </button>
+        <button mat-button class="tool">
           <mat-icon>description</mat-icon>Buscar ejercicios
-        </mat-chip>
-        <mat-chip class="deleteItinerary-button" (click)="deleteItinerary()">
-          <mat-icon>delete</mat-icon>Borrar itinerario
-        </mat-chip>
+        </button>
       </mat-chip-list>
     </div>
 
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <div id="editor-container">
-        <textarea class="textAres" [(ngModel)]="itineraryContent" (change)="updateHTMLView()"></textarea>
+        <textarea class="textAres" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
       </div>
     </div>
 

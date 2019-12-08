@@ -27,22 +27,27 @@
   background-color: #a769b8;
 }
 
+.tab-text {
+  margin-left: 0.5rem;
+}
+
 .tab-icon {
   position: absolute;
-  left: 1rem;
+  left: 1.37rem;
   margin-top: 0.4rem;
 }
 
 .tab-icon-without-menu {
   position: absolute;
+  left: 1.37rem;
   top: 0.78rem;
-  left: 1rem;
 }
 
 #unit-content {
   margin-top: 4rem;
   position: absolute;
   right: 0;
+  padding-bottom: 2rem;
 }
 
 .with-menu {
@@ -68,6 +73,10 @@
   background-color: #9e2abb !important;
 }
 
+input:invalid {
+  background-color: red;
+}
+
 #lateral-panel {
   position: fixed;
   top: 3rem;
@@ -77,7 +86,7 @@
 }
 
 #hide-menu-button {
-  z-index: 2000;
+  z-index: 501;
   top: 3rem;
   position: fixed;
   color: #ffffff;
@@ -109,7 +118,7 @@
   top: 3rem;
   right: 0;
   height: 2.5rem;
-  z-index: 1000;
+  z-index: 500;
   background-color: #5d306a;
   text-align: right;
   padding: 0.3rem 0 0.3rem 0;

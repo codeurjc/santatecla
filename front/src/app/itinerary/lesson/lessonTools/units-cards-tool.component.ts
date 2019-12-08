@@ -34,7 +34,7 @@ export class UnitsCardsToolComponent implements OnInit {
           id: unit.id,
           name: unit.name,
           cards: unit.cards,
-          itineraries: unit.itineraries
+          lessons: unit.lessons
         });
         this.unitsResult = this.units;
       });

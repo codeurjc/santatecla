@@ -11,7 +11,7 @@ export interface Unit {
   cards?: Card[];
   outgoingRelations?: Relation[];
   incomingRelations?: Relation[];
-  itineraries?: Lesson[];
+  lessons?: Lesson[];
   definitionQuestions?: DefinitionQuestion[];
   listQuestions?: ListQuestion[];
   testQuestions ?: TestQuestion[];

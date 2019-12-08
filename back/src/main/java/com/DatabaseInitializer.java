@@ -90,8 +90,8 @@ public class DatabaseInitializer {
                 Slide slide1 = new Slide("Saludos");
                 Slide slide2 = new Slide("Despedidas");
 
-                slide1.addContent("Hola");
-                slide2.addContent("Adios");
+                slide1.addContent("Hola\n\n");
+                slide2.addContent("Adios\n\n");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);

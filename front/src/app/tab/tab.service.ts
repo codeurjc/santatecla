@@ -5,44 +5,59 @@ export class TabService {
 
   units = false;
   unit = '';
+  unitId: number;
+
   courses = false;
   course = '';
 
+  lessons = false;
+  lesson = '';
+
   constructor() {}
 
-  setHome() {
+  emptyAll() {
     this.units = false;
     this.unit = '';
     this.courses = false;
     this.course = '';
+    this.lessons = false;
+    this.lesson = '';
+  }
+
+  setHome() {
+    this.emptyAll();
   }
 
   setUnits() {
+    this.emptyAll();
     this.units = true;
-    this.unit = '';
-    this.courses = false;
-    this.course = '';
   }
 
-  setUnit(unitName: string) {
+  setUnit(unitName: string, unitId) {
+    this.emptyAll();
     this.units = true;
     this.unit = unitName;
-    this.courses = false;
-    this.course = '';
+    this.unitId = unitId;
   }
 
   setCourses() {
-    this.units = false;
-    this.unit = '';
+    this.emptyAll();
     this.courses = true;
-    this.course = '';
   }
 
   setCourse(courseName: string) {
-    this.units = false;
-    this.unit = '';
+    this.emptyAll();
     this.courses = true;
     this.course = courseName;
+  }
+
+  setLesson(unitName: string, unitId: number, lessonName: string) {
+    this.emptyAll();
+    this.units = true;
+    this.unit = unitName;
+    this.unitId = unitId;
+    this.lessons = true;
+    this.lesson = lessonName;
   }
 
 }

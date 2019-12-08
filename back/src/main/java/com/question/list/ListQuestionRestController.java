@@ -7,54 +7,59 @@ import com.GeneralRestController;
 
 import com.question.list.list_answer.ListAnswer;
 import com.question.list.list_question.ListQuestion;
+import com.unit.Unit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/list")
+@RequestMapping("/api/units/{unitID}/question/list")
 public class ListQuestionRestController extends GeneralRestController {
 
-    @GetMapping("/")
-    public ResponseEntity<List<ListQuestion>> getQuestions() {
-        return new ResponseEntity<>(this.listQuestionService.findAll(), HttpStatus.OK);
-    }
+    @GetMapping("")
+    public ResponseEntity<List<ListQuestion>> getListQuestions(@PathVariable long unitID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ListQuestion> getQuestion(@PathVariable long id) {
-        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
-        if (optional.isPresent()) {
-            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
-        }
+        if (unit.isPresent())
+            return new ResponseEntity<>(unit.get().getListQuestions(), HttpStatus.OK);
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ListQuestion> addQuestion(@RequestBody ListQuestion question) {
-        this.listQuestionService.save(question);
+    @PostMapping("")
+    public ResponseEntity<ListQuestion> addListQuestion(@PathVariable long unitID, @RequestBody ListQuestion question) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
 
-        return new ResponseEntity<>(question, HttpStatus.CREATED);
+        if (unit.isPresent()) {
+            this.listQuestionService.save(question);
+            unit.get().addListQuestion(question);
+            this.unitService.save(unit.get());
+            return new ResponseEntity<>(question, HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<ListQuestion> deleteQuestion(@PathVariable long id) {
+    @DeleteMapping("/{questionID}")
+    public ResponseEntity<ListQuestion> deleteListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<ListQuestion> question = this.listQuestionService.findOne(questionID);
 
-        Optional<ListQuestion> question = this.listQuestionService.findOne(id);
-
-        if (question.isPresent()) {
-            this.listQuestionService.delete(id);
+        if (unit.isPresent() && question.isPresent()) {
+            this.listQuestionService.delete(questionID);
             return new ResponseEntity<>(question.get(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<ListQuestion> updateQuestion(@PathVariable long id, @RequestBody ListQuestion newQuestion) {
+    @PutMapping(value = "/{questionID}")
+    public ResponseEntity<ListQuestion> updateQuestion(@PathVariable long unitID, @PathVariable long questionID, @RequestBody ListQuestion newQuestion) {
 
-        Optional<ListQuestion> oldQuestion = this.listQuestionService.findOne(id);
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<ListQuestion> oldQuestion = this.listQuestionService.findOne(questionID);
 
-        if (oldQuestion.isPresent()) {
+        if (unit.isPresent() && oldQuestion.isPresent()) {
             oldQuestion.get().update(newQuestion);
             this.listQuestionService.save(oldQuestion.get());
             return new ResponseEntity<>(oldQuestion.get(), HttpStatus.OK);
@@ -63,90 +68,29 @@ public class ListQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<ListAnswer> addAnswer(@PathVariable long id, @RequestBody ListAnswer answer) {
+    @GetMapping(value = "/{questionID}/answer")
+    public ResponseEntity<List<ListAnswer>> getListAnswers(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<ListQuestion> question = this.listQuestionService.findOne(questionID);
 
-        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
-        if (optional.isPresent()) {
-            ListQuestion question = optional.get();
-            question.addAnswer(answer);
-            if (answer.isCorrect()) {
-                question.setTotalCorrectAnswers(question.getTotalCorrectAnswers() + 1);
-            } else {
-                question.setTotalWrongAnswers(question.getTotalWrongAnswers() + 1);
-            }
-            this.listQuestionService.save(question);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value = "/{id}/answer")
-    public ResponseEntity<List<ListAnswer>> getAnswers(@PathVariable long id) {
-
-        Optional<ListQuestion> question = this.listQuestionService.findOne(id);
-
-        if (question.isPresent()) {
+        if (unit.isPresent() && question.isPresent()) {
             return new ResponseEntity<>(question.get().getListAnswers(), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{id}/answer/user/{userId}")
-    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
-        return new ResponseEntity<>(this.listQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
-    }
+    @PostMapping("/{questionID}/answer")
+    public ResponseEntity<ListAnswer> addListAnswer(@PathVariable long unitID, @PathVariable long questionID, @RequestBody ListAnswer answer) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<ListQuestion> question = this.listQuestionService.findOne(questionID);
 
-    /*@PostMapping("/{id}/correct/")
-    public ResponseEntity<ListQuestion> addCorrectAnswer(@PathVariable long id){
-        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
-        if(optional.isPresent()){
-            ListQuestion question = optional.get();
-            question.addAnswer(answer);
-            if(answer.isCorrect()){
-                question.setCorrectAnswerCount(question.getCorrectAnswerCount() + 1);
-            }
-            else {
-                question.setWrongAnswerCount(question.getWrongAnswerCount() + 1);
-            }
-            this.listQuestionService.save(question);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+        if (unit.isPresent() && question.isPresent()) {
+            question.get().addAnswer(answer);
+            this.listQuestionService.save(question.get());
+            return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    /*@PostMapping("/{id}/wrong/")
-    public ResponseEntity<ListQuestion> addWrongAnswer(@PathVariable long id){
-        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
-        if(optional.isPresent()){
-            optional.get().setWrongAnswers(optional.get().getWrongAnswers()+1);
-            this.listQuestionService.save(optional.get());
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/{id}/correct/")
-    public ResponseEntity<Integer> getCorrectAnswers(@PathVariable long id){
-        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
-        if(optional.isPresent()){
-            return new ResponseEntity<>(optional.get().getCorrectAnswersCount(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/{id}/wrong/")
-    public ResponseEntity<Integer> getWrongAnswers(@PathVariable long id){
-        Optional<ListQuestion> optional = this.listQuestionService.findOne(id);
-        if(optional.isPresent()){
-            return new ResponseEntity<>(optional.get().getWrongAnswers(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }*/
-
-
 }

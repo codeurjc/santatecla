@@ -58,7 +58,8 @@ import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.com
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
-import {ViewChangesComponent} from "./view/dialog/view-changes.component";
+import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
+import {AddQuestionDialogComponent} from './question/addQuestionDialog/addQuestionDialog.component';
 
 @NgModule({
   declarations: [
@@ -81,11 +82,12 @@ import {ViewChangesComponent} from "./view/dialog/view-changes.component";
     CourseComponent,
     NewCourseComponent,
     AnswerDefinitionDialogComponent,
+    AddQuestionDialogComponent,
     HomeComponent,
-    ViewChangesComponent
+    ConfirmActionComponent
   ],
   entryComponents: [
-    ViewChangesComponent
+    ConfirmActionComponent
   ],
   imports: [
     ClipboardModule,

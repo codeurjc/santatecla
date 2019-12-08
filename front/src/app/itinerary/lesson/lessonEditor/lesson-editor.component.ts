@@ -14,6 +14,7 @@ import Asciidoctor from 'asciidoctor';
 import {Slide} from '../../../slide/slide.model';
 import {DefinitionQuestionService} from '../../../question/definitionQuestion/definitionQuestion.service';
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
+import {TabService} from "../../../tab/tab.service";
 
 
 function convertToHTML(text) {
@@ -23,7 +24,7 @@ function convertToHTML(text) {
 }
 
 @Component({
-  selector: 'app-itineraries',
+  selector: 'app-lesson-editor',
   templateUrl: './lesson-editor.component.html',
   styleUrls: ['./lesson-editor.component.css']
 })
@@ -31,17 +32,17 @@ function convertToHTML(text) {
 export class LessonEditorComponent implements OnInit {
 
   contentHTML: any;
-  itineraryContent: any;
-  itineraryContentExtended: string;
+  lessonContent: any;
+  lessonContentExtended: string;
 
   extractedData: string[];
   position: number[];
 
   unit: Unit;
-  itinerary: Lesson;
+  lesson: Lesson;
 
   unitId: number;
-  itineraryId: number;
+  lessonId: number;
 
   contentCount: number;
 
@@ -56,16 +57,23 @@ export class LessonEditorComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
               private loginService: LoginService,
+              private lessonService: LessonService,
               private definitionQuestionService: DefinitionQuestionService,
               private unitService: UnitService,
-              private bottomSheet: MatBottomSheet) {
+              private bottomSheet: MatBottomSheet,
+              private tabService: TabService) {
   }
 
   ngOnInit() {
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
-      this.itineraryId = params.itineraryId;
+      this.lessonId = params.lessonId;
+      this.lessonService.getLesson(this.lessonId).subscribe((lesson: Lesson) => {
+        this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
+          this.tabService.setLesson(unit.name, this.unitId, lesson.name);
+        });
+      });
       this.loadItinerary();
     });
 
@@ -74,21 +82,21 @@ export class LessonEditorComponent implements OnInit {
   loadItinerary() {
     this.showSpinner = true;
 
-    this.itineraryService.getLesson(this.itineraryId).subscribe((data: Lesson) => {
-      this.itinerary = {
+    this.itineraryService.getLesson(this.lessonId).subscribe((data: Lesson) => {
+      this.lesson = {
         id: data.id,
         name: data.name,
         slides: data.slides
       };
-      this.itineraryContent = '== ' + this.itinerary.name + '\n';
-      this.itineraryContentExtended = '';
-      this.slidesToContent(this.itinerary.slides);
-      this.extendContent(this.itineraryContent);
+      this.lessonContent = '== ' + this.lesson.name + '\n';
+      this.lessonContentExtended = '';
+      this.slidesToContent(this.lesson.slides);
+      this.extendContent(this.lessonContent);
     });
   }
 
   viewHTMLVersion() {
-    this.contentHTML = convertToHTML(this.itineraryContentExtended);
+    this.contentHTML = convertToHTML(this.lessonContentExtended);
   }
 
   slidesToContent(slides: Slide[]) {
@@ -96,7 +104,7 @@ export class LessonEditorComponent implements OnInit {
       this.showSpinner = false;
     } else {
       slides.forEach((slide: Slide) => {
-        this.itineraryContent = this.itineraryContent + slide.content + '// ' + slide.id + '\n\n';
+        this.lessonContent = this.lessonContent + slide.content + '// ' + slide.id + '\n\n';
       });
     }
   }
@@ -108,7 +116,7 @@ export class LessonEditorComponent implements OnInit {
       this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
     } else if (type === 'slide') {
       this.subSlide = true;
-      contentEmbebed = await this.unitService.getSlideFormItinerary(contentId, contentId2, unitId).toPromise();
+      contentEmbebed = await this.unitService.getSlideFormLesson(contentId, contentId2, unitId).toPromise();
       this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
@@ -170,14 +178,14 @@ export class LessonEditorComponent implements OnInit {
 
   addExtractedData(content: string) {
     this.componentsChecker = 0;
-    this.itineraryContentExtended = '';
+    this.lessonContentExtended = '';
     let lines: string[];
     lines = content.split('\n');
     for (let i = 0; i < this.position.length; i ++) {
       lines[this.position[i]] = this.extractedData[i];
     }
     lines.forEach((line: string) => {
-      this.itineraryContentExtended = this.itineraryContentExtended + line + '\n';
+      this.lessonContentExtended = this.lessonContentExtended + line + '\n';
     });
     this.extractedData.forEach((component: string) => {
       if (component !== '') {
@@ -186,7 +194,7 @@ export class LessonEditorComponent implements OnInit {
     });
     if (this.componentsChecker === this.contentCount) {
       if (this.subSlide) {
-        this.extendContent(this.itineraryContentExtended);
+        this.extendContent(this.lessonContentExtended);
       } else {
         this.showSpinner = false;
         this.viewHTMLVersion();
@@ -198,16 +206,16 @@ export class LessonEditorComponent implements OnInit {
     let slidesContent: string[];
     slidesContent = content.split('=== ');
     if (slidesContent[0].split(' ')[0] === '==') {
-      this.itinerary.name = '';
+      this.lesson.name = '';
       for (let i = 1; i < slidesContent[0].split(' ').length; i ++) {
-        this.itinerary.name = this.itinerary.name + slidesContent[0].split(' ')[i].split('\n')[0] + ' ';
+        this.lesson.name = this.lesson.name + slidesContent[0].split(' ')[i].split('\n')[0] + ' ';
       }
     }
     this.contentToSlides(slidesContent);
   }
 
   contentToSlides(content: string[]) {
-    this.itinerary.slides = [];
+    this.lesson.slides = [];
     let slide: Slide;
     for (let i = 1; i < content.length; i ++) {
       slide = { name: '', content: ''};
@@ -228,15 +236,15 @@ export class LessonEditorComponent implements OnInit {
           }
         }
       }
-      this.itinerary.slides.push(slide);
+      this.lesson.slides.push(slide);
     }
   }
 
   updateHTMLView() {
-    this.contentToItinerary(this.itineraryContent);
+    this.contentToItinerary(this.lessonContent);
     this.contentHTML = '';
     this.showSpinner = true;
-    this.itineraryService.updateLesson(this.itinerary).subscribe((_) => {
+    this.itineraryService.updateLesson(this.lesson).subscribe((_) => {
       this.loadItinerary();
     }, (error) => {
       console.error(error);
@@ -245,21 +253,6 @@ export class LessonEditorComponent implements OnInit {
 
   openBottomSheet(): void {
     this.bottomSheet.open(UnitsCardsToolComponent);
-  }
-
-  deleteItinerary() {
-    this.dialogService.openConfirm({
-      message: '¿ Seguro que desea eliminar el itinerario ' + this.itinerary.name + ' ?',
-      title: 'Confirmación',
-      width: '400px',
-      height: '200px'
-    }).afterClosed().subscribe((accept: boolean) => {
-      if (accept) {
-        this.unitService.deleteItinerary(this.unitId, this.itineraryId).subscribe(() => {
-          this.router.navigate(['/units/' + this.unitId + '/cards']);
-        });
-      }
-    });
   }
 
 }

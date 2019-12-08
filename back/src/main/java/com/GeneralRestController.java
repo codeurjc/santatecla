@@ -8,7 +8,9 @@ import com.question.QuestionService;
 import com.question.definition.definition_question.DefinitionQuestionService;
 import com.question.list.list_question.ListQuestionService;
 import com.question.test.test_question.TestQuestionService;
+import com.relation.RelationService;
 import com.slide.*;
+import com.unit.UnitService;
 import com.user.UserComponent;
 import com.user.UserService;
 
@@ -52,4 +54,10 @@ public class GeneralRestController {
 
 	@Autowired
 	protected CourseService courseService;
+
+	@Autowired
+	protected UnitService unitService;
+
+	@Autowired
+	protected RelationService relationService;
 }

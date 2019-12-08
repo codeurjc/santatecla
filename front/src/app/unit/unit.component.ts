@@ -15,17 +15,18 @@ export class UnitComponent implements OnInit {
   activeTab = 0;
   showMenu = true;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private unitService: UnitService, private tabService: TabService) {}
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private unitService: UnitService,
+              private tabService: TabService) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      const unitId = params['unitId'];
+      const unitId = params.unitId;
       this.unitService.getUnit(unitId).subscribe((data: Unit) => {
-        this.tabService.setUnit(data.name);
+        this.tabService.setUnit(data.name, data.id);
         this.unit = data;
-      },error => {
-        console.log(error);
-      });
+      }, error => { console.log(error); });
     });
   }
 

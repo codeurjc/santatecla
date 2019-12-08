@@ -19,6 +19,10 @@ public class QuestionService {
 
     public Optional<Question> findOne(long id){ return this.questionRepository.findById(id);}
 
+    public void delete(long id) {
+        this.questionRepository.deleteById(id);
+    }
+
     public List<Question> findQuestionsByModuleId(long id){
         return this.questionRepository.findByModuleId(id);
     }

@@ -12,6 +12,7 @@ import {NewCourseComponent} from './course/newCourse.component';
 import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
 import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.component';
 import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
+import {AddQuestionDialogComponent} from './question/addQuestionDialog/addQuestionDialog.component';
 import {UnitComponent} from './unit/unit.component';
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
@@ -25,8 +26,10 @@ const appRoutes = [
   { path: 'lessonForm', component: LessonFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
   { path: 'units/:unitId/lessons', component: LessonComponent },
+  { path: 'units/:unitId/lessons/:lessonId', component: LessonEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
+  { path: 'answerQuestionDialog', component: AddQuestionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/listQuestion/:questionId', component: ListQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},

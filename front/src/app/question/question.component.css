@@ -11,6 +11,19 @@
   font-size: 0.8rem;
 }
 
+.new-question-button {
+  position: fixed;
+  color: white;
+  background-color: #7d3c90;
+  top: 3.45rem;
+  z-index: 501;
+  right: 1rem;
+}
+
+.tool:hover {
+  background-color: #a769b8;
+}
+
 .questions-group {
   margin-right: 10%;
   margin-left: 10%;
@@ -19,13 +32,9 @@
 }
 
 .questions-card {
-  margin: 0%
-}
-
-.question-card {
   margin-right: 10%;
   margin-left: 10%;
-  margin-top: 2%;
+  margin-top: 5%;
   margin-bottom: 2%;
 }
 
@@ -43,11 +52,21 @@
 
 .card-content {
   text-align: center;
+  align-content: center;
 }
 
 .button-row button,
 .button-row a {
   margin: 8px;
+}
+
+.question-button {
+  background-color: #7d3c90;
+  color: #ffffff;
+}
+
+.active-type {
+  background-color: #a769b8;
 }
 
 .add-question-radio-group {
@@ -71,6 +90,8 @@
 
 .add-answer-button {
   margin: 10px;
+  background-color: #7d3c90;
+  color: #ffffff;
 }
 
 .add-answer-list {
