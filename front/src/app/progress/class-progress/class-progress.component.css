@@ -46,8 +46,10 @@
 }
 
 .top-margin {
-  margin-top: 5%;
+  margin-top: 5rem;
+  align-content: center;
   text-align: center;
+  justify-content: center;
 }
 
 .letf-margin {

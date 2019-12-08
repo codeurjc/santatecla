@@ -5,12 +5,8 @@ import {Course} from '../../course/course.model';
 import {UserResult} from '../items/userResult.model';
 import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../../course/course.service';
-import {StudentProgressItem} from '../items/studentProgressItem.model';
-import {ModuleFormat} from '../items/moduleFormat.model';
 import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {MatIconRegistry} from '@angular/material';
-import {TdDigitsPipe} from '@covalent/core';
 import {DatePipe} from '@angular/common';
 
 @Component({
@@ -22,19 +18,9 @@ import {DatePipe} from '@angular/common';
 export class ModuleProgressComponent implements OnInit {
   courseId: number;
   course: Course;
-  courses: Course[];
   moduleResults: UserResult[];
-  classResults: StudentProgressItem[];
-  courseFormat: ModuleFormat[];
-  moduleFormat: ModuleFormat;
-  moduleExtendedResults: StudentProgressItem[];
   columnsToDisplay = ['name', 'realization', 'average'];
-  classColumnsToDisplay = ['name'];
-  extendedColumnsToDisplay = ['name'];
   moduleResultsReady = false;
-  classResultsReady = false;
-  extendedInfo = false;
-  chosenInfoToShow = 'Todo';
   histogram = [];
   xAxisLabel = 'Tema';
   yAxisLabel = 'Media';
@@ -60,53 +46,11 @@ export class ModuleProgressComponent implements OnInit {
         this.buildHistogramData();
         this.moduleResultsReady = true;
       }, error => {console.log(error); });
-
-      this.progressService.getClassProgress(this.courseId).subscribe((data: StudentProgressItem[]) => {
-        this.classResults = data;
-        console.log(this.classResults);
-      }, error => {console.log(error); });
-
-      this.progressService.getModuleFormat(this.courseId).subscribe((data: ModuleFormat[]) => {
-        this.courseFormat = data;
-
-        for (let module of this.courseFormat) {
-          this.classColumnsToDisplay.push(module.moduleName);
-        }
-
-        this.classColumnsToDisplay.push('studentAverage');
-        this.classResultsReady = true;
-      }, error => {console.log(error); });
-
     });
 
     this._iconRegistry.addSvgIconInNamespace('assets', 'covalent',
       this._domSanitizer.bypassSecurityTrustResourceUrl(
         'https://raw.githubusercontent.com/Teradata/covalent-quickstart/develop/src/assets/icons/covalent.svg'));
-  }
-
-  showModuleExtendedInfo(moduleId: number, moduleName: string) {
-    this.classResultsReady = false;
-    this.progressService.getExtendedModuleInfo(this.courseId, moduleId).subscribe((data: StudentProgressItem[]) => {
-      this.moduleExtendedResults = data;
-      this.classResultsReady = true;
-      this.extendedInfo = true;
-    }, error => {console.log(error); });
-
-    for (let module of this.courseFormat){
-      if (module.moduleName === moduleName){
-        this.moduleFormat = module;
-      }
-    }
-
-    for (let question of this.moduleFormat.questions){
-      this.extendedColumnsToDisplay.push(question);
-    }
-
-    this.extendedColumnsToDisplay.push('studentAverage');
-  }
-
-  axisDigits(val: any): any {
-    return new TdDigitsPipe().transform(val);
   }
 
   axisDate(val: string): string {
