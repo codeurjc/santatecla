@@ -14,7 +14,8 @@ import Asciidoctor from 'asciidoctor';
 import {Slide} from '../../../slide/slide.model';
 import {DefinitionQuestionService} from '../../../question/definitionQuestion/definitionQuestion.service';
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
-import {TabService} from "../../../tab/tab.service";
+import {TabService} from '../../../tab/tab.service';
+import {UnitLessonService} from '../unit-lesson.service';
 
 
 function convertToHTML(text) {
@@ -61,6 +62,7 @@ export class LessonEditorComponent implements OnInit {
               private definitionQuestionService: DefinitionQuestionService,
               private unitService: UnitService,
               private bottomSheet: MatBottomSheet,
+              private unitLessonService: UnitLessonService,
               private tabService: TabService) {
   }
 
@@ -116,7 +118,7 @@ export class LessonEditorComponent implements OnInit {
       this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
     } else if (type === 'slide') {
       this.subSlide = true;
-      contentEmbebed = await this.unitService.getSlideFormLesson(contentId, contentId2, unitId).toPromise();
+      contentEmbebed = await this.unitLessonService.getSlideFormLesson(contentId, contentId2, unitId).toPromise();
       this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();

@@ -25,20 +25,6 @@ export class LessonService {
     return this.http.put<Lesson>('/api/lessons/' + lesson.id , body, {headers});
   }
 
-  addLesson(lesson: Lesson, id: number) {
-    const body = JSON.stringify(lesson);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.post<Lesson>('/api/units/' + id + '/lessons', body, {headers});
-  }
-
-  deleteLesson(lesson: Lesson): Observable<Lesson> {
-    return this.http.delete<Lesson>('/api/lessons/' + lesson.id);
-  }
-
   removeSlide(itinerary: Lesson, id: number) {
     return this.http.delete('/api/lessons/' + itinerary.id + '/slide/' + id);
   }

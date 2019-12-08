@@ -6,11 +6,20 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 import com.itinerary.lesson.Lesson;
+import com.card.CardService;
+import com.question.Question;
+import com.question.definition.definition_answer.DefinitionAnswer;
+import com.question.definition.definition_question.DefinitionQuestion;
+import com.question.list.list_answer.ListAnswer;
+import com.question.list.list_question.ListQuestion;
+import com.question.test.test_answer.TestAnswer;
+import com.question.test.test_question.TestQuestion;
 import com.relation.Relation;
 
 import javax.servlet.http.HttpServletResponse;
 
 import com.slide.Slide;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -106,60 +115,4 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(units, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{unitId}/lessons/{lessonId}/slides/{slideId}", method = RequestMethod.GET)
-    public ResponseEntity<Slide> getSlideFromLesson(@PathVariable long unitId, @PathVariable long lessonId, @PathVariable long slideId, HttpServletResponse response) {
-        Optional<Unit> unit = unitService.findOne(unitId);
-        if (!unit.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Optional<Lesson> lesson = lessonService.findOne(lessonId);
-        if (!lesson.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Optional<Slide> slide = slideService.findOne(slideId);
-        if (!slide.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<Slide>(slide.get(), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/{unitId}/lessons")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Lesson addLesson(@RequestBody Lesson lesson, @PathVariable long unitId) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        this.lessonService.save(lesson);
-
-        unit.get().getLessons().add(lesson);
-        this.unitService.save(unit.get());
-
-        return lesson;
-    }
-
-    @DeleteMapping(value = "/{unitId}/lessons/{lessonId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Lesson> deleteLesson(@PathVariable long lessonId, @PathVariable long unitId) {
-
-        Optional<Unit> unit = this.unitService.findOne(unitId);
-
-        if (unit.isPresent()) {
-            Optional<Lesson> lesson = this.lessonService.findOne(lessonId);
-            if (lesson.isPresent()) {
-                unit.get().getLessons().remove(lesson.get());
-                this.lessonService.delete(lessonId);
-                return new ResponseEntity<>(lesson.get(), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    }
-
-    /*@GetMapping(value = "/{unitId}/question/answer/{userId}/distinct")
-    public ResponseEntity<Integer> getUserAnswerDistinctCount(@PathVariable long unitId, @PathVariable long userId) {
-        return new ResponseEntity<>(this.unitService.getUserDistinctAnswer(unitId, userId), HttpStatus.OK);
-    }*/
 }

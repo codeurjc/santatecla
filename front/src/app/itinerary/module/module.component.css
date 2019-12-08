@@ -1,4 +1,4 @@
-#lesson-search {
+#module-search {
   position: absolute;
   top: 4rem;
   width: 37%;
@@ -9,7 +9,7 @@
   width: 100%;
 }
 
-.new-lesson-button {
+.new-module-button {
   position: fixed;
   color: white;
   background-color: #7d3c90;
@@ -22,29 +22,29 @@
   background-color: #a769b8;
 }
 
-.lessons-list {
+.modules-list {
   position: absolute;
   top: 10rem;
   width: 50%;
   left: 25%;
 }
 
-.lesson-button {
+.module-button {
   margin-top: 0.5rem;
   width: 85%;
   padding: 1rem 0 1rem 2rem;
   text-align: left;
 }
 
-.admin-lesson-button {
+.admin-module-button {
   background-color: #f9f2fd;
 }
 
-.user-lesson-button {
+.user-module-button {
   background-color: #eaeefd;
 }
 
-#options-lesson-button {
+#options-module-button {
   height: 4.2rem;
   background-color: #f9f2fd;
   margin-left: 0.5rem;

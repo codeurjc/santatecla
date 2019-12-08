@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.card.Card;
+import com.itinerary.module.Module;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.itinerary.lesson.Lesson;
 import com.question.list.list_question.ListQuestion;
@@ -29,6 +30,10 @@ public class Unit {
     private List<Lesson> lessons;
 
     @OneToMany
+    @OrderColumn
+    private List<Module> modules;
+
+    @OneToMany
     private List<Relation> incomingRelations;
 
     @OneToMany
@@ -47,6 +52,7 @@ public class Unit {
     public Unit() {
         this.cards = new ArrayList<>();
         this.lessons = new ArrayList<>();
+        this.modules = new ArrayList<>();
         this.incomingRelations = new ArrayList<>();
         this.outgoingRelations = new ArrayList<>();
         this.definitionQuestions = new ArrayList<>();
@@ -105,6 +111,14 @@ public class Unit {
 
     public void addLesson(Lesson lesson) {
         this.lessons.add(lesson);
+    }
+
+    public List<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
     }
 
     public List<Relation> getIncomingRelations() {

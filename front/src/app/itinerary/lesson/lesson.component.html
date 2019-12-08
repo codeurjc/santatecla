@@ -7,7 +7,7 @@
       Nueva Lección
     </button>
 
-    <div id="course-search">
+    <div id="lesson-search">
       <mat-form-field appearance="outline" id="search">
         <mat-label>Buscar lección</mat-label>
         <input id="search-input" matInput (keyup)="searchLesson($event.target.value)"/>
@@ -19,7 +19,7 @@
           <button mat-button [ngClass]="loginService.isAdmin ? 'lesson-button admin-lesson-button' : 'lesson-button user-lesson-button'" (click)="editLesson(lesson.id)">
             {{lesson.name}}
           </button>
-          <button id="options-lesson-button" mat-button matTooltip="Opciones" [matTooltipPosition]="deleteInfoPosition" [matMenuTriggerFor]="menu">
+          <button id="options-lesson-button" mat-button matTooltip="Opciones" [matTooltipPosition]="optionInfoPosition" [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">

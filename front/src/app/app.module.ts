@@ -60,18 +60,25 @@ import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
 import {AddQuestionDialogComponent} from './question/addQuestionDialog/addQuestionDialog.component';
+import {ModuleComponent} from './itinerary/module/module.component';
+import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-editor.component';
+import {ModuleService} from './itinerary/module/module.service';
+import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
+import {UnitModuleService} from './itinerary/module/unit-module.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LessonFormComponent,
     LessonComponent,
+    ModuleComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,
     UnitComponent,
     CardComponent,
     LessonEditorComponent,
+    ModuleEditorComponent,
     UnitsCardsToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
@@ -138,8 +145,9 @@ import {AddQuestionDialogComponent} from './question/addQuestionDialog/addQuesti
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
-  providers: [LoginService, LessonService, CardService, SlideService, DefinitionQuestionService, ListQuestionService, QuestionService,
-    ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService, MenuComponent,
+  providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
+    QuestionService, ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService,
+    MenuComponent, UnitLessonService, UnitModuleService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

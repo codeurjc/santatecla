@@ -28,6 +28,13 @@
           </div>
         </button>
 
+        <button mat-button *ngIf="loginService.isAdmin && tabService.module" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+          <div class="nav-button-name">
+            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Módulo</span>
+            <span class="nav-button-content">{{tabService.module}}</span>
+          </div>
+        </button>
+
         <button mat-button *ngIf="tabService.courses" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button home-button' : 'nav-button user-nav-button home-button'" [routerLink]="['/courses']">
           <mat-icon class="nav-button-icon">class</mat-icon>
           <div class="nav-button-name">Cursos</div>
