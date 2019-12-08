@@ -15,16 +15,18 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
 import {UnitComponent} from './unit/unit.component';
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
+import {ModuleComponent} from './itinerary/module/module.component';
 
 
 const appRoutes = [
   { path: '' , component: HomeComponent },
   { path: 'unit' , component: ViewComponent },
   { path: 'unit/:unitId', component: UnitComponent },
-  { path: 'units', component: UnitsCardsToolComponent },
+  { path: 'unitsCardsTool', component: UnitsCardsToolComponent },
   { path: 'lessonForm', component: LessonFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
   { path: 'units/:unitId/lessons', component: LessonComponent },
+  { path: 'units/:unitId/modules', component: ModuleComponent },
   { path: 'units/:unitId/lessons/:lessonId', component: LessonEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},

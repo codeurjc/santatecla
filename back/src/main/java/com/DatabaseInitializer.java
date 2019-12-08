@@ -198,6 +198,11 @@ public class DatabaseInitializer {
 
                 unit1.addLesson(lesson1);
                 unit2.addLesson(lesson2);
+                unit4.addLesson(lesson3);
+
+                unit1.getModules().add(module1);
+                unit1.getModules().add(module2);
+                unit1.getModules().add(module3);
 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);

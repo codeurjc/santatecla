@@ -59,12 +59,14 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
+import {ModuleComponent} from './itinerary/module/module.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LessonFormComponent,
     LessonComponent,
+    ModuleComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,
