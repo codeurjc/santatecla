@@ -62,6 +62,7 @@ import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
 import {ModuleComponent} from './itinerary/module/module.component';
 import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-editor.component';
 import {ModuleService} from './itinerary/module/module.service';
+import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
 
 @NgModule({
   declarations: [
@@ -143,7 +144,7 @@ import {ModuleService} from './itinerary/module/module.service';
   ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
     QuestionService, ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService,
-    MenuComponent,
+    MenuComponent, UnitLessonService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],

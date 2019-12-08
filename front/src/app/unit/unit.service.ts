@@ -4,7 +4,6 @@ import { Unit } from './unit.model';
 import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
 import { ListQuestion } from '../question/listQuestion/listQuestion.model';
 import { TestQuestion } from '../question/testQuestion/testQuestion.model';
-import {Lesson} from "../itinerary/lesson/lesson.model";
 import {DefinitionAnswer} from '../question/definitionQuestion/definitionAnswer.model';
 
 @Injectable()
@@ -50,24 +49,6 @@ export class UnitService {
 
   getCard(cardId: number, unitId: number) {
     return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
-  }
-
-  getSlideFormLesson(slideId: number, lessonId: number, unitId: number) {
-    return this.http.get(this.baseUrl + unitId + '/lessons/' + lessonId + '/slides/' + slideId);
-  }
-
-  addLesson(unitId: number, lesson: Lesson) {
-    const body = JSON.stringify(lesson);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.post<Lesson>(this.baseUrl + unitId + '/lessons', body, { headers });
-  }
-
-  deleteLesson(unitId: number, lessonId: number) {
-    return this.http.delete<Lesson>(this.baseUrl + unitId + '/lessons/' + lessonId);
   }
 
   getUnitDefinitionQuestions(id: number) {

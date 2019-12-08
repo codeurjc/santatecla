@@ -8,6 +8,7 @@ import {UnitService} from '../../unit/unit.service';
 import {LessonFormComponent} from './lessonForm/lesson-form.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmActionComponent} from '../../confirmAction/confirm-action.component';
+import {UnitLessonService} from './unit-lesson.service';
 
 @Component({
   selector: 'app-lessons',
@@ -36,6 +37,7 @@ export class LessonComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
+              private unitLessonService: UnitLessonService,
               public dialog: MatDialog) {
   }
 
@@ -80,7 +82,7 @@ export class LessonComponent implements OnInit {
       this.newLesson = result;
       if (typeof this.newLesson !== 'undefined') {
         if (this.newLesson.name !== '') {
-          this.unitService.addLesson(this.unitId, this.newLesson).subscribe((data) => {
+          this.unitLessonService.addLesson(this.unitId, this.newLesson).subscribe((data) => {
             this.router.navigate(['/units/' + this.unitId + '/lessons/' + data.id]);
           });
         }
@@ -96,7 +98,7 @@ export class LessonComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        this.unitService.deleteLesson(this.unitId, lessonId).subscribe(() => {
+        this.unitLessonService.deleteLesson(this.unitId, lessonId).subscribe(() => {
           this.ngOnInit();
         });
       }
