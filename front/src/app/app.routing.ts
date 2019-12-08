@@ -33,7 +33,7 @@ const appRoutes = [
   { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
-  { path: 'answerQuestionDialog', component: AddQuestionDialogComponent},
+  { path: 'addQuestionDialog', component: AddQuestionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/listQuestion/:questionId', component: ListQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},

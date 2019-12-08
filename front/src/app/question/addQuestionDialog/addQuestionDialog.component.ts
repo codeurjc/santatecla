@@ -69,6 +69,27 @@ export class AddQuestionDialogComponent implements OnInit {
     this.resetAddQuestionForm();
   }
 
+  sendQuestion() {
+    switch (this.subtype) {
+      case 'DefinitionQuestion': {
+        this.sendDefinitionQuestion();
+        break;
+      }
+      case 'ListQuestion': {
+        this.sendListQuestion();
+        break;
+      }
+      case 'TestQuestion': {
+        this.sendTestQuestion();
+        break;
+      }
+      default: {
+        console.log('Not valid');
+        break;
+      }
+    }
+  }
+
   sendDefinitionQuestion() {
     if (this.questionInput === '') {
       // TODO

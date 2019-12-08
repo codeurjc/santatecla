@@ -77,13 +77,7 @@
       <!--<button mat-button [mat-dialog-close]="true" cdkFocusInitial>
         Responder
       </button>-->
-      <button *ngIf="subtype == 'DefinitionQuestion'" (click)="sendDefinitionQuestion()" [mat-dialog-close]="true" class="mat-button question-button tool">
-        Guardar
-      </button>
-      <button *ngIf="subtype == 'ListQuestion'" (click)="sendListQuestion()" [mat-dialog-close]="true" class="mat-button question-button tool">
-        Guardar
-      </button>
-      <button *ngIf="subtype == 'TestQuestion'" (click)="sendTestQuestion()" [mat-dialog-close]="true" class="mat-button question-button tool">
+      <button (click)="sendQuestion()" [mat-dialog-close]="true" class="mat-button question-button tool">
         Guardar
       </button>
     </div>
