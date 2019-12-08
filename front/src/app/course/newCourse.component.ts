@@ -22,6 +22,7 @@ export class NewCourseComponent implements OnInit {
   course: Course;
 
   activeTab = 0;
+  showMenu = true;
 
   constructor(private courseService: NewCourseService,
               private loginService: LoginService, private routing: Router,
@@ -110,6 +111,10 @@ export class NewCourseComponent implements OnInit {
 
   private activateTab(tab: number) {
     this.activeTab = tab;
+  }
+
+  private setShowMenu(showMenu: boolean) {
+    this.showMenu = showMenu;
   }
 
 }

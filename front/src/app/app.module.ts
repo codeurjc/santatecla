@@ -38,7 +38,8 @@ import { DefinitionQuestionComponent } from './question/definitionQuestion/defin
 import { DefinitionQuestionService } from './question/definitionQuestion/definitionQuestion.service';
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
 import { ListQuestionService } from './question/listQuestion/listQuestion.service';
-import { ProgressComponent } from './progress/progress.component';
+import { ModuleProgressComponent } from './progress/module-progress/module-progress.component';
+import { ClassProgressComponent } from './progress/class-progress/class-progress.component';
 import { ProgressService } from './progress/progress.service';
 import {QuestionService} from './question/question.service';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
@@ -83,7 +84,8 @@ import {UnitModuleService} from './itinerary/module/unit-module.service';
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
-    ProgressComponent,
+    ModuleProgressComponent,
+    ClassProgressComponent,
     TestQuestionComponent,
     MyCoursesComponent,
     CourseComponent,

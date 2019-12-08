@@ -1,12 +1,12 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { ProgressService } from './progress.service';
-import {LoginService} from '../auth/login.service';
-import {Course} from '../course/course.model';
-import {UserResult} from './items/userResult.model';
+import { ProgressService } from '../progress.service';
+import {LoginService} from '../../auth/login.service';
+import {Course} from '../../course/course.model';
+import {UserResult} from '../items/userResult.model';
 import {ActivatedRoute} from '@angular/router';
-import {CourseService} from '../course/course.service';
-import {StudentProgressItem} from './items/studentProgressItem.model';
-import {ModuleFormat} from './items/moduleFormat.model';
+import {CourseService} from '../../course/course.service';
+import {StudentProgressItem} from '../items/studentProgressItem.model';
+import {ModuleFormat} from '../items/moduleFormat.model';
 import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {MatIconRegistry} from '@angular/material';
@@ -14,12 +14,12 @@ import {TdDigitsPipe} from '@covalent/core';
 import {DatePipe} from '@angular/common';
 
 @Component({
-  selector: 'app-progress',
-  templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.css']
+  selector: 'app-module-progress',
+  templateUrl: './module-progress.component.html',
+  styleUrls: ['./module-progress.component.css']
 })
 
-export class ProgressComponent implements OnInit {
+export class ModuleProgressComponent implements OnInit {
   courseId: number;
   course: Course;
   courses: Course[];

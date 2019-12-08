@@ -2,18 +2,29 @@
 <html>
 <body>
 
-<div id="tab-wrapper" *ngIf="course&&course.id">
-  <div [className]="activeTab == 0 ? 'tab activeTab' : 'tab'" (click)="activateTab(0)">
-    <mat-icon class="tab-icon">subject</mat-icon>
-    Contenido
-  </div>
-  <div [className]="activeTab == 1 ? 'tab activeTab' : 'tab'" (click)="activateTab(1)">
-    <mat-icon class="tab-icon">bar_chart</mat-icon>
-    Seguimiento
-  </div>
-</div>
+<div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
 
-<div class="course-content">
+  <button [ngClass]="activeTab == 0 ? 'tab activeTab mat-button' : 'tab mat-button'" (click)="activateTab(0)">
+    <mat-icon [ngClass]="showMenu ? 'tab-icon' : 'tab-icon-without-menu'">description</mat-icon>
+    <span class="tab-text" *ngIf="showMenu">Contenido</span>
+  </button>
+
+  <button [ngClass]="activeTab == 1 ? 'tab activeTab mat-button' : 'tab mat-button'" (click)="activateTab(1)">
+    <mat-icon [ngClass]="showMenu ? 'tab-icon' : 'tab-icon-without-menu'">bar_chart</mat-icon>
+    <span class="tab-text" *ngIf="showMenu">Seguimiento del módulo</span>
+  </button>
+
+  <button [ngClass]="activeTab == 2 ? 'tab activeTab mat-button' : 'tab mat-button'" (click)="activateTab(2)">
+    <mat-icon [ngClass]="showMenu ? 'tab-icon' : 'tab-icon-without-menu'">bar_chart</mat-icon>
+    <span class="tab-text" *ngIf="showMenu">Seguimiento de la clase</span>
+  </button>
+
+</div>
+<mat-icon id="hide-menu-button" [ngClass]="showMenu ? 'show-hide-menu-button' : 'hidden-hide-menu-button'" (click)="setShowMenu(!showMenu)">reorder</mat-icon>
+
+<div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'"></div>
+
+<div id="course-content" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
   <div *ngIf="activeTab==0">
     <h1 class="center-align title">Nuevo curso</h1>
 
@@ -68,7 +79,8 @@
     </div>
   </div>
 
-  <app-progress *ngIf="activeTab==1"></app-progress>
+  <app-module-progress *ngIf="activeTab==1"></app-module-progress>
+  <app-class-progress *ngIf="activeTab==2"></app-class-progress>
 
 </div>
 </body>

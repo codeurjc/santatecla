@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1 class="center-align title">Seguimiento del curso {{this.course?.name}}</h1>
+    <div class="center-align" id="progressType">
+      Mostrar: {{this.chosenInfoToShow}}
+      <mat-menu #showInfo="matMenu">
+        <button mat-menu-item (click)="this.chosenInfoToShow='Todo'">Todo</button>
+        <button mat-menu-item (click)="this.chosenInfoToShow='Seguimiento del Módulo'">Seguimiento del Módulo</button>
+        <button mat-menu-item (click)="this.chosenInfoToShow='Seguimiento de la clase'">Seguimiento de la clase</button>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="showInfo">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="this.chosenInfoToShow == 'Todo' || this.chosenInfoToShow == 'Seguimiento del Módulo'">
+      <h2 class="top-margin" >Seguimiento del módulo</h2>
+      <span *ngIf="moduleResultsReady">
+
+        <!--<mat-form-field class="letf-margin">
+          <input matInput (keyup)="applyFilterStudent($event.target.value)" placeholder="Nombre del alumno">
+        </mat-form-field>!-->
+
+        <table mat-table [dataSource]="this.moduleResults" class="mat-elevation-z8 center-table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> {{this.course.module.name}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="realization">
+            <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> % Realización </th>
+            <td mat-cell *matCellDef="let element"> {{element.points[0]}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="average">
+            <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> Media </th>
+            <td mat-cell *matCellDef="let element"> {{element.points[1]}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" class="columnWidth center-align"></tr>
+        </table>
+
+      </span>
+    </div>
+
+</body>
+</html>

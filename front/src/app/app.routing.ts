@@ -5,7 +5,7 @@ import { ViewComponent } from './view/view.component';
 import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
 import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
 import { QuestionComponent } from './question/question.component';
-import { ProgressComponent } from './progress/progress.component';
+import { ModuleProgressComponent } from './progress/module-progress/module-progress.component';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {MyCoursesComponent} from './course/myCourses.component';
 import {NewCourseComponent} from './course/newCourse.component';
@@ -39,7 +39,7 @@ const appRoutes = [
   { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},
   { path: 'question', component: QuestionComponent},
   { path: 'courses', component: MyCoursesComponent },
-  { path: 'progress', component: ProgressComponent },
+  { path: 'progress', component: ModuleProgressComponent },
   { path: 'newCourse', component: NewCourseComponent},
   { path: 'course/:courseId', component: NewCourseComponent}
 
