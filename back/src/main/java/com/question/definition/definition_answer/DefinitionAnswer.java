@@ -13,7 +13,7 @@ import com.user.User;
 public class DefinitionAnswer{
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     private String answerText;

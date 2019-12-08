@@ -9,10 +9,10 @@ import java.util.List;
 @Entity
 public class Module extends Block {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @OrderColumn
     private List<Block> blocks;
 

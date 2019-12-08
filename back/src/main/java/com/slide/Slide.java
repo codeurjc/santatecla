@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Slide {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     private String type;

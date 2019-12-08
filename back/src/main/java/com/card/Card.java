@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     private String name;

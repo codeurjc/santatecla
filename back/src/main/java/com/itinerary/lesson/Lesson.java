@@ -12,7 +12,7 @@ import com.slide.*;
 public class Lesson extends Block {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     @ManyToMany(fetch = FetchType.EAGER)

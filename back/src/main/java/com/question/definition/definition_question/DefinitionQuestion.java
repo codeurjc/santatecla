@@ -16,7 +16,7 @@ import com.question.definition.definition_answer.DefinitionAnswer;
 @Entity
 public class DefinitionQuestion extends Question {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL)

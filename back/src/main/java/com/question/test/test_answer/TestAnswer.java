@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class TestAnswer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     private String answerText;
