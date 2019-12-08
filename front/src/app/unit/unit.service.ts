@@ -70,6 +70,10 @@ export class UnitService {
     return this.http.delete<Lesson>(this.baseUrl + unitId + '/lessons/' + lessonId);
   }
 
+  getUnitQuestions(id: number) {
+    return this.http.get(this.baseUrl + id + '/question');
+  }
+
   getUnitDefinitionQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/definition');
   }

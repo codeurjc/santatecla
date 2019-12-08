@@ -59,6 +59,7 @@ import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/a
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
+import {AddQuestionDialogComponent} from './question/addQuestionDialog/addQuestionDialog.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
     CourseComponent,
     NewCourseComponent,
     AnswerDefinitionDialogComponent,
+    AddQuestionDialogComponent,
     HomeComponent,
     ConfirmActionComponent
   ],

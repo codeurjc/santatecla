@@ -8,13 +8,20 @@ import {DefinitionQuestion} from './definitionQuestion/definitionQuestion.model'
 import {ListQuestion} from './listQuestion/listQuestion.model';
 import {TestQuestion} from './testQuestion/testQuestion.model';
 import {TestQuestionService} from './testQuestion/testQuestion.service';
-import {Unit} from '../unit/unit.model';
 import {UnitService} from '../unit/unit.service';
 import {Lesson} from '../itinerary/lesson/lesson.model';
 import {LoginService} from '../auth/login.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
 import {AnswerDefinitionDialogComponent} from './answerQuestionDialog/answerDefinitionDialog.component';
+import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
+import {AddQuestionDialogComponent} from './addQuestionDialog/addQuestionDialog.component';
+
+const QUESTION_TYPES = [
+  {id: 'DefinitionQuestion', name: 'Definición'},
+  {id: 'ListQuestion', name: 'Listado'},
+  {id: 'TestQuestion', name: 'Test'},
+];
 
 @Component({
   selector: 'app-questions',
@@ -33,18 +40,16 @@ export class QuestionComponent implements OnInit {
   listQuestion: ListQuestion;
   testQuestion: TestQuestion;
 
-  questionTypes: string[];
-  questionTypeNames: Map<string, string>;
+  questionTypes;
 
-  // Add Question attributes
-  subtype: string;
-  questionInput: string;
   answerInput: string;
-  possibleAnswers: Map<string, boolean>;
-  correct: boolean;
-  correctTestAnswerSelected: boolean;
 
-  unit: Unit;
+  confirmDialog = {
+    text: 'Se eliminará el ejercicio permanentemente',
+    button1: 'Cancelar',
+    button2: 'Borrar'
+  };
+
   unitId: number;
   itinerariesTabs: Lesson[];
 
@@ -62,30 +67,26 @@ export class QuestionComponent implements OnInit {
   ngOnInit() {
 
     this.questions = [];
-    this.initQuestionTypes();
+    this.questionTypes = QUESTION_TYPES;
 
-    // Add Question attributes
-    this.subtype = 'DefinitionQuestion';
-    this.resetAddQuestionForm();
+    this.answerInput = '';
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
     });
 
-    this.getQuestions();
+    // this.getQuestions();
+    this.getAllQuestions();
 
-  }
-
-  initQuestionTypes() {
-    this.questionTypes = ['DefinitionQuestion', 'ListQuestion', 'TestQuestion'];
-
-    this.questionTypeNames = new Map<string, string>();
-    this.questionTypeNames.set('DefinitionQuestion', 'Definición');
-    this.questionTypeNames.set('ListQuestion', 'Listado');
-    this.questionTypeNames.set('TestQuestion', 'Test');
   }
 
   getQuestions() {
+    this.unitService.getUnitQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
+      this.questions = data;
+    });
+  }
+
+  getAllQuestions() {
     this.questions = [];
 
     this.unitService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
@@ -104,136 +105,26 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  setQuestion(subtype: string) {
-    this.subtype = subtype;
-    this.resetAddQuestionForm();
-  }
+  deleteQuestion(questionID: number) {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      width: '400px',
+      data: {confirmText: this.confirmDialog.text, button1: this.confirmDialog.button1, button2: this.confirmDialog.button2}
+    });
 
-  sendDefinitionQuestion() {
-    if (this.questionInput === '') {
-      // TODO
-      console.log('error: inputs cannot be empty');
-      return;
-    }
-    this.definitionQuestion = {
-      questionText: this.questionInput,
-      subtype: 'DefinitionQuestion'
-    };
-    this.unitService.addUnitDefinitionQuestion(this.unitId, this.definitionQuestion).subscribe(
-      (_) => {
-          this.resetAddQuestionForm();
-          // TODO Remove it
-          this.ngOnInit();
-        },
-      (error) => console.log(error)
-    );
-  }
-
-  sendListQuestion() {
-    if (this.questionInput === '') {
-      // TODO
-      console.log('error: inputs cannot be empty');
-      return;
-    }
-    let ca = [];
-    this.possibleAnswers.forEach((value: boolean, key: string) => {
-      if (value) {
-        ca = ca.concat(key);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        this.unitService.deleteUnitQuestion(this.unitId, questionID).subscribe(
+          (_) => {
+            // TODO Remove it
+            this.ngOnInit();
+          },
+          (error) => {
+            console.log(error);
+            this.ngOnInit();
+          }
+        );
       }
     });
-    this.listQuestion = {
-      questionText: this.questionInput,
-      subtype: 'ListQuestion',
-      possibleAnswers: Array.from(this.possibleAnswers.keys()),
-      correctAnswers: ca
-    };
-    this.unitService.addUnitListQuestion(this.unitId, this.listQuestion).subscribe(
-      (_) => {
-        this.resetAddQuestionForm();
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => {
-        console.log(error);
-        this.ngOnInit();
-      }
-    );
-  }
-
-  sendTestQuestion() {
-    if (this.questionInput === '') {
-      // TODO
-      console.log('error: inputs cannot be empty');
-      return;
-    }
-    let ca = [];
-    this.possibleAnswers.forEach((value: boolean, key: string) => {
-      if (value) {
-        ca = ca.concat(key);
-      }
-    });
-    this.testQuestion = {
-      questionText: this.questionInput,
-      subtype: 'TestQuestion',
-      possibleAnswers: Array.from(this.possibleAnswers.keys()),
-      correctAnswer: ca[0]
-    };
-    this.unitService.addUnitTestQuestion(this.unitId, this.testQuestion).subscribe(
-      (_) => {
-        this.resetAddQuestionForm();
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => console.log(error)
-    );
-  }
-
-  deleteTestQuestion(questionID: number) {
-    this.unitService.deleteUnitQuestion(this.unitId, questionID).subscribe(
-      (_) => {
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => {
-        console.log(error);
-        this.ngOnInit();
-      }
-    );
-  }
-
-  addPossibleListAnswer() {
-    if (this.answerInput === '') {
-      // TODO
-      console.log('error: inputs cannot be empty');
-      return;
-    }
-    this.possibleAnswers = this.possibleAnswers.set(this.answerInput, this.correct);
-    this.answerInput = '';
-  }
-
-  addPossibleTestAnswer() {
-    if (this.answerInput === '') {
-      // TODO
-      console.log('error: inputs cannot be empty');
-      return;
-    }
-    if (!this.correctTestAnswerSelected && this.correct) {
-      this.possibleAnswers.set(this.answerInput, true);
-      this.correctTestAnswerSelected = true;
-    } else if (!this.correctTestAnswerSelected && !this.correct) {
-      this.possibleAnswers.set(this.answerInput, false);
-    } else {
-      this.possibleAnswers.set(this.answerInput, false);
-    }
-    this.answerInput = '';
-  }
-
-  resetAddQuestionForm() {
-    this.questionInput = '';
-    this.answerInput = '';
-    this.possibleAnswers = new Map();
-    this.correct = false;
-    this.correctTestAnswerSelected = false;
   }
 
   sendDefinitionAnswer(questionID: number) {
@@ -259,6 +150,17 @@ export class QuestionComponent implements OnInit {
     );
   }
 
+  openAddQuestionDialog() {
+    const dialogRef = this.dialog.open(AddQuestionDialogComponent, {
+      width: '600px',
+      data: {unitId: this.unitId}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    });
+  }
+
   openAnswerDialog(q: Question): void {
     const dialogRef = this.dialog.open(AnswerDefinitionDialogComponent, {
       width: '250px',
@@ -272,6 +174,4 @@ export class QuestionComponent implements OnInit {
       }
     });
   }
-
-
 }

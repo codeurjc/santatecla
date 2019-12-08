@@ -158,8 +158,8 @@ public class UnitRestController extends GeneralRestController {
 
     }
 
-    @GetMapping(value = "/{unitId}/question/answer/{userId}/distinct")
+    /*@GetMapping(value = "/{unitId}/question/answer/{userId}/distinct")
     public ResponseEntity<Integer> getUserAnswerDistinctCount(@PathVariable long unitId, @PathVariable long userId) {
         return new ResponseEntity<>(this.unitService.getUserDistinctAnswer(unitId, userId), HttpStatus.OK);
-    }
+    }*/
 }

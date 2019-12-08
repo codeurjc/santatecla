@@ -18,6 +18,7 @@ public class ListQuestion extends Question {
     private long id;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<String> possibleAnswers;
 
     @ElementCollection(fetch = FetchType.EAGER)

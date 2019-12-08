@@ -2,6 +2,8 @@ package com.question.test.test_question;
 
 import com.question.Question;
 import com.question.test.test_answer.TestAnswer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class TestQuestion extends Question {
     private long id;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<String> possibleAnswers;
 
     private String correctAnswer;

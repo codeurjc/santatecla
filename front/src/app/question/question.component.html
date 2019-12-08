@@ -3,12 +3,17 @@
   <!-- ADMIN -->
   <body *ngIf="loginService.isAdmin">
 
-    <!-- DEFINITION QUESTION LIST -->
+    <button mat-button class="tool new-question-button" (click)="openAddQuestionDialog()">
+      <mat-icon>add</mat-icon>
+      Nuevo ejercicio
+    </button>
+
+    <!-- QUESTION LIST -->
     <mat-card class="questions-card">
-      <mat-card-title class="card-title">Definición</mat-card-title>
+      <mat-card-title class="card-title">Preguntas</mat-card-title>
       <mat-card-content class="card-content">
         <mat-list>
-          <mat-list-item *ngFor="let question of definitionQuestions">
+          <mat-list-item *ngFor="let question of questions">
             <p matLine>
               {{ question.questionText }}
               <button mat-button (click)="deleteQuestion(question.id)">
@@ -20,8 +25,8 @@
       </mat-card-content>
     </mat-card>
 
-      <!-- LIST QUESTION LIST -->
-    <mat-card class="questions-card">
+    <!-- LIST QUESTION LIST -->
+    <!--<mat-card class="questions-card">
       <mat-card-title class="card-title">Listado</mat-card-title>
       <mat-card-content class="card-content">
         <mat-list>
@@ -35,10 +40,10 @@
           </mat-list-item>
         </mat-list>
       </mat-card-content>
-    </mat-card>
+    </mat-card>-->
 
     <!-- TEST QUESTION LIST -->
-    <mat-card class="questions-card">
+    <!--<mat-card class="questions-card">
       <mat-card-title class="card-title">Test</mat-card-title>
       <mat-card-content class="card-content">
         <mat-list>
@@ -52,94 +57,7 @@
           </mat-list-item>
         </mat-list>
       </mat-card-content>
-    </mat-card>
-
-    <mat-card class="add-question-card">
-      <mat-card-title class="card-title">Añadir ejercicios</mat-card-title>
-      <mat-card-content class="card-content">
-        <div class="button-row">
-          <button *ngFor="let type of questionTypes"  mat-raised-button color="primary" (click)="setQuestion(type)">{{questionTypeNames.get(type)}}</button>
-        </div>
-
-        <!-- DEFINITION FORM -->
-        <div *ngIf="subtype == 'DefinitionQuestion'">
-          <form class="add-question-form">
-            <mat-form-field>
-              <input matInput name="question" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required/>
-            </mat-form-field>
-          </form>
-          <div class="add-question-form">
-            <button mat-raised-button color="primary" (click)="sendDefinitionQuestion()">
-              Guardar
-            </button>
-          </div>
-        </div>
-
-        <!--LIST FORM -->
-        <div *ngIf="subtype == 'ListQuestion'">
-          <form class="add-question-form">
-            <div class="add-question-form-list">
-              <mat-form-field>
-                <input matInput name="question" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required/>
-              </mat-form-field>
-              <div>
-                <mat-form-field>
-                  <input matInput name="answer" placeholder="Respuesta posible" [(ngModel)]="answerInput" type="text"/>
-                </mat-form-field>
-                <mat-checkbox name="correct" [(ngModel)]="correct" value="false">
-                  Correcta
-                </mat-checkbox>
-                <button mat-raised-button color="primary" (click)="addPossibleListAnswer()" class=" add-answer-button">
-                  Añadir
-                </button>
-              </div>
-            </div>
-          </form>
-          <div class="add-question-form">
-            <button mat-raised-button color="primary" (click)="sendListQuestion()">
-              Guardar
-            </button>
-          </div>
-        </div>
-
-        <!-- TEST FORM -->
-        <div *ngIf="subtype == 'TestQuestion'">
-          <form class="add-question-form">
-            <div class="add-question-form-list">
-              <mat-form-field>
-                <input matInput name="question" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required/>
-              </mat-form-field>
-              <div>
-                <mat-form-field>
-                  <input matInput name="answer" placeholder="Respuesta posible"  [(ngModel)]="answerInput" type="text"/>
-                </mat-form-field>
-                <mat-checkbox name="correct" [(ngModel)]="correct" value="false" [disabled]="correctTestAnswerSelected">
-                  Correcta
-                </mat-checkbox>
-                <button mat-raised-button color="primary" (click)="addPossibleTestAnswer()" class=" add-answer-button">
-                  Añadir
-                </button>
-              </div>
-            </div>
-          </form>
-          <div class="add-question-form">
-            <button mat-raised-button color="primary" (click)="sendTestQuestion()">
-              Guardar
-            </button>
-          </div>
-        </div>
-
-        <div class="add-question-form">
-        <mat-list role="list">
-          <mat-list-item role="listitem" *ngFor="let answer of possibleAnswers.keys()">
-            {{answer}}
-            <mat-icon *ngIf="possibleAnswers.get(answer)">done_all</mat-icon>
-          </mat-list-item>
-        </mat-list>
-        </div>
-
-      </mat-card-content>
-    </mat-card>
+    </mat-card>-->
   </body>
 
   <!-- NOT ADMIN -->
@@ -173,7 +91,6 @@
         </div>
       </mat-card-content>
     </mat-card>
-
-
   </body>
+
 </html>

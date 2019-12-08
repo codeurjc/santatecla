@@ -43,7 +43,7 @@ public class QuestionRestController extends GeneralRestController {
         Optional<Question> question = this.questionService.findOne(questionID);
 
         if (unit.isPresent() && question.isPresent()) {
-            this.listQuestionService.delete(questionID);
+            this.questionService.delete(questionID);
             return new ResponseEntity<>(question.get(), HttpStatus.OK);
         }
 

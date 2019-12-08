@@ -20,7 +20,7 @@ public class Question {
     protected int totalCorrectAnswers;
     protected int totalWrongAnswers;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     protected List<Module> modules;
 
     public Question() {
