@@ -14,7 +14,7 @@ import org.hibernate.annotations.FetchMode;
 public class ListQuestion extends Question {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ElementCollection(fetch = FetchType.EAGER)

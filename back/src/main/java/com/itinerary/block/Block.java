@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Block {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     protected String name;

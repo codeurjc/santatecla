@@ -65,7 +65,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
 
-  constructor(private router: Router, private unitService: UnitService, private _dialogService: TdDialogService,
+  constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
               private tabService: TabService, public dialog: MatDialog) {}
 
   ngOnInit() {
@@ -73,7 +73,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
-    this.focusUnit(17);
+    this.focusUnit(1);
   }
 
   ngAfterContentInit() {
@@ -418,7 +418,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event'])
   onKeyPress($event: KeyboardEvent) {
-    if (($event.metaKey || $event.ctrlKey) && ($event.key == 's')) {
+    if (($event.metaKey || $event.ctrlKey) && ($event.key === 's')) {
       $event.preventDefault();
       this.save(null);
     }

@@ -13,7 +13,7 @@ import java.util.List;
 public class TestQuestion extends Question {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ElementCollection(fetch = FetchType.EAGER)
