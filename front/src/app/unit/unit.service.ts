@@ -51,6 +51,10 @@ export class UnitService {
     return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
   }
 
+  getUnitQuestions(id: number) {
+    return this.http.get(this.baseUrl + id + '/question');
+  }
+
   getUnitDefinitionQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/definition');
   }

@@ -5,21 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
-import com.itinerary.lesson.Lesson;
-import com.card.CardService;
-import com.question.Question;
-import com.question.definition.definition_answer.DefinitionAnswer;
-import com.question.definition.definition_question.DefinitionQuestion;
-import com.question.list.list_answer.ListAnswer;
-import com.question.list.list_question.ListQuestion;
-import com.question.test.test_answer.TestAnswer;
-import com.question.test.test_question.TestQuestion;
 import com.relation.Relation;
 
-import javax.servlet.http.HttpServletResponse;
-
-import com.slide.Slide;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

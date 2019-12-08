@@ -42,7 +42,6 @@ export class CardComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    console.log('a');
     this.cardList.nativeElement.childNodes.forEach((card) => {
       try {
         this.fitContent(card.childNodes[2].firstChild.firstChild.childNodes[2].firstChild);
