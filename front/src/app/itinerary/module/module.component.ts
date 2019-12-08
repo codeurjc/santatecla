@@ -53,9 +53,9 @@ export class ModuleComponent implements OnInit {
 
   }
 
-  /*editModule(lessonId: number) {
-    this.router.navigate(['/units/' + this.unitId + '/lessons/' + lessonId]);
-  }*/
+  editModule(moduleId: number) {
+    this.router.navigate(['/units/' + this.unitId + '/modules/' + moduleId]);
+  }
 
   searchModule(value: string) {
     this.modulesResult = [];

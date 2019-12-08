@@ -14,7 +14,7 @@ import Asciidoctor from 'asciidoctor';
 import {Slide} from '../../../slide/slide.model';
 import {DefinitionQuestionService} from '../../../question/definitionQuestion/definitionQuestion.service';
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
-import {TabService} from "../../../tab/tab.service";
+import {TabService} from '../../../tab/tab.service';
 
 
 function convertToHTML(text) {

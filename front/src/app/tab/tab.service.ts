@@ -13,6 +13,9 @@ export class TabService {
   lessons = false;
   lesson = '';
 
+  modules = false;
+  module = '';
+
   constructor() {}
 
   emptyAll() {
@@ -22,6 +25,8 @@ export class TabService {
     this.course = '';
     this.lessons = false;
     this.lesson = '';
+    this.modules = false;
+    this.module = '';
   }
 
   setHome() {
@@ -58,6 +63,15 @@ export class TabService {
     this.unitId = unitId;
     this.lessons = true;
     this.lesson = lessonName;
+  }
+
+  setModule(unitName: string, unitId: number, moduleName: string) {
+    this.emptyAll();
+    this.units = true;
+    this.unit = unitName;
+    this.unitId = unitId;
+    this.modules = true;
+    this.module = moduleName;
   }
 
 }

@@ -16,6 +16,7 @@ import {UnitComponent} from './unit/unit.component';
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ModuleComponent} from './itinerary/module/module.component';
+import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-editor.component';
 
 
 const appRoutes = [
@@ -28,6 +29,7 @@ const appRoutes = [
   { path: 'units/:unitId/lessons', component: LessonComponent },
   { path: 'units/:unitId/modules', component: ModuleComponent },
   { path: 'units/:unitId/lessons/:lessonId', component: LessonEditorComponent },
+  { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
