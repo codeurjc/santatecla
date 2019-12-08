@@ -6,6 +6,7 @@ import {UnitService} from '../../unit/unit.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmActionComponent} from '../../confirmAction/confirm-action.component';
 import {Module} from './module.model';
+import {UnitModuleService} from "./unit-module.service";
 
 @Component({
   selector: 'app-modules',
@@ -33,6 +34,7 @@ export class ModuleComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
+              private unitModuleService: UnitModuleService,
               public dialog: MatDialog) {
   }
 
@@ -85,7 +87,7 @@ export class ModuleComponent implements OnInit {
     });
   }*/
 
-  /*deleteModule(lessonId: number) {
+  deleteModule(moduleId: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       width: '400px',
       data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
@@ -93,11 +95,11 @@ export class ModuleComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        this.unitService.deleteLesson(this.unitId, lessonId).subscribe(() => {
+        this.unitModuleService.deleteModule(this.unitId, moduleId).subscribe(() => {
           this.ngOnInit();
         });
       }
     });
-  }*/
+  }
 
 }

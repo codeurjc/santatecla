@@ -12,7 +12,8 @@ public class Module extends Block {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @OrderColumn
     private List<Block> blocks;
 
     public Module(){

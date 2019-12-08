@@ -63,6 +63,7 @@ import {ModuleComponent} from './itinerary/module/module.component';
 import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-editor.component';
 import {ModuleService} from './itinerary/module/module.service';
 import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
+import {UnitModuleService} from './itinerary/module/unit-module.service';
 
 @NgModule({
   declarations: [
@@ -144,7 +145,7 @@ import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
   ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
     QuestionService, ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService,
-    MenuComponent, UnitLessonService,
+    MenuComponent, UnitLessonService, UnitModuleService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
