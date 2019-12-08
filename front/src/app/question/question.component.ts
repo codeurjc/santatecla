@@ -31,6 +31,9 @@ const QUESTION_TYPES = [
 
 export class QuestionComponent implements OnInit {
 
+  displayedColumns: string[] = ['question', 'subtype', 'edit', 'delete'];
+  showSpinner = false;
+
   questions: Question[];
   definitionQuestions: DefinitionQuestion[];
   listQuestions: ListQuestion[];
@@ -40,7 +43,7 @@ export class QuestionComponent implements OnInit {
   listQuestion: ListQuestion;
   testQuestion: TestQuestion;
 
-  questionTypes;
+  questionTypes: Map<string, string>;
 
   answerInput: string;
 
@@ -66,8 +69,13 @@ export class QuestionComponent implements OnInit {
   }
   ngOnInit() {
 
+    this.showSpinner = true;
+
     this.questions = [];
-    this.questionTypes = QUESTION_TYPES;
+    this.questionTypes = new Map();
+    for (const entry of QUESTION_TYPES) {
+      this.questionTypes.set(entry.id, entry.name);
+    }
 
     this.answerInput = '';
 
@@ -77,11 +85,10 @@ export class QuestionComponent implements OnInit {
 
     // this.getQuestions();
     this.getAllQuestions();
-
   }
 
   getQuestions() {
-    this.unitService.getUnitQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
+    this.unitService.getUnitQuestions(this.unitId).subscribe((data: Question[]) => {
       this.questions = data;
     });
   }
@@ -92,17 +99,24 @@ export class QuestionComponent implements OnInit {
     this.unitService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
       this.definitionQuestions = data;
       this.questions = this.questions.concat(data);
+      this.showSpinner = false;
     });
 
     this.unitService.getUnitListQuestions(this.unitId).subscribe((data: ListQuestion[]) => {
       this.listQuestions = data;
       this.questions = this.questions.concat(data);
+      this.showSpinner = false;
     });
 
     this.unitService.getUnitTestQuestions(this.unitId).subscribe((data: TestQuestion[]) => {
       this.testQuestions = data;
       this.questions = this.questions.concat(data);
+      this.showSpinner = false;
     });
+  }
+
+  editQuestion(questionID: number) {
+    console.log('TODO');
   }
 
   deleteQuestion(questionID: number) {

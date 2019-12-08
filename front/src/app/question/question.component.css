@@ -20,8 +20,36 @@
   right: 1rem;
 }
 
+#spinner-container {
+  position: fixed;
+  width: calc(100% - 30rem);
+  right: 8rem;
+  top: 3.6rem;
+  z-index: 9999;
+  text-align: center;
+}
+
+#spinner {
+  display: inline;
+  z-index: 10000;
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+#spinner-text {
+  position: fixed;
+  display: inline;
+  z-index: 10000;
+  color: #ffffff;
+  margin: 0.35rem 0.5rem 0.35rem 0.5rem;
+}
+
 .tool:hover {
   background-color: #a769b8;
+}
+
+table {
+  width: 100%;
 }
 
 .questions-group {
@@ -100,4 +128,12 @@
 
 .delete-icon {
   color: indianred;
+}
+
+.edit-icon {
+  color: darkorange;
+}
+
+.text-secondary {
+  color: gray;
 }
