@@ -1,5 +1,6 @@
 package com.itinerary.module;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,12 +48,17 @@ public class UnitModuleRestController extends GeneralRestController {
             Optional<Module> module = this.moduleService.findOne(moduleId);
             if (module.isPresent()) {
                 unit.get().getModules().remove(module.get());
-                List<Module> modules = this.moduleService.findAll();
-                for (Module m : modules) {
-                    List<Block> blocks = m.getBlocks();
-                    if (blocks.contains(module.get())) {
-                        blocks.remove(module.get());
+                List<Long> parents = module.get().getParentsId();
+                if (parents != null) {
+                    List<Long> idUsed = new ArrayList<>();
+                    for (Long pId : parents) {
+                        Optional<Module> m = this.moduleService.findOne(pId);
+                        if (m.get().getBlocks().contains(module.get())) {
+                            m.get().getBlocks().remove(module.get());
+                            idUsed.add(pId);
+                        }
                     }
+                    parents.removeAll(idUsed);
                 }
                 this.blockService.delete(moduleId);
                 return new ResponseEntity<>(module.get(), HttpStatus.OK);

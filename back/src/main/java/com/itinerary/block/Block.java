@@ -1,6 +1,8 @@
 package com.itinerary.block;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Block {
@@ -10,7 +12,12 @@ public class Block {
 
     protected String name;
 
-    public Block(){}
+    @ElementCollection
+    protected List<Long> parentsId;
+
+    public Block() {
+        this.parentsId = new ArrayList<>();
+    }
 
     public Block(String name){
         this();
@@ -29,12 +36,20 @@ public class Block {
         return name;
     }
 
+    public List<Long> getParentsId() {
+        return parentsId;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setParentsId(List<Long> parentsId) {
+        this.parentsId = parentsId;
     }
 
 }

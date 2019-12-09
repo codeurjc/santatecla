@@ -27,6 +27,7 @@ public class Module extends Block {
 
     public void addBlock(Block block){
         this.blocks.add(block);
+        block.getParentsId().add(this.id);
     }
 
     /********************

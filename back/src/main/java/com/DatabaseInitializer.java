@@ -119,6 +119,10 @@ public class DatabaseInitializer {
                 Module module2 = new Module("Tema 2");
                 Module module3 = new Module("Paradigmas");
 
+                moduleRepository.save(module1);
+                moduleRepository.save(module2);
+                moduleRepository.save(module3);
+
                 module1.addBlock(lesson1);
                 module2.addBlock(lesson2);
                 module2.addBlock(lesson3);
