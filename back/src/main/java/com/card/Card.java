@@ -18,9 +18,10 @@ public class Card {
 
     public Card() {}
 
-    public Card(String name) {
+    public Card(String name, String content) {
         this();
         this.name = name;
+        this.content = content;
     }
 
     public void update(Card card) {

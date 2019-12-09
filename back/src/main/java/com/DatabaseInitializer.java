@@ -70,24 +70,6 @@ public class DatabaseInitializer {
 
         @PostConstruct
         public void init() {
-/*
-                //Cards
-                Card card1 = new Card("Qué es");
-                Card card2 = new Card("Qué es");
-                Card card3 = new Card("Cuándo se creó");
-                Card card4 = new Card("Cuándo se creó");
-
-                card1.setContent("Un *lenguaje de programación* es un lenguaje formal (o artificial, es decir, un lenguaje con reglas gramaticales bien definidas) que le proporciona a una persona, en este caso el programador, la capacidad de escribir (o programar) una serie de *instrucciones o secuencias* de órdenes en forma de algoritmos con el fin de controlar el comportamiento físico y/o lógico de una computadora, de manera que se puedan obtener diversas clases de datos. A todo este conjunto de órdenes escritas mediante un lenguaje de programación se le denomina *programa*.");
-                card2.setContent("Java es...");
-                card4.setContent("*A finales de 1953*, John Backus sometió una propuesta a sus superiores en IBM para desarrollar una alternativa más práctica al lenguaje ensamblador, para programar la computadora central IBM 704. El histórico equipo Fortran de Backus consistió en los programadores Richard Goldberg, Sheldon F. Best, Harlan Herrick, Peter Sheridan, Roy Nutt, Robert Nelson, Irving Ziller, Lois Haibt y David Sayre.");
-                card3.setContent("Java se creó en...");
-
-                cardRepository.save(card1);
-                cardRepository.save(card2);
-                cardRepository.save(card3);
-                cardRepository.save(card4);
-
-                */
 
                 //Slides
                 Slide slide1 = new Slide("Programación Declarativa vs Programación Imperativa");
@@ -323,7 +305,7 @@ public class DatabaseInitializer {
                 units.add(unit1);
                 Unit unit2 = new Unit("Programación funcional");
                 units.add(unit2);
-                Unit unit3 = new Unit("Programación imperativa estructurada");
+                Unit unit3 = new Unit("Programación imperativa");
                 units.add(unit3);
                 Unit unit4 = new Unit("Lenguaje de programación");
                 units.add(unit4);
@@ -339,7 +321,7 @@ public class DatabaseInitializer {
                 units.add(unit9);
                 Unit unit10 = new Unit("Función recursiva lineal");
                 units.add(unit10);
-                Unit unit11 = new Unit("Función recursiva no lineal");
+                Unit unit11 = new Unit("Función recursiva múltiple");
                 units.add(unit11);
                 Unit unit12 = new Unit("Función de orden superior");
                 units.add(unit12);
@@ -353,12 +335,181 @@ public class DatabaseInitializer {
                 units.add(unit16);
                 Unit unit17 = new Unit("Fichero");
                 units.add(unit17);
-                Unit unit18 = new Unit("Sistema de información");
-                units.add(unit18);
-                Unit unit19 = new Unit("ERP");
-                units.add(unit19);
-                Unit unit20 = new Unit("CRM");
-                units.add(unit20);
+
+                // Cards
+                Card card1_1 = new Card("Definición",
+                        "Un _paradigma de programación_ es un *estilo de desarrollo de programas*, es decir, " +
+                                "un modelo para resolver problemas computacionales.");
+                Card card1_2 = new Card("Diferencias entre los tipos de paradigmas",
+                        "Los paradigmas difieren unos de otros en los *conceptos* y la *forma de abstraer* los elementos " +
+                                "involucrados en un problema, así como en los *pasos* que integran su solución del problema, " +
+                                "en otras palabras, el cómputo.");
+                cardRepository.save(card1_1);
+                cardRepository.save(card1_2);
+                unit1.addCard(card1_1);
+                unit1.addCard(card1_2);
+                Card card2_1 = new Card("Definición",
+                        "La _programación funcional_ es un paradigma de programación *basado en el uso " +
+                                "de funciones matemáticas*. Tiene sus raíces en el cálculo lambda, un sistema formal desarrollado " +
+                                "para investigar la definición de _función_, su aplicación y la recursión.");
+                Card card2_2 = new Card("Ventajas",
+                                " - Ausencia de efectos colaterales\n" +
+                                " - Proceso de depuración menos problemático\n" +
+                                " - Pruebas de unidades más confiables\n" +
+                                " - Mayor facilidad para la ejecución concurrente");
+                cardRepository.save(card2_1);
+                cardRepository.save(card2_2);
+                unit2.addCard(card2_1);
+                unit2.addCard(card2_2);
+                Card card3_1 = new Card("Definición",
+                        "La _programación imperativa_ es un paradigma de programación en el que un programa se describe en términos " +
+                                "de *instrucciones, condiciones y pasos* que modifican el estado de un programa al permitir la mutación de " +
+                                "variables, todo esto con el objetivo de llegar a un resultado.");
+                Card card3_2 = new Card("Ventajas",
+                        " - Relativa simplicidad y facilidad de impletentación, así como el seguimiento del flujo del programa\n" +
+                                " - Modularización");
+                cardRepository.save(card3_1);
+                cardRepository.save(card3_2);
+                unit3.addCard(card3_1);
+                unit3.addCard(card3_2);
+                Card card4_1 = new Card("Definición",
+                        "Un _lenguaje de programación_ es un *idioma artificial* diseñado para expresar computaciones " +
+                                "que pueden ser llevadas a cabo por máquinas como las computadoras.\n" +
+                                "Le proporciona al programador la capacidad de escribir (programar) una serie de instrucciones " +
+                                "o secuencias de órdenes en forma de algoritmos con el fin de *controlar el comportamiento de una " +
+                                "computadora, de manera que se puedan obtener diversas clases de datos*");
+                cardRepository.save(card4_1);
+                unit4.addCard(card4_1);
+                Card card5_1 = new Card("Definición",
+                        "_Haskell_ es un lenguaje de programación moderno, estándar, no estricto, puramente funcional.");
+                Card card5_2 = new Card("Características",
+                        "Posee todas las características avanzadas, incluyendo *polimorfismo de tipos*, " +
+                                "*evaluación perezosa* y *funciones de alto orden*. También es un tipo de sistema " +
+                                "que soporta una forma sistemática de sobrecarga y un sistema modular.");
+                Card card5_3 = new Card("Por qué usar Haskell",
+                        "Es particularmente apropiado para programas que necesitan ser altamente modificados y mantenidos, " +
+                                "de forma fácil y barata.");
+                cardRepository.save(card5_1);
+                cardRepository.save(card5_2);
+                cardRepository.save(card5_3);
+                unit5.addCard(card5_1);
+                unit5.addCard(card5_2);
+                unit5.addCard(card5_3);
+                Card card6_1 = new Card("Definición",
+                        "C es un lenguaje de programación orientado a la implementación de sistemas operativos, por su *eficiencia* del " +
+                                "código. Es el lenguaje de programación más popular para crear software de sistema, aunque también se " +
+                                "utiliza para crear aplicaciones.");
+                Card card6_2 = new Card("Características",
+                        "Se trata de un lenguaje de tipos de *datos estáticos, débilmente tipificado, de medio nivel*, " +
+                                "ya que dispone de las estructuras típicas de los lenguajes de alto nivel pero, a su vez, dispone " +
+                                "de construcciones del lenguaje que permiten un control a muy bajo nivel.");
+                cardRepository.save(card6_1);
+                cardRepository.save(card6_2);
+                unit6.addCard(card6_1);
+                unit6.addCard(card6_2);
+                Card card7_1 = new Card("Definición",
+                        "_Python_ es un lenguaje de programación interpretado cuya filosofía hace hincapié en la *legibilidad de su código*.");
+                Card card7_2 = new Card("Características",
+                        "Es un lenguaje de programación *multiparadigma*, ya que soporta orientación a objetos, " +
+                                "programación imperativa y, en menor medida, programación funcional. Es un lenguaje *interpretado, " +
+                                "dinámico y multiplataforma*.");
+                cardRepository.save(card7_1);
+                cardRepository.save(card7_2);
+                unit7.addCard(card7_1);
+                unit7.addCard(card7_2);
+                Card card8_1 = new Card("Definición",
+                        "Una _función_ es un conjunto de líneas de código que *realizan una tarea específica* y puede retornar un valor. " +
+                                "Pueden tomar parámetros que modifiquen su funcionamiento. Son utilizadas para descomponer grandes problemas en " +
+                                "tareas simples y para implementar operaciones que son comúnmente utilizadas durante un programa.");
+                cardRepository.save(card8_1);
+                unit8.addCard(card8_1);
+                Card card9_1 = new Card("Definición",
+                        "Se denominan _funciones recursivas_ a aquellas que *se llaman a sí mismas* durante su propia ejecución.");
+                Card card9_2 = new Card("Ejemplos",
+                        " - Método de ordenación quick-sort" +
+                                " - Juego de las Torres de Hanoi");
+                cardRepository.save(card9_1);
+                cardRepository.save(card9_2);
+                unit9.addCard(card9_1);
+                unit9.addCard(card9_2);
+                Card card10_1 = new Card("Definición",
+                        "En una _función recursiva lineal_ cada llamada recursiva genera, *como mucho, otra llamada recursiva*.");
+                cardRepository.save(card10_1);
+                unit10.addCard(card10_1);
+                Card card11_1 = new Card("Definición",
+                        "Llamada recursiva que puede generar *más de una llamada* recursiva*.");
+                Card card11_2 = new Card("Ejemplos",
+                        " - La serie de Fibonacci\n" +
+                                " - Fractales de árbol");
+                cardRepository.save(card11_1);
+                cardRepository.save(card11_2);
+                unit11.addCard(card11_1);
+                unit11.addCard(card11_2);
+                Card card12_1 = new Card("Definición",
+                        "Las _funciones de orden superior_ son funciones que *reciben una o más funciones como entrada o " +
+                                "devuelven una función como salida*.");
+                Card card12_2 = new Card("Utilidad",
+                        "Se puede utilizar tanto la combinación de funciones de orden superior y como con expresiones lambda, " +
+                                "lo que nos permite evitar escribir bucles.");
+                cardRepository.save(card12_1);
+                cardRepository.save(card12_2);
+                unit12.addCard(card12_1);
+                unit12.addCard(card12_2);
+                Card card13_1 = new Card("Definición",
+                        "Un _tipo de dato_ es la propiedad de un valor que determina su *dominio* (qué valores puede tomar), " +
+                                "qué operaciones se le pueden aplicar y cómo es representado internamente por el computador.");
+                cardRepository.save(card13_1);
+                unit13.addCard(card13_1);
+                Card card14_1 = new Card("Definición",
+                        "Una _clase_ es una *plantilla* para la creación de objetos de datos según un modelo predefinido. " +
+                                "Las clases se utilizan para representar *entidades o conceptos, como los sustantivos en el lenguaje*. " +
+                                "Cada clase es un modelo que define un conjunto de variables, y cada objeto creado a partir de la " +
+                                "clase se denomina instancia de la clase.");
+                Card card14_2 = new Card("Utilización",
+                        "Las clases de objetos son un pilar fundamental de la programación orientada a objetos. Permiten abstraer " +
+                                "los datos y sus operaciones asociadas al modo de una caja negra.");
+                Card card14_3 = new Card("Componentes",
+                        " - *Campos de datos*: almacenan el estado de la clase por medio de variables, estructuras de datos e incluso otras clases.\n" +
+                                " - *Métodos*: subrutinas de manipulación de dichos datos.\n" +
+                                " - Ciertos lenguajes permiten un tercer tipo de miembro: las *propiedades*, a medio camino entre los campos y los métodos.");
+                cardRepository.save(card14_1);
+                cardRepository.save(card14_2);
+                cardRepository.save(card14_3);
+                unit14.addCard(card14_1);
+                unit14.addCard(card14_2);
+                unit14.addCard(card14_3);
+                Card card15_1 = new Card("Definición",
+                        "Un _lenguaje interpretado_ es el lenguaje cuyo código no necesita ser preprocesado mediante un compilador, " +
+                                "eso significa que el ordenador es capaz de ejecutar la sucesión de instrucciones dadas por el programador " +
+                                "sin necesidad de leer y traducir exhaustivamente todo el código.");
+                Card card15_2 = new Card("Ventajas",
+                        " - *Independiente de la máquina y del sistema operativo*. No contiene instrucciones propias de un procesador " +
+                                "sino que contiene llamadas a funciones que el interprete deberá reconocer. Basta que exista un interprete de " +
+                                "un lenguaje para dicho sistema y todos los programas escrito en ese lenguaje funcionarán.");
+                Card card15_3 = new Card("Desventajas",
+                        " - Velocidad\n" +
+                                " - Portabilidad");
+                cardRepository.save(card15_1);
+                cardRepository.save(card15_2);
+                cardRepository.save(card15_3);
+                unit15.addCard(card15_1);
+                unit15.addCard(card15_2);
+                unit15.addCard(card15_3);
+                Card card16_1 = new Card("Definición",
+                        "Se llama _array o vector_ a una zona de almacenamiento *contiguo* que contiene una serie de elementos del mismo tipo.");
+                Card card16_2 = new Card("Cuándo utilizar un array",
+                        "Estas estructuras de datos son adecuadas para situaciones en las que el *volumen de los datos es de tamaño fijo* " +
+                                "y el *acceso se realice de forma aleatoria*, si sabemos la posición de cada elemento.");
+                cardRepository.save(card16_1);
+                cardRepository.save(card16_2);
+                unit16.addCard(card16_1);
+                unit16.addCard(card16_2);
+                Card card17_1 = new Card("Definición",
+                        "Un _fichero o archivo_ informático es un *conjunto de bytes* que son almacenados en un dispositivo. " +
+                                "Es identificado por un nombre y la descripción de la carpeta o directorio que lo contiene.");
+                cardRepository.save(card17_1);
+                unit17.addCard(card17_1);
+
 /*
                 ArrayList<DefinitionQuestion> unit1Questions = new ArrayList<>();
                 unit1Questions.add((DefinitionQuestion)definition1);
@@ -373,10 +524,6 @@ public class DatabaseInitializer {
                 unit1.setTestQuestions(unitTestQuestions);
                 unit2.setTestQuestions(unitTestQuestions);
 
-                unit1.addCard(card1);
-                unit1.addCard(card4);
-                unit2.addCard(card2);
-                unit2.addCard(card3);
 
                 unit1.addLesson(lesson1);
                 unit2.addLesson(lesson2);
