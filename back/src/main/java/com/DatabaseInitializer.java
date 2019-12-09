@@ -275,7 +275,7 @@ public class DatabaseInitializer {
                 units.add(unit4);
                 Unit unit5 = new Unit("Haskell");
                 units.add(unit5);
-                Unit unit6 = new Unit("Java");
+                Unit unit6 = new Unit("C");
                 units.add(unit6);
                 Unit unit7 = new Unit("Python");
                 units.add(unit7);
@@ -334,6 +334,35 @@ public class DatabaseInitializer {
                 unit1.getModules().add(module4);
                 unit1.getModules().add(module5);
 */
+
+                unit2.addLesson(lesson1);
+                unit5.addLesson(lesson2);
+                unit9.addLesson(lesson3);
+                unit12.addLesson(lesson4);
+                unit4.addLesson(lesson5);
+                unit6.addLesson(lesson6);
+                unit6.addLesson(lesson7);
+                unit6.addLesson(lesson8);
+                unit6.addLesson(lesson9);
+                unit17.addLesson(lesson10);
+                unit7.addLesson(lesson11);
+                unit7.addLesson(lesson12);
+
+                unit1.getModules().add(module4);
+                unit2.getModules().add(module1);
+                unit3.getModules().add(module2);
+                unit15.getModules().add(module3);
+                unit2.getModules().add(module5);
+                unit5.getModules().add(module6);
+                unit5.getModules().add(module7);
+                unit5.getModules().add(module8);
+                unit6.getModules().add(module9);
+                unit6.getModules().add(module10);
+                unit6.getModules().add(module11);
+                unit6.getModules().add(module12);
+                unit6.getModules().add(module13);
+                unit7.getModules().add(module14);
+
                 for (Unit unit : units) {
                         unitRepository.save(unit);
                 }
