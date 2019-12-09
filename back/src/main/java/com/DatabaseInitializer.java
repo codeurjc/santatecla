@@ -13,6 +13,7 @@ import com.itinerary.lesson.Lesson;
 import com.itinerary.lesson.LessonRepository;
 import com.itinerary.module.Module;
 import com.itinerary.module.ModuleRepository;
+import com.question.Question;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -263,6 +264,59 @@ public class DatabaseInitializer {
 
                 testQuestionRepository.save(test);
 */
+                //Paradigmas de programación: Questions
+                List<DefinitionQuestion> unit1Definitions = new ArrayList<>();
+                List<ListQuestion> unit1Lists = new ArrayList<>();
+                List<TestQuestion> unit1Tests = new ArrayList<>();
+
+                DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es un paradigma de programación?");
+                DefinitionQuestion definition2 = new DefinitionQuestion("Defina, según sus palabras, un tipo de paradigma");
+                DefinitionQuestion definition3 = new DefinitionQuestion("Defina, según sus palabras, dos tipos de paradigmas");
+                DefinitionQuestion definition4 = new DefinitionQuestion("Defina, según sus palabras, tres tipos de paradigmas");
+                unit1Definitions.add(definition1);
+                unit1Definitions.add(definition2);
+                unit1Definitions.add(definition3);
+                unit1Definitions.add(definition4);
+
+                ArrayList<String> possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Paradigma funcional");
+                possibleAnswers.add("Paradigma lógico");
+                possibleAnswers.add("Paradigma orientado a objetos");
+                possibleAnswers.add("Paradigmal imperativo");
+                TestQuestion test1 = new TestQuestion("Los lenguajes comunes de este paradigma son: LISP, Scheme, Haskell, Scala", possibleAnswers, "Paradigma funcional");
+
+                possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Programación orientada a objetos");
+                possibleAnswers.add("Programación lógica");
+                possibleAnswers.add("Programación estructurada");
+                possibleAnswers.add("Programación lineal");
+                TestQuestion test2 = new TestQuestion( "Forma de escribir programación, " +
+                        "utilizando solo tres estructuras: secuencial, selectiva e iterativa",
+                        possibleAnswers, "Programación estructurada");
+
+                unit1Tests.add(test1);
+                unit1Tests.add(test2);
+
+                possibleAnswers = new ArrayList<>();
+                possibleAnswers.add("Paradigma euclídeo");
+                possibleAnswers.add("Paradigma orientado a estructuras");
+                possibleAnswers.add("Paradigma orientado a objetos");
+                possibleAnswers.add("Paradigmal imperativo");
+                List<String> correctAnswers = new ArrayList<>();
+                correctAnswers.add("Paradigma orientado a objetos");
+                correctAnswers.add("Paradigmal imperativo");
+                ListQuestion list1 = new ListQuestion("¿Cuáles son paradigmas?", possibleAnswers, correctAnswers);
+
+                unit1Lists.add(list1);
+
+                definitionQuestionRepository.save(definition1);
+                definitionQuestionRepository.save(definition2);
+                definitionQuestionRepository.save(definition3);
+                definitionQuestionRepository.save(definition4);
+                listQuestionRepository.save(list1);
+                testQuestionRepository.save(test1);
+                testQuestionRepository.save(test2);
+
                 //Units
                 List<Unit> units = new ArrayList<>();
                 Unit unit1 = new Unit("Paradigma de programación");
@@ -363,6 +417,10 @@ public class DatabaseInitializer {
                 unit6.getModules().add(module13);
                 unit7.getModules().add(module14);
 
+                unit1.setDefinitionQuestions(unit1Definitions);
+                unit1.setListQuestions(unit1Lists);
+                unit1.setTestQuestions(unit1Tests);
+
                 for (Unit unit : units) {
                         unitRepository.save(unit);
                 }
@@ -460,7 +518,6 @@ public class DatabaseInitializer {
                 for (Unit unit : units) {
                         unitRepository.save(unit);
                 }
-
 
                 //Users
                 User user1 = new User("alumno", "alumno", "ROLE_USER");
