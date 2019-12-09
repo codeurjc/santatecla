@@ -17,7 +17,7 @@
         <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
           <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save(card)">
         </mat-form-field>
-        <mat-icon id="delete-card-button" (click)="deleteCard(card.id)">delete</mat-icon>
+        <mat-icon id="delete-card-button" (click)="deleteCard(card.id)" matTooltip="Eliminar">delete</mat-icon>
         <mat-form-field class="example-full-width card-input card-input-area">
           <textarea matInput class="card-input" placeholder="Contenido" required (change)="save(card)" (input)="changeTextArea($event)" [(ngModel)]="card.content"></textarea>
         </mat-form-field>
