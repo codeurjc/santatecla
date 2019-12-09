@@ -76,7 +76,6 @@ export class CardComponent implements OnInit, AfterViewChecked {
 
   private deleteCard(id: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      width: '400px',
       data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
     });
 

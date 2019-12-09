@@ -6,7 +6,7 @@
       <json-editor [options]="editorOptions" [(ngModel)]="data"></json-editor>
     </div>
 
-    <button id="save-button" mat-icon-button color="primary" [disabled]="!changed" (click)="save()">
+    <button id="save-button" mat-icon-button color="primary" [disabled]="!changed" (click)="save(null)">
       <mat-icon>save</mat-icon>
       Guardar
     </button>

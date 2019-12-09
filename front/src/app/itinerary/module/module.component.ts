@@ -71,7 +71,6 @@ export class ModuleComponent implements OnInit {
   /*addModule(): void {
     this.newModule = {name: ''};
     const dialogRef = this.dialog.open(ModuleFormComponent, {
-      width: '400px',
       data: {itinerary: this.newModule}
     });
 
@@ -89,7 +88,6 @@ export class ModuleComponent implements OnInit {
 
   deleteModule(moduleId: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      width: '400px',
       data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
     });
 

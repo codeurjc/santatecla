@@ -158,7 +158,6 @@ export class QuestionComponent implements OnInit {
 
   deleteQuestion(questionID: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      width: '400px',
       data: {confirmText: this.confirmDialog.text, button1: this.confirmDialog.button1, button2: this.confirmDialog.button2}
     });
 

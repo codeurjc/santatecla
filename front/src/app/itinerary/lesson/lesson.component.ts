@@ -74,7 +74,6 @@ export class LessonComponent implements OnInit {
   addLesson(): void {
     this.newLesson = {name: ''};
     const dialogRef = this.dialog.open(LessonFormComponent, {
-      width: '400px',
       data: {itinerary: this.newLesson}
     });
 
@@ -92,7 +91,6 @@ export class LessonComponent implements OnInit {
 
   deleteLesson(lessonId: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      width: '400px',
       data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
     });
 

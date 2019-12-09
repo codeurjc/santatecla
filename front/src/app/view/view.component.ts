@@ -21,8 +21,8 @@ declare var mermaid: any;
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   confirmText = 'Se han realizado cambios';
-  button1 = 'Descartar';
-  button2 = 'Guardar';
+  button1 = 'Guardar';
+  button2 = 'Descartar';
 
   private UNIT_NAME_SEPARATOR = '/';
   private ENTER_KEY = 'Enter';
@@ -489,21 +489,21 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   public documentDoubleClick(event: Event): void {
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
+      const id = target.id.toString().substring(0, target.id.toString().length);
       if (this.changed) {
         const dialogRef = this.dialog.open(ConfirmActionComponent, {
-          width: '400px',
           data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
         });
 
         dialogRef.afterClosed().subscribe(result => {
-          if (result === 2) {
-            this.goToUnit(target.id.toString().substring(0, target.id.toString().length));
-          } else if (result === 1) {
-            this.save(target.id.toString().substring(0, target.id.toString().length));
+          if (result === 1) {
+            this.goToUnit(id);
+          } else if (result === 2) {
+            this.save(id);
           }
         });
       } else {
-        this.goToUnit(target.id.toString().substring(0, target.id.toString().length));
+        this.goToUnit(id);
       }
     }
   }

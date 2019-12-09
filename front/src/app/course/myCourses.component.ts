@@ -40,9 +40,7 @@ export class MyCoursesComponent implements OnInit {
   deleteCourse(course: Course) {
     this.dialogService.openConfirm({
       message: '¿Seguro que desea eliminar el curso ' + course.name + ' ?',
-      title: 'Confirmación',
-      width: '400px',
-      height: '200px'
+      title: 'Confirmación'
     }).afterClosed().subscribe((accept: boolean) => {
       if (accept) {
         this.courseService.deleteCourse(course.id).subscribe((_) => {
