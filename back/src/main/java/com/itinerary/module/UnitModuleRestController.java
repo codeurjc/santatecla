@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 
+import com.itinerary.block.Block;
 import com.unit.Unit;
 import com.unit.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,14 @@ public class UnitModuleRestController extends GeneralRestController {
             Optional<Module> module = this.moduleService.findOne(moduleId);
             if (module.isPresent()) {
                 unit.get().getModules().remove(module.get());
-                this.moduleService.delete(moduleId);
+                List<Module> modules = this.moduleService.findAll();
+                for (Module m : modules) {
+                    List<Block> blocks = m.getBlocks();
+                    if (blocks.contains(module.get())) {
+                        blocks.remove(module.get());
+                    }
+                }
+                this.blockService.delete(moduleId);
                 return new ResponseEntity<>(module.get(), HttpStatus.OK);
             }
         }

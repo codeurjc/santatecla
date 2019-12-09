@@ -1,12 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {DefinitionQuestion} from '../definitionQuestion/definitionQuestion.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {QuestionComponent} from '../question.component';
+import {DefinitionQuestion} from '../definitionQuestion/definitionQuestion.model';
 import {ListQuestion} from '../listQuestion/listQuestion.model';
 import {TestQuestion} from '../testQuestion/testQuestion.model';
-import {UnitService} from '../../unit/unit.service';
 import {LoginService} from '../../auth/login.service';
+import {Question} from '../question.model';
+import {QuestionService} from '../question.service';
 
 const QUESTION_TYPES = [
   {id: 'DefinitionQuestion', name: 'Definición'},
@@ -15,7 +16,9 @@ const QUESTION_TYPES = [
 ];
 
 export interface DialogData {
+  isEditing: boolean;
   unitId: number;
+  question: Question;
 }
 
 @Component({
@@ -41,7 +44,7 @@ export class AddQuestionDialogComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private unitService: UnitService,
+    private questionService: QuestionService,
     private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     public dialogRef: MatDialogRef<QuestionComponent>,
@@ -54,6 +57,11 @@ export class AddQuestionDialogComponent implements OnInit {
     // Add Question attributes
     this.subtype = 'DefinitionQuestion';
     this.resetAddQuestionForm();
+
+    if (this.data.isEditing) {
+      this.setEditQuestionForm();
+    }
+
   }
 
   resetAddQuestionForm() {
@@ -64,9 +72,54 @@ export class AddQuestionDialogComponent implements OnInit {
     this.correctTestAnswerSelected = false;
   }
 
+  setEditQuestionForm() {
+    this.subtype = this.data.question.subtype
+    this.questionInput = this.data.question.questionText;
+    this.answerInput = '';
+    this.correct = false;
+
+    if (this.subtype === 'ListQuestion') {
+      this.possibleAnswers = new Map();
+      for (const answer of this.data.question.possibleAnswers) {
+        this.possibleAnswers.set(answer, this.data.question.correctAnswers.includes(answer));
+      }
+    }
+
+    if (this.subtype === 'TestQuestion') {
+      this.possibleAnswers = new Map();
+      for (const answer of this.data.question.possibleAnswers) {
+        this.possibleAnswers.set(answer, answer === this.data.question.correctAnswer);
+        if (!this.correctTestAnswerSelected) {
+          this.correctTestAnswerSelected = answer === this.data.question.correctAnswer
+        }
+      }
+    }
+  }
+
   setQuestion(subtype: string) {
     this.subtype = subtype;
     this.resetAddQuestionForm();
+  }
+
+  sendQuestion() {
+    switch (this.subtype) {
+      case 'DefinitionQuestion': {
+        this.sendDefinitionQuestion();
+        break;
+      }
+      case 'ListQuestion': {
+        this.sendListQuestion();
+        break;
+      }
+      case 'TestQuestion': {
+        this.sendTestQuestion();
+        break;
+      }
+      default: {
+        console.log('Not valid');
+        break;
+      }
+    }
   }
 
   sendDefinitionQuestion() {
@@ -79,14 +132,22 @@ export class AddQuestionDialogComponent implements OnInit {
       questionText: this.questionInput,
       subtype: 'DefinitionQuestion'
     };
-    this.unitService.addUnitDefinitionQuestion(this.data.unitId, this.definitionQuestion).subscribe(
-      (_) => {
-        this.resetAddQuestionForm();
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => console.log(error)
-    );
+
+    if (!this.data.isEditing) {
+      this.questionService.addUnitDefinitionQuestion(this.data.unitId, this.definitionQuestion).subscribe(
+        (_) => {
+          this.resetAddQuestionForm();
+        },
+        (error) => console.log(error)
+      );
+    } else {
+      this.questionService.editUnitDefinitionQuestion(this.data.unitId, this.data.question.id, this.definitionQuestion).subscribe(
+        (_) => {
+          this.resetAddQuestionForm();
+        },
+        (error) => console.log(error)
+      );
+    }
   }
 
   sendListQuestion() {
@@ -107,17 +168,29 @@ export class AddQuestionDialogComponent implements OnInit {
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswers: ca
     };
-    this.unitService.addUnitListQuestion(this.data.unitId, this.listQuestion).subscribe(
+
+    if (!this.data.isEditing) {
+      this.questionService.addUnitListQuestion(this.data.unitId, this.listQuestion).subscribe(
       (_) => {
-        this.resetAddQuestionForm();
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => {
-        console.log(error);
-        this.ngOnInit();
-      }
-    );
+          this.resetAddQuestionForm();
+        },
+        (error) => {
+          console.log(error);
+          this.ngOnInit();
+        }
+      );
+    } else {
+      this.questionService.editUnitListQuestion(this.data.unitId, this.data.question.id, this.listQuestion).subscribe(
+        (_) => {
+          this.resetAddQuestionForm();
+        },
+        (error) => {
+          console.log(error);
+          this.ngOnInit();
+        }
+      );
+    }
+
   }
 
   sendTestQuestion() {
@@ -138,15 +211,23 @@ export class AddQuestionDialogComponent implements OnInit {
       possibleAnswers: Array.from(this.possibleAnswers.keys()),
       correctAnswer: ca[0]
     };
-    this.unitService.addUnitTestQuestion(this.data.unitId, this.testQuestion).subscribe(
-      (_) => {
-        this.resetAddQuestionForm();
-        // TODO Remove it
-        this.ngOnInit();
-      },
-      (error) => console.log(error)
-    );
+    if (!this.data.isEditing) {
+      this.questionService.addUnitTestQuestion(this.data.unitId, this.testQuestion).subscribe(
+        (_) => {
+          this.resetAddQuestionForm();
+        },
+        (error) => console.log(error)
+      );
+    } else {
+      this.questionService.editUnitTestQuestion(this.data.unitId, this.data.question.id, this.testQuestion).subscribe(
+        (_) => {
+          this.resetAddQuestionForm();
+        },
+        (error) => console.log(error)
+      );
+    }
   }
+
   addPossibleListAnswer() {
     if (this.answerInput === '') {
       // TODO
@@ -165,9 +246,8 @@ export class AddQuestionDialogComponent implements OnInit {
     }
     if (!this.correctTestAnswerSelected && this.correct) {
       this.possibleAnswers.set(this.answerInput, true);
+      this.correct = false;
       this.correctTestAnswerSelected = true;
-    } else if (!this.correctTestAnswerSelected && !this.correct) {
-      this.possibleAnswers.set(this.answerInput, false);
     } else {
       this.possibleAnswers.set(this.answerInput, false);
     }

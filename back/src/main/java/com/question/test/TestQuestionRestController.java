@@ -25,6 +25,17 @@ public class TestQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/{questionID}")
+    public ResponseEntity<TestQuestion> getListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<TestQuestion> question = this.testQuestionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent())
+            return new ResponseEntity<>(question.get(), HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("")
     public ResponseEntity<TestQuestion> addTestQuestion(@PathVariable long unitID, @RequestBody TestQuestion question) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
@@ -52,7 +63,7 @@ public class TestQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{questionID}")
     public ResponseEntity<TestQuestion> updateQuestion(@PathVariable long unitID, @PathVariable long questionID, @RequestBody TestQuestion newQuestion) {
 
         Optional<Unit> unit = this.unitService.findOne(unitID);

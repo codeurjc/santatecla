@@ -29,16 +29,20 @@ public class Module extends Block {
         this.blocks.add(block);
     }
 
+    /********************
+     * GETTER AND SETTER *
+     ********************/
+
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public List<Block> getBlocks() {
         return blocks;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setBlocks(List<Block> blocks) {

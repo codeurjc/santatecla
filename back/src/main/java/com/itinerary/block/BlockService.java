@@ -1,4 +1,4 @@
-package com.itinerary.module;
+package com.itinerary.block;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,20 +7,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ModuleService {
+public class BlockService {
     @Autowired
-    private ModuleRepository repository;
+    private BlockRepository repository;
 
-    public Optional<Module> findOne(long id) {
+    public Optional<Block> findOne(long id) {
         return repository.findById(id);
     }
 
-    public List<Module> findAll() {
+    public List<Block> findAll() {
         return repository.findAll();
     }
 
-    public void save(Module module) {
-        repository.save(module);
+    public void save(Block block) {
+        repository.save(block);
     }
 
     public void delete(long id) {

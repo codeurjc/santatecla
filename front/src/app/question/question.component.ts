@@ -31,6 +31,9 @@ const QUESTION_TYPES = [
 
 export class QuestionComponent implements OnInit {
 
+  displayedColumns: string[] = ['question', 'subtype', 'edit', 'delete'];
+  showSpinner = false;
+
   questions: Question[];
   definitionQuestions: DefinitionQuestion[];
   listQuestions: ListQuestion[];
@@ -40,7 +43,7 @@ export class QuestionComponent implements OnInit {
   listQuestion: ListQuestion;
   testQuestion: TestQuestion;
 
-  questionTypes;
+  questionTypes: Map<string, string>;
 
   answerInput: string;
 
@@ -57,17 +60,18 @@ export class QuestionComponent implements OnInit {
     public loginService: LoginService,
     public dialog: MatDialog,
     private questionService: QuestionService,
-    private definitionQuestionService: DefinitionQuestionService,
-    private listQuestionService: ListQuestionService,
-    private testQuestionService: TestQuestionService,
-    private unitService: UnitService,
     private activatedRoute: ActivatedRoute,
     private router: Router) {
   }
   ngOnInit() {
 
+    this.showSpinner = true;
+
     this.questions = [];
-    this.questionTypes = QUESTION_TYPES;
+    this.questionTypes = new Map();
+    for (const entry of QUESTION_TYPES) {
+      this.questionTypes.set(entry.id, entry.name);
+    }
 
     this.answerInput = '';
 
@@ -77,11 +81,10 @@ export class QuestionComponent implements OnInit {
 
     // this.getQuestions();
     this.getAllQuestions();
-
   }
 
   getQuestions() {
-    this.unitService.getUnitQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
+    this.questionService.getUnitQuestions(this.unitId).subscribe((data: Question[]) => {
       this.questions = data;
     });
   }
@@ -89,20 +92,68 @@ export class QuestionComponent implements OnInit {
   getAllQuestions() {
     this.questions = [];
 
-    this.unitService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
+    this.questionService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
       this.definitionQuestions = data;
       this.questions = this.questions.concat(data);
+      this.showSpinner = false;
     });
 
-    this.unitService.getUnitListQuestions(this.unitId).subscribe((data: ListQuestion[]) => {
+    this.questionService.getUnitListQuestions(this.unitId).subscribe((data: ListQuestion[]) => {
       this.listQuestions = data;
       this.questions = this.questions.concat(data);
+      this.showSpinner = false;
     });
 
-    this.unitService.getUnitTestQuestions(this.unitId).subscribe((data: TestQuestion[]) => {
+    this.questionService.getUnitTestQuestions(this.unitId).subscribe((data: TestQuestion[]) => {
       this.testQuestions = data;
       this.questions = this.questions.concat(data);
+      this.showSpinner = false;
     });
+  }
+
+  editQuestion(questionID: number, subtype: string) {
+    switch (subtype) {
+      case 'DefinitionQuestion': {
+        this.getDefinitionQuestion(questionID);
+        break;
+      }
+      case 'ListQuestion': {
+        this.getListQuestion(questionID);
+        break;
+      }
+      case 'TestQuestion': {
+        this.getTestQuestion(questionID);
+        break;
+      }
+      default: {
+        console.log('Not valid');
+        break;
+      }
+    }
+  }
+
+  getDefinitionQuestion(questionID: number) {
+    this.questionService.getUnitDefinitionQuestion(this.unitId, questionID).subscribe(
+      (data: DefinitionQuestion) => {
+        this.openEditQuestionDialog(data);
+      }
+    );
+  }
+
+  getListQuestion(questionID: number) {
+    this.questionService.getUnitListQuestion(this.unitId, questionID).subscribe(
+      (data: ListQuestion) => {
+        this.openEditQuestionDialog(data);
+      }
+    );
+  }
+
+  getTestQuestion(questionID: number) {
+    this.questionService.getUnitTestQuestion(this.unitId, questionID).subscribe(
+      (data: TestQuestion) => {
+        this.openEditQuestionDialog(data);
+      }
+    );
   }
 
   deleteQuestion(questionID: number) {
@@ -113,7 +164,7 @@ export class QuestionComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        this.unitService.deleteUnitQuestion(this.unitId, questionID).subscribe(
+        this.questionService.deleteUnitQuestion(this.unitId, questionID).subscribe(
           (_) => {
             // TODO Remove it
             this.ngOnInit();
@@ -138,7 +189,7 @@ export class QuestionComponent implements OnInit {
       user: this.loginService.getCurrentUser(),
       unitId: this.unitId
     };
-    this.unitService.addUnitDefinitionAnswer(this.unitId, questionID, answer).subscribe(
+    this.questionService.addUnitDefinitionAnswer(this.unitId, questionID, answer).subscribe(
       (_) => {
         // TODO Remove it
         this.ngOnInit();
@@ -150,10 +201,21 @@ export class QuestionComponent implements OnInit {
     );
   }
 
+  openEditQuestionDialog(editingQuestion) {
+    const dialogRef = this.dialog.open(AddQuestionDialogComponent, {
+      width: '600px',
+      data: {isEditing: true, unitId: this.unitId, question: editingQuestion}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    });
+  }
+
   openAddQuestionDialog() {
     const dialogRef = this.dialog.open(AddQuestionDialogComponent, {
       width: '600px',
-      data: {unitId: this.unitId}
+      data: {isEditing: false, unitId: this.unitId}
     });
 
     dialogRef.afterClosed().subscribe(result => {
