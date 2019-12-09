@@ -87,63 +87,147 @@ public class DatabaseInitializer {
                 cardRepository.save(card4);
 
                 //Slides
-                Slide slide1 = new Slide("Saludos");
-                Slide slide2 = new Slide("Despedidas");
-
-                slide1.addContent("Hola\n\n");
-                slide2.addContent("Adios\n\n");
+                Slide slide1 = new Slide("Programación Declarativa vs Programación Imperativa");
+                Slide slide2 = new Slide("Tipos de datos");
+                Slide slide3 = new Slide("Funciones recursivas");
+                Slide slide4 = new Slide("Funciones de orden superior");
+                Slide slide5 = new Slide("Sinónimos de tipo");
+                Slide slide6 = new Slide("Historia");
+                Slide slide7 = new Slide("Tipos de datos compuestos");
+                Slide slide8 = new Slide("Estructuras");
+                Slide slide9 = new Slide("¿Qué es?");
+                Slide slide10 = new Slide("Introducción");
+                Slide slide11 = new Slide("Compiladores e interpretes");
+                Slide slide12 = new Slide("Funciones");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide2);
+                slideRepository.save(slide3);
+                slideRepository.save(slide4);
+                slideRepository.save(slide5);
+                slideRepository.save(slide6);
+                slideRepository.save(slide7);
+                slideRepository.save(slide8);
+                slideRepository.save(slide9);
+                slideRepository.save(slide10);
+                slideRepository.save(slide11);
+                slideRepository.save(slide12);
 
                 //Lesson
-                Lesson lesson1 = new Lesson("Introducción a lenguajes de programción");
-                Lesson lesson2 = new Lesson("Introducción Java");
-                Lesson lesson3 = new Lesson("Introducción C++");
+                Lesson lesson1 = new Lesson("Introducción a la programación funcional");
+                Lesson lesson2 = new Lesson("Introducción a Haskell");
+                Lesson lesson3 = new Lesson("Introducción a la recursividad");
+                Lesson lesson4 = new Lesson("Funciones de orden superior");
+                Lesson lesson5 = new Lesson("Declaración, Clases y Tipos");
+                Lesson lesson6 = new Lesson("Introducción a C");
+                Lesson lesson7 = new Lesson("Arrays y funciones en C");
+                Lesson lesson8 = new Lesson("Estructuras y punteros en C");
+                Lesson lesson9 = new Lesson("Memoria dinámica");
+                Lesson lesson10 = new Lesson("Ficheros");
+                Lesson lesson11 = new Lesson("Introducción, Tipos de datos, Operadores y Estructura de control");
+                Lesson lesson12 = new Lesson("Funciones y Objetos");
 
                 lesson1.getSlides().add(slide1);
-                lesson1.getSlides().add(slide2);
-
-                lesson2.getSlides().add(slide1);
                 lesson2.getSlides().add(slide2);
-
-                lesson3.getSlides().add(slide1);
-                lesson3.getSlides().add(slide2);
+                lesson3.getSlides().add(slide3);
+                lesson4.getSlides().add(slide4);
+                lesson5.getSlides().add(slide5);
+                lesson6.getSlides().add(slide6);
+                lesson7.getSlides().add(slide7);
+                lesson8.getSlides().add(slide8);
+                lesson9.getSlides().add(slide9);
+                lesson10.getSlides().add(slide10);
+                lesson11.getSlides().add(slide11);
+                lesson12.getSlides().add(slide12);
 
                 lessonRepository.save(lesson1);
                 lessonRepository.save(lesson2);
                 lessonRepository.save(lesson3);
+                lessonRepository.save(lesson4);
+                lessonRepository.save(lesson5);
+                lessonRepository.save(lesson6);
+                lessonRepository.save(lesson7);
+                lessonRepository.save(lesson8);
+                lessonRepository.save(lesson9);
+                lessonRepository.save(lesson10);
+                lessonRepository.save(lesson11);
+                lessonRepository.save(lesson12);
 
                 //Modules
-                Module module1 = new Module("Tema 1");
-                Module module2 = new Module("Tema 2");
-                Module module3 = new Module("Paradigmas");
-                Module module4 = new Module("Tema 2.1");
-                Module module5 = new Module("Tema 2.2");
+                Module module1 = new Module("Programeación funcional");
+                Module module2 = new Module("Programación imperativa estructurada");
+                Module module3 = new Module("Programación con lenguajes interpretados");
+                Module module4 = new Module("Paradigmas de la programación");
+                Module module5 = new Module("Introducción a la programación funcional");
+                Module module6 = new Module("Introducción a Haskell");
+                Module module7 = new Module("Recursividad. Funciones de orden superior");
+                Module module8 = new Module("Tipos de datos definidos por el programador. Sistema de Clases");
+                Module module9 = new Module("Introducción a C");
+                Module module10 = new Module("Arrays y funciones en C");
+                Module module11 = new Module("Estructuras y punteros en C");
+                Module module12 = new Module("Memoria dinámica");
+                Module module13 = new Module("Ficheros");
+                Module module14 = new Module("Introducción a Python");
 
                 moduleRepository.save(module1);
                 moduleRepository.save(module2);
                 moduleRepository.save(module3);
                 moduleRepository.save(module4);
                 moduleRepository.save(module5);
+                moduleRepository.save(module6);
+                moduleRepository.save(module7);
+                moduleRepository.save(module8);
+                moduleRepository.save(module9);
+                moduleRepository.save(module10);
+                moduleRepository.save(module11);
+                moduleRepository.save(module12);
+                moduleRepository.save(module13);
+                moduleRepository.save(module14);
 
-                module1.addBlock(lesson1);
-                module2.addBlock(lesson2);
-                module2.addBlock(lesson3);
-                module4.addBlock(lesson1);
+                module5.addBlock(lesson1);
+                module6.addBlock(lesson2);
+                module7.addBlock(lesson3);
+                module7.addBlock(lesson4);
+                module8.addBlock(lesson5);
+                module9.addBlock(lesson6);
+                module10.addBlock(lesson7);
+                module11.addBlock(lesson8);
+                module12.addBlock(lesson9);
+                module13.addBlock(lesson10);
+                module14.addBlock(lesson11);
+                module14.addBlock(lesson12);
 
-                module2.addBlock(module4);
-                module2.addBlock(module5);
-                module3.addBlock(module1);
-                module3.addBlock(module2);
-                module3.addBlock(lesson1);
+                module1.addBlock(module5);
+                module1.addBlock(module6);
+                module1.addBlock(module7);
+                module1.addBlock(module8);
+
+                module2.addBlock(module9);
+                module2.addBlock(module10);
+                module2.addBlock(module11);
+                module2.addBlock(module12);
+                module2.addBlock(module13);
+
+                module3.addBlock(module14);
+
+                module4.addBlock(module1);
+                module4.addBlock(module2);
+                module4.addBlock(module3);
 
                 moduleRepository.save(module1);
                 moduleRepository.save(module2);
                 moduleRepository.save(module3);
                 moduleRepository.save(module4);
                 moduleRepository.save(module5);
-
+                moduleRepository.save(module6);
+                moduleRepository.save(module7);
+                moduleRepository.save(module8);
+                moduleRepository.save(module9);
+                moduleRepository.save(module10);
+                moduleRepository.save(module11);
+                moduleRepository.save(module12);
+                moduleRepository.save(module13);
+                moduleRepository.save(module14);
 
                 // Definition Questions
                 DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?");
@@ -218,7 +302,6 @@ public class DatabaseInitializer {
                 unit1.getModules().add(module2);
                 unit1.getModules().add(module3);
                 unit1.getModules().add(module4);
-                unit1.getModules().add(module5);
 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
