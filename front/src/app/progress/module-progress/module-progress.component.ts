@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ProgressService } from '../progress.service';
-import {LoginService} from '../../auth/login.service';
+import {LoginService, User} from '../../auth/login.service';
 import {Course} from '../../course/course.model';
 import {UserResult} from '../items/userResult.model';
 import {ActivatedRoute} from '@angular/router';
@@ -24,6 +24,7 @@ export class ModuleProgressComponent implements OnInit {
   histogram = [];
   xAxisLabel = 'Tema';
   yAxisLabel = 'Media';
+  showingModuleResults: UserResult[];
 
   constructor(private courseService: CourseService,
               private loginService: LoginService,
@@ -43,6 +44,7 @@ export class ModuleProgressComponent implements OnInit {
 
       this.progressService.getModuleProgress(this.courseId).subscribe((data: UserResult[]) => {
         this.moduleResults = data;
+        this.showingModuleResults = this.moduleResults;
         this.buildHistogramData();
         this.moduleResultsReady = true;
       }, error => {console.log(error); });
@@ -63,14 +65,14 @@ export class ModuleProgressComponent implements OnInit {
     }
   }
 
-  /*applyFilterStudent(value: string) {
-    this.showingClassResults = [];
-    for (let result of this.classResults) {
+  applyFilterModule(value: string) {
+    this.showingModuleResults = [];
+    for (let result of this.moduleResults) {
       if (result.name.toLowerCase().includes(value.toLowerCase())) {
-        this.showingClassResults.push(result);
+        this.showingModuleResults.push(result);
       }
     }
-  }*/
+  }
 
 
 }

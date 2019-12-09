@@ -17,9 +17,11 @@ export class ClassProgressComponent implements OnInit {
   courseId: number;
   course: Course;
   classResults: StudentProgressItem[];
+  showingClassResults: StudentProgressItem[];
   courseFormat: ModuleFormat[];
   moduleFormat: ModuleFormat;
   moduleExtendedResults: StudentProgressItem[];
+  showingExtendedResults: StudentProgressItem[];
   classColumnsToDisplay = ['name'];
   extendedColumnsToDisplay = ['name'];
   classResultsReady = false;
@@ -40,6 +42,7 @@ export class ClassProgressComponent implements OnInit {
 
       this.progressService.getClassProgress(this.courseId).subscribe((data: StudentProgressItem[]) => {
         this.classResults = data;
+        this.showingClassResults = this.classResults;
         console.log(this.classResults);
       }, error => {console.log(error); });
 
@@ -61,6 +64,7 @@ export class ClassProgressComponent implements OnInit {
     this.classResultsReady = false;
     this.progressService.getExtendedModuleInfo(this.courseId, moduleId).subscribe((data: StudentProgressItem[]) => {
       this.moduleExtendedResults = data;
+      this.showingExtendedResults = this.moduleExtendedResults;
       this.classResultsReady = true;
       this.extendedInfo = true;
     }, error => {console.log(error); });
@@ -78,14 +82,23 @@ export class ClassProgressComponent implements OnInit {
     this.extendedColumnsToDisplay.push('studentAverage');
   }
 
-  /*applyFilterStudent(value: string) {
+  applyFilterStudent(value: string) {
     this.showingClassResults = [];
     for (let result of this.classResults) {
-      if (result.name.toLowerCase().includes(value.toLowerCase())) {
+      if (result.studentName.toLowerCase().includes(value.toLowerCase())) {
         this.showingClassResults.push(result);
       }
     }
-  }*/
+  }
+
+  applyFilterExtendedStudent(value: string) {
+    this.showingExtendedResults = [];
+    for (let result of this.moduleExtendedResults) {
+      if (result.studentName.toLowerCase().includes(value.toLowerCase())) {
+        this.showingExtendedResults.push(result);
+      }
+    }
+  }
 
 
 }
