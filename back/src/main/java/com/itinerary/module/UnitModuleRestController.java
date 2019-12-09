@@ -59,6 +59,21 @@ public class UnitModuleRestController extends GeneralRestController {
                         }
                     }
                     parents.removeAll(idUsed);
+                    List<Block> blocks = module.get().getBlocks();
+                    if (blocks != null) {
+                        for (Block b : blocks) {
+                            List<Long> iDs = b.getParentsId();
+                            if (iDs != null) {
+                                List<Long> iDsUsed = new ArrayList<>();
+                                for (Long id : iDs) {
+                                    if (id == moduleId) {
+                                        iDsUsed.add(id);
+                                    }
+                                }
+                                iDs.removeAll(iDsUsed);
+                            }
+                        }
+                    }
                 }
                 this.blockService.delete(moduleId);
                 return new ResponseEntity<>(module.get(), HttpStatus.OK);

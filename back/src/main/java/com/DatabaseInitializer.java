@@ -118,15 +118,22 @@ public class DatabaseInitializer {
                 Module module1 = new Module("Tema 1");
                 Module module2 = new Module("Tema 2");
                 Module module3 = new Module("Paradigmas");
+                Module module4 = new Module("Tema 2.1");
+                Module module5 = new Module("Tema 2.2");
 
                 moduleRepository.save(module1);
                 moduleRepository.save(module2);
                 moduleRepository.save(module3);
+                moduleRepository.save(module4);
+                moduleRepository.save(module5);
 
                 module1.addBlock(lesson1);
                 module2.addBlock(lesson2);
                 module2.addBlock(lesson3);
+                module4.addBlock(lesson1);
 
+                module2.addBlock(module4);
+                module2.addBlock(module5);
                 module3.addBlock(module1);
                 module3.addBlock(module2);
                 module3.addBlock(lesson1);
@@ -134,6 +141,9 @@ public class DatabaseInitializer {
                 moduleRepository.save(module1);
                 moduleRepository.save(module2);
                 moduleRepository.save(module3);
+                moduleRepository.save(module4);
+                moduleRepository.save(module5);
+
 
                 // Definition Questions
                 DefinitionQuestion definition1 = new DefinitionQuestion("¿Qué es el software?");
@@ -207,6 +217,8 @@ public class DatabaseInitializer {
                 unit1.getModules().add(module1);
                 unit1.getModules().add(module2);
                 unit1.getModules().add(module3);
+                unit1.getModules().add(module4);
+                unit1.getModules().add(module5);
 
                 unitRepository.save(unit1);
                 unitRepository.save(unit2);
