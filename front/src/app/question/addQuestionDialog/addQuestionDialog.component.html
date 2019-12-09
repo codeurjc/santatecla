@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
   <body class="card-content">
-    <h1 mat-dialog-title>Añadir nueva pregunta</h1>
+    <h1 mat-dialog-title *ngIf="!data.isEditing">Añadir nueva pregunta</h1>
+    <h1 mat-dialog-title *ngIf="data.isEditing">Editar pregunta</h1>
+
     <div mat-dialog-content>
-      <div class="button-row">
+      <div *ngIf="!data.isEditing" class="button-row">
         <button *ngFor="let type of questionTypes" (click)="setQuestion(type.id)"
                 [ngClass]="subtype == type.id ? 'question-button mat-button active-type' : 'tool question-button mat-button'">
           {{type.name}}
