@@ -26,6 +26,17 @@ public class ListQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/{questionID}")
+    public ResponseEntity<ListQuestion> getListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<ListQuestion> question = this.listQuestionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent())
+            return new ResponseEntity<>(question.get(), HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("")
     public ResponseEntity<ListQuestion> addListQuestion(@PathVariable long unitID, @RequestBody ListQuestion question) {
         Optional<Unit> unit = this.unitService.findOne(unitID);

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
-import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
 
@@ -30,6 +29,17 @@ public class DefinitionQuestionRestController extends GeneralRestController {
 
         if (unit.isPresent())
             return new ResponseEntity<>(unit.get().getDefinitionQuestions(), HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{questionID}")
+    public ResponseEntity<DefinitionQuestion> getListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent())
+            return new ResponseEntity<>(question.get(), HttpStatus.OK);
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
