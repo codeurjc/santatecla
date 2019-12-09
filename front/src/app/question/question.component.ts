@@ -12,6 +12,7 @@ import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
 import {AnswerDefinitionDialogComponent} from './answerQuestionDialog/answerDefinitionDialog.component';
 import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
 import {AddQuestionDialogComponent} from './addQuestionDialog/addQuestionDialog.component';
+import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
 const QUESTION_TYPES = [
   {id: 'DefinitionQuestion', name: 'Definición'},
@@ -28,6 +29,9 @@ const QUESTION_TYPES = [
 export class QuestionComponent implements OnInit {
 
   displayedColumns: string[] = ['question', 'subtype', 'edit', 'delete'];
+  dataSource;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   showSpinner = false;
 
   questions: Question[];
@@ -59,8 +63,8 @@ export class QuestionComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router) {
   }
-  ngOnInit() {
 
+  ngOnInit() {
     this.showSpinner = true;
 
     this.questions = [];
@@ -75,34 +79,53 @@ export class QuestionComponent implements OnInit {
       this.unitId = params.unitId;
     });
 
-    // this.getQuestions();
-    this.getAllQuestions();
+    // init data source
+    this.dataSource = new MatTableDataSource<Question>();
+
+    this.getQuestions();
+    // this.getAllQuestions();
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getQuestions() {
     this.questionService.getUnitQuestions(this.unitId).subscribe((data: Question[]) => {
       this.questions = data;
+      this.dataSource.data = data;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.showSpinner = false;
     });
   }
 
+  // Get questions type by type
   getAllQuestions() {
-    this.questions = [];
-
     this.questionService.getUnitDefinitionQuestions(this.unitId).subscribe((data: DefinitionQuestion[]) => {
       this.definitionQuestions = data;
       this.questions = this.questions.concat(data);
+      // question table
+      this.dataSource = new MatTableDataSource(this.questions);
+      this.dataSource.sort = this.sort;
       this.showSpinner = false;
     });
 
     this.questionService.getUnitListQuestions(this.unitId).subscribe((data: ListQuestion[]) => {
       this.listQuestions = data;
       this.questions = this.questions.concat(data);
+      // question table
+      this.dataSource = new MatTableDataSource(this.questions);
+      this.dataSource.sort = this.sort;
       this.showSpinner = false;
     });
 
     this.questionService.getUnitTestQuestions(this.unitId).subscribe((data: TestQuestion[]) => {
       this.testQuestions = data;
       this.questions = this.questions.concat(data);
+      // question table
+      this.dataSource = new MatTableDataSource(this.questions);
+      this.dataSource.sort = this.sort;
       this.showSpinner = false;
     });
   }
@@ -203,7 +226,9 @@ export class QuestionComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
+      if (result === 1) {
+        this.ngOnInit();
+      }
     });
   }
 
@@ -214,7 +239,9 @@ export class QuestionComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
+      if (result === 1) {
+        this.ngOnInit();
+      }
     });
   }
 

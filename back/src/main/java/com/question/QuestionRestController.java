@@ -1,5 +1,6 @@
 package com.question;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,11 @@ public class QuestionRestController extends GeneralRestController {
         Optional<Unit> unit = this.unitService.findOne(unitID);
 
         if (unit.isPresent()) {
-            return new ResponseEntity<>(this.questionService.findAll(), HttpStatus.OK);
+            List<Question> questions = new ArrayList<>();
+            questions.addAll(unit.get().getDefinitionQuestions());
+            questions.addAll(unit.get().getListQuestions());
+            questions.addAll(unit.get().getTestQuestions());
+            return new ResponseEntity<>(questions, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -120,6 +120,7 @@ export class AddQuestionDialogComponent implements OnInit {
         break;
       }
     }
+    this.dialogRef.close(1);
   }
 
   sendDefinitionQuestion() {
@@ -255,6 +256,16 @@ export class AddQuestionDialogComponent implements OnInit {
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(2);
+  }
+
+  changeTextArea(event: Event) {
+    this.fitContent(event.target as HTMLTextAreaElement);
+  }
+
+  fitContent(textArea: HTMLTextAreaElement) {
+    textArea.style.overflow = 'hidden';
+    textArea.style.height = '0px';
+    textArea.style.height = textArea.scrollHeight + 'px';
   }
 }

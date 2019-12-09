@@ -52,6 +52,15 @@ table {
   width: 100%;
 }
 
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
 .questions-group {
   margin-right: 10%;
   margin-left: 10%;
@@ -95,15 +104,6 @@ table {
 
 .active-type {
   background-color: #a769b8;
-}
-
-.add-question-radio-group {
-  display: flex;
-  justify-content: center;
-}
-
-.add-question-radio-group-element {
-  margin: 10px;
 }
 
 .add-question-form {
