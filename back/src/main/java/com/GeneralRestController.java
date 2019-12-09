@@ -2,6 +2,7 @@ package com;
 
 import com.card.CardService;
 import com.course.CourseService;
+import com.itinerary.block.BlockService;
 import com.itinerary.lesson.LessonService;
 import com.itinerary.module.ModuleService;
 import com.question.QuestionService;
@@ -36,6 +37,9 @@ public class GeneralRestController {
 
 	@Autowired
 	protected ModuleService moduleService;
+
+	@Autowired
+	protected BlockService blockService;
 
 	@Autowired
 	protected CardService cardService;

@@ -15,7 +15,7 @@ public class ModuleRestController extends GeneralRestController {
 
     @GetMapping(value="/")
     public MappingJacksonValue modules(){
-        MappingJacksonValue result = new MappingJacksonValue(this.lessonService.findAll());
+        MappingJacksonValue result = new MappingJacksonValue(this.moduleService.findAll());
         return result;
     }
 
