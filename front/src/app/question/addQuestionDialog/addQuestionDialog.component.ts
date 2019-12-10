@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {QuestionComponent} from '../question.component';
 import {DefinitionQuestion} from '../definitionQuestion/definitionQuestion.model';
 import {ListQuestion} from '../listQuestion/listQuestion.model';
@@ -48,6 +48,7 @@ export class AddQuestionDialogComponent implements OnInit {
     private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     public dialogRef: MatDialogRef<QuestionComponent>,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   ngOnInit() {
@@ -73,7 +74,7 @@ export class AddQuestionDialogComponent implements OnInit {
   }
 
   setEditQuestionForm() {
-    this.subtype = this.data.question.subtype
+    this.subtype = this.data.question.subtype;
     this.questionInput = this.data.question.questionText;
     this.answerInput = '';
     this.correct = false;
@@ -90,7 +91,7 @@ export class AddQuestionDialogComponent implements OnInit {
       for (const answer of this.data.question.possibleAnswers) {
         this.possibleAnswers.set(answer, answer === this.data.question.correctAnswer);
         if (!this.correctTestAnswerSelected) {
-          this.correctTestAnswerSelected = answer === this.data.question.correctAnswer
+          this.correctTestAnswerSelected = answer === this.data.question.correctAnswer;
         }
       }
     }
@@ -139,14 +140,14 @@ export class AddQuestionDialogComponent implements OnInit {
         (_) => {
           this.resetAddQuestionForm();
         },
-        (error) => console.log(error)
+        (err) => console.log(err)
       );
     } else {
       this.questionService.editUnitDefinitionQuestion(this.data.unitId, this.data.question.id, this.definitionQuestion).subscribe(
         (_) => {
           this.resetAddQuestionForm();
         },
-        (error) => console.log(error)
+        (err) => console.log(err)
       );
     }
   }
@@ -175,8 +176,8 @@ export class AddQuestionDialogComponent implements OnInit {
       (_) => {
           this.resetAddQuestionForm();
         },
-        (error) => {
-          console.log(error);
+        (err) => {
+          console.log(err);
           this.ngOnInit();
         }
       );
@@ -185,8 +186,8 @@ export class AddQuestionDialogComponent implements OnInit {
         (_) => {
           this.resetAddQuestionForm();
         },
-        (error) => {
-          console.log(error);
+        (err) => {
+          console.log(err);
           this.ngOnInit();
         }
       );
@@ -217,14 +218,14 @@ export class AddQuestionDialogComponent implements OnInit {
         (_) => {
           this.resetAddQuestionForm();
         },
-        (error) => console.log(error)
+        (err) => console.log(err)
       );
     } else {
       this.questionService.editUnitTestQuestion(this.data.unitId, this.data.question.id, this.testQuestion).subscribe(
         (_) => {
           this.resetAddQuestionForm();
         },
-        (error) => console.log(error)
+        (err) => console.log(err)
       );
     }
   }
@@ -232,7 +233,7 @@ export class AddQuestionDialogComponent implements OnInit {
   addPossibleListAnswer() {
     if (this.answerInput === '') {
       // TODO
-      console.log('error: inputs cannot be empty');
+      this.openSnackBar('Input cannot be empty', 'Entendido');
       return;
     }
     this.possibleAnswers = this.possibleAnswers.set(this.answerInput, this.correct);
@@ -242,7 +243,7 @@ export class AddQuestionDialogComponent implements OnInit {
   addPossibleTestAnswer() {
     if (this.answerInput === '') {
       // TODO
-      console.log('error: inputs cannot be empty');
+      this.openSnackBar('Input cannot be empty', 'Entendido');
       return;
     }
     if (!this.correctTestAnswerSelected && this.correct) {
@@ -267,5 +268,11 @@ export class AddQuestionDialogComponent implements OnInit {
     textArea.style.overflow = 'hidden';
     textArea.style.height = '0px';
     textArea.style.height = textArea.scrollHeight + 'px';
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

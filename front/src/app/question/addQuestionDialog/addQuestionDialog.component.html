@@ -71,8 +71,11 @@
       <div class="add-question-form">
         <mat-list role="list">
           <mat-list-item role="listitem" *ngFor="let answer of possibleAnswers.keys()">
-            {{answer}}
+            <p matLine> {{answer}} </p>
             <mat-icon *ngIf="possibleAnswers.get(answer)">done_all</mat-icon>
+            <button mat-button (click)="possibleAnswers.delete(answer)" >
+              <mat-icon (click)="possibleAnswers.delete(answer)" class="delete-icon">clear</mat-icon>
+            </button>
           </mat-list-item>
         </mat-list>
       </div>
