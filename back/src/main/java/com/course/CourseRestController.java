@@ -130,6 +130,7 @@ public class CourseRestController extends GeneralRestController {
         ArrayList<Module> questionModules = new ArrayList<>();
         double sumQuestionAux;
         double sumModuleAux;
+        double average;
         List<Question> questions;
         StudentProgressItem item;
         ArrayList<StudentProgressItem> result = new ArrayList<>();
@@ -149,7 +150,13 @@ public class CourseRestController extends GeneralRestController {
                     sumModuleAux += sumQuestionAux / questions.size();
                     item.addGrade(sumQuestionAux / questions.size());
                 }
-                item.setAverage(sumModuleAux / questionModules.size());
+                average = sumModuleAux / questionModules.size();
+
+                if (Double.isNaN(average)){
+                    average = 0;
+                }
+
+                item.setAverage(average);
                 result.add(item);
             }
             return new ResponseEntity<>(result, HttpStatus.OK);

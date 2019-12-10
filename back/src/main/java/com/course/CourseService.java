@@ -64,12 +64,18 @@ public class CourseService {
         return result*10;
     }
 
-    public Double findModuleGrade(List<User> students, long moduleId, long courseId){
+    public double findModuleGrade(List<User> students, long moduleId, long courseId){
         double sumGrade = 0;
         for (User u : students){
             sumGrade += findUserGrade(moduleId, u.getId(), courseId);
         }
-        return (sumGrade/students.size());
+        double result = sumGrade/students.size();
+
+        if (Double.isNaN(result)){
+            return 0;
+        }
+
+        return result;
     }
 
     public double findUserQuestionGrade(Long userId, long moduleId, long courseId, Question question){

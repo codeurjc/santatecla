@@ -673,7 +673,7 @@ public class DatabaseInitializer {
                 userRepository.save(user2);
                 User teacher = new User("profesor", "profesor", "ROLE_ADMIN");
                 userRepository.save(teacher);
-/*
+
                 // Courses
                 Course course = new Course("Lenguajes de programación", teacher, "Aprende lo básico de los lenguajes de programación más usados.");
                 course.addStudent(user1);
@@ -685,7 +685,6 @@ public class DatabaseInitializer {
                 course2.addStudent(user1);
                 course2.setModule(module3);
                 courseRepository.save(course2);
-*/
 	}
 
 }

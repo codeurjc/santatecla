@@ -3,7 +3,10 @@ import {LoginService, User} from '../auth/login.service';
 import {NewCourseService} from './newCourse.service';
 import {Course} from './course.model';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TabService} from "../tab/tab.service";
+import {TabService} from '../tab/tab.service';
+import {Unit} from '../unit/unit.model';
+import {UnitService} from '../unit/unit.service';
+import {Module} from '../itinerary/module/module.model';
 
 @Component({
   templateUrl: './newCourse.component.html',
@@ -17,17 +20,22 @@ export class NewCourseComponent implements OnInit {
   showingStudents: User[];
   chosenStudents: User[];
   showStudentOptions = false;
+  showUnitOptions = false;
   searchStudentField: string;
   arrowStudentKeyLocation = 0;
+  arrowUnitKeyLocation = 0;
+  chosenModule: Module;
   course: Course;
-
+  searchUnitField: string;
+  showingUnits: Unit[];
   activeTab = 0;
   showMenu = true;
 
   constructor(private courseService: NewCourseService,
               private loginService: LoginService, private routing: Router,
               private activatedRoute: ActivatedRoute,
-              private tabService: TabService) {
+              private tabService: TabService,
+              private unitService: UnitService) {
     this.chosenStudents = [];
   }
 
@@ -41,6 +49,7 @@ export class NewCourseComponent implements OnInit {
           this.courseName = this.course.name;
           this.courseDescription = this.course.description;
           this.chosenStudents = this.course.students;
+          this.chosenModule = this.course.module;
           this.tabService.setCourse(this.courseName);
         }, error => {console.log(error); });
       }
@@ -79,6 +88,20 @@ export class NewCourseComponent implements OnInit {
     }
   }
 
+  searchUnit() {
+    if (this.searchUnitField !== '') {
+      this.unitService.searchByNameContaining(this.searchUnitField).subscribe((data: Unit[]) => {
+        this.showingUnits = data;
+        this.arrowUnitKeyLocation = 0;
+      }, error => {
+        console.log(error);
+      });
+    } else {
+      this.showingUnits = [];
+      this.showUnitOptions = false;
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   public documentClick(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -87,9 +110,16 @@ export class NewCourseComponent implements OnInit {
       this.showStudentOptions = false;
     } else if (target.id === 'search-student-input') {
       this.showStudentOptions = true;
+      this.showUnitOptions = false;
+    } else if (target.id === 'module-name') {
+      this.showUnitOptions = false;
+    } else if ((target.id === 'search-unit-input') || (target.id === 'unit-result') ||
+      (target.classList.contains('mat-expansion-indicator') || (target.classList.contains('mat-expansion-panel-header')))) {
+      this.showUnitOptions = true;
       this.showStudentOptions = false;
     } else {
       this.showStudentOptions = false;
+      this.showUnitOptions = false;
     }
   }
 
@@ -97,6 +127,7 @@ export class NewCourseComponent implements OnInit {
     this.course = {name: this.courseName, description: this.courseDescription};
     this.course.teacher = this.loginService.getCurrentUser();
     this.course.students = this.chosenStudents;
+    this.course.module = this.chosenModule;
     console.log(this.course);
     if (this.courseId === undefined) {
       this.courseService.postCourse(this.course).subscribe((data: Course) => {
@@ -107,6 +138,10 @@ export class NewCourseComponent implements OnInit {
         this.routing.navigate(['/courses']);
       }, error => {console.log(error); } );
     }
+  }
+
+  applyFilterUnits(value: string) {
+
   }
 
   private activateTab(tab: number) {

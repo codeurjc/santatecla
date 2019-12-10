@@ -11,6 +11,7 @@ public class StudentProgressItem {
     public StudentProgressItem(String studentName){
         this.studentName = studentName;
         this.grades = new ArrayList<>();
+        this.average = 0;
     }
 
     public void addGrade(Double m){
