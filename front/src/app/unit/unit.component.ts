@@ -11,9 +11,9 @@ import {TabService} from "../tab/tab.service";
 
 export class UnitComponent implements OnInit {
 
-  unit: Unit;
-  activeTab = 0;
-  showMenu = true;
+  private unit: Unit;
+  private activeTab = 0;
+  private showMenu = true;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,

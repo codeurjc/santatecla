@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Unit } from './unit.model';
 import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
 import { ListQuestion } from '../question/listQuestion/listQuestion.model';
@@ -22,7 +22,8 @@ export class UnitService {
   }
 
   searchByNameContaining(name: string) {
-    return this.http.get(this.baseUrl + 'search/' + name);
+    const params = new HttpParams().set('name', name);
+    return this.http.get(this.baseUrl + 'search/', { params: params });
   }
 
   createUnit(unit: Unit) {

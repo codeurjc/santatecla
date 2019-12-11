@@ -46,6 +46,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private relations = new Map<string, Relation>();
   private remainingUnits = 0;
 
+  private showMenu = true;
   private disableUpButton = false;
 
   private newUnitId = 0;
@@ -542,10 +543,18 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
 
+  // Menu
+
+  private setShowMenu(showMenu: boolean) {
+    this.showMenu = showMenu;
+  }
+
+
+
   // Search
 
   private search() {
-    if (this.validSearchField()) {
+    if (this.searchField.length > 0) {
       this.unitService.searchByNameContaining(this.searchField).subscribe((data: any) => {
         this.results = data;
         this.arrowKeyLocation = 0;
@@ -555,22 +564,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.emptyResults();
     }
-  }
-
-  private validSearchField() {
-    const invalidChars = ['?', '/', '\\', '[', ']', ';', '#'];
-    for (const ch of invalidChars) {
-      if (this.searchField.includes(ch)) {
-        return false;
-      }
-    }
-    const invalidCharsToSearchAlone = [' ', '.', '%'];
-    for (const ch of invalidCharsToSearchAlone) {
-      if (this.searchField.split(ch).length === (this.searchField.length + 1)) {
-        return false;
-      }
-    }
-    return true;
   }
 
   private setShowResults(showResults: boolean) {
