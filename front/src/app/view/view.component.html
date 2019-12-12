@@ -42,19 +42,24 @@
       <input id="uml-edit-input" (change)="updateUnitName()">
       <div id="uml-node-options">
         <button id="composition-incoming-button" class="uml-options-button"><img src="../../assets/img/add-composition-incoming.png" height="15"></button>
-        <!--<button id="composition-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-composition-outgoing.png" height="15"></button>-->
+        <button id="composition-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-composition-outgoing.png" height="15"></button>
         <br>
         <button id="inheritance-incoming-button" class="uml-options-button"><img src="../../assets/img/add-inheritance-incoming.png" height="15"></button>
-        <!--<button id="inheritance-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-inheritance-outgoing.png" height="15"></button>-->
+        <button id="inheritance-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-inheritance-outgoing.png" height="15"></button>
         <br>
         <button id="aggregation-incoming-button" class="uml-options-button"><img src="../../assets/img/add-aggregation-incoming.png" height="15"></button>
-        <!--<button id="aggregation-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-aggregation-outgoing.png" height="15"></button>-->
+        <button id="aggregation-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-aggregation-outgoing.png" height="15"></button>
         <br>
         <button id="association-incoming-button" class="uml-options-button"><img src="../../assets/img/add-association-incoming.png" height="15"></button>
-        <!--<button id="association-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-association-outgoing.png" height="15"></button>-->
+        <button id="association-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-association-outgoing.png" height="15"></button>
         <br>
         <button id="use-incoming-button" class="uml-options-button"><img src="../../assets/img/add-use-incoming.png" height="15"></button>
-        <!--<button id="use-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-use-outgoing.png" height="15"></button>-->
+        <button id="use-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-use-outgoing.png" height="15"></button>
+        <br>
+        <button id="delete-unit-button" class="uml-options-button">
+          <mat-icon id="delete-unit-icon">delete</mat-icon>
+          Eliminar unidad
+        </button>
       </div>
     </div>
 
@@ -81,6 +86,10 @@
         </div>
       </div>
     </div>
+
+    <svg id="svg">
+      <path #umlNewPath id="path"></path>
+    </svg>
 
   </body>
 </html>

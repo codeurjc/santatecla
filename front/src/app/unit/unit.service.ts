@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Unit } from './unit.model';
-import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
-import { ListQuestion } from '../question/listQuestion/listQuestion.model';
-import { TestQuestion } from '../question/testQuestion/testQuestion.model';
-import {DefinitionAnswer} from '../question/definitionQuestion/definitionAnswer.model';
 
 @Injectable()
 export class UnitService {

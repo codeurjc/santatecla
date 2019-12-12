@@ -1,6 +1,7 @@
 package com.unit;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,6 +85,12 @@ public class UnitRestController extends GeneralRestController {
         }
     }
 
+    @GetMapping(value="/search")
+    public ResponseEntity<List<Unit>> searchUnits(@RequestParam String name) {
+        List<Unit> units = this.unitService.findByNameContaining(name);
+        return new ResponseEntity<>(units, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{id}/absoluteName")
     public ResponseEntity<Unit> getUnitAbsoluteName(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
@@ -93,13 +100,7 @@ public class UnitRestController extends GeneralRestController {
     @GetMapping(value="/{id}/parent")
     public ResponseEntity<Unit> getUnitParent(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
-        return unit.map(value -> new ResponseEntity<>(unitService.getParent(value), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @GetMapping(value="/search")
-    public ResponseEntity<List<Unit>> searchUnits(@RequestParam String name) {
-        List<Unit> units = this.unitService.findByNameContaining(name);
-        return new ResponseEntity<>(units, HttpStatus.OK);
+        return unit.map(value -> new ResponseEntity<>(unitService.getParent(value, new HashSet<>()), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 }

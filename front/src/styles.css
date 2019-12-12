@@ -16,6 +16,7 @@ body {
   position: absolute;
   width: calc(100% - 20rem);
   height: calc(100% - 11rem);
+  z-index: 1;
 }
 
 #loader {
