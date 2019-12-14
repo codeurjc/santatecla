@@ -16,6 +16,7 @@ export class TabService {
 
   modules = false;
   module = '';
+  moduleId: number;
 
   constructor(private loginService: LoginService) {}
 
@@ -62,6 +63,18 @@ export class TabService {
     this.units = true;
     this.unit = unitName;
     this.unitId = unitId;
+    this.lessons = true;
+    this.lesson = lessonName;
+  }
+
+  setLessonInModule(unitName: string, unitId: number, moduleName: string, moduleId: number, lessonName: string) {
+    this.emptyAll();
+    this.units = true;
+    this.unit = unitName;
+    this.unitId = unitId;
+    this.modules = true;
+    this.module = moduleName;
+    this.moduleId = moduleId;
     this.lessons = true;
     this.lesson = lessonName;
   }

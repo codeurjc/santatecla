@@ -23,7 +23,7 @@ import {Course} from '../../../course/course.model';
   styleUrls: ['./module-editor.component.css']
 })
 
-export class ModuleEditorComponent implements OnInit{
+export class ModuleEditorComponent implements OnInit {
 
   @ViewChild('tree') tree;
 
@@ -37,8 +37,10 @@ export class ModuleEditorComponent implements OnInit{
   indexTreeControl = new NestedTreeControl<Module>(node => !!node && node.blocks);
   dataSource = new MatTreeNestedDataSource<Module>();
 
-  showMenu = true;
+  showMenu: boolean;
   activeTab = 0;
+
+  viewLessonPosition = 'after';
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -53,6 +55,11 @@ export class ModuleEditorComponent implements OnInit{
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
+      if (this.loginService.isAdmin) {
+        this.showMenu = false;
+      } else {
+        this.showMenu = true;
+      }
       this.unitId = params.unitId;
       this.courseId = params.courseId;
       this.moduleId = params.moduleId;
@@ -108,5 +115,9 @@ export class ModuleEditorComponent implements OnInit{
         return false;
       }
     }
+  }
+
+  viewLesson(lessonId: number) {
+    this.router.navigate(['/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId + '/view']);
   }
 }

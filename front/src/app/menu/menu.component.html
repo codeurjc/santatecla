@@ -15,23 +15,25 @@
           <img class="nav-button-icon" src="../../assets/img/uml-icon.png" height="15">
           <div class="nav-button-name">Unidades</div>
         </button>
+
         <button mat-button *ngIf="loginService.isAdmin && tabService.unit" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/unit/', tabService.unitId]">
           <div class="nav-button-name">
             <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Unidad</span>
             <span class="nav-button-content">{{tabService.unit}}</span>
           </div>
         </button>
+
+        <button mat-button *ngIf="loginService.isAdmin && tabService.module" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/units/' + tabService.unitId + '/modules/' + tabService.moduleId]">
+          <div class="nav-button-name">
+            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Módulo</span>
+            <span class="nav-button-content">{{tabService.module}}</span>
+          </div>
+        </button>
+
         <button mat-button *ngIf="loginService.isAdmin && tabService.lesson" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
           <div class="nav-button-name">
             <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Lección</span>
             <span class="nav-button-content">{{tabService.lesson}}</span>
-          </div>
-        </button>
-
-        <button mat-button *ngIf="loginService.isAdmin && tabService.module" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
-          <div class="nav-button-name">
-            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Módulo</span>
-            <span class="nav-button-content">{{tabService.module}}</span>
           </div>
         </button>
 

@@ -66,12 +66,14 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {ModuleService} from './itinerary/module/module.service';
 import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
 import {UnitModuleService} from './itinerary/module/unit-module.service';
+import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LessonFormComponent,
     LessonComponent,
+    LessonViewComponent,
     ModuleComponent,
     LoginComponent,
     MenuComponent,

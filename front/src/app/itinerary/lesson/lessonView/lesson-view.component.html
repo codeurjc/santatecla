@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+
+    <!-- TOOLS BAR -->
+    <div *ngIf="loginService.isLogged" [ngClass]="loginService.isAdmin ? 'toolsBar admin' : 'toolsBar student'"></div>
+
+    <h1>Hola, megalodón</h1>
+    <h2>Estas en la lección "{{lesson.name}}"</h2>
+
+  </body>
+</html>
