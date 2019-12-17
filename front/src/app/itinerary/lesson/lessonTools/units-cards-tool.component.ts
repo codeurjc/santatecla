@@ -38,7 +38,6 @@ export class UnitsCardsToolComponent implements OnInit {
         });
         this.unitsResult = this.units;
       });
-      console.log(this.units);
     });
   }
 

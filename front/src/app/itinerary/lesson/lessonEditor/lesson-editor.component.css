@@ -25,38 +25,37 @@
 }
 
 #editor-container {
-  float: left;
   position: absolute;
-  width: 45%;
-  overflow: auto;
+  left: 0;
+  right: 55%;
+  top: 6.5rem;
+  bottom: 0.5rem;
   margin: 0.5rem;
 }
 
-.textAres {
+.text-area {
+  position: absolute;
   resize: none;
-  width: 89%;
-  height: 900px;
+  border: none;
+  width: 90%;
+  top: 0.5rem;
+  bottom: 0.5rem;
   padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 0.1rem solid #27273c;
   font-size: 15px;
 }
 
 #html-itinerary-representation-editor {
+  position: absolute;
+  right: 0;
+  left: 45%;
+  top: 6.5rem;
+  bottom: 0.5rem;
   border-radius: 0.5rem;
-  padding: 0.5rem;
-  border: 0.1rem solid #27273c;
-  float: right;
-  width: 55%;
-  overflow: auto;
   margin: 0.5rem;
 }
 
-#html-itinerary-representation {
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  border: 0.1rem solid #27273c;
-  margin: 1rem;
+.slide-content {
+  margin-bottom: 1rem;
 }
 
 #spinnerEditor {

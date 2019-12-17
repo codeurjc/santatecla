@@ -22,20 +22,20 @@
 
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
-      <div id="editor-container">
-        <textarea class="textAres" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
-      </div>
+      <mat-card id="editor-container">
+        <textarea class="text-area" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
+      </mat-card>
     </div>
 
     <!-- HTML REPRESENTATION -->
     <div id="html-itinerary-representation-editor" *ngIf="loginService.isAdmin">
       <img src="../../../../assets/img/spinner.gif" id="spinnerEditor" *ngIf="showSpinner">
-      <div [innerHTML]="contentHTML"></div>
-    </div>
-
-    <div id="html-itinerary-representation" *ngIf="!loginService.isAdmin">
-      <img src="../../../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
-      <div [innerHTML]="contentHTML"></div>
+      <h1>{{lesson?.name}}</h1>
+      <div *ngFor="let slide of contentHTML">
+        <mat-card class="slide-content">
+          <div [innerHTML]="slide"></div>
+        </mat-card>
+      </div>
     </div>
 
   </body>

@@ -32,9 +32,12 @@ function convertToHTML(text) {
 
 export class LessonEditorComponent implements OnInit {
 
-  contentHTML: any;
+  contentHTML: any[];
+
   lessonContent: any;
   lessonContentExtended: string;
+
+  slidesContentExtended: string[];
 
   extractedData: string[];
   position: number[];
@@ -98,7 +101,15 @@ export class LessonEditorComponent implements OnInit {
   }
 
   viewHTMLVersion() {
-    this.contentHTML = convertToHTML(this.lessonContentExtended);
+    this.contentHTML = [];
+    this.slidesContentExtended = this.lessonContentExtended.split('===');
+    let counter = 0;
+    this.slidesContentExtended.forEach( (slide: string) => {
+      if (counter !== 0) {
+        this.contentHTML.push(convertToHTML('=== ' + slide + '\n'));
+      }
+      counter = counter + 1;
+    });
   }
 
   slidesToContent(slides: Slide[]) {
@@ -244,7 +255,6 @@ export class LessonEditorComponent implements OnInit {
 
   updateHTMLView() {
     this.contentToItinerary(this.lessonContent);
-    this.contentHTML = '';
     this.showSpinner = true;
     this.itineraryService.updateLesson(this.lesson).subscribe((_) => {
       this.loadItinerary();
