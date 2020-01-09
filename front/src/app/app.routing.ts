@@ -19,6 +19,7 @@ import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ModuleComponent} from './itinerary/module/module.component';
 import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-editor.component';
 import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
+import {CourseComponent} from './course/course.component';
 
 
 const appRoutes = [
@@ -44,7 +45,7 @@ const appRoutes = [
   { path: 'courses', component: MyCoursesComponent },
   { path: 'progress', component: ModuleProgressComponent },
   { path: 'newCourse', component: NewCourseComponent},
-  { path: 'course/:courseId', component: NewCourseComponent}
+  { path: 'course/:courseId', component: CourseComponent}
 
 ];
 

@@ -168,6 +168,10 @@
   height: 3rem;
 }
 
+.tab-group{
+  margin-left: 3rem
+}
+
 .tab:hover {
   background-color: #a769b8;
 }
@@ -193,7 +197,7 @@
 }
 
 #course-content {
-  margin-top: 4rem;
+  margin-top: 6rem;
   position: absolute;
   right: 0;
   padding-bottom: 2rem;
@@ -252,6 +256,23 @@
   background-color: #5d306a;
   text-align: right;
   padding: 0.3rem 0 0.3rem 0;
+}
+
+.example-tree-invisible {
+  display: none;
+}
+
+.toolsBar {
+  height: 6.2rem;
+  padding-left: 0.5rem;
+}
+
+.admin {
+  background-color: #5d306a;
+}
+
+.student {
+  background-color: #30376a;
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {

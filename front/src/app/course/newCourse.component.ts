@@ -140,10 +140,6 @@ export class NewCourseComponent implements OnInit {
     }
   }
 
-  applyFilterUnits(value: string) {
-
-  }
-
   private activateTab(tab: number) {
     this.activeTab = tab;
   }

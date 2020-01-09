@@ -13,7 +13,6 @@ import { LoginService } from '../../../auth/login.service';
 import { UnitService } from '../../../unit/unit.service';
 import {TabService} from '../../../tab/tab.service';
 import {ModuleService} from '../module.service';
-import {Block} from '../../block.model';
 import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
 
