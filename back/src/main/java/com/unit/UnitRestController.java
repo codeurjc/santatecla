@@ -85,6 +85,23 @@ public class UnitRestController extends GeneralRestController {
         }
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Unit> deleteUnit(@PathVariable long id) {
+        Optional<Unit> unit = unitService.findOne(id);
+        if (unit.isPresent()) {
+            for (Relation relation : unit.get().getOutgoingRelations()) {
+                relationService.delete(relation.getId());
+            }
+            for (Relation relation : unit.get().getIncomingRelations()) {
+                relationService.delete(relation.getId());
+            }
+            unitService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping(value="/search")
     public ResponseEntity<List<Unit>> searchUnits(@RequestParam String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);

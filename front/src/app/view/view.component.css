@@ -23,6 +23,7 @@
 
 #uml-edit-input {
   position: absolute;
+  z-index: 2;
 }
 
 #uml-edit-input {
@@ -42,11 +43,8 @@
 
 #delete-unit-button {
   width: 100%;
-  font-size: 0.7rem;
   margin-top: 0.2rem;
-  padding: 0.2rem 0 0.2rem 1.3rem;
   background-color: #ffdae8;
-  cursor: pointer;
 }
 
 #delete-unit-button:hover {
@@ -55,10 +53,8 @@
 
 #delete-unit-icon {
   font-size: 1rem;
-  position: absolute;
-  left: 0.5rem;
-  width: 1.5rem;
-  margin-top: -0.05rem;
+  margin-top: 0.2rem;
+  margin-bottom: -0.3rem;
 }
 
 #uml-path-options {
@@ -207,9 +203,5 @@
 }
 
 #path {
-  position: absolute;
-  z-index: 100;
-  border: solid 1px black;
-  margin: 20rem;
-  width: 50vw;
+  stroke: #27273c;
 }

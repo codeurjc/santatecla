@@ -20,10 +20,6 @@ declare var mermaid: any;
 
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  confirmText = 'Se han realizado cambios';
-  button1 = 'Guardar';
-  button2 = 'Descartar';
-
   private UNIT_NAME_SEPARATOR = '/';
   private ENTER_KEY = 'Enter';
   private ARROW_UP_KEY = 'ArrowUp';
@@ -72,6 +68,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnInit() {
     this.tabService.setUnits();
+    window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
@@ -358,6 +355,36 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return duplicate;
   }
 
+  private deleteUnit() {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se eliminará definitivamente la unidad y su contenido.',
+        button1: 'Cancelar',
+        button2: 'Eliminar'}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      window.scroll(0, 0);
+      if (result === 1) {
+        this.unitService.deleteUnit(+this.selectedTarget.id).subscribe(() => {
+          if (+this.focusedUnitId === +this.selectedTarget.id) {
+            let focused = false;
+            this.getUnitById(this.focusedUnitId.toString()).incomingRelations.forEach((relation: Relation) => {
+              if ((!focused) && (this.focusedUnitId.toString() !== relation.outgoing.toString())) {
+                this.focusedUnitId = relation.outgoing.toString();
+                focused = true;
+              }
+            });
+          }
+          this.focusUnit(this.focusedUnitId);
+        });
+      }
+    });
+  }
+
+  private deleteRelation() {
+
+  }
+
   private findUnitTarget(id: string): HTMLInputElement {
     let found = false;
     let target: HTMLInputElement = null;
@@ -565,9 +592,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       const id = target.id.toString().substring(0, target.id.toString().length);
       if (this.changed) {
         const dialogRef = this.dialog.open(ConfirmActionComponent, {
-          data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
+          data: {
+            confirmText: 'Se han realizado cambios',
+            button1: 'Guardar',
+            button2: 'Descartar'}
         });
-
         dialogRef.afterClosed().subscribe(result => {
           if (result === 1) {
             this.goToUnit(id);
@@ -619,9 +648,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.umlNewPath.nativeElement.setAttribute('d',
         'M' + (this.creatingRelation.boundingClientRect.right + window.pageXOffset - (this.creatingRelation.boundingClientRect.width / 2)) +
         ' ' + (this.creatingRelation.boundingClientRect.top + window.pageYOffset + (this.creatingRelation.boundingClientRect.height / 2)) +
-        ' L' + (this.creatingRelation.boundingClientRect.right + window.pageXOffset + 1 - (this.creatingRelation.boundingClientRect.width / 2)) +
-        ' ' + (this.creatingRelation.boundingClientRect.top + window.pageYOffset + 1 + (this.creatingRelation.boundingClientRect.height / 2)) +
-        ' L' + (event.clientX + 1) + ' ' + (event.clientY + 1) +
         ' L' + event.clientX + ' ' + event.clientY);
     } else {
       this.umlNewPath.nativeElement.setAttribute('d','');

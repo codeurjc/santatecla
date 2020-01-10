@@ -23,4 +23,8 @@ public class RelationService {
 		relationRepository.save(relation);
 	}
 
+	public void delete(long id) {
+		relationRepository.deleteById(id);
+	}
+
 }
