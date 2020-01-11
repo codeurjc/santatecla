@@ -4,7 +4,7 @@
 
     <div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
       <mat-form-field appearance="outline" id="search">
-        <mat-label>Focalizar unidad</mat-label>
+        <mat-label>Buscar unidad</mat-label>
         <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)"/>
         <div id="result-list" *ngIf="showResults">
           <div id="result" *ngFor="let result of results; let i = index" [class.active]="i==arrowKeyLocation" (mouseover)="setActive(i)">
@@ -17,7 +17,7 @@
     <mat-icon id="hide-menu-button" [ngClass]="showMenu ? 'show-hide-menu-button' : 'hidden-hide-menu-button'" (click)="setShowMenu(!showMenu)">reorder</mat-icon>
     <div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'"></div>
 
-    <div id="json-editor-container">
+    <div id="json-editor-container" [hidden]="hideJson">
       <json-editor [options]="editorOptions" [(ngModel)]="data"></json-editor>
     </div>
 
@@ -26,10 +26,12 @@
       Guardar
     </button>
 
+    <!--
     <button id="up-button" mat-icon-button color="primary" [disabled]="disableUpButton" (click)="upLevelAbove()">
       <mat-icon>keyboard_arrow_up</mat-icon>
       Focalizar padre
     </button>
+    -->
 
     <div id="spinner-container" *ngIf="showSpinner">
       <img id="spinner" src="../../assets/img/spinner.gif">

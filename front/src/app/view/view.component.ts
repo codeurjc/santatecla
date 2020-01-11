@@ -30,6 +30,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private results: Unit[] = [];
   private arrowKeyLocation = 0;
 
+  private hideJson = true;
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
   private editorOptions: JsonEditorOptions;
   private data = {
@@ -486,6 +487,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (($event.metaKey || $event.ctrlKey) && ($event.key === 's')) {
       $event.preventDefault();
       this.save(null);
+    }
+    if (($event.metaKey || $event.ctrlKey) && ($event.key === 'e')) {
+      $event.preventDefault();
+      this.hideJson = !this.hideJson;
     }
   }
 

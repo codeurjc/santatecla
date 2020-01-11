@@ -1,10 +1,26 @@
 #json-editor-container {
   position: absolute;
-  width: 40%;
+  width: 30%;
   height: calc(100vh - 3rem);
   top: 3rem;
+  z-index: 1000;
+}
 
-  visibility: hidden;
+#search {
+  color: white;
+}
+
+#result {
+  border-top: 1px solid #9e2abb;
+  background-color: #6a3b77;
+}
+
+.active {
+  background-color: #896196 !important;
+}
+
+mat-label {
+  color: #cda3db;
 }
 
 #unit-representation {
