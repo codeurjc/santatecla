@@ -36,7 +36,7 @@ const appRoutes = [
   { path: 'units/:unitId/lessons', component: LessonComponent },
   { path: 'units/:unitId/modules', component: ModuleComponent },
   { path: 'units/:unitId/lessons/:lessonId', component: LessonEditorComponent },
-  { path: 'units/:unitId/modules/:moduleId/lessons/:lessonId/view', component: LessonViewComponent },
+  { path: 'units/:id/modules/:moduleId/lessons/:lessonId/view', component: LessonViewComponent },
   { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'course/:courseId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },

@@ -139,7 +139,11 @@ export class ModuleEditorComponent implements OnInit {
   }
 
   viewLesson(lessonId: number) {
-    this.router.navigate(['/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId + '/view']);
+    if (this.loginService.isAdmin) {
+      this.router.navigate(['/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId + '/view']);
+    } else {
+      this.router.navigate(['/units/' + this.courseId + '/modules/' + this.moduleId + '/lessons/' + lessonId + '/view']);
+    }
   }
 
   addBlock(node: Module): void {

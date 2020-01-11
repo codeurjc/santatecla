@@ -5,8 +5,15 @@
     <!-- TOOLS BAR -->
     <div *ngIf="loginService.isLogged" [ngClass]="loginService.isAdmin ? 'toolsBar admin' : 'toolsBar student'"></div>
 
-    <h1>Hola, megalodón</h1>
-    <h2>Estas en la lección "{{lesson.name}}"</h2>
+    <h1>{{lesson?.name}}</h1>
+
+    <img src="../../../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
+
+    <div *ngFor="let slide of contentHtml">
+      <mat-card class="slide-content">
+        <div [innerHTML]="slide"></div>
+      </mat-card>
+    </div>
 
   </body>
 </html>
