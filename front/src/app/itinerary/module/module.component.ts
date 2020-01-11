@@ -6,7 +6,8 @@ import {UnitService} from '../../unit/unit.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmActionComponent} from '../../confirmAction/confirm-action.component';
 import {Module} from './module.model';
-import {UnitModuleService} from "./unit-module.service";
+import {UnitModuleService} from './unit-module.service';
+import {ModuleFormComponent} from "./moduleForm/module-form.component";
 
 @Component({
   selector: 'app-modules',
@@ -68,7 +69,7 @@ export class ModuleComponent implements OnInit {
     }
   }
 
-  /*addModule(): void {
+  addModule(): void {
     this.newModule = {name: ''};
     const dialogRef = this.dialog.open(ModuleFormComponent, {
       data: {itinerary: this.newModule}
@@ -78,13 +79,13 @@ export class ModuleComponent implements OnInit {
       this.newModule = result;
       if (typeof this.newModule !== 'undefined') {
         if (this.newModule.name !== '') {
-          this.unitService.addLesson(this.unitId, this.newModule).subscribe((data) => {
-            this.router.navigate(['/units/' + this.unitId + '/lessons/' + data.id]);
+          this.unitModuleService.addModule(this.unitId, this.newModule).subscribe((data) => {
+            this.router.navigate(['/units/' + this.unitId + '/modules/' + data.id]);
           });
         }
       }
     });
-  }*/
+  }
 
   deleteModule(moduleId: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
