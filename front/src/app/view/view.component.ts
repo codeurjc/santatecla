@@ -101,9 +101,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.relations.clear();
     this.remainingUnits = 0;
     this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>());
-    this.unitService.getParent(id).subscribe((parent: Unit) => {
-      this.disableUpButton = (parent === null);
-    });
   }
 
   private getUnitAndUpdateUml(id: number, visited: Set<number>) {
@@ -414,6 +411,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
     optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
     optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    this.disableUpButton = true;
+    if (+this.focusedUnitId === +this.selectedTarget.id) {
+      this.unitService.getParent(+this.focusedUnitId).subscribe((parent: Unit) => {
+        this.disableUpButton = (parent === null);
+      });
+    }
   }
 
   private updateUmlNodeOptions() {

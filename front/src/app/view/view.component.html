@@ -26,13 +26,6 @@
       Guardar
     </button>
 
-    <!--
-    <button id="up-button" mat-icon-button color="primary" [disabled]="disableUpButton" (click)="upLevelAbove()">
-      <mat-icon>keyboard_arrow_up</mat-icon>
-      Focalizar padre
-    </button>
-    -->
-
     <div id="spinner-container" *ngIf="showSpinner">
       <img id="spinner" src="../../assets/img/spinner.gif">
       <span id="spinner-text">Cargando...</span>
@@ -43,6 +36,11 @@
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">
       <div id="uml-node-options">
+
+        <button title="Cargar padre" id="up-button" class="uml-options-button" [hidden]="disableUpButton" (click)="upLevelAbove()">
+          <mat-icon class="button-icon">keyboard_arrow_up</mat-icon>
+        </button>
+
         <button id="composition-incoming-button" class="uml-options-button"><img src="../../assets/img/add-composition-incoming.png" height="15"></button>
         <button id="composition-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-composition-outgoing.png" height="15"></button>
         <br>
@@ -58,9 +56,11 @@
         <button id="use-incoming-button" class="uml-options-button"><img src="../../assets/img/add-use-incoming.png" height="15"></button>
         <button id="use-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-use-outgoing.png" height="15"></button>
         <br>
-        <button id="delete-unit-button" class="uml-options-button" (click)="deleteUnit()">
-          <mat-icon id="delete-unit-icon">delete</mat-icon>
+
+        <button title="Borrar unidad" id="delete-unit-button" class="uml-options-button" (click)="deleteUnit()">
+          <mat-icon class="button-icon">delete</mat-icon>
         </button>
+
       </div>
     </div>
 
