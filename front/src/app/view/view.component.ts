@@ -735,11 +735,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private parseUml(relations: any) {
     const parsedRelations = this.getRelationsDiagram(relations);
-    if (parsedRelations === '') {
-      throw new Error('Invalid data. Unable to display uml');
-    } else {
+    if (parsedRelations !== '') {
       return 'classDiagram\n' + parsedRelations;
+    } else if (this.getUnitById(this.focusedUnitId.toString())) {
+      return 'classDiagram\n' + this.getOneUnitDiagram();
+    } else {
+      throw new Error('Invalid data. Unable to display uml');
     }
+  }
+
+  private getOneUnitDiagram() {
+    return this.parseUnitName(this.focusedUnitId.toString()) + '<|--|>' + this.parseUnitName(this.focusedUnitId.toString());
   }
 
   private getRelationsDiagram(relations: any): string {
