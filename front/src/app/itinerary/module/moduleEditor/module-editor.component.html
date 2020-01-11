@@ -35,7 +35,7 @@
 
     <div id="module-content" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
       <h1 class="menu-margin">{{module?.name}}</h1>
-
+      <button mat-icon-button (click)="addBlock(module)" matTooltip="Añadir bloque" [matTooltipPosition]="optionInfoPosition"><mat-icon>add</mat-icon></button>
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree menu-margin">
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node *matTreeNodeDef="let node1" matTreeNodeToggle>
@@ -58,6 +58,7 @@
                 </mat-icon>
               </button>
               <h3>{{node2?.name}}</h3>
+              <button mat-icon-button (click)="addBlock(node2)" matTooltip="Añadir bloque" [matTooltipPosition]="optionInfoPosition"><mat-icon>add</mat-icon></button>
             </div>
             <ul [class.example-tree-invisible]="!treeControl.isExpanded(node2)">
               <ng-container matTreeNodeOutlet></ng-container>

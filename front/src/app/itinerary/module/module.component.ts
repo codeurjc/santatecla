@@ -7,7 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ConfirmActionComponent} from '../../confirmAction/confirm-action.component';
 import {Module} from './module.model';
 import {UnitModuleService} from './unit-module.service';
-import {ModuleFormComponent} from "./moduleForm/module-form.component";
+import {ModuleFormComponent} from './moduleForm/module-form.component';
 
 @Component({
   selector: 'app-modules',

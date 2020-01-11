@@ -21,6 +21,7 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
 import {CourseComponent} from './course/course.component';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
+import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
 
 
 const appRoutes = [
@@ -28,6 +29,7 @@ const appRoutes = [
   { path: 'unit' , component: ViewComponent },
   { path: 'unit/:unitId', component: UnitComponent },
   { path: 'unitsCardsTool', component: UnitsCardsToolComponent },
+  { path: 'unitsBlocksTool', component: UnitsBlocksToolComponent },
   { path: 'lessonForm', component: LessonFormComponent },
   { path: 'moduleForm', component: ModuleFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },

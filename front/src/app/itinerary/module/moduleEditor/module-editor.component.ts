@@ -15,6 +15,7 @@ import {TabService} from '../../../tab/tab.service';
 import {ModuleService} from '../module.service';
 import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
+import {UnitsBlocksToolComponent} from './units-blocks-tool.component';
 
 @Component({
   selector: 'app-module-editor',
@@ -40,6 +41,7 @@ export class ModuleEditorComponent implements OnInit {
   activeTab = 0;
 
   viewLessonPosition = 'after';
+  optionInfoPosition = 'after';
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -119,4 +121,14 @@ export class ModuleEditorComponent implements OnInit {
   viewLesson(lessonId: number) {
     this.router.navigate(['/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId + '/view']);
   }
+
+  addBlock(node: Module): void {
+    this.bottomSheet.open(UnitsBlocksToolComponent, {
+      data: node,
+    }).afterDismissed().subscribe( () => {
+      this.ngOnInit();
+    });
+    this.ngOnInit();
+  }
+
 }

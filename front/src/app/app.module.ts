@@ -68,6 +68,7 @@ import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
 import {UnitModuleService} from './itinerary/module/unit-module.service';
 import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
+import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.com
     LessonEditorComponent,
     ModuleEditorComponent,
     UnitsCardsToolComponent,
+    UnitsBlocksToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
