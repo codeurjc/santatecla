@@ -51,7 +51,7 @@
         <div class="column module-column">
           <h3>Itinerario del curso</h3>
           <mat-form-field appearance="outline">
-            <mat-label>Nombre de la unidad</mat-label>
+            <mat-label>Nombre del itinerario</mat-label>
             <input matInput [(ngModel)]="searchUnitField" (ngModelChange)="searchUnit(); this.showUnitOptions = true" id="search-unit-input">
             <div *ngIf="showUnitOptions" class="result-wrapper">
               <div style="background-color: white" class="result">
@@ -91,13 +91,16 @@
             </div>
           </mat-form-field>
           <h5>Alumnos seleccionados</h5>
-          <span *ngFor="let student of this.chosenStudents">
-                {{student.name}}
+          <span style="height: 200px; overflow-y: auto">
+            <span *ngFor="let student of this.chosenStudents">
+              {{student.name}}
             <mat-icon (click)="removeStudent(student)" class="pointer-cursor">close</mat-icon>
+              <p></p>
+            </span>
+            <div *ngIf="this.chosenStudents.length == 0">
+              <p class="indianred-color">Debe elegir algún estudiante</p>
+            </div>
           </span>
-          <div *ngIf="this.chosenStudents.length == 0">
-            <p class="indianred-color">Debe elegir algún estudiante</p>
-          </div>
         </div>
 
       </div>
@@ -143,7 +146,7 @@
         <div class="column module-column">
           <h3>Itinerario del curso</h3>
           <mat-form-field appearance="outline">
-            <mat-label>Nombre de la unidad</mat-label>
+            <mat-label>Nombre del itinerario</mat-label>
             <input matInput [(ngModel)]="searchUnitField" (ngModelChange)="searchUnit(); this.showUnitOptions = true" id="search-unit-input">
             <div *ngIf="showUnitOptions" class="result-wrapper">
               <div style="background-color: white" class="result">
