@@ -13,7 +13,7 @@
     </div>
 
     <div #cardList>
-      <mat-card class="card" *ngFor = "let card of cards">
+      <mat-card [ngClass]="card.id != 0 ? 'card saved-card' : 'card new-card'" *ngFor = "let card of cards">
         <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
           <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save(card)">
         </mat-form-field>
