@@ -14,7 +14,10 @@ export class MyCoursesService {
   }
 
   deleteCourse(id: number) {
-    console.log(id);
     return this.http.delete('api/course/' + id);
+  }
+
+  searchByNameContaining(name: string) {
+    return this.http.get('api/course/search/' + name);
   }
 }

@@ -135,7 +135,7 @@ export class NewCourseComponent implements OnInit {
       }, error => {console.log(error); } );
     } else {
       this.courseService.putCourse(this.course, this.courseId).subscribe((data: Course) => {
-        this.routing.navigate(['/courses']);
+        this.routing.navigate(['/course/'+this.courseId]);
       }, error => {console.log(error); } );
     }
   }

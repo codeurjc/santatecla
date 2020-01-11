@@ -26,7 +26,12 @@
 
 <div id="course-content" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
   <div *ngIf="this.activeTab == 0">
-    <h1 class="tab-group">{{course?.name}}</h1>
+    <h1 class="tab-group">
+      {{course?.name}}
+      <div class="mat-button" [routerLink]="['/newCourse/'+this.course?.id]">
+        <mat-icon>edit</mat-icon>
+      </div>
+    </h1>
 
     <mat-tab-group class="tab-group">
       <mat-tab label="Itinerario Formativo">
@@ -62,7 +67,7 @@
       <mat-tab label="Alumnos">
         <h2>Alumnos del curso</h2>
         <span *ngFor="let student of this.course?.students">
-            <div class="tab mat-button">
+            <div class="tab student-tab mat-button">
               <mat-icon class="tab-icon">account_circle</mat-icon>
               {{student.name}}
             </div>

@@ -168,6 +168,10 @@
   height: 3rem;
 }
 
+.student-tab{
+  width: 60%;
+}
+
 .tab-group{
   margin-left: 3rem
 }

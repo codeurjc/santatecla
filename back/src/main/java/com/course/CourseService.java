@@ -39,6 +39,10 @@ public class CourseService {
         return this.courseRepository.findUserCourses(id);
     }
 
+    public List<Course> searchCourseByNameContaining(String name){
+        return this.courseRepository.findByNameContaining(name);
+    }
+
     private int findUserRealization(Long moduleId, Long userId, Long courseId){
         return this.courseRepository.findUserListAnswerDistinctCount(moduleId, userId, courseId) + this.courseRepository.findUserTestAnswerDistinctCount(moduleId, userId, courseId) +
                 this.courseRepository.findUserDefinitionAnswerDistinctCount(moduleId, userId, courseId);

@@ -27,7 +27,7 @@
 
   <div id="course-content" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
     <div *ngIf="activeTab==0">
-      <h1 class="center-align title">{{this.course.name}}</h1>
+      <h1 class="center-align title">{{this.course?.name}}</h1>
 
       <form class="center-align" name="newCourseName">
         <mat-form-field class="course-form">
@@ -106,7 +106,7 @@
         <span *ngIf="(this.chosenStudents.length !== 0) && (this.courseDescription !== '') && (this.courseName !== '') && (this.chosenModule != undefined)">
           <mat-button-toggle class="save-button" (click)="save()" >Guardar</mat-button-toggle>
         </span>
-        <mat-button-toggle class="save-button" [routerLink]="['/courses']" >Volver</mat-button-toggle>
+        <mat-button-toggle class="save-button" [routerLink]="['/course/'+this.courseId]" >Volver</mat-button-toggle>
       </div>
     </div>
 

@@ -45,6 +45,7 @@ const appRoutes = [
   { path: 'courses', component: MyCoursesComponent },
   { path: 'progress', component: ModuleProgressComponent },
   { path: 'newCourse', component: NewCourseComponent},
+  { path: 'newCourse/:courseId', component: NewCourseComponent},
   { path: 'course/:courseId', component: CourseComponent}
 
 ];
