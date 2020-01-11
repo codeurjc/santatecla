@@ -14,7 +14,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-tab-group>
-          <mat-tab label="Lecciones">
+          <mat-tab *ngIf="unit.lessons.length > 0" label="Lecciones">
             <div *ngFor = "let lesson of unit.lessons">
                 {{lesson.name}}
                 <button id="copyButton" mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"
@@ -23,7 +23,7 @@
                 </button>
             </div>
           </mat-tab>
-          <mat-tab label="Módulos">
+          <mat-tab *ngIf="unit.modules.length > 0" label="Módulos">
             <div *ngFor = "let module of unit.modules">
                 {{module.name}}
                 <button id="copyButton2" mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"

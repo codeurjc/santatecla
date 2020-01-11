@@ -24,4 +24,8 @@ export class ModuleService {
 
     return this.http.post<Block>('/api/modules/' + moduleId, body, { headers });
   }
+
+  deleteBlock(moduleId: number, blockId: number) {
+    return this.http.delete('/api/modules/' + moduleId + '/blocks/' + blockId);
+  }
 }

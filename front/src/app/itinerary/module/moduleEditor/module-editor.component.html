@@ -44,6 +44,7 @@
             <button mat-icon-button disabled></button>
             <mat-card class="lesson-button">
               {{node1?.name}} <mat-icon class="lesson-view-button" (click)="viewLesson(node1.id)" matTooltip="Ver lección" [matTooltipPosition]="viewLessonPosition">subscriptions</mat-icon>
+              <button (click)="deleteBlock(node1, node1?.id)" mat-icon-button matTooltip="Eliminar" [matTooltipPosition]="optionInfoPosition"><mat-icon>delete</mat-icon></button>
             </mat-card>
           </li>
         </mat-tree-node>
@@ -59,6 +60,7 @@
               </button>
               <h3>{{node2?.name}}</h3>
               <button mat-icon-button (click)="addBlock(node2)" matTooltip="Añadir bloque" [matTooltipPosition]="optionInfoPosition"><mat-icon>add</mat-icon></button>
+              <button (click)="deleteBlock(node2, node2?.id)" mat-icon-button matTooltip="Eliminar" [matTooltipPosition]="optionInfoPosition"><mat-icon>delete</mat-icon></button>
             </div>
             <ul [class.example-tree-invisible]="!treeControl.isExpanded(node2)">
               <ng-container matTreeNodeOutlet></ng-container>

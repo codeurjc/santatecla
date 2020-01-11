@@ -51,4 +51,25 @@ public class ModuleRestController extends GeneralRestController {
         return block;
     }
 
+    @DeleteMapping(value = "/{moduleId}/blocks/{blockId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Module> deleteModule(@PathVariable long moduleId, @PathVariable long blockId) {
+
+        Optional<Module> module = this.moduleService.findOne(moduleId);
+        Optional<Block> block = this.blockService.findOne(blockId);
+
+        if (module.isPresent() && block.isPresent()) {
+            module.get().getBlocks().remove(block.get());
+            this.moduleService.save(module.get());
+
+            block.get().getParentsId().remove(moduleId);
+            this.blockService.save(block.get());
+
+            return new ResponseEntity<>(module.get(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        
+    }
+
 }
