@@ -2,6 +2,7 @@ package com.itinerary.module;
 
 import com.GeneralRestController;
 import com.itinerary.block.Block;
+import com.itinerary.lesson.Lesson;
 import com.slide.Slide;
 import com.unit.Unit;
 import com.unit.UnitService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,6 +34,20 @@ public class ModuleRestController extends GeneralRestController {
         if (module.isPresent()) {
             return new ResponseEntity<>(module.get(), HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping(value="/{id}")
+    public ResponseEntity<Module> updateLesson(@PathVariable long id, @RequestBody Module module){
+
+        Optional<Module> m = this.moduleService.findOne(id);
+
+        if(m.isPresent()){
+            m.get().update(module);
+            this.moduleService.save(m.get());
+            return new ResponseEntity<>(m.get(), HttpStatus.OK);
+        }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -69,7 +85,7 @@ public class ModuleRestController extends GeneralRestController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        
+
     }
 
 }

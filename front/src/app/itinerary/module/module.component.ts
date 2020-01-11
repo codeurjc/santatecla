@@ -8,6 +8,8 @@ import {ConfirmActionComponent} from '../../confirmAction/confirm-action.compone
 import {Module} from './module.model';
 import {UnitModuleService} from './unit-module.service';
 import {ModuleFormComponent} from './moduleForm/module-form.component';
+import {ModuleRenameComponent} from "./moduleRename/module-rename.component";
+import {ModuleService} from "./module.service";
 
 @Component({
   selector: 'app-modules',
@@ -35,6 +37,7 @@ export class ModuleComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
+              private moduleService: ModuleService,
               private unitModuleService: UnitModuleService,
               public dialog: MatDialog) {
   }
@@ -97,6 +100,22 @@ export class ModuleComponent implements OnInit {
         this.unitModuleService.deleteModule(this.unitId, moduleId).subscribe(() => {
           this.ngOnInit();
         });
+      }
+    });
+  }
+
+  renameModule(module: Module) {
+    const dialogRef = this.dialog.open(ModuleRenameComponent, {
+      data: { name: module.name }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (typeof result !== 'undefined') {
+        if ((result !== '') && (result !== module.name)) {
+          module.name = result;
+          this.moduleService.updateModule(module).subscribe(() => {
+          });
+        }
       }
     });
   }

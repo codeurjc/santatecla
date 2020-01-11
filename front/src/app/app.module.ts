@@ -69,6 +69,7 @@ import {UnitModuleService} from './itinerary/module/unit-module.service';
 import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
 import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
+import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rename.component';
 
 @NgModule({
   declarations: [
@@ -99,10 +100,12 @@ import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-bl
     AnswerDefinitionDialogComponent,
     AddQuestionDialogComponent,
     HomeComponent,
-    ConfirmActionComponent
+    ConfirmActionComponent,
+    ModuleRenameComponent
   ],
   entryComponents: [
-    ConfirmActionComponent
+    ConfirmActionComponent,
+    ModuleRenameComponent
   ],
   imports: [
     ClipboardModule,

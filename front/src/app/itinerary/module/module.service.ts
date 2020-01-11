@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Block} from '../block.model';
+import {Module} from './module.model';
 
 @Injectable()
 export class ModuleService {
@@ -13,6 +14,16 @@ export class ModuleService {
 
   getModule(id: number) {
     return this.http.get('/api/modules/' + id);
+  }
+
+  updateModule(module: Module): Observable<Module> {
+    const body = JSON.stringify(module);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put<Module>('/api/modules/' + module.id , body, {headers});
   }
 
   addBlock(moduleId: number, block: Block) {
@@ -28,4 +39,5 @@ export class ModuleService {
   deleteBlock(moduleId: number, blockId: number) {
     return this.http.delete('/api/modules/' + moduleId + '/blocks/' + blockId);
   }
+
 }

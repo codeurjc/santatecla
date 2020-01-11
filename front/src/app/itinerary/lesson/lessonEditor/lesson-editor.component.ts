@@ -55,8 +55,7 @@ export class LessonEditorComponent implements OnInit {
 
   subSlide: boolean;
 
-  constructor(private itineraryService: LessonService,
-              private slideService: SlideService,
+  constructor(private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
@@ -87,7 +86,7 @@ export class LessonEditorComponent implements OnInit {
   loadItinerary() {
     this.showSpinner = true;
 
-    this.itineraryService.getLesson(this.lessonId).subscribe((data: Lesson) => {
+    this.lessonService.getLesson(this.lessonId).subscribe((data: Lesson) => {
       this.lesson = {
         id: data.id,
         name: data.name,
@@ -133,7 +132,7 @@ export class LessonEditorComponent implements OnInit {
       this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
-      let url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;
+      const url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;
       this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]');
     }
     this.addExtractedData(content);
@@ -256,7 +255,7 @@ export class LessonEditorComponent implements OnInit {
   updateHTMLView() {
     this.contentToItinerary(this.lessonContent);
     this.showSpinner = true;
-    this.itineraryService.updateLesson(this.lesson).subscribe((_) => {
+    this.lessonService.updateLesson(this.lesson).subscribe((_) => {
       this.loadItinerary();
     }, (error) => {
       console.error(error);
