@@ -89,11 +89,11 @@ export class ModuleEditorComponent implements OnInit {
 
         if (this.unitId !== undefined) {
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-            this.tabService.setModule(unit.name, this.unitId, module.name);
+            this.tabService.setUnitModule(unit.name, this.unitId, module.name, module.id);
           });
         } else {
           this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
-            this.tabService.setModule(course.name, course.id, module.name);
+            this.tabService.setCourseModule(course.module.id, course.id, course.name);
           });
         }
       });

@@ -53,10 +53,11 @@ export class TabService {
     this.courses = true;
   }
 
-  setCourse(courseName: string) {
+  setCourse(courseName: string, courseId: number) {
     this.emptyAll();
     this.courses = true;
     this.course = courseName;
+    this.courseId = courseId;
   }
 
   setLesson(unitName: string, unitId: number, lessonName: string) {
@@ -85,18 +86,22 @@ export class TabService {
     this.lesson = lessonName;
   }
 
-  setModule(name: string, unitId: number, moduleName: string) {
+  setUnitModule(name: string, unitId: number, moduleName: string, moduleId: number) {
     this.emptyAll();
-    if (this.loginService.isAdmin) {
-      this.units = true;
-      this.unit = name;
-      this.unitId = unitId;
-      this.modules = true;
-      this.module = moduleName;
-    } else {
-      this.courses = true;
-      this.course = name;
-    }
+    this.units = true;
+    this.unit = name;
+    this.unitId = unitId;
+    this.modules = true;
+    this.module = moduleName;
+    this.moduleId = moduleId;
+  }
+
+  setCourseModule(moduleId: number, courseId: number, name: string) {
+    this.emptyAll();
+    this.moduleId = moduleId;
+    this.courseId = courseId;
+    this.courses = true;
+    this.course = name;
   }
 
 }

@@ -731,7 +731,70 @@ public class DatabaseInitializer {
                 course2.addStudent(user9);
 
                 course2.setModule(module3);
-                courseRepository.save(course2);
+
+            Course course3 = new Course("Curso de Python", teacher, "Aprende todo lo necesario para ser un experto en Python");
+            course3.addStudent(user1);
+            course3.addStudent(user2);
+            course3.addStudent(user3);
+            course3.addStudent(user4);
+            course3.addStudent(user5);
+            course3.addStudent(user6);
+            course3.addStudent(user7);
+            course3.addStudent(user8);
+            course3.addStudent(user9);
+            course3.addStudent(user10);
+            course3.addStudent(user11);
+            course3.addStudent(user12);
+
+            course3.setModule(module4);
+            courseRepository.save(course3);
+
+            Course course4 = new Course("Curso de Testing", teacher, "Aprende todo lo necesario para ser un experto en Testing.");
+            course4.addStudent(user1);
+            course4.addStudent(user2);
+            course4.addStudent(user3);
+            course4.addStudent(user4);
+            course4.addStudent(user5);
+            course4.addStudent(user6);
+            course4.addStudent(user7);
+            course4.addStudent(user8);
+            course4.addStudent(user9);
+
+            course4.setModule(module3);
+
+            courseRepository.save(course4);
+
+            Course course5 = new Course("Investigación Operativa", teacher, "Aprende todo lo necesario para ser un experto en Pls");
+            course5.addStudent(user1);
+            course5.addStudent(user2);
+            course5.addStudent(user3);
+            course5.addStudent(user4);
+            course5.addStudent(user5);
+            course5.addStudent(user6);
+            course5.addStudent(user7);
+            course5.addStudent(user8);
+            course5.addStudent(user9);
+            course5.addStudent(user10);
+            course5.addStudent(user11);
+            course5.addStudent(user12);
+
+            course5.setModule(module4);
+            courseRepository.save(course5);
+
+            Course course6 = new Course("Curso de Go", teacher, "Aprende todo lo necesario para ser un experto en Go.");
+            course6.addStudent(user1);
+            course6.addStudent(user2);
+            course6.addStudent(user3);
+            course6.addStudent(user4);
+            course6.addStudent(user5);
+            course6.addStudent(user6);
+            course6.addStudent(user7);
+            course6.addStudent(user8);
+            course6.addStudent(user9);
+
+            course6.setModule(module3);
+
+            courseRepository.save(course6);
 	}
 
 }

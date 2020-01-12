@@ -35,7 +35,7 @@ export class CourseComponent implements OnInit {
       this.courseService.getCourse(this.id).subscribe((data: Course) => {
         this.course = data;
         this.dataSource.data = this.course.module.blocks;
-        this.tabService.setCourse(this.course.name);
+        this.tabService.setCourse(this.course.name, this.course.id);
       }, error => {console.log(error); });
     });
   }
