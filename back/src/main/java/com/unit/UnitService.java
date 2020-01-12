@@ -2,7 +2,6 @@ package com.unit;
 
 import java.util.*;
 
-import com.card.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,27 +89,36 @@ public class UnitService {
 	}
 
 	private Unit getAncestor(Unit unit, int level) {
-		Unit parent = getParent(unit);
+		Unit parent = getParent(unit, new HashSet<>());
 		while (level > 0) {
-			parent = getParent(parent);
+			parent = getParent(parent, new HashSet<>());
 			level--;
 		}
 		return parent;
 	}
 
-	Unit getParent(Unit unit) {
-		if (unit.getOutgoingRelations().isEmpty()) {
-			return null;
+	Unit getParent(Unit unit, Set<Unit> visited) {
+		Unit parent;
+		int position = 0;
+		visited.add(unit);
+		while (unit.getOutgoingRelations().size() > position) {
+			parent = findOne(unit.getOutgoingRelations().get(position).getIncoming()).get();
+			position++;
+			if (!visited.contains(parent)) {
+				return parent;
+			}
 		}
-		return findOne(unit.getOutgoingRelations().get(0).getIncoming()).get();
+		return null;
 	}
 
 	public String getAbsoluteName(Unit unit) {
 		Unit parent = unit;
 		String absoluteName = "";
+		Set<Unit> visited = new HashSet<>();
 		while (parent != null) {
+			visited.add(parent);
 			absoluteName = this.UNIT_NAME_SEPARATOR + parent.getName()  + absoluteName;
-			parent = getParent(parent);
+			parent = getParent(parent, visited);
 		}
 		return absoluteName;
 	}

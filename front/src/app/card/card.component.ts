@@ -50,7 +50,7 @@ export class CardComponent implements OnInit, AfterViewChecked {
   }
 
   private addCard() {
-    if ((this.cards.length === 0) || (this.cards[0].name && this.cards[0].content)) {
+    if ((this.cards.length === 0) || (this.cards[0].id !== 0) || (this.cards[0].name && this.cards[0].content)) {
       this.cards.unshift({
         id: 0,
         name: '',
@@ -61,7 +61,7 @@ export class CardComponent implements OnInit, AfterViewChecked {
   }
 
   private focusNewCard() {
-    window.scroll(0, 0);
+    window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
   }
 
   private getCardIndex(id: number): number {

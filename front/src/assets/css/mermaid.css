@@ -412,6 +412,10 @@ g.classGroup line {
   fill: none;
 }
 
+.invisible-relation {
+  visibility: hidden;
+}
+
 #compositionStart {
   fill: #27273c;
   stroke: #27273c;

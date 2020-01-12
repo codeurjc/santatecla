@@ -1,10 +1,26 @@
 #json-editor-container {
   position: absolute;
-  width: 40%;
+  width: 30%;
   height: calc(100vh - 3rem);
   top: 3rem;
+  z-index: 1000;
+}
 
-  visibility: hidden;
+#search {
+  color: white;
+}
+
+#result {
+  border-top: 1px solid #9e2abb;
+  background-color: #6a3b77;
+}
+
+.active {
+  background-color: #896196 !important;
+}
+
+mat-label {
+  color: #cda3db;
 }
 
 #unit-representation {
@@ -14,7 +30,7 @@
 }
 
 #unit-prefix {
-  color: #646464;
+  color: #b99bcd;
 }
 
 #unit-name {
@@ -23,6 +39,7 @@
 
 #uml-edit-input {
   position: absolute;
+  z-index: 2;
 }
 
 #uml-edit-input {
@@ -37,6 +54,34 @@
   background-color: #ffffff;
   border: thin solid #A8A8A8;
   top: 120%;
+  z-index: 2;
+  width: 8rem;
+}
+
+#up-button {
+  width: 100%;
+  margin-bottom: 0.2rem;
+  background-color: #f2f0ff;
+}
+
+#up-button:hover {
+  background-color: #e7e4fe;
+}
+
+.delete-button {
+  width: 100% !important;;
+  margin-top: 0.2rem !important;;
+  background-color: #ffdae8 !important;;
+}
+
+.delete-button:hover {
+  background-color: #ebcad7 !important;;
+}
+
+.button-icon {
+  font-size: 1rem;
+  margin-top: 0.2rem;
+  margin-bottom: -0.3rem;
 }
 
 #uml-path-options {
@@ -44,36 +89,54 @@
   padding: 0.1rem;
   background-color: #ffffff;
   border: thin solid #A8A8A8;
+  z-index: 2;
 }
 
 .uml-option-icon {
   font-size: 1rem;
 }
 
-#save-button {
-  position: absolute;
-  right: 16%;
-  margin: 6rem 1rem 1rem 1rem;
-  z-index: 110;
+.save-button {
+  position: fixed;
+  color: #896d91;
+  top: 3.45rem;
+  z-index: 501;
+  right: 1rem;
+  cursor: inherit;
 }
 
-#up-button {
-  position: absolute;
-  right: 16%;
-  margin: 10rem 1rem 1rem 1rem;
-  z-index: 110;
+.save-button-enabled {
+  color: white;
+  background-color: #7d3c90;
+  cursor: pointer;
 }
 
-button:enabled {
-  color: #9e2abb;
+.save-button-enabled:hover {
+  background-color: #a769b8;
+}
+
+#spinner-container {
+  position: fixed;
+  width: calc(100% - 30rem);
+  right: 8rem;
+  top: 3.6rem;
+  z-index: 9999;
+  text-align: center;
 }
 
 #spinner {
-  position: absolute;
-  width: 8rem;
-  height: 8rem;
-  left: 40%;
-  top: 40%;
+  display: inline;
+  z-index: 10000;
+  height: 1.8rem;
+  width: 1.8rem;
+}
+
+#spinner-text {
+  position: fixed;
+  display: inline;
+  z-index: 10000;
+  color: #ffffff;
+  margin: 0.35rem 0.5rem 0.35rem 0.5rem;
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
@@ -109,18 +172,61 @@ button:enabled {
 }
 
 #search {
-  width: 20%;
+  width: 100%;
   z-index: 120;
-  position: absolute;
-  top: 15rem;
-  right: 1rem;
 }
 
 .uml-options-button {
   border-radius: 0.2rem;
   background-color: #fdf7ff;
+  cursor: pointer;
+  width: 50%;
+}
+
+.uml-relation-button {
+  width: 100% !important;
 }
 
 .uml-options-button:hover {
   background-color: #ebe5ed;
+}
+
+.uml-content {
+  margin-top: 8rem;
+  position: absolute;
+  right: 0;
+  padding-bottom: 2rem;
+  width: 100%;
+  height: 100vh;
+}
+
+.uml-content-with-menu {
+  left: 22rem;
+}
+
+.uml-content-without-menu {
+  left: 11rem;
+}
+
+.hidden-menu {
+  width: 20rem;
+  left: -22rem;
+}
+
+.hidden-hide-menu-button {
+  left: 0;
+}
+
+.without-menu {
+  width: 100%;
+}
+
+#svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#path {
+  stroke: #27273c;
 }

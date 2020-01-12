@@ -49091,7 +49091,13 @@ const drawEdge = function (elem, path, relation) {
 
 
   const relationId = relation.id1.match(/[0-9]+|[^0-9]*/g)[0] + '-' + relation.id2.match(/[0-9]+|[^0-9]*/g)[0] + '-' + getRelationType(relation.relation.type1);
-  const svgPath = elem.append('path').attr('d', lineFunction(lineData)).attr('id', relationId).attr('class', 'relation');
+  let svgPath;
+  // if <|--|> then invisible
+  if ((relation.relation.type1 == 1) && (relation.relation.type2 == 1)) {
+    svgPath = elem.append('path').attr('d', lineFunction(lineData)).attr('id', relationId).attr('class', 'invisible-relation');
+  } else {
+    svgPath = elem.append('path').attr('d', lineFunction(lineData)).attr('id', relationId).attr('class', 'relation');
+  }
 
 
 

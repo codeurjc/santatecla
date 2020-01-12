@@ -20,10 +20,6 @@ declare var mermaid: any;
 
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  confirmText = 'Se han realizado cambios';
-  button1 = 'Guardar';
-  button2 = 'Descartar';
-
   private UNIT_NAME_SEPARATOR = '/';
   private ENTER_KEY = 'Enter';
   private ARROW_UP_KEY = 'ArrowUp';
@@ -34,6 +30,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private results: Unit[] = [];
   private arrowKeyLocation = 0;
 
+  private hideJson = true;
   @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
   private editorOptions: JsonEditorOptions;
   private data = {
@@ -46,6 +43,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private relations = new Map<string, Relation>();
   private remainingUnits = 0;
 
+  private showMenu = true;
   private disableUpButton = false;
 
   private newUnitId = 0;
@@ -62,7 +60,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   @ViewChild('umlPathOptions') umlPathOptions: ElementRef;
   private showUmlPathOptions = false;
   private selectedRelationType = '';
-
+  @ViewChild('umlNewPath') umlNewPath: ElementRef;
+  private creatingRelation = null;
 
 
   constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
@@ -70,6 +69,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnInit() {
     this.tabService.setUnits();
+    window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
@@ -101,9 +101,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.relations.clear();
     this.remainingUnits = 0;
     this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>());
-    this.unitService.getParent(id).subscribe((parent: Unit) => {
-      this.disableUpButton = (parent === null);
-    });
   }
 
   private getUnitAndUpdateUml(id: number, visited: Set<number>) {
@@ -260,7 +257,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
       this.focusUnit(this.focusedUnitId);
-      this.updateUml();
       if (goToUnit) {
         this.goToUnit(goToUnit);
       }
@@ -282,9 +278,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         element.innerHTML = svgCode;
         this.updateUmlNodeOptions();
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   private updateUnitName() {
@@ -296,7 +290,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.updateUml();
   }
 
-  private createRelation(relationType): Unit {
+  private createUnit(relationType): Unit {
     const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
     const newUnitName = 'Nueva unidad';
     const newUnit: Unit = {
@@ -318,6 +312,96 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.updateUml();
     this.changed = true;
     return newUnit;
+  }
+
+  private createRelation(relationType, incoming: Unit, outgoing: Unit) {
+    const newRelation: Relation = {
+      id: this.getNewRelationId().toString(),
+      relationType,
+      incoming: incoming.id,
+      outgoing: outgoing.id
+    };
+    const duplicateIncoming = this.checkDuplicateRelation(incoming, newRelation);
+    const duplicateOutgoing = this.checkDuplicateRelation(outgoing, newRelation);
+    if (!(duplicateIncoming && duplicateOutgoing)) {
+      if (!duplicateIncoming) {
+        incoming.incomingRelations.push(newRelation);
+      }
+      if (!duplicateOutgoing) {
+        outgoing.outgoingRelations.push(newRelation);
+      }
+      this.addRelation(newRelation);
+    }
+    this.updateUml();
+    this.changed = true;
+  }
+
+  private checkDuplicateRelation(unit: Unit, relation: Relation): boolean {
+    let duplicate = false;
+    unit.incomingRelations.forEach((incomingRelation: Relation) => {
+      if ((!duplicate) && (incomingRelation.incoming.toString() === relation.incoming.toString()) && (incomingRelation.outgoing.toString() === relation.outgoing.toString())) {
+        incomingRelation.relationType = relation.relationType;
+        duplicate = true;
+      }
+    });
+    unit.outgoingRelations.forEach((outgoingRelation: Relation) => {
+      if ((!duplicate) && (outgoingRelation.incoming.toString() === relation.incoming.toString()) && (outgoingRelation.outgoing.toString() === relation.outgoing.toString())) {
+        outgoingRelation.relationType = relation.relationType;
+        duplicate = true;
+      }
+    });
+    return duplicate;
+  }
+
+  private deleteUnit() {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se eliminará definitivamente la unidad y su contenido.',
+        button1: 'Cancelar',
+        button2: 'Eliminar'}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      window.scroll(0, 0);
+      if (result === 1) {
+        this.unitService.deleteUnit(+this.selectedTarget.id).subscribe(() => {
+          if (+this.focusedUnitId === +this.selectedTarget.id) {
+            let focused = false;
+            this.getUnitById(this.focusedUnitId.toString()).incomingRelations.forEach((relation: Relation) => {
+              if ((!focused) && (this.focusedUnitId.toString() !== relation.outgoing.toString())) {
+                this.focusedUnitId = relation.outgoing.toString();
+                focused = true;
+              }
+            });
+          }
+          this.focusUnit(this.focusedUnitId);
+        });
+      }
+    });
+  }
+
+  private deleteRelation() {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se eliminará la relación',
+        button1: 'Cancelar',
+        button2: 'Eliminar'}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      window.scroll(0, 0);
+      if (result === 1) {
+        const splittedRelation: string[] = this.selectedTarget.id.split('-');
+        const incoming = splittedRelation[0];
+        const outgoing = splittedRelation[1];
+        const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
+        this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
+          if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
+            this.unitService.deleteRelation(+relation.id).subscribe(() => {
+              this.focusUnit(this.focusedUnitId);
+            });
+          }
+        });
+      }
+    });
   }
 
   private findUnitTarget(id: string): HTMLInputElement {
@@ -348,6 +432,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
     optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
     optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    this.disableUpButton = true;
+    if (+this.focusedUnitId === +this.selectedTarget.id) {
+      this.unitService.getParent(+this.focusedUnitId).subscribe((parent: Unit) => {
+        this.disableUpButton = (parent === null);
+      });
+    }
   }
 
   private updateUmlNodeOptions() {
@@ -422,6 +512,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       $event.preventDefault();
       this.save(null);
     }
+    if (($event.metaKey || $event.ctrlKey) && ($event.key === 'e')) {
+      $event.preventDefault();
+      this.hideJson = !this.hideJson;
+    }
   }
 
 
@@ -432,69 +526,106 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   public documentClick(event: Event): void {
     const target = event.target as HTMLInputElement;
 
-    // Search
-    if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
-      this.focusUnit(+this.results[this.arrowKeyLocation].id);
-    } else if ((target.attributes) && (target.attributes['class']) &&
-      ((target.attributes['class'].nodeValue === 'mat-form-field-flex') ||
-        (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
-        (target.attributes['class'].nodeValue === 'mat-form-field-infix') || (target.id === 'search-input'))) {
-      this.setShowResults(true);
+    if (!this.creatingRelation) {
+
+      // Search
+      if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
+        this.focusUnit(+this.results[this.arrowKeyLocation].id);
+      } else if ((target.attributes) && (target.attributes['class']) &&
+        ((target.attributes['class'].nodeValue === 'mat-form-field-flex') ||
+          (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
+          (target.attributes['class'].nodeValue === 'mat-form-field-infix') || (target.id === 'search-input'))) {
+        this.setShowResults(true);
+      } else {
+        this.setShowResults(false);
+      }
+
+      // Uml
+      if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
+        this.selectedTarget = this.findUnitTarget(this.createUnit(RelationType.COMPOSITION).id);
+        this.drawUmlNodeOptions();
+      } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement.id === 'inheritance-incoming-button')) {
+        this.selectedTarget = this.findUnitTarget(this.createUnit(RelationType.INHERITANCE).id);
+        this.drawUmlNodeOptions();
+      } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement.id === 'aggregation-incoming-button')) {
+        this.selectedTarget = this.findUnitTarget(this.createUnit(RelationType.AGGREGATION).id);
+        this.drawUmlNodeOptions();
+      } else if ((target.id === 'association-incoming-button') || (target.parentElement.id === 'association-incoming-button')) {
+        this.selectedTarget = this.findUnitTarget(this.createUnit(RelationType.ASSOCIATION).id);
+        this.drawUmlNodeOptions();
+      } else if ((target.id === 'use-incoming-button') || (target.parentElement.id === 'use-incoming-button')) {
+        this.selectedTarget = this.findUnitTarget(this.createUnit(RelationType.USE).id);
+        this.drawUmlNodeOptions();
+      } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
+        this.creatingRelation = {
+          relationType: RelationType.COMPOSITION,
+          outgoing: this.selectedTarget.id.toString(),
+          boundingClientRect: this.selectedTarget.getBoundingClientRect()
+        };
+        this.closeUmlNodeOptions();
+      } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement.id === 'inheritance-outgoing-button')) {
+        this.creatingRelation = {
+          relationType: RelationType.INHERITANCE,
+          outgoing: this.selectedTarget.id.toString(),
+          boundingClientRect: this.selectedTarget.getBoundingClientRect()
+        };
+        this.closeUmlNodeOptions();
+      } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement.id === 'aggregation-outgoing-button')) {
+        this.creatingRelation = {
+          relationType: RelationType.AGGREGATION,
+          outgoing: this.selectedTarget.id.toString(),
+          boundingClientRect: this.selectedTarget.getBoundingClientRect()
+        };
+        this.closeUmlNodeOptions();
+      } else if ((target.id === 'association-outgoing-button') || (target.parentElement.id === 'association-outgoing-button')) {
+        this.creatingRelation = {
+          relationType: RelationType.ASSOCIATION,
+          outgoing: this.selectedTarget.id.toString(),
+          boundingClientRect: this.selectedTarget.getBoundingClientRect()
+        };
+        this.closeUmlNodeOptions();
+      } else if ((target.id === 'use-outgoing-button') || (target.parentElement.id === 'use-outgoing-button')) {
+        this.creatingRelation = {
+          relationType: RelationType.USE,
+          outgoing: this.selectedTarget.id.toString(),
+          boundingClientRect: this.selectedTarget.getBoundingClientRect()
+        };
+        this.closeUmlNodeOptions();
+      } else if ((target.id === 'composition-relation-button') || (target.parentElement.id === 'composition-relation-button')) {
+        this.changeRelationType(this.selectedTarget.id.toString(), RelationType.COMPOSITION);
+      } else if ((target.id === 'inheritance-relation-button') || (target.parentElement.id === 'inheritance-relation-button')) {
+        this.changeRelationType(this.selectedTarget.id.toString(), RelationType.INHERITANCE);
+      } else if ((target.id === 'aggregation-relation-button') || (target.parentElement.id === 'aggregation-relation-button')) {
+        this.changeRelationType(this.selectedTarget.id.toString(), RelationType.AGGREGATION);
+      } else if ((target.id === 'association-relation-button') || (target.parentElement.id === 'association-relation-button')) {
+        this.changeRelationType(this.selectedTarget.id.toString(), RelationType.ASSOCIATION);
+      } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
+        this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
+      } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
+        this.closeUmlNodeOptions();
+      }
     } else {
-      this.setShowResults(false);
-    }
-
-    // Uml
-    if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
-      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.COMPOSITION).id);
-      this.drawUmlNodeOptions();
-    } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement.id === 'inheritance-incoming-button')) {
-      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.INHERITANCE).id);
-      this.drawUmlNodeOptions();
-    } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement.id === 'aggregation-incoming-button')) {
-      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.AGGREGATION).id);
-      this.drawUmlNodeOptions();
-    } else if ((target.id === 'association-incoming-button') || (target.parentElement.id === 'association-incoming-button')) {
-      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.ASSOCIATION).id);
-      this.drawUmlNodeOptions();
-    } else if ((target.id === 'use-incoming-button') || (target.parentElement.id === 'use-incoming-button')) {
-      this.selectedTarget = this.findUnitTarget(this.createRelation(RelationType.USE).id);
-      this.drawUmlNodeOptions();
-    } else if ((target.id === 'association-outgoing-button') || (target.parentElement.id === 'association-outgoing-button')) {
-
-    } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement.id === 'aggregation-outgoing-button')) {
-
-    } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
-
-    } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement.id === 'inheritance-outgoing-button')) {
-
-    } else if ((target.id === 'use-outgoing-button') || (target.parentElement.id === 'use-outgoing-button')) {
-
-    } else if ((target.id === 'composition-relation-button') || (target.parentElement.id === 'composition-relation-button')) {
-      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.COMPOSITION);
-    } else if ((target.id === 'inheritance-relation-button') || (target.parentElement.id === 'inheritance-relation-button')) {
-      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.INHERITANCE);
-    } else if ((target.id === 'aggregation-relation-button') || (target.parentElement.id === 'aggregation-relation-button')) {
-      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.AGGREGATION);
-    } else if ((target.id === 'association-relation-button') || (target.parentElement.id === 'association-relation-button')) {
-      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.ASSOCIATION);
-    } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
-      this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
-    } else if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
-      this.closeUmlNodeOptions();
+      if ((target.tagName === 'rect') || (target.tagName === 'text')) {
+        this.createRelation(this.creatingRelation.relationType, this.getUnitById(target.id.toString().substring(0, target.id.toString().length)), this.getUnitById(this.creatingRelation.outgoing));
+      }
+      this.creatingRelation = null;
+      this.umlNewPath.nativeElement.setAttribute('d','');
     }
   }
 
   @HostListener('document:dblclick', ['$event'])
   public documentDoubleClick(event: Event): void {
+    this.creatingRelation = null;
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
       const id = target.id.toString().substring(0, target.id.toString().length);
       if (this.changed) {
         const dialogRef = this.dialog.open(ConfirmActionComponent, {
-          data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
+          data: {
+            confirmText: 'Se han realizado cambios',
+            button1: 'Guardar',
+            button2: 'Descartar'}
         });
-
         dialogRef.afterClosed().subscribe(result => {
           if (result === 1) {
             this.goToUnit(id);
@@ -511,6 +642,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   @HostListener('document:contextmenu', ['$event'])
   public documentRightClick(event: Event): void {
     event.preventDefault();
+    this.creatingRelation = null;
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text') || (target.tagName === 'path'))) {
       this.selectedTarget = target;
@@ -539,13 +671,33 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.updateUmlNodeOptions();
   }
 
+  @HostListener('document:mousemove', ['$event'])
+  private onMouseMove(event: MouseEvent) {
+    if (this.creatingRelation) {
+      this.umlNewPath.nativeElement.setAttribute('d',
+        'M' + (this.creatingRelation.boundingClientRect.right + window.pageXOffset - (this.creatingRelation.boundingClientRect.width / 2)) +
+        ' ' + (this.creatingRelation.boundingClientRect.top + window.pageYOffset + (this.creatingRelation.boundingClientRect.height / 2)) +
+        ' L' + event.clientX + ' ' + event.clientY);
+    } else {
+      this.umlNewPath.nativeElement.setAttribute('d','');
+    }
+  }
+
+
+
+
+  // Menu
+
+  private setShowMenu(showMenu: boolean) {
+    this.showMenu = showMenu;
+  }
 
 
 
   // Search
 
   private search() {
-    if (this.validSearchField()) {
+    if (this.searchField.length > 0) {
       this.unitService.searchByNameContaining(this.searchField).subscribe((data: any) => {
         this.results = data;
         this.arrowKeyLocation = 0;
@@ -555,22 +707,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.emptyResults();
     }
-  }
-
-  private validSearchField() {
-    const invalidChars = ['?', '/', '\\', '[', ']', ';', '#'];
-    for (const ch of invalidChars) {
-      if (this.searchField.includes(ch)) {
-        return false;
-      }
-    }
-    const invalidCharsToSearchAlone = [' ', '.', '%'];
-    for (const ch of invalidCharsToSearchAlone) {
-      if (this.searchField.split(ch).length === (this.searchField.length + 1)) {
-        return false;
-      }
-    }
-    return true;
   }
 
   private setShowResults(showResults: boolean) {
@@ -623,11 +759,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private parseUml(relations: any) {
     const parsedRelations = this.getRelationsDiagram(relations);
-    if (parsedRelations === '') {
-      throw new Error('Invalid data. Unable to display uml');
-    } else {
+    if (parsedRelations !== '') {
       return 'classDiagram\n' + parsedRelations;
+    } else if (this.getUnitById(this.focusedUnitId.toString())) {
+      return 'classDiagram\n' + this.getOneUnitDiagram();
+    } else {
+      throw new Error('Invalid data. Unable to display uml');
     }
+  }
+
+  private getOneUnitDiagram() {
+    return this.parseUnitName(this.focusedUnitId.toString()) + '<|--|>' + this.parseUnitName(this.focusedUnitId.toString());
   }
 
   private getRelationsDiagram(relations: any): string {

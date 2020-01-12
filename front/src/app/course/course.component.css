@@ -98,19 +98,6 @@
   margin-top: 4rem;
 }
 
-.unit-course-name {
-  margin: 0 2.5rem 0 1.5rem;
-  top: 0.8rem;
-  position: relative;
-  display: inline;
-  font-size: 1.25rem;
-  color: #601972;;
-}
-
-.course-content {
-  margin-top: 6rem;
-}
-
 .course-button {
   width: 90%;
   padding: 1rem 0 1rem 2rem;

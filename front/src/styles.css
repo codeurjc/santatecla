@@ -13,11 +13,10 @@ body {
 }
 
 #uml {
-  top: 5rem;
-  left: 1rem;
   position: absolute;
-  width: calc(80% - 3rem);
-  height: calc(100% - 6rem);
+  width: calc(100% - 20rem);
+  height: calc(100% - 11rem);
+  z-index: 1;
 }
 
 #loader {
@@ -180,4 +179,101 @@ body {
 
 .active {
   background-color: #e5e9f0 !important;
+}
+
+.tab {
+  background-color: #7d3c90;
+  color: #ffffff;
+  padding: 0.3rem 0 0.3rem 3.5rem !important;
+  width: 100%;
+  margin-bottom: 0.5rem !important;
+  text-align: left !important;
+  height: 3rem;
+}
+
+.tab:hover {
+  background-color: #a769b8;
+}
+
+.activeTab {
+  background-color: #a769b8;
+}
+
+.tab-text {
+  margin-left: 0.5rem;
+}
+
+.tab-icon {
+  position: absolute;
+  left: 1.37rem;
+  margin-top: 0.4rem;
+}
+
+.tab-icon-without-menu {
+  position: absolute;
+  left: 1.37rem;
+  top: 0.78rem;
+}
+
+#unit-course-content {
+  margin-top: 4rem;
+  position: absolute;
+  right: 0;
+  padding-bottom: 2rem;
+}
+
+.with-menu {
+  width: calc(100% - 21.5rem);
+}
+
+.without-menu {
+  width: calc(100% - 6.2rem);
+}
+
+#lateral-panel {
+  position: fixed;
+  top: 3rem;
+  bottom: 0;
+  background-color: #5d306a;
+  padding: 1rem;
+  z-index: 3;
+}
+
+#hide-menu-button {
+  z-index: 501;
+  top: 3rem;
+  position: fixed;
+  color: #ffffff;
+  padding: 0.8rem;
+  border-bottom-right-radius: 1rem;
+  border-top-right-radius: 1rem;
+  background-image: linear-gradient(to right, #5d306a 20%, #3e2047 100%);
+  cursor: pointer;
+}
+
+.show-hide-menu-button {
+  left: 21rem;
+}
+
+.hidden-hide-menu-button {
+  left: 5.2rem;
+}
+
+.left-zero {
+  width: 20rem;
+}
+
+.hidden-menu {
+  width: 4.2rem;
+}
+
+#top-panel {
+  position: fixed;
+  top: 3rem;
+  right: 0;
+  height: 2.5rem;
+  z-index: 500;
+  background-color: #5d306a;
+  text-align: right;
+  padding: 0.3rem 0 0.3rem 0;
 }

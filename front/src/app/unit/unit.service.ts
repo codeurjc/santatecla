@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Unit } from './unit.model';
-import { DefinitionQuestion } from '../question/definitionQuestion/definitionQuestion.model';
-import { ListQuestion } from '../question/listQuestion/listQuestion.model';
-import { TestQuestion } from '../question/testQuestion/testQuestion.model';
-import {DefinitionAnswer} from '../question/definitionQuestion/definitionAnswer.model';
+import {Relation} from "../relation/relation.model";
 
 @Injectable()
 export class UnitService {
@@ -22,7 +19,8 @@ export class UnitService {
   }
 
   searchByNameContaining(name: string) {
-    return this.http.get(this.baseUrl + 'search/' + name);
+    const params = new HttpParams().set('name', name);
+    return this.http.get(this.baseUrl + 'search/', { params: params });
   }
 
   createUnit(unit: Unit) {
@@ -47,7 +45,16 @@ export class UnitService {
     return this.http.get(this.baseUrl + id + '/parent');
   }
 
+  deleteUnit(id: number) {
+    return this.http.delete<Unit>(this.baseUrl + id);
+  }
+
+  deleteRelation(id: number) {
+    return this.http.delete<Relation>(this.baseUrl + 'relations/' + id);
+  }
+
   getCard(cardId: number, unitId: number) {
     return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
   }
+
 }
