@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Unit } from './unit.model';
+import {Relation} from "../relation/relation.model";
 
 @Injectable()
 export class UnitService {
@@ -46,6 +47,10 @@ export class UnitService {
 
   deleteUnit(id: number) {
     return this.http.delete<Unit>(this.baseUrl + id);
+  }
+
+  deleteRelation(id: number) {
+    return this.http.delete<Relation>(this.baseUrl + 'relations/' + id);
   }
 
   getCard(cardId: number, unitId: number) {

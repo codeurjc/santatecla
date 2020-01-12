@@ -102,6 +102,17 @@ public class UnitRestController extends GeneralRestController {
         }
     }
 
+    @DeleteMapping(value = "/relations/{id}")
+    public ResponseEntity<Relation> deleteRelation(@PathVariable long id) {
+        Optional<Relation> relation = relationService.findOne(id);
+        if (relation.isPresent()) {
+            relationService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping(value="/search")
     public ResponseEntity<List<Unit>> searchUnits(@RequestParam String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);

@@ -380,7 +380,28 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private deleteRelation() {
-
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se eliminará la relación',
+        button1: 'Cancelar',
+        button2: 'Eliminar'}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      window.scroll(0, 0);
+      if (result === 1) {
+        const splittedRelation: string[] = this.selectedTarget.id.split('-');
+        const incoming = splittedRelation[0];
+        const outgoing = splittedRelation[1];
+        const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
+        this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
+          if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
+            this.unitService.deleteRelation(+relation.id).subscribe(() => {
+              this.focusUnit(this.focusedUnitId);
+            });
+          }
+        });
+      }
+    });
   }
 
   private findUnitTarget(id: string): HTMLInputElement {

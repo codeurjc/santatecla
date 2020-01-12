@@ -601,10 +601,6 @@ public class DatabaseInitializer {
                 relationRepository.save(relation7);
                 unit4.addIncomingRelation(relation7);
                 unit5.addOutgoingRelation(relation7);
-                Relation relation8 = new Relation(Relation.RelationType.INHERITANCE, unit2.getId(), unit5.getId());
-                relationRepository.save(relation8);
-                unit2.addIncomingRelation(relation8);
-                unit5.addOutgoingRelation(relation8);
                 Relation relation9 = new Relation(Relation.RelationType.ASSOCIATION, unit2.getId(), unit5.getId());
                 relationRepository.save(relation9);
                 unit2.addIncomingRelation(relation9);
