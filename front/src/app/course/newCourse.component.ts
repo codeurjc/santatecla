@@ -50,7 +50,7 @@ export class NewCourseComponent implements OnInit {
           this.courseDescription = this.course.description;
           this.chosenStudents = this.course.students;
           this.chosenModule = this.course.module;
-          this.tabService.setCourse(this.courseName);
+          this.tabService.setCourse(this.courseName, this.courseId);
         }, error => {console.log(error); });
       }
     });
