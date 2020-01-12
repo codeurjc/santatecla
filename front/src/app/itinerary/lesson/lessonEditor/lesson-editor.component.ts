@@ -37,6 +37,8 @@ function convertToHTML(text) {
 export class LessonEditorComponent implements OnInit {
 
   contentHTML: any[];
+  contentSlide: number;
+  progress: number;
 
   lessonContent: any;
   lessonContentExtended: string;
@@ -73,9 +75,12 @@ export class LessonEditorComponent implements OnInit {
               private bottomSheet: MatBottomSheet,
               private unitLessonService: UnitLessonService,
               private tabService: TabService) {
+    this.showSpinner = true;
   }
 
   ngOnInit() {
+
+    this.contentSlide = 0;
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
@@ -108,8 +113,6 @@ export class LessonEditorComponent implements OnInit {
   }
 
   loadItinerary() {
-    this.showSpinner = true;
-
     this.lessonService.getLesson(this.lessonId).subscribe((data: Lesson) => {
       this.lesson = {
         id: data.id,
@@ -234,6 +237,7 @@ export class LessonEditorComponent implements OnInit {
       } else {
         this.showSpinner = false;
         this.viewHTMLVersion();
+        this.progress = (1 / (this.contentHTML.length)) * 100;
       }
     }
   }
@@ -288,6 +292,16 @@ export class LessonEditorComponent implements OnInit {
 
   openBottomSheet(): void {
     this.bottomSheet.open(UnitsCardsToolComponent);
+  }
+
+  nextSlide() {
+    this.contentSlide++;
+    this.progress = this.progress + ((1 / (this.contentHTML.length)) * 100);
+  }
+
+  prevSlide() {
+    this.contentSlide--;
+    this.progress = this.progress - ((1 / (this.contentHTML.length)) * 100);
   }
 
 }
