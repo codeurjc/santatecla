@@ -18,8 +18,9 @@ import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ModuleComponent} from './itinerary/module/module.component';
 import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-editor.component';
-import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
 import {CourseComponent} from './course/course.component';
+import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
+import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
 
 
 const appRoutes = [
@@ -27,12 +28,14 @@ const appRoutes = [
   { path: 'unit' , component: ViewComponent },
   { path: 'unit/:unitId', component: UnitComponent },
   { path: 'unitsCardsTool', component: UnitsCardsToolComponent },
+  { path: 'unitsBlocksTool', component: UnitsBlocksToolComponent },
   { path: 'lessonForm', component: LessonFormComponent },
+  { path: 'moduleForm', component: ModuleFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
   { path: 'units/:unitId/lessons', component: LessonComponent },
   { path: 'units/:unitId/modules', component: ModuleComponent },
   { path: 'units/:unitId/lessons/:lessonId', component: LessonEditorComponent },
-  { path: 'units/:unitId/modules/:moduleId/lessons/:lessonId/view', component: LessonViewComponent },
+  { path: 'units/:unitId/modules/:moduleId/lessons/:lessonId', component: LessonEditorComponent },
   { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'course/:courseId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },

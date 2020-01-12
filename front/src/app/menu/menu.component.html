@@ -11,6 +11,11 @@
           <div class="nav-button-name">Inicio</div>
         </button>
 
+        <button mat-button *ngIf="tabService.courses" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button home-button' : 'nav-button user-nav-button home-button'" [routerLink]="['/courses']">
+          <mat-icon class="nav-button-icon">class</mat-icon>
+          <div class="nav-button-name">Cursos</div>
+        </button>
+
         <button mat-button *ngIf="loginService.isAdmin && tabService.units" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/unit']">
           <img class="nav-button-icon" src="../../assets/img/uml-icon.png" height="15">
           <div class="nav-button-name">Unidades</div>
@@ -23,6 +28,13 @@
           </div>
         </button>
 
+        <button mat-button *ngIf="tabService.course" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/course/' + tabService.courseId + '/modules/' + tabService.moduleId]">
+          <div class="nav-button-name">
+            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Curso</span>
+            <span class="nav-button-content">{{tabService.course}}</span>
+          </div>
+        </button>
+
         <button mat-button *ngIf="loginService.isAdmin && tabService.module" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/units/' + tabService.unitId + '/modules/' + tabService.moduleId]">
           <div class="nav-button-name">
             <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Módulo</span>
@@ -30,21 +42,10 @@
           </div>
         </button>
 
-        <button mat-button *ngIf="loginService.isAdmin && tabService.lesson" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+        <button mat-button *ngIf="tabService.lesson" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
           <div class="nav-button-name">
             <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Lección</span>
             <span class="nav-button-content">{{tabService.lesson}}</span>
-          </div>
-        </button>
-
-        <button mat-button *ngIf="tabService.courses" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button home-button' : 'nav-button user-nav-button home-button'" [routerLink]="['/courses']">
-          <mat-icon class="nav-button-icon">class</mat-icon>
-          <div class="nav-button-name">Cursos</div>
-        </button>
-        <button mat-button *ngIf="tabService.course" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
-          <div class="nav-button-name">
-            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Curso</span>
-            <span class="nav-button-content">{{tabService.course}}</span>
           </div>
         </button>
       </div>

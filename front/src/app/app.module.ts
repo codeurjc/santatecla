@@ -66,15 +66,17 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {ModuleService} from './itinerary/module/module.service';
 import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
 import {UnitModuleService} from './itinerary/module/unit-module.service';
-import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
+import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
+import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
+import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rename.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LessonFormComponent,
     LessonComponent,
-    LessonViewComponent,
     ModuleComponent,
+    ModuleFormComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,
@@ -83,6 +85,7 @@ import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.com
     LessonEditorComponent,
     ModuleEditorComponent,
     UnitsCardsToolComponent,
+    UnitsBlocksToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
@@ -95,10 +98,12 @@ import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.com
     AnswerDefinitionDialogComponent,
     AddQuestionDialogComponent,
     HomeComponent,
-    ConfirmActionComponent
+    ConfirmActionComponent,
+    ModuleRenameComponent
   ],
   entryComponents: [
-    ConfirmActionComponent
+    ConfirmActionComponent,
+    ModuleRenameComponent
   ],
   imports: [
     ClipboardModule,

@@ -6,7 +6,10 @@ import {UnitService} from '../../unit/unit.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmActionComponent} from '../../confirmAction/confirm-action.component';
 import {Module} from './module.model';
-import {UnitModuleService} from "./unit-module.service";
+import {UnitModuleService} from './unit-module.service';
+import {ModuleFormComponent} from './moduleForm/module-form.component';
+import {ModuleRenameComponent} from "./moduleRename/module-rename.component";
+import {ModuleService} from "./module.service";
 
 @Component({
   selector: 'app-modules',
@@ -34,6 +37,7 @@ export class ModuleComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
+              private moduleService: ModuleService,
               private unitModuleService: UnitModuleService,
               public dialog: MatDialog) {
   }
@@ -68,7 +72,7 @@ export class ModuleComponent implements OnInit {
     }
   }
 
-  /*addModule(): void {
+  addModule(): void {
     this.newModule = {name: ''};
     const dialogRef = this.dialog.open(ModuleFormComponent, {
       data: {itinerary: this.newModule}
@@ -78,13 +82,13 @@ export class ModuleComponent implements OnInit {
       this.newModule = result;
       if (typeof this.newModule !== 'undefined') {
         if (this.newModule.name !== '') {
-          this.unitService.addLesson(this.unitId, this.newModule).subscribe((data) => {
-            this.router.navigate(['/units/' + this.unitId + '/lessons/' + data.id]);
+          this.unitModuleService.addModule(this.unitId, this.newModule).subscribe((data) => {
+            this.router.navigate(['/units/' + this.unitId + '/modules/' + data.id]);
           });
         }
       }
     });
-  }*/
+  }
 
   deleteModule(moduleId: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
@@ -96,6 +100,22 @@ export class ModuleComponent implements OnInit {
         this.unitModuleService.deleteModule(this.unitId, moduleId).subscribe(() => {
           this.ngOnInit();
         });
+      }
+    });
+  }
+
+  renameModule(module: Module) {
+    const dialogRef = this.dialog.open(ModuleRenameComponent, {
+      data: { name: module.name }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (typeof result !== 'undefined') {
+        if ((result !== '') && (result !== module.name)) {
+          module.name = result;
+          this.moduleService.updateModule(module).subscribe(() => {
+          });
+        }
       }
     });
   }

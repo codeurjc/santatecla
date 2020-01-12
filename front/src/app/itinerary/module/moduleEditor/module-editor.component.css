@@ -158,3 +158,23 @@ li {
   position: absolute;
   cursor: pointer;
 }
+
+.add-block-button {
+  background-color: #5d306a;
+  color: white;
+  margin-left: 1rem;
+}
+
+.delete-block-button {
+  background-color: indianred;
+  color: white;
+  margin-left: 1rem;
+}
+
+.lesson {
+  margin-left: 3rem;
+}
+
+.title {
+  top: -0.3rem;
+}

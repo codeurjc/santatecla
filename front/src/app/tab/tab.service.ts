@@ -10,6 +10,7 @@ export class TabService {
 
   courses = false;
   course = '';
+  courseId: number;
 
   lessons = false;
   lesson = '';
@@ -67,12 +68,17 @@ export class TabService {
     this.lesson = lessonName;
   }
 
-  setLessonInModule(unitName: string, unitId: number, moduleName: string, moduleId: number, lessonName: string) {
+  setLessonInModule(name: string, id: number, moduleName: string, moduleId: number, lessonName: string) {
     this.emptyAll();
-    this.units = true;
-    this.unit = unitName;
-    this.unitId = unitId;
-    this.modules = true;
+    if (this.loginService.isAdmin) {
+      this.units = true;
+      this.unit = name;
+      this.unitId = id;
+    } else {
+      this.courses = true;
+      this.course = name;
+      this.courseId = id;
+    }
     this.module = moduleName;
     this.moduleId = moduleId;
     this.lessons = true;
