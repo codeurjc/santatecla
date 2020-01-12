@@ -8,3 +8,5 @@
 .vscode/
 
 .angulardoc.json
+
+front/package-lock.json

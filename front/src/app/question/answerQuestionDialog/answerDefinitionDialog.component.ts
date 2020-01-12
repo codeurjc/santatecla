@@ -45,7 +45,7 @@ export class AnswerDefinitionDialogComponent implements OnInit {
         (data: DefinitionAnswer[]) => {
           this.definitionAnswers = data;
         });
-      });
+    });
   }
 
   onNoClick(): void {

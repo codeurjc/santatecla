@@ -39,6 +39,7 @@ export class AddQuestionDialogComponent implements OnInit {
   questionInput: string;
   answerInput: string;
   possibleAnswers: Map<string, boolean>;
+  bindedAnswerKeys: string[];
   correct: boolean;
   correctTestAnswerSelected: boolean;
 
@@ -69,6 +70,7 @@ export class AddQuestionDialogComponent implements OnInit {
     this.questionInput = '';
     this.answerInput = '';
     this.possibleAnswers = new Map();
+    this.rechargeAnswersKeys();
     this.correct = false;
     this.correctTestAnswerSelected = false;
   }
@@ -78,16 +80,15 @@ export class AddQuestionDialogComponent implements OnInit {
     this.questionInput = this.data.question.questionText;
     this.answerInput = '';
     this.correct = false;
+    this.possibleAnswers = new Map();
 
     if (this.subtype === 'ListQuestion') {
-      this.possibleAnswers = new Map();
       for (const answer of this.data.question.possibleAnswers) {
         this.possibleAnswers.set(answer, this.data.question.correctAnswers.includes(answer));
       }
     }
 
     if (this.subtype === 'TestQuestion') {
-      this.possibleAnswers = new Map();
       for (const answer of this.data.question.possibleAnswers) {
         this.possibleAnswers.set(answer, answer === this.data.question.correctAnswer);
         if (!this.correctTestAnswerSelected) {
@@ -95,11 +96,16 @@ export class AddQuestionDialogComponent implements OnInit {
         }
       }
     }
+    this.rechargeAnswersKeys();
   }
 
   setQuestion(subtype: string) {
     this.subtype = subtype;
     this.resetAddQuestionForm();
+  }
+
+  rechargeAnswersKeys() {
+    this.bindedAnswerKeys = Array.from(this.possibleAnswers.keys());
   }
 
   sendQuestion() {
@@ -192,13 +198,17 @@ export class AddQuestionDialogComponent implements OnInit {
         }
       );
     }
-
   }
 
   sendTestQuestion() {
     if (this.questionInput === '') {
       // TODO
+      this.openSnackBar('La pregunta no puede estar vacía', 'Entendido');
       console.log('error: inputs cannot be empty');
+      return;
+    }
+    if (!this.correctTestAnswerSelected) {
+      this.openSnackBar('Debe haber una respuesta correcta', 'Entendido');
       return;
     }
     let ca = [];
@@ -233,17 +243,26 @@ export class AddQuestionDialogComponent implements OnInit {
   addPossibleListAnswer() {
     if (this.answerInput === '') {
       // TODO
-      this.openSnackBar('Input cannot be empty', 'Entendido');
+      this.openSnackBar('La respuesta no puede estar vacía', 'Entendido');
+      return;
+    }
+    if (this.possibleAnswers.has(this.answerInput)) {
+      this.openSnackBar('La respuesta está repetida', 'Entendido');
       return;
     }
     this.possibleAnswers = this.possibleAnswers.set(this.answerInput, this.correct);
+    this.rechargeAnswersKeys();
     this.answerInput = '';
   }
 
   addPossibleTestAnswer() {
     if (this.answerInput === '') {
       // TODO
-      this.openSnackBar('Input cannot be empty', 'Entendido');
+      this.openSnackBar('La respuesta no puede estar vacía', 'Entendido');
+      return;
+    }
+    if (this.possibleAnswers.has(this.answerInput)) {
+      this.openSnackBar('La respuesta está repetida', 'Entendido');
       return;
     }
     if (!this.correctTestAnswerSelected && this.correct) {
@@ -253,7 +272,16 @@ export class AddQuestionDialogComponent implements OnInit {
     } else {
       this.possibleAnswers.set(this.answerInput, false);
     }
+    this.rechargeAnswersKeys();
     this.answerInput = '';
+  }
+
+  deletePossibleAnswer(answer: string) {
+    if (this.possibleAnswers.get(answer)) {
+      this.correctTestAnswerSelected = false;
+    }
+    this.possibleAnswers.delete(answer);
+    this.rechargeAnswersKeys();
   }
 
   onNoClick(): void {
