@@ -66,7 +66,6 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {ModuleService} from './itinerary/module/module.service';
 import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
 import {UnitModuleService} from './itinerary/module/unit-module.service';
-import {LessonViewComponent} from './itinerary/lesson/lessonView/lesson-view.component';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
 import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
 import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rename.component';
@@ -76,7 +75,6 @@ import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rena
     AppComponent,
     LessonFormComponent,
     LessonComponent,
-    LessonViewComponent,
     ModuleComponent,
     ModuleFormComponent,
     LoginComponent,

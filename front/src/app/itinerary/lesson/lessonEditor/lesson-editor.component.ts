@@ -16,6 +16,10 @@ import {DefinitionQuestionService} from '../../../question/definitionQuestion/de
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
 import {TabService} from '../../../tab/tab.service';
 import {UnitLessonService} from '../unit-lesson.service';
+import {CourseService} from '../../../course/course.service';
+import {Course} from '../../../course/course.model';
+import {ModuleService} from '../../module/module.service';
+import {Module} from '../../module/module.model';
 
 
 function convertToHTML(text) {
@@ -46,6 +50,7 @@ export class LessonEditorComponent implements OnInit {
   lesson: Lesson;
 
   unitId: number;
+  moduleId: number;
   lessonId: number;
 
   contentCount: number;
@@ -63,6 +68,8 @@ export class LessonEditorComponent implements OnInit {
               private lessonService: LessonService,
               private definitionQuestionService: DefinitionQuestionService,
               private unitService: UnitService,
+              private courseService: CourseService,
+              private moduleService: ModuleService,
               private bottomSheet: MatBottomSheet,
               private unitLessonService: UnitLessonService,
               private tabService: TabService) {
@@ -73,12 +80,29 @@ export class LessonEditorComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
       this.lessonId = params.lessonId;
+
       this.lessonService.getLesson(this.lessonId).subscribe((lesson: Lesson) => {
-        this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-          this.tabService.setLesson(unit.name, this.unitId, lesson.name);
-        });
+        if (this.loginService.isAdmin) {
+          this.moduleId = params.moduleId;
+          this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
+            if (typeof this.moduleId === 'undefined') {
+              this.tabService.setLesson(unit.name, this.unitId, lesson.name);
+            } else {
+              this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
+                this.tabService.setLessonInModule(unit.name, this.unitId, module.name, module.id, lesson.name);
+              });
+            }
+          });
+        } else {
+          this.moduleId = params.moduleId;
+          this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
+            this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
+                this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
+            });
+          });
+        }
+        this.loadItinerary();
       });
-      this.loadItinerary();
     });
 
   }

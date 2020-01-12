@@ -1,7 +1,14 @@
 .toolsBar {
   height: 6.2rem;
   padding-left: 0.5rem;
+}
+
+.admin {
   background-color: #5d306a;
+}
+
+.student {
+  background-color: #30376a;
 }
 
 .tools {
@@ -44,7 +51,7 @@
   font-size: 15px;
 }
 
-#html-itinerary-representation-editor {
+.html-lesson-representation-editor {
   position: absolute;
   right: 0;
   left: 45%;

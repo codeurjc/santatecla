@@ -2,9 +2,9 @@
 <html>
   <body>
 
-    <!-- TOOLS BAR -->
-    <div class="toolsBar" *ngIf="loginService.isAdmin">
-      <mat-chip-list class="tools">
+    <!-- TOOLS BAR UNIT -->
+    <div [ngClass]="loginService.isAdmin ? 'toolsBar admin' : 'toolsBar student'">
+      <mat-chip-list *ngIf="loginService.isAdmin" class="tools">
         <button mat-button class="tool">
           <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
         </button>
@@ -20,6 +20,8 @@
       </mat-chip-list>
     </div>
 
+    <!-- TOOLS BAR COURSE-->
+
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <mat-card id="editor-container">
@@ -28,7 +30,7 @@
     </div>
 
     <!-- HTML REPRESENTATION -->
-    <div id="html-itinerary-representation-editor" *ngIf="loginService.isAdmin">
+    <div [ngClass]="loginService.isAdmin ? 'html-lesson-representation-editor' : 'html-lesson-view'">
       <img src="../../../../assets/img/spinner.gif" id="spinnerEditor" *ngIf="showSpinner">
       <h1>{{lesson?.name}}</h1>
       <div *ngFor="let slide of contentHTML">
