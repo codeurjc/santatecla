@@ -42,11 +42,11 @@
       </div>
       <div *ngIf="(!loginService.isAdmin &&  !showSpinner)">
         <mat-progress-bar class="progress" mode="determinate" value="{{progress}}"></mat-progress-bar>
-        <button mat-icon-button id="prev" (click)="(contentSlide === 0) || prevSlide()"><mat-icon>keyboard_arrow_left</mat-icon></button>
         <mat-card class="slide slide-content">
+          <button *ngIf="(contentSlide !== 0)" mat-icon-button id="prev" (click)="prevSlide()"><mat-icon>keyboard_arrow_left</mat-icon></button>
           <div [innerHTML]="contentHTML[contentSlide]"></div>
+          <button *ngIf="(contentSlide !== contentHTML.length-1)" mat-icon-button id="next" (click)="nextSlide()"><mat-icon>keyboard_arrow_right</mat-icon></button>
         </mat-card>
-        <button mat-icon-button id="next" (click)="(contentSlide === contentHTML.length-1) || nextSlide()"><mat-icon>keyboard_arrow_right</mat-icon></button>
         <mat-progress-bar class="progress" mode="determinate" value="{{progress}}"></mat-progress-bar>
       </div>
     </div>

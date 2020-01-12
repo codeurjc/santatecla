@@ -156,7 +156,7 @@ export class LessonEditorComponent implements OnInit {
     } else if (type === 'slide') {
       this.subSlide = true;
       contentEmbebed = await this.unitLessonService.getSlideFormLesson(contentId, contentId2, unitId).toPromise();
-      this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
+      this.extractedData.splice(contentCounter, 1, contentEmbebed.content.split('=== ')[1]);
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
       const url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;

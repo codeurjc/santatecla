@@ -105,17 +105,19 @@
 }
 
 #prev {
-  color: #30376a;
+  color: white;
   position: absolute;
-  left: 4%;
-  top: 50%;
+  background-color: #30376a;
+  left: -8%;
+  top: 42%;
 }
 
 #next {
-  color: #30376a;
+  color: white;
   position: absolute;
-  right: 4%;
-  top: 50%;
+  background-color: #30376a;
+  right: -8%;
+  top: 42%;
 }
 
 .progress {

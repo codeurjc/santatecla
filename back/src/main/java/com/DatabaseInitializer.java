@@ -73,6 +73,10 @@ public class DatabaseInitializer {
 
                 //Slides
                 Slide slide1 = new Slide("Programación Declarativa vs Programación Imperativa");
+                Slide slide01 = new Slide("¿Qué es la Programación Funcional?");
+                Slide slide02 = new Slide("Evolución de la Programación Funcional");
+                Slide slide03 = new Slide("Paradigmas de la programación");
+                Slide slide04 = new Slide("Ejemplo de añadir una slide");
                 Slide slide2 = new Slide("Tipos de datos");
                 Slide slide3 = new Slide("Funciones recursivas");
                 Slide slide4 = new Slide("Funciones de orden superior");
@@ -85,7 +89,76 @@ public class DatabaseInitializer {
                 Slide slide11 = new Slide("Compiladores e interpretes");
                 Slide slide12 = new Slide("Funciones");
 
+                slide1.addContent("\nLos programas de computador constituyen una\n" +
+                        "representación de uno o más algoritmos diseñados para\n" +
+                        "resolver problemas reales\n" +
+                        "\n" +
+                        "En un programa de computador intervienen dos\n" +
+                        "elementos principales:\n" +
+                        "\n" +
+                        "* La lógica: “qué objetivo se desea alcanzar”\n" +
+                        "* El control: “cómo alcanzar dicho objetivo”\n" +
+                        "\n" +
+                        "La programación declarativa es un paradigma de\n" +
+                        "programación que expresa la lógica de computación sin\n" +
+                        "describir el flujo de control\n" +
+                        "\n" +
+                        "Constituye un estilo de programación contrapuesto al\n" +
+                        "estilo imperativo, que se centra tanto el objetivo final\n" +
+                        "como en la manera de alcanzarlo, estableciendo una\n" +
+                        "secuencia pasos para ello\n" +
+                        "\n" +
+                        "El paradigma *imperativo* está basado en el concepto de\n" +
+                        "nombres de variables que pueden ser asociadas a\n" +
+                        "diferentes valores, empleando expresiones de\n" +
+                        "asignación\n" +
+                        "\n" +
+                        "En el paradigma *declarativo* no existe el concepto de\n" +
+                        "variable como tal que pueda ser alterada durante la\n" +
+                        "ejecución de un programa, sino que un valor asignado a\n" +
+                        "una “variable” permanece constante\n");
+
+                slide01.addContent("\nEl paradigma de la programación funcional es un estilo\n" +
+                        "de computación que sigue la evaluación de funciones\n" +
+                        "matemáticas y evita los estados intermedios\n" +
+                        "\n" +
+                        "En un sentido estricto, la programación funcional define\n" +
+                        "un programa como una función matemática que\n" +
+                        "convierte unas entradas en unas salidas, sin ningún\n" +
+                        "estado interno y ningún efecto lateral\n");
+
+                slide02.addContent("\nDe los años 20 y 30 proviene la teoría de funciones\n" +
+                        "como modelo de computación. Los fundadores entre\n" +
+                        "otros son: Haskell Curry y Alonzo Church\n" +
+                        "\n" +
+                        "El primer lenguaje funcional desarrollado fue LISP\n" +
+                        "(1958), de John McCarthy, que se aplicó en el área de\n" +
+                        "Inteligencia Artificial\n" +
+                        "\n" +
+                        "* LISP es un lenguaje revolucionario que introduce nuevos\n" +
+                        "conceptos de programación: funciones como objetos primitivos,\n" +
+                        "funciones de orden superior, polimorfismo, etc.\n" +
+                        "\n" +
+                        "Años 80: Eclosión de lenguajes funcionales SASL, KRC\n" +
+                        "y Miranda, Haskell, Hope, Wadler, CAML, etc.\n" +
+                        "\n" +
+                        "* Años 70, 80 y 90 se utilizaba en el ámbito académico y de\n" +
+                        "investigación, pero en la Empresa se utilizaban los lenguajes\n" +
+                        "imperativos y OO\n");
+
+                slide03.addContent("\n" +
+                        "assert.card/1/1\n" +
+                        "\n" +
+                        "assert.card/2/1\n");
+
+                slide04.addContent("\n" +
+                        "assert.slide/1/1/1\n");
+
                 slideRepository.save(slide1);
+                slideRepository.save(slide01);
+                slideRepository.save(slide02);
+                slideRepository.save(slide03);
+                slideRepository.save(slide04);
                 slideRepository.save(slide2);
                 slideRepository.save(slide3);
                 slideRepository.save(slide4);
@@ -113,6 +186,10 @@ public class DatabaseInitializer {
                 Lesson lesson12 = new Lesson("Funciones y Objetos");
 
                 lesson1.getSlides().add(slide1);
+                lesson1.getSlides().add(slide01);
+                lesson1.getSlides().add(slide02);
+                lesson1.getSlides().add(slide03);
+                lesson1.getSlides().add(slide04);
                 lesson2.getSlides().add(slide2);
                 lesson3.getSlides().add(slide3);
                 lesson4.getSlides().add(slide4);
