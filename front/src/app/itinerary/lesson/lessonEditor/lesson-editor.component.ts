@@ -16,6 +16,10 @@ import {DefinitionQuestionService} from '../../../question/definitionQuestion/de
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
 import {TabService} from '../../../tab/tab.service';
 import {UnitLessonService} from '../unit-lesson.service';
+import {CourseService} from '../../../course/course.service';
+import {Course} from '../../../course/course.model';
+import {ModuleService} from '../../module/module.service';
+import {Module} from '../../module/module.model';
 
 
 function convertToHTML(text) {
@@ -32,9 +36,14 @@ function convertToHTML(text) {
 
 export class LessonEditorComponent implements OnInit {
 
-  contentHTML: any;
+  contentHTML: any[];
+  contentSlide: number;
+  progress: number;
+
   lessonContent: any;
   lessonContentExtended: string;
+
+  slidesContentExtended: string[];
 
   extractedData: string[];
   position: number[];
@@ -43,6 +52,7 @@ export class LessonEditorComponent implements OnInit {
   lesson: Lesson;
 
   unitId: number;
+  moduleId: number;
   lessonId: number;
 
   contentCount: number;
@@ -52,8 +62,7 @@ export class LessonEditorComponent implements OnInit {
 
   subSlide: boolean;
 
-  constructor(private itineraryService: LessonService,
-              private slideService: SlideService,
+  constructor(private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
@@ -61,30 +70,50 @@ export class LessonEditorComponent implements OnInit {
               private lessonService: LessonService,
               private definitionQuestionService: DefinitionQuestionService,
               private unitService: UnitService,
+              private courseService: CourseService,
+              private moduleService: ModuleService,
               private bottomSheet: MatBottomSheet,
               private unitLessonService: UnitLessonService,
               private tabService: TabService) {
+    this.showSpinner = true;
   }
 
   ngOnInit() {
 
+    this.contentSlide = 0;
+
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
       this.lessonId = params.lessonId;
+
       this.lessonService.getLesson(this.lessonId).subscribe((lesson: Lesson) => {
-        this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-          this.tabService.setLesson(unit.name, this.unitId, lesson.name);
-        });
+        if (this.loginService.isAdmin) {
+          this.moduleId = params.moduleId;
+          this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
+            if (typeof this.moduleId === 'undefined') {
+              this.tabService.setLesson(unit.name, this.unitId, lesson.name);
+            } else {
+              this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
+                this.tabService.setLessonInModule(unit.name, this.unitId, module.name, module.id, lesson.name);
+              });
+            }
+          });
+        } else {
+          this.moduleId = params.moduleId;
+          this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
+            this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
+                this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
+            });
+          });
+        }
+        this.loadItinerary();
       });
-      this.loadItinerary();
     });
 
   }
 
   loadItinerary() {
-    this.showSpinner = true;
-
-    this.itineraryService.getLesson(this.lessonId).subscribe((data: Lesson) => {
+    this.lessonService.getLesson(this.lessonId).subscribe((data: Lesson) => {
       this.lesson = {
         id: data.id,
         name: data.name,
@@ -98,7 +127,15 @@ export class LessonEditorComponent implements OnInit {
   }
 
   viewHTMLVersion() {
-    this.contentHTML = convertToHTML(this.lessonContentExtended);
+    this.contentHTML = [];
+    this.slidesContentExtended = this.lessonContentExtended.split('===');
+    let counter = 0;
+    this.slidesContentExtended.forEach( (slide: string) => {
+      if (counter !== 0) {
+        this.contentHTML.push(convertToHTML('=== ' + slide + '\n'));
+      }
+      counter = counter + 1;
+    });
   }
 
   slidesToContent(slides: Slide[]) {
@@ -122,7 +159,7 @@ export class LessonEditorComponent implements OnInit {
       this.extractedData.splice(contentCounter, 1, '=' + contentEmbebed.content);
     } else if (type === 'question') {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
-      let url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;
+      const url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;
       this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]');
     }
     this.addExtractedData(content);
@@ -200,6 +237,7 @@ export class LessonEditorComponent implements OnInit {
       } else {
         this.showSpinner = false;
         this.viewHTMLVersion();
+        this.progress = (1 / (this.contentHTML.length)) * 100;
       }
     }
   }
@@ -244,9 +282,8 @@ export class LessonEditorComponent implements OnInit {
 
   updateHTMLView() {
     this.contentToItinerary(this.lessonContent);
-    this.contentHTML = '';
     this.showSpinner = true;
-    this.itineraryService.updateLesson(this.lesson).subscribe((_) => {
+    this.lessonService.updateLesson(this.lesson).subscribe((_) => {
       this.loadItinerary();
     }, (error) => {
       console.error(error);
@@ -255,6 +292,16 @@ export class LessonEditorComponent implements OnInit {
 
   openBottomSheet(): void {
     this.bottomSheet.open(UnitsCardsToolComponent);
+  }
+
+  nextSlide() {
+    this.contentSlide++;
+    this.progress = this.progress + ((1 / (this.contentHTML.length)) * 100);
+  }
+
+  prevSlide() {
+    this.contentSlide--;
+    this.progress = this.progress - ((1 / (this.contentHTML.length)) * 100);
   }
 
 }

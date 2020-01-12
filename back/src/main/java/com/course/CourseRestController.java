@@ -82,6 +82,12 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping(value="/search/{name}")
+    public ResponseEntity<List<Course>> searchCourseByNameContaining(@PathVariable String name){
+        List<Course> courses = this.courseService.searchCourseByNameContaining(name);
+        return new ResponseEntity<>(courses, HttpStatus.OK);
+    }
+
     @GetMapping(value="/{courseId}/module/progress")
     public ResponseEntity<List<ProgressItem>> getModuleProgress(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
@@ -130,6 +136,7 @@ public class CourseRestController extends GeneralRestController {
         ArrayList<Module> questionModules = new ArrayList<>();
         double sumQuestionAux;
         double sumModuleAux;
+        double average;
         List<Question> questions;
         StudentProgressItem item;
         ArrayList<StudentProgressItem> result = new ArrayList<>();
@@ -149,7 +156,13 @@ public class CourseRestController extends GeneralRestController {
                     sumModuleAux += sumQuestionAux / questions.size();
                     item.addGrade(sumQuestionAux / questions.size());
                 }
-                item.setAverage(sumModuleAux / questionModules.size());
+                average = sumModuleAux / questionModules.size();
+
+                if (Double.isNaN(average)){
+                    average = 0;
+                }
+
+                item.setAverage(average);
                 result.add(item);
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -214,115 +227,5 @@ public class CourseRestController extends GeneralRestController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    
-    /*@GetMapping(value="/{courseId}/user/{userId}/worst")
-    public ResponseEntity<Unit> getWorstUnit(@PathVariable long courseId, @PathVariable long userId){
-        Optional<Course> optional = this.courseService.findOne(courseId);
-        double aux = 1;
-        Unit worst = new Unit();
-        if(optional.isPresent()){
-            for(Unit u : optional.get().getUnits()){
-                if(this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId) < aux){
-                    aux = this.courseService.findUserCorrectWrongAnswerRelation(courseId, u.getId(), userId);
-                    worst = u;
-                }
-            }
-            return new ResponseEntity<>(worst, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value="/{courseId}/user/best")
-    public ResponseEntity<User> getBestStudent(@PathVariable long courseId){
-        Optional<Course> optional = this.courseService.findOne(courseId);
-        double aux = 0;
-        User best = new User();
-        double sumUnitPoints = 0;
-        if(optional.isPresent()){
-            for(User user : optional.get().getStudents()) {
-                System.out.println(user.getName());
-                for (Unit unit : optional.get().getUnits()) {
-                    sumUnitPoints += this.courseService.findUserCorrectWrongAnswerRelation(courseId, unit.getId(), user.getId());
-                }
-                if(sumUnitPoints > aux){
-                    aux = sumUnitPoints;
-                    best = user;
-                }
-                sumUnitPoints = 0;
-            }
-            return new ResponseEntity<>(best, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value="/{courseId}/user/worst")
-    public ResponseEntity<User> getWorstStudent(@PathVariable long courseId){
-        Optional<Course> optional = this.courseService.findOne(courseId);
-        double aux = Double.MAX_VALUE;
-        User worst = new User();
-        double sumUnitPoints = 0;
-        if(optional.isPresent()){
-            for(User user : optional.get().getStudents()) {
-                System.out.println(user.getName());
-                for (Unit unit : optional.get().getUnits()) {
-                    sumUnitPoints += this.courseService.findUserCorrectWrongAnswerRelation(courseId, unit.getId(), user.getId());
-                }
-                if(sumUnitPoints < aux){
-                    aux = sumUnitPoints;
-                    worst = user;
-                }
-                sumUnitPoints = 0;
-            }
-            return new ResponseEntity<>(worst, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value="/{courseId}/class/points")
-    public ResponseEntity<List<UserProgressItem>> getStudentProgress(@PathVariable long courseId){
-        Optional<Course> optional = this.courseService.findOne(courseId);
-        ArrayList<Double> points;
-        ArrayList<UserProgressItem> result = new ArrayList<>();
-        if(optional.isPresent()){
-            for (User user : optional.get().getStudents()){
-                points = new ArrayList<>();
-                for(Unit unit : optional.get().getUnits()){
-                    points.add(this.courseService.findUserCorrectWrongAnswerRelation(courseId,unit.getId(), user.getId())*10);
-                }
-                UserProgressItem item = new UserProgressItem(user.getName(), points);
-                result.add(item);
-            }
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping(value="/{courseId}/units/points")
-    public ResponseEntity<List<UserProgressItem>> getUnitProgress(@PathVariable long courseId){
-        Optional<Course> optional = this.courseService.findOne(courseId);
-        ArrayList<Double> points;
-        int correctAnswers;
-        int wrongAnswers;
-        ArrayList<UserProgressItem> result = new ArrayList<>();
-        if(optional.isPresent()){
-            for (Unit unit : optional.get().getUnits()){
-                points = new ArrayList<>();
-                correctAnswers = this.courseService.findUnitCorrectAnswers(courseId, unit.getId());
-                points.add((double)correctAnswers);
-                wrongAnswers = this.courseService.findUnitWrongAnswers(courseId, unit.getId());
-                points.add((double)wrongAnswers);
-                if(wrongAnswers > 0.75*(correctAnswers+wrongAnswers)){
-                    points.add(1.0);
-                }
-                else {
-                    points.add(0.0);
-                }
-                UserProgressItem item = new UserProgressItem(unit.getName(), points);
-                result.add(item);
-            }
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }*/
 
 }

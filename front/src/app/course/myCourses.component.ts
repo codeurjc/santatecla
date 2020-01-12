@@ -5,7 +5,7 @@ import {Course} from './course.model';
 import {Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
 import {TdDialogService} from '@covalent/core';
-import {MenuComponent} from "../menu/menu.component";
+import {MenuComponent} from '../menu/menu.component';
 
 @Component({
   templateUrl: './myCourses.component.html',
@@ -15,6 +15,7 @@ import {MenuComponent} from "../menu/menu.component";
 export class MyCoursesComponent implements OnInit {
   courses: Course[];
   searchField = '';
+  showingCourses: Course[];
 
   constructor(private loginService: LoginService,
               private courseService: MyCoursesService,
@@ -22,6 +23,7 @@ export class MyCoursesComponent implements OnInit {
               private tabService: TabService,
               private dialogService: TdDialogService) {
     this.courses = [];
+    this.showingCourses = [];
   }
 
   ngOnInit() {
@@ -29,10 +31,12 @@ export class MyCoursesComponent implements OnInit {
     if (this.loginService.isAdmin) {
       this.courseService.getTeacherCourses(this.loginService.getCurrentUser().id).subscribe((data: Course[]) => {
         this.courses = data;
+        this.showingCourses = this.courses;
       }, error => {console.log(error); });
     } else {
       this.courseService.getUserCourses(this.loginService.getCurrentUser().id).subscribe((data: Course[]) => {
         this.courses = data;
+        this.showingCourses = this.courses;
       }, error => {console.log(error); });
     }
   }
@@ -51,7 +55,15 @@ export class MyCoursesComponent implements OnInit {
   }
 
   search() {
-    // TODO
+    if (this.searchField !== '') {
+      this.courseService.searchByNameContaining(this.searchField).subscribe((data: Course[]) => {
+        this.showingCourses = data;
+      }, error => {
+        console.log(error);
+      });
+    } else {
+      this.showingCourses = this.courses;
+    }
   }
 
 }

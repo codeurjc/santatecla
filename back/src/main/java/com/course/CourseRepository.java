@@ -7,6 +7,7 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findAll();
     List<Course> findByTeacherId(long id);
+    List<Course> findByNameContaining(String name);
 
     @Query(value = "SELECT course.id FROM course JOIN course_students ON course.id = course_students.course_id JOIN user ON course_students.students_id = user.id WHERE user.id = ?1", nativeQuery = true)
     List<Long> findUserCourses(long userId);

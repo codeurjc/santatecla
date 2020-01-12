@@ -2,9 +2,9 @@
 <html>
   <body>
 
-    <!-- TOOLS BAR -->
-    <div class="toolsBar" *ngIf="loginService.isAdmin">
-      <mat-chip-list class="tools">
+    <!-- TOOLS BAR UNIT -->
+    <div [ngClass]="loginService.isAdmin ? 'toolsBar admin' : 'toolsBar student'">
+      <mat-chip-list *ngIf="loginService.isAdmin" class="tools">
         <button mat-button class="tool">
           <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
         </button>
@@ -20,22 +20,35 @@
       </mat-chip-list>
     </div>
 
+    <!-- TOOLS BAR COURSE-->
+
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
-      <div id="editor-container">
-        <textarea class="textAres" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
-      </div>
+      <mat-card id="editor-container">
+        <textarea class="text-area" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
+      </mat-card>
     </div>
 
     <!-- HTML REPRESENTATION -->
-    <div id="html-itinerary-representation-editor" *ngIf="loginService.isAdmin">
-      <img src="../../../../assets/img/spinner.gif" id="spinnerEditor" *ngIf="showSpinner">
-      <div [innerHTML]="contentHTML"></div>
-    </div>
-
-    <div id="html-itinerary-representation" *ngIf="!loginService.isAdmin">
-      <img src="../../../../assets/img/spinner.gif" id="spinner" *ngIf="showSpinner">
-      <div [innerHTML]="contentHTML"></div>
+    <div [ngClass]="loginService.isAdmin ? 'html-lesson-representation-editor' : 'html-lesson-view'">
+      <img [ngClass]="loginService.isAdmin ? 'spinner' : 'center'" src="../../../../assets/img/spinner.gif" *ngIf="showSpinner">
+      <h1 [ngClass]="!loginService.isAdmin ? 'html-lesson-title' : ''">{{lesson?.name}}</h1>
+      <div *ngIf="loginService.isAdmin">
+        <div *ngFor="let slide of contentHTML">
+          <mat-card class="slide-content">
+            <div [innerHTML]="slide"></div>
+          </mat-card>
+        </div>
+      </div>
+      <div *ngIf="(!loginService.isAdmin &&  !showSpinner)">
+        <mat-progress-bar class="progress" mode="determinate" value="{{progress}}"></mat-progress-bar>
+        <button mat-icon-button id="prev" (click)="(contentSlide === 0) || prevSlide()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <mat-card class="slide slide-content">
+          <div [innerHTML]="contentHTML[contentSlide]"></div>
+        </mat-card>
+        <button mat-icon-button id="next" (click)="(contentSlide === contentHTML.length-1) || nextSlide()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+        <mat-progress-bar class="progress" mode="determinate" value="{{progress}}"></mat-progress-bar>
+      </div>
     </div>
 
   </body>

@@ -66,6 +66,9 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {ModuleService} from './itinerary/module/module.service';
 import {UnitLessonService} from './itinerary/lesson/unit-lesson.service';
 import {UnitModuleService} from './itinerary/module/unit-module.service';
+import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
+import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
+import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rename.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +76,7 @@ import {UnitModuleService} from './itinerary/module/unit-module.service';
     LessonFormComponent,
     LessonComponent,
     ModuleComponent,
+    ModuleFormComponent,
     LoginComponent,
     MenuComponent,
     ViewComponent,
@@ -81,6 +85,7 @@ import {UnitModuleService} from './itinerary/module/unit-module.service';
     LessonEditorComponent,
     ModuleEditorComponent,
     UnitsCardsToolComponent,
+    UnitsBlocksToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
@@ -93,10 +98,12 @@ import {UnitModuleService} from './itinerary/module/unit-module.service';
     AnswerDefinitionDialogComponent,
     AddQuestionDialogComponent,
     HomeComponent,
-    ConfirmActionComponent
+    ConfirmActionComponent,
+    ModuleRenameComponent
   ],
   entryComponents: [
-    ConfirmActionComponent
+    ConfirmActionComponent,
+    ModuleRenameComponent
   ],
   imports: [
     ClipboardModule,

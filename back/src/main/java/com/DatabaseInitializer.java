@@ -255,6 +255,11 @@ public class DatabaseInitializer {
                 DefinitionQuestion definition2 = new DefinitionQuestion("Defina, según sus palabras, un tipo de paradigma");
                 DefinitionQuestion definition3 = new DefinitionQuestion("Defina, según sus palabras, dos tipos de paradigmas");
                 DefinitionQuestion definition4 = new DefinitionQuestion("Defina, según sus palabras, tres tipos de paradigmas");
+
+                definition2.addModule(module6);
+                definition3.addModule(module7);
+                definition4.addModule(module8);
+
                 unit1Definitions.add(definition1);
                 unit1Definitions.add(definition2);
                 unit1Definitions.add(definition3);
@@ -267,6 +272,8 @@ public class DatabaseInitializer {
                 possibleAnswers.add("Paradigmal imperativo");
                 TestQuestion test1 = new TestQuestion("Los lenguajes comunes de este paradigma son: LISP, Scheme, Haskell, Scala", possibleAnswers, "Paradigma funcional");
 
+                test1.addModule(module5);
+
                 possibleAnswers = new ArrayList<>();
                 possibleAnswers.add("Programación orientada a objetos");
                 possibleAnswers.add("Programación lógica");
@@ -275,6 +282,8 @@ public class DatabaseInitializer {
                 TestQuestion test2 = new TestQuestion( "Forma de escribir programación, " +
                         "utilizando solo tres estructuras: secuencial, selectiva e iterativa",
                         possibleAnswers, "Programación estructurada");
+
+                test2.addModule(module5);
 
                 unit1Tests.add(test1);
                 unit1Tests.add(test2);
@@ -668,24 +677,65 @@ public class DatabaseInitializer {
 
                 //Users
                 User user1 = new User("alumno", "alumno", "ROLE_USER");
-                User user2 = new User("David", "alumno", "ROLE_USER");
+                User user2 = new User("David Garcia", "alumno", "ROLE_USER");
+                User user3 = new User("Jesús Ramírez", "alumno", "ROLE_USER");
+                User user4 = new User("Alex Sánchez", "alumno", "ROLE_USER");
+                User user5 = new User("Nacho Jiménez", "alumno", "ROLE_USER");
+                User user6 = new User("Javi Gómez", "alumno", "ROLE_USER");
+                User user7 = new User("Pedro Laborde", "alumno", "ROLE_USER");
+                User user8 = new User("Maria Sánchez", "alumno", "ROLE_USER");
+                User user9 = new User("Gema Caballero", "alumno", "ROLE_USER");
+                User user10 = new User("Lucía Martín", "alumno", "ROLE_USER");
+                User user11 = new User("Paula Goya", "alumno", "ROLE_USER");
+                User user12 = new User("Lola Fernández", "alumno", "ROLE_USER");
+
                 userRepository.save(user1);
                 userRepository.save(user2);
+                userRepository.save(user3);
+                userRepository.save(user4);
+                userRepository.save(user5);
+                userRepository.save(user6);
+                userRepository.save(user7);
+                userRepository.save(user8);
+                userRepository.save(user9);
+                userRepository.save(user10);
+                userRepository.save(user11);
+                userRepository.save(user12);
+
                 User teacher = new User("profesor", "profesor", "ROLE_ADMIN");
                 userRepository.save(teacher);
-/*
+
                 // Courses
                 Course course = new Course("Lenguajes de programación", teacher, "Aprende lo básico de los lenguajes de programación más usados.");
                 course.addStudent(user1);
                 course.addStudent(user2);
-                course.setModule(module3);
+                course.addStudent(user3);
+                course.addStudent(user4);
+                course.addStudent(user5);
+                course.addStudent(user6);
+                course.addStudent(user7);
+                course.addStudent(user8);
+                course.addStudent(user9);
+                course.addStudent(user10);
+                course.addStudent(user11);
+                course.addStudent(user12);
+
+                course.setModule(module4);
                 courseRepository.save(course);
 
                 Course course2 = new Course("Curso de Java", teacher, "Aprende todo lo necesario para ser un experto en Java.");
                 course2.addStudent(user1);
+                course2.addStudent(user2);
+                course2.addStudent(user3);
+                course2.addStudent(user4);
+                course2.addStudent(user5);
+                course2.addStudent(user6);
+                course2.addStudent(user7);
+                course2.addStudent(user8);
+                course2.addStudent(user9);
+
                 course2.setModule(module3);
                 courseRepository.save(course2);
-*/
 	}
 
 }

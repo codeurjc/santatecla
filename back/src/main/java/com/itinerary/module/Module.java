@@ -20,14 +20,18 @@ public class Module extends Block {
         this.blocks = new ArrayList<>();
     }
 
-    public Module(String name){
+    public Module(String name) {
         super(name);
         this.blocks = new ArrayList<>();
     }
 
-    public void addBlock(Block block){
+    public void addBlock(Block block) {
         this.blocks.add(block);
         block.getParentsId().add(this.id);
+    }
+
+    public void update(Module module) {
+        this.name = module.name;
     }
 
     /********************

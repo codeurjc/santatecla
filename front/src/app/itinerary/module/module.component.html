@@ -23,7 +23,7 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>Renombrar</button>
+            <button mat-menu-item (click)="renameModule(module)">Renombrar</button>
             <button mat-menu-item>Copiar</button>
             <button mat-menu-item id="delete-option" (click)="deleteModule(module.id)">Eliminar</button>
           </mat-menu>

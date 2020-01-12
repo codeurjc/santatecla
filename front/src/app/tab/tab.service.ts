@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {LoginService} from '../auth/login.service';
 
 @Injectable()
 export class TabService {
@@ -9,14 +10,16 @@ export class TabService {
 
   courses = false;
   course = '';
+  courseId: number;
 
   lessons = false;
   lesson = '';
 
   modules = false;
   module = '';
+  moduleId: number;
 
-  constructor() {}
+  constructor(private loginService: LoginService) {}
 
   emptyAll() {
     this.units = false;
@@ -65,13 +68,35 @@ export class TabService {
     this.lesson = lessonName;
   }
 
-  setModule(unitName: string, unitId: number, moduleName: string) {
+  setLessonInModule(name: string, id: number, moduleName: string, moduleId: number, lessonName: string) {
     this.emptyAll();
-    this.units = true;
-    this.unit = unitName;
-    this.unitId = unitId;
-    this.modules = true;
+    if (this.loginService.isAdmin) {
+      this.units = true;
+      this.unit = name;
+      this.unitId = id;
+    } else {
+      this.courses = true;
+      this.course = name;
+      this.courseId = id;
+    }
     this.module = moduleName;
+    this.moduleId = moduleId;
+    this.lessons = true;
+    this.lesson = lessonName;
+  }
+
+  setModule(name: string, unitId: number, moduleName: string) {
+    this.emptyAll();
+    if (this.loginService.isAdmin) {
+      this.units = true;
+      this.unit = name;
+      this.unitId = unitId;
+      this.modules = true;
+      this.module = moduleName;
+    } else {
+      this.courses = true;
+      this.course = name;
+    }
   }
 
 }

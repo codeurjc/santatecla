@@ -1,13 +1,20 @@
 .toolsBar {
-  height: 6rem;
+  height: 6.2rem;
   padding-left: 0.5rem;
+}
+
+.admin {
   background-color: #5d306a;
+}
+
+.student {
+  background-color: #30376a;
 }
 
 .tools {
   color: white;
   position: absolute;
-  top: 3.6rem;
+  top: 3.7rem;
 }
 
 .tool {
@@ -25,46 +32,68 @@
 }
 
 #editor-container {
-  float: left;
   position: absolute;
-  width: 45%;
-  overflow: auto;
+  left: 0;
+  right: 55%;
+  top: 6.5rem;
+  bottom: 0.5rem;
   margin: 0.5rem;
 }
 
-.textAres {
+.text-area {
+  position: absolute;
   resize: none;
-  width: 89%;
-  height: 900px;
+  border: none;
+  width: 90%;
+  top: 0.5rem;
+  bottom: 0.5rem;
   padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 0.1rem solid #27273c;
   font-size: 15px;
 }
 
-#html-itinerary-representation-editor {
+.html-lesson-representation-editor {
+  position: absolute;
+  right: 0;
+  left: 45%;
+  top: 6.5rem;
+  bottom: 0.5rem;
   border-radius: 0.5rem;
-  padding: 0.5rem;
-  border: 0.1rem solid #27273c;
-  float: right;
-  width: 55%;
-  overflow: auto;
   margin: 0.5rem;
 }
 
-#html-itinerary-representation {
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  border: 0.1rem solid #27273c;
+.html-lesson-view {
   margin: 1rem;
 }
 
-#spinnerEditor {
+.html-lesson-title {
+  text-align: center;
+}
+
+.slide {
+  margin-top: 1rem;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.slide-content {
+  margin-bottom: 1rem;
+}
+
+.spinner {
   position: absolute;
   width: 10rem;
   height: 10rem;
   left: 65%;
   top: 40%;
+}
+
+.center {
+  position: absolute;
+  width: 10%;
+  margin-top: 20%;
+  margin-right: 45%;
+  margin-left: 45%;
+  z-index: 1000;
 }
 
 #spinner {
@@ -73,4 +102,23 @@
   height: 10rem;
   left: 44%;
   top: 40%;
+}
+
+#prev {
+  color: #30376a;
+  position: absolute;
+  left: 4%;
+  top: 50%;
+}
+
+#next {
+  color: #30376a;
+  position: absolute;
+  right: 4%;
+  top: 50%;
+}
+
+.progress {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
