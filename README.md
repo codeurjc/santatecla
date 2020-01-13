@@ -40,6 +40,38 @@ The student's profile can consult the courses the student is in. In this courses
 
 ### Screenshots
 
+Login.
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/0.login.PNG)
+
+<br/>
+<br/>
+
+Home. There are two areas: Units (you can manage the units and their content) and courses (you can model the content in courses).
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/1.profesor.PNG)
+
+<br/>
+<br/>
+
+Diagram of units. you can see the units, search and focus a unit, edit them, and add both new units and new relationships.
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/2.profesor.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/3.profesor.png)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/4.profesor.PNG)
+
+<br/>
+<br/>
+
+Cards. Here we can see the cards of each unit. We can edit them and add new ones.
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/5.profesor.PNG)
+
+<br/>
+<br/>
+
 ![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessonsList.PNG)
 
 ![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessoneditor.PNG)
