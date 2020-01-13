@@ -1,7 +1,8 @@
-#copyButton {
-  left: 10rem;
-}
-
 #unitSearcher {
   margin-left: 30%;
+}
+
+.card {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }

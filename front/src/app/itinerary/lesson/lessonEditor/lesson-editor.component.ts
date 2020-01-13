@@ -304,4 +304,16 @@ export class LessonEditorComponent implements OnInit {
     this.progress = this.progress - ((1 / (this.contentHTML.length)) * 100);
   }
 
+  scrollSlides() {
+    const div = document.getElementById('slide-area-editor');
+    const div2 = document.getElementById('text-area-editor');
+    div2.scrollTop = div.scrollTop;
+  }
+
+  scrollText() {
+    const div = document.getElementById('slide-area-editor');
+    const div2 = document.getElementById('text-area-editor');
+    div.scrollTop = div2.scrollTop;
+  }
+
 }

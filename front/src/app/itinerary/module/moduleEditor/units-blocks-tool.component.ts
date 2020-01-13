@@ -4,8 +4,8 @@ import {Unit} from '../../../unit/unit.model';
 import {UnitService} from '../../../unit/unit.service';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import { ClipboardService } from 'ngx-clipboard';
-import {Block} from "../../block.model";
-import {ModuleService} from "../module.service";
+import {Block} from '../../block.model';
+import {ModuleService} from '../module.service';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class UnitsBlocksToolComponent implements OnInit {
   units: Unit[];
   unitsResult: Unit[];
 
-  copyInfoPosition = 'before';
+  copyInfoPosition = 'after';
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,

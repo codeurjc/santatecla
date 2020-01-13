@@ -40,15 +40,32 @@
   margin: 0.5rem;
 }
 
+#html-lesson-editor {
+  top: 4.5rem;
+  height: 20rem;
+}
+
+.slides-container {
+  position: absolute;
+  height: calc(100vh - 15rem);
+  background-color: #f9f2fd;
+  overflow-y: scroll;
+}
+.slide-content {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
 .text-area {
   position: absolute;
   resize: none;
   border: none;
-  width: 90%;
+  width: 93%;
   top: 0.5rem;
   bottom: 0.5rem;
   padding: 0.5rem;
   font-size: 15px;
+  outline: none;
 }
 
 .html-lesson-representation-editor {
@@ -59,6 +76,7 @@
   bottom: 0.5rem;
   border-radius: 0.5rem;
   margin: 0.5rem;
+  height: 10rem;
 }
 
 .html-lesson-view {
@@ -75,16 +93,12 @@
   margin-right: 10%;
 }
 
-.slide-content {
-  margin-bottom: 1rem;
-}
-
 .spinner {
   position: absolute;
-  width: 10rem;
-  height: 10rem;
-  left: 65%;
-  top: 40%;
+  width: 10%;
+  margin-right: 45%;
+  margin-left: 45%;
+  margin-top: 30%;
 }
 
 .center {
@@ -94,14 +108,6 @@
   margin-right: 45%;
   margin-left: 45%;
   z-index: 1000;
-}
-
-#spinner {
-  position: absolute;
-  width: 10rem;
-  height: 10rem;
-  left: 44%;
-  top: 40%;
 }
 
 #prev {
