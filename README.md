@@ -81,3 +81,26 @@ Cards. Here we can see the cards of each unit. We can edit them and add new ones
 ![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/modulesList.PNG)
 
 ![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/moduleEditor.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/coursesList.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/addCourse.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/courseContent.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/courseStudents.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/questionsList.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/courseStudents.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/seguimientoModulo.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/seguimientoClase.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/curso.PNG)
+
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/studentCourses.PNG)
+
+
+
