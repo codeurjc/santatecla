@@ -40,6 +40,8 @@ export class LessonEditorComponent implements OnInit {
   contentSlide: number;
   progress: number;
 
+  index: string;
+
   lessonContent: any;
   lessonContentExtended: string;
 
@@ -129,6 +131,13 @@ export class LessonEditorComponent implements OnInit {
   viewHTMLVersion() {
     this.contentHTML = [];
     this.slidesContentExtended = this.lessonContentExtended.split('===');
+    if (!this.loginService.isAdmin) {
+      this.index = '=== Índice\n\n';
+      this.lesson.slides.forEach( (slide: Slide) => {
+        this.index = this.index + '. ' + slide.name + '\n';
+      });
+      this.contentHTML.push(convertToHTML(this.index));
+    }
     let counter = 0;
     this.slidesContentExtended.forEach( (slide: string) => {
       if (counter !== 0) {
