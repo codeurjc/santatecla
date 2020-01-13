@@ -38,14 +38,14 @@ The student's profile can consult the courses the student is in. In this courses
 
 ![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/DBModel6.png)
 
-### Captures
+### Screenshots
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessonsList.png)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessonsList.PNG)
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessoneditor.png)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessoneditor.PNG)
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessonView.png)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/lessonView.PNG)
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/modulesList.png)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/modulesList.PNG)
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/moduleEditor.png)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/moduleEditor.PNG)
