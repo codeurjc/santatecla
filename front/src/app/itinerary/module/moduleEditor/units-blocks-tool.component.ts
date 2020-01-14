@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Unit} from '../../../unit/unit.model';
 import {UnitService} from '../../../unit/unit.service';
@@ -26,7 +26,7 @@ export class UnitsBlocksToolComponent implements OnInit {
               private moduleService: ModuleService,
               private bottomSheetRef: MatBottomSheetRef<UnitsBlocksToolComponent>,
               private clipboardService: ClipboardService,
-              @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
+              @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
   }
 
   ngOnInit() {
@@ -63,6 +63,11 @@ export class UnitsBlocksToolComponent implements OnInit {
     } else {
       console.log('No se puede añadir');
     }
+  }
+
+  addModuleIntoCourse(event: MouseEvent, block: Block) {
+    this.bottomSheetRef.dismiss(block);
+    event.preventDefault();
   }
 
 }

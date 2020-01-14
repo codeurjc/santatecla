@@ -14,12 +14,16 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-tab-group>
-          <mat-tab *ngIf="unit.lessons.length > 0" label="Lecciones">
+          <mat-tab *ngIf="unit.lessons.length > 0 && this.data != undefined" label="Lecciones">
             <div *ngFor = "let lesson of unit.lessons">
               <mat-card class="cardin">
                 {{lesson.name}}
                 <button mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"
-                      (click)="addBlockInToModule($event, lesson)">
+                      (click)="addBlockInToModule($event, lesson)" *ngIf="this.data != undefined">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"
+                        (click)="addModuleIntoCourse($event, lesson)" *ngIf="this.data == undefined">
                   <mat-icon>add</mat-icon>
                 </button>
               </mat-card>
@@ -30,7 +34,11 @@
               <mat-card class="cardin">
                 {{module.name}}
                 <button mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"
-                        (click)="addBlockInToModule($event, module)">
+                        (click)="addBlockInToModule($event, module)" *ngIf="this.data != undefined">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"
+                        (click)="addModuleIntoCourse($event, module)" *ngIf="this.data == undefined">
                   <mat-icon>add</mat-icon>
                 </button>
               </mat-card>

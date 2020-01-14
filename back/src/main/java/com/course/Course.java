@@ -47,7 +47,6 @@ public class Course {
     public void update(Course course){
         this.name = course.name;
         this.description = course.description;
-        this.students = course.students;
         this.module = course.module;
         this.teacher = course.teacher;
     }

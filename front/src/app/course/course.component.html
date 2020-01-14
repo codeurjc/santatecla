@@ -28,7 +28,7 @@
   <div *ngIf="this.activeTab == 0">
     <h1 class="tab-group">
       {{course?.name}}
-      <div class="mat-button" [routerLink]="['/newCourse/'+this.course?.id]">
+      <div class="mat-button" (click)="openEditCourseDialog()">
         <mat-icon>edit</mat-icon>
       </div>
     </h1>
@@ -73,10 +73,6 @@
           </span>
       </mat-tab>
     </mat-tab-group>
-
-    <div class="center-align">
-      <mat-button-toggle class="save-button" (click)="navigateHome()">Volver a Mis Cursos</mat-button-toggle>
-    </div>
 
   </div>
 

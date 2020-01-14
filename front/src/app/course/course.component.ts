@@ -5,8 +5,9 @@ import {CourseService} from './course.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {Module} from '../itinerary/module/module.model';
-import {MatTreeNestedDataSource} from '@angular/material';
+import {MatDialog, MatTreeNestedDataSource} from '@angular/material';
 import {TabService} from '../tab/tab.service';
+import {NewCourseComponent} from './newCourse.component';
 
 @Component({
   templateUrl: './course.component.html',
@@ -27,7 +28,8 @@ export class CourseComponent implements OnInit {
               private courseService: CourseService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private tabService: TabService) {}
+              private tabService: TabService,
+              public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -42,15 +44,22 @@ export class CourseComponent implements OnInit {
 
   hasChild = (_: number, node: Module) => !!node && !!node.blocks && node.blocks.length > 0;
 
-  navigateHome() {
-    this.router.navigate(['courses']);
-  }
-
   private activateTab(tab: number) {
     this.activeTab = tab;
   }
 
   private setShowMenu(showMenu: boolean) {
     this.showMenu = showMenu;
+  }
+
+  openEditCourseDialog() {
+    const dialogRef = this.dialog.open(NewCourseComponent, {
+      width: '600px',
+      data: {data: this.course.id}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    });
   }
 }
