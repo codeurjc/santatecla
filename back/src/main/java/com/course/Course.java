@@ -41,6 +41,10 @@ public class Course {
     }
 
     public void addStudent(User user){
+        if(this.students.contains(user)){
+            System.out.println("CONTIENE");
+            return;
+        }
         this.students.add(user);
     }
 

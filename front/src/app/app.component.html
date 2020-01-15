@@ -7,7 +7,7 @@
   <body>
 
     <div *ngIf="!loginService.isLogged">
-      <app-login></app-login>
+      <app-login [url]="this.router.url"></app-login>
     </div>
 
     <div *ngIf="loginService.isLogged">

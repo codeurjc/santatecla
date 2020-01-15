@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
 import {UnitService} from '../unit/unit.service';
 import {Module} from '../itinerary/module/module.model';
-import {MAT_DIALOG_DATA, MatBottomSheet, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MAT_DIALOG_DATA, MatBottomSheet, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {UnitsBlocksToolComponent} from '../itinerary/module/moduleEditor/units-blocks-tool.component';
 import {MyCoursesComponent} from './myCourses.component';
 import {CourseComponent} from './course.component';
@@ -33,6 +33,7 @@ export class NewCourseComponent implements OnInit {
               private myCoursesDialogRef: MatDialogRef<MyCoursesComponent>,
               private courseDialogRef: MatDialogRef<CourseComponent>,
               private snackBar: MatSnackBar,
+              public dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -67,10 +68,10 @@ export class NewCourseComponent implements OnInit {
       this.course = {name : this.courseName, description: this.courseDescription};
       this.course.teacher = this.loginService.getCurrentUser();
       this.course.module = this.chosenModule;
-      this.showSpinner = true;
       this.courseService.postCourse(this.course).subscribe((data: Course) => {
+        this.copyUrl(data.id);
+        this.openError('La URL para acceder al curso ha sido copiada al portapapeles', 'Entendido');
         this.myCoursesDialogRef.close(1);
-        this.showSpinner = false;
       }, error => {console.log(error); } );
 
     } else {
@@ -104,6 +105,16 @@ export class NewCourseComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  copyUrl(id: number) {
+    const url = window.location.href.substring(0, window.location.href.length - 1) + '/' + id;
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (url));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
   }
 
 }

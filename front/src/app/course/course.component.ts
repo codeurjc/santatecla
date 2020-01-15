@@ -34,11 +34,19 @@ export class CourseComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.id = params.courseId;
-      this.courseService.getCourse(this.id).subscribe((data: Course) => {
-        this.course = data;
-        this.dataSource.data = this.course.module.blocks;
-        this.tabService.setCourse(this.course.name, this.course.id);
-      }, error => {console.log(error); });
+      if (this.loginService.isAdmin) {
+        this.courseService.getCourse(this.id).subscribe((data: Course) => {
+          this.course = data;
+          this.dataSource.data = this.course.module.blocks;
+          this.tabService.setCourse(this.course.name, this.course.id);
+        }, error => {
+          console.log(error);
+        });
+      } else {
+        this.courseService.addNewStudent(this.id, this.loginService.getCurrentUser()).subscribe((data: any) => {
+          this.router.navigate(['/courses']);
+        }, error => { console.log(error); } );
+      }
     });
   }
 

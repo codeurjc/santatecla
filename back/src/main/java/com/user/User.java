@@ -75,4 +75,14 @@ public class User {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	@Override
+	public boolean equals(Object o){
+		if (!(o instanceof User)){
+			return false;
+		}
+
+		User user = (User) o;
+		return this.id.equals(user.id);
+	}
 }

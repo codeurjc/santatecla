@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {User} from '../auth/login.service';
 
 @Injectable()
 export class CourseService {
@@ -9,15 +10,13 @@ export class CourseService {
     return this.http.get('/api/course/' + id);
   }
 
-  getUserDistinctAnswerCount(unitId: number, userId: number) {
-    return this.http.get('api/units/' + unitId + '/question/answer/' + userId + '/distinct');
-  }
+  addNewStudent(id: number, student: User) {
+    const body = JSON.stringify(student);
 
-  getUserBestUnit(courseId: number, userId: number) {
-    return this.http.get('api/course/' + courseId + '/user/' + userId + '/best');
-  }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
 
-  getUserWorstUnit(courseId: number, userId: number) {
-    return this.http.get('api/course/' + courseId + '/user/' + userId + '/worst');
+    return this.http.post<User>('/api/course/' + id + '/students/', body, {headers});
   }
 }

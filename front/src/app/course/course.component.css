@@ -27,11 +27,6 @@
   float: right;
 }
 
-.save-button {
-  margin-top: 5%;
-  background-color: lightgrey;
-}
-
 .result {
   padding: 1rem;
   cursor: pointer;
@@ -77,6 +72,11 @@
 
 .edit-course{
   cursor: pointer;
+}
+
+.save-course{
+  background-color: #7d3c90;
+  color: #ffffff
 }
 
 .bottom-margin{
