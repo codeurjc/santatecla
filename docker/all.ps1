@@ -5,6 +5,7 @@ docker run --rm --name angular-cli -v ${PWD}:/angular -w /angular node /bin/bash
 
 cd ../docker
 
-# .\create_image.bat
+.\create_image.bat
 
-# docker-compose up
+docker-compose up
+pause
