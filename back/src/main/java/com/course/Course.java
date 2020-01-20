@@ -41,13 +41,16 @@ public class Course {
     }
 
     public void addStudent(User user){
+        if(this.students.contains(user)){
+            System.out.println("CONTIENE");
+            return;
+        }
         this.students.add(user);
     }
 
     public void update(Course course){
         this.name = course.name;
         this.description = course.description;
-        this.students = course.students;
         this.module = course.module;
         this.teacher = course.teacher;
     }

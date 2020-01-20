@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoginService} from '../auth/login.service';
 
@@ -9,6 +9,8 @@ import {LoginService} from '../auth/login.service';
 })
 
 export class LoginComponent {
+  @Input()
+  url: string;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -19,10 +21,14 @@ export class LoginComponent {
     event.preventDefault();
     this.loginService.login(user, pass).subscribe(
       (u) => {
-        if (u.roles.includes('ROLE_ADMIN')) {
-          this.router.navigate(['/']);
+        if (this.url === '/') {
+          if (u.roles.includes('ROLE_ADMIN')) {
+            this.router.navigate(['/']);
+          } else {
+            this.router.navigate(['/courses']);
+          }
         } else {
-          this.router.navigate(['/courses']);
+          this.router.navigate([this.url]);
         }
       },
       (error) => alert('Invalid user or password'),

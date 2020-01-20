@@ -5,7 +5,8 @@ import {Course} from './course.model';
 import {Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
 import {TdDialogService} from '@covalent/core';
-import {MenuComponent} from '../menu/menu.component';
+import {MatDialog} from '@angular/material';
+import {NewCourseComponent} from './newCourse.component';
 
 @Component({
   templateUrl: './myCourses.component.html',
@@ -21,7 +22,8 @@ export class MyCoursesComponent implements OnInit {
               private courseService: MyCoursesService,
               private router: Router,
               private tabService: TabService,
-              private dialogService: TdDialogService) {
+              private dialogService: TdDialogService,
+              public dialog: MatDialog) {
     this.courses = [];
     this.showingCourses = [];
   }
@@ -64,6 +66,20 @@ export class MyCoursesComponent implements OnInit {
     } else {
       this.showingCourses = this.courses;
     }
+  }
+
+  openAddCourseDialog() {
+    const dialogRef = this.dialog.open(NewCourseComponent, {
+      width: '600px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result === 1) {
+        this.ngOnInit();
+      }
+    });
   }
 
 }

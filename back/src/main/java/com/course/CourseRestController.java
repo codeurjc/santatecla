@@ -82,6 +82,17 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping(value="/{id}/students/")
+    public ResponseEntity<Course> addStudent(@PathVariable long id, @RequestBody User newStudent){
+        Optional<Course> optional = this.courseService.findOne(id);
+        if(optional.isPresent()){
+            optional.get().addStudent(newStudent);
+            this.courseService.save(optional.get());
+            return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping(value="/search/{name}")
     public ResponseEntity<List<Course>> searchCourseByNameContaining(@PathVariable String name){
         List<Course> courses = this.courseService.searchCourseByNameContaining(name);

@@ -8,7 +8,7 @@
       <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()"/>
     </mat-form-field>
   </div>
-  <button mat-button *ngIf="this.loginService.isAdmin" id="new-course-button" [routerLink]="['/newCourse']">
+  <button mat-button *ngIf="this.loginService.isAdmin" id="new-course-button" (click)="openAddCourseDialog()">
     <mat-icon>add</mat-icon>
     Nuevo Curso
   </button>

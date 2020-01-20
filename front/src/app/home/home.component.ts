@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TabService} from "../tab/tab.service";
+import {LoginService} from '../auth/login.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +11,14 @@ import {TabService} from "../tab/tab.service";
 
 export class HomeComponent implements OnInit {
 
-  constructor(private tabService: TabService) {}
+  constructor(private tabService: TabService,
+              private loginService: LoginService,
+              private router: Router) {}
 
   ngOnInit() {
+    if (!this.loginService.isAdmin) {
+      this.router.navigate(['/courses']);
+    }
     this.tabService.setHome();
   }
 
