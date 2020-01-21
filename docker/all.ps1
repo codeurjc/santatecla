@@ -8,4 +8,3 @@ cd ../docker
 .\create_image.bat
 
 docker-compose up
-pause

@@ -10,3 +10,6 @@
 .angulardoc.json
 
 front/package-lock.json
+
+### Docker ###
+docker/build/
