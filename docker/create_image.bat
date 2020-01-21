@@ -14,7 +14,7 @@ copy target\back-0.0.1-SNAPSHOT.jar ..\docker\build\
 cd ../docker
 
 :: Delete previous back image
-docker rmi -f back
+docker rmi -f sigma98/back
 
 :: Build back image
-docker build -t back .
+docker build -t sigma98/back .
