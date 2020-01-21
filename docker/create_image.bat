@@ -1,8 +1,8 @@
 cd ../front
 
 :: Copy generated resources on static
-del /Q ..\back\src\main\resources\static\new\*
-copy /Y dist\front\* ..\back\src\main\resources\static\new
+del /Q ..\back\src\main\resources\static\*
+copy /Y dist\front\* ..\back\src\main\resources\static
 
 cd ../back
 

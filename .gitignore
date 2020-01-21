@@ -11,5 +11,6 @@
 
 front/package-lock.json
 
-### Docker ###
+### Docker build ###
 docker/build/
+back/src/main/resources/static/
