@@ -50,6 +50,8 @@ Pull requests have to be able to be merged into develop automatically:
 
 - Recommended (into feature branch): `git merge --no-ff origin/develop`
 
+After approving and merging pull request, feature branch must be deleted.
+
 ### Versioning:
 
 **X.Y.Z**
