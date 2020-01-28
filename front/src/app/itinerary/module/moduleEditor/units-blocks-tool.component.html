@@ -2,12 +2,21 @@
 <html>
   <body>
 
+  <p></p>
+
+  <button mat-raised-button style="margin-left: 43%"
+          matTooltip="En primer lugar selecciona una unidad. A continuación, podrás elegir entre los módulos de dicha unidad que puedes introducir al curso.">
+    <mat-icon>live_help</mat-icon>
+  </button>
+
+  <p></p>
+
     <mat-form-field id="searcher">
       <input matInput (keyup)="applyFilterUnits($event.target.value)" placeholder="Nombre de la unidad">
     </mat-form-field>
 
     <mat-accordion *ngFor = "let unit of this.unitsResult">
-      <mat-expansion-panel class="card">
+      <mat-expansion-panel class="card" *ngIf="unit.modules.length != 0 || this.data != undefined">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{unit.name}}
@@ -20,10 +29,6 @@
                 {{lesson.name}}
                 <button mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"
                       (click)="addBlockInToModule($event, lesson)" *ngIf="this.data != undefined">
-                  <mat-icon>add</mat-icon>
-                </button>
-                <button mat-icon-button matTooltip="Añadir" [matTooltipPosition]="copyInfoPosition"
-                        (click)="addModuleIntoCourse($event, lesson)" *ngIf="this.data == undefined">
                   <mat-icon>add</mat-icon>
                 </button>
               </mat-card>
