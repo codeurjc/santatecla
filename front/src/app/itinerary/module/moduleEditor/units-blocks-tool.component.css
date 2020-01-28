@@ -11,6 +11,10 @@
   margin: 0.5rem;
 }
 
+.add-course-tooltip{
+  margin-left: 43%;
+}
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   color: #9e2abb !important;
 }
