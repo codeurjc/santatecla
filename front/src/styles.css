@@ -299,3 +299,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #5d306a;
 }
+
+.mat-tooltip.tooltip {
+  font-size: 13px;
+}
+
