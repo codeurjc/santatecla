@@ -4,8 +4,9 @@
 
   <p></p>
 
-  <button mat-raised-button style="margin-left: 43%"
-          matTooltip="En primer lugar selecciona una unidad. A continuación, podrás elegir entre los módulos de dicha unidad que puedes introducir al curso.">
+  <button mat-raised-button [matTooltipClass]="'tooltip'"
+          matTooltip="En primer lugar selecciona una unidad. A continuación, podrás elegir entre los módulos de dicha unidad que puedes introducir al curso."
+          class="add-course-tooltip">
     <mat-icon>live_help</mat-icon>
   </button>
 
