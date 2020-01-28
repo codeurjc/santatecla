@@ -113,4 +113,12 @@ export class QuestionService {
 
     return this.http.post(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer', body, {headers});
   }
+
+  getQuestionCorrectCount(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/' + questionId + '/correctCount');
+  }
+
+  getQuestionWrongCount(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/' + questionId + '/wrongCount');
+  }
 }
