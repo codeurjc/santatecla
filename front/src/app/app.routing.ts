@@ -21,6 +21,7 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {CourseComponent} from './course/course.component';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
 import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
+import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
 
 
 const appRoutes = [
@@ -39,6 +40,7 @@ const appRoutes = [
   { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'course/:courseId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
+  { path: 'units/:unitId/question/:questionId', component: QuestionTrackingComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
   { path: 'addQuestionDialog', component: AddQuestionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
