@@ -121,4 +121,8 @@ export class QuestionService {
   getQuestionWrongCount(unitId, questionId: number) {
     return this.http.get(this.baseUrl + unitId + '/question/' + questionId + '/wrongCount');
   }
+
+  getTestQuestionWrongAnswerCount(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/test/' + questionId + '/chosenWrongAnswersCount');
+  }
 }

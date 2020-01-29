@@ -7,13 +7,34 @@
 <body>
   <h1>HOLA</h1>
 
-  <div *ngIf="this.resultsReady">
-    <ngx-charts-pie-chart
-      [view]="[250, 250]"
-      [results]="this.chartResults"
-      [animations]="true"
-      [customColors]="[{name:'Respuestas Correctas',value:'#26d469'}, {name:'Respuestas Incorrectas',value:'#de4d40'}]">
-    </ngx-charts-pie-chart>
+  <div *ngIf="this.resultsReady" class="display-flex">
+    <mat-card class="charts-cards">
+      <mat-card-content class="center-charts">
+        <ngx-charts-pie-chart
+          [view]="[400, 250]"
+          [results]="this.chartResults"
+          [animations]="true"
+          [customColors]="[{name:'Respuestas Correctas',value:'#26d469'}, {name:'Respuestas Incorrectas',value:'#de4d40'}]"
+          [legend]="true"
+          [legendPosition]="true"
+          [legendTitle]="'Leyenda'">
+        </ngx-charts-pie-chart>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="charts-cards" *ngIf="this.questionType == 'TestQuestion'">
+      <mat-card-content class="center-charts">
+        <ngx-charts-bar-vertical
+        [view]="[400, 250]"
+        [results]="this.testChartResults"
+        [animations]="true"
+        [xAxis]="true"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="'Respuesta'"
+        [yAxisLabel]="'Número de Respuestas'">
+        </ngx-charts-bar-vertical>
+      </mat-card-content>
+    </mat-card>
   </div>
 </body>
 </html>

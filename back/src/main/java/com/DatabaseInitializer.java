@@ -18,6 +18,7 @@ import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
 import com.question.list.list_question.ListQuestionRepository;
+import com.question.test.test_answer.TestAnswer;
 import com.question.test.test_question.TestQuestion;
 import com.question.test.test_question.TestQuestionRepository;
 import com.relation.Relation;
@@ -29,6 +30,7 @@ import com.unit.UnitRepository;
 import com.user.User;
 import com.user.UserRepository;
 
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -348,8 +350,39 @@ public class DatabaseInitializer {
                 possibleAnswers.add("Paradigma orientado a objetos");
                 possibleAnswers.add("Paradigmal imperativo");
                 TestQuestion test1 = new TestQuestion("Los lenguajes comunes de este paradigma son: LISP, Scheme, Haskell, Scala", possibleAnswers, "Paradigma funcional");
+                TestAnswer testAnswer1 = new TestAnswer();
+                testAnswer1.setAnswerText("Paradigma lógico");
+                testAnswer1.setCorrect(false);
+                TestAnswer testAnswer2 = new TestAnswer();
+                testAnswer2.setAnswerText("Paradigma lógico");
+                testAnswer2.setCorrect(false);
+                TestAnswer testAnswer3 = new TestAnswer();
+                testAnswer3.setAnswerText("Paradigma lógico");
+                testAnswer3.setCorrect(false);
+                TestAnswer testAnswer4 = new TestAnswer();
+                testAnswer4.setAnswerText("Paradigma orientado a objetos");
+                testAnswer4.setCorrect(false);
+                TestAnswer testAnswer5 = new TestAnswer();
+                testAnswer5.setAnswerText("Paradigmal imperativo");
+                testAnswer5.setCorrect(false);
+                TestAnswer testAnswer6 = new TestAnswer();
+                testAnswer6.setAnswerText("Paradigmal imperativo");
+                testAnswer6.setCorrect(false);
+                TestAnswer testAnswer7 = new TestAnswer();
+                testAnswer7.setAnswerText("Paradigmal funcional");
+                testAnswer7.setCorrect(true);
+
+                test1.addAnswer(testAnswer1);
+                test1.addAnswer(testAnswer2);
+                test1.addAnswer(testAnswer3);
+                test1.addAnswer(testAnswer4);
+                test1.addAnswer(testAnswer5);
+                test1.addAnswer(testAnswer6);
+                test1.addAnswer(testAnswer7);
 
                 test1.addModule(module5);
+                test1.setTotalCorrectAnswers(1);
+                test1.setTotalWrongAnswers(6);
 
                 possibleAnswers = new ArrayList<>();
                 possibleAnswers.add("Programación orientada a objetos");

@@ -26,7 +26,7 @@
           <ng-container matColumnDef="question">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Pregunta </th>
             <td mat-cell *matCellDef="let question">
-              <a [routerLink]="['question', question.id]">{{question.questionText}} </a>
+              <a [routerLink]="['question', question.subtype, question.id]">{{question.questionText}} </a>
             </td>
           </ng-container>
 

@@ -137,3 +137,16 @@ th.mat-sort-header-sorted {
 .text-secondary {
   color: gray;
 }
+
+.display-flex {
+  display: flex;
+}
+
+.charts-cards {
+  position: relative;
+  width: 50%;
+}
+
+.center-charts {
+  margin-left: 25%;
+}

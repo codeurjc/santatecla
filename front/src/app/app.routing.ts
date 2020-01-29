@@ -40,7 +40,7 @@ const appRoutes = [
   { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'course/:courseId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
-  { path: 'unit/:unitId/question/:questionId', component: QuestionTrackingComponent },
+  { path: 'unit/:unitId/question/:questionType/:questionId', component: QuestionTrackingComponent },
   { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
   { path: 'addQuestionDialog', component: AddQuestionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
