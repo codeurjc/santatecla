@@ -230,3 +230,7 @@ mat-label {
 #path {
   stroke: #27273c;
 }
+
+.level-selector {
+  margin-right: 10rem;
+}

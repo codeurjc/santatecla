@@ -15,7 +15,28 @@
       </mat-form-field>
     </div>
     <mat-icon id="hide-menu-button" [ngClass]="showMenu ? 'show-hide-menu-button' : 'hidden-hide-menu-button'" (click)="setShowMenu(!showMenu)">reorder</mat-icon>
-    <div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'"></div>
+
+    <div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
+
+      <mat-form-field class="level-selector">
+        <mat-label>Nivel padres</mat-label>
+        <mat-select [value]="parentLevel">
+          <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(level, null)">
+            <span *ngIf="level == -1">Todos</span>
+            <span *ngIf="level != -1">{{level}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="level-selector">
+        <mat-label>Nivel hijos</mat-label>
+        <mat-select [value]="childrenLevel">
+          <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(null, level)">
+            <span *ngIf="level == -1">Todos</span>
+            <span *ngIf="level != -1">{{level}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <div id="json-editor-container" [hidden]="hideJson">
       <json-editor [options]="editorOptions" [(ngModel)]="data"></json-editor>
@@ -36,10 +57,6 @@
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">
       <div id="uml-node-options">
-
-        <button title="Cargar padre" id="up-button" class="uml-options-button" [hidden]="disableUpButton" (click)="upLevelAbove()">
-          <mat-icon class="button-icon">keyboard_arrow_up</mat-icon>
-        </button>
 
         <button id="composition-incoming-button" class="uml-options-button"><img src="../../assets/img/add-composition-incoming.png" height="15"></button>
         <button id="composition-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-composition-outgoing.png" height="15"></button>

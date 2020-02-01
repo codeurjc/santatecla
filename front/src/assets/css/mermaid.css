@@ -382,10 +382,15 @@ g.classGroup rect {
   cursor: pointer;
 }
 
-g.classGroup rect[id^="0"] {
+g.classGroup rect[id^="N0"] {
   fill: #fafffb;
   stroke: #03ca24;
   cursor: pointer;
+}
+
+g.classGroup rect[id^="F"] {
+  fill: #f8eefa;
+  stroke-width: 0.15rem;
 }
 
 g.classGroup line {

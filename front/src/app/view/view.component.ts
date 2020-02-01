@@ -38,13 +38,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     relations: []
   };
 
+  private parentLevel = 1;
+  private childrenLevel = -1;
+  private selectLevelOptions = [-1, 1, 2, 3, 5];
+
   private focusedUnitId;
   private units: Map<string, Unit> = new Map<string, Unit>();
   private relations = new Map<string, Relation>();
   private remainingUnits = 0;
 
   private showMenu = true;
-  private disableUpButton = false;
 
   private newUnitId = 0;
   private newRelationId = 0;
@@ -100,23 +103,39 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.units.clear();
     this.relations.clear();
     this.remainingUnits = 0;
-    this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>());
+    this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>(), this.parentLevel, this.childrenLevel);
   }
 
-  private getUnitAndUpdateUml(id: number, visited: Set<number>) {
+  private getUnitAndUpdateUml(id: number, visited: Set<number>, remainingParentLevel: number, remainingChildrenLevel: number) {
     this.remainingUnits--;
     visited.add(id);
     this.unitService.getUnit(id).subscribe((data: Unit) => {
       this.addUnit(data);
-      this.remainingUnits += data.incomingRelations.length + 1;
+      this.remainingUnits += data.incomingRelations.length + data.outgoingRelations.length + 1;
+
       data.incomingRelations.forEach((relation: Relation) => {
         this.remainingUnits--;
         if (!this.getRelationById(relation.id.toString())) {
           const outgoing = +relation.outgoing;
-          if (!visited.has(outgoing)) {
-            this.getUnitAndUpdateUml(outgoing, visited);
+          if (remainingChildrenLevel !== 0) {
+            if (!visited.has(outgoing)) {
+              this.getUnitAndUpdateUml(outgoing, visited, 0, remainingChildrenLevel - 1);
+            }
+            this.addRelation(relation);
           }
-          this.addRelation(relation);
+        }
+      });
+
+      data.outgoingRelations.forEach((relation: Relation) => {
+        this.remainingUnits--;
+        if (!this.getRelationById(relation.id.toString())) {
+          const incoming = +relation.incoming;
+          if (remainingParentLevel !== 0) {
+            if (!visited.has(incoming)) {
+              this.getUnitAndUpdateUml(incoming, visited, remainingParentLevel - 1, 0);
+            }
+            this.addRelation(relation);
+          }
         }
       });
 
@@ -124,9 +143,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.updateUml();
         this.emptyResults();
         this.showSpinner = false;
-
-
-
 
         let i = 0;
         this.units.forEach((unit: Unit) => {
@@ -144,18 +160,25 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           });
         });
 
-
-
       }
+
     }, error => {
       console.log(error);
     });
   }
 
-  private upLevelAbove() {
-    this.unitService.getParent(this.focusedUnitId).subscribe((parent: Unit) => {
-      this.focusUnit(+parent.id);
-    });
+  private reloadLevels(newParentLevel, newChildrenLevel) {
+    if (newParentLevel) {
+      if (newParentLevel !== this.parentLevel) {
+        this.parentLevel = newParentLevel;
+        this.focusUnit(+this.focusedUnitId);
+      }
+    } else if (newChildrenLevel) {
+      if (newChildrenLevel !== this.childrenLevel) {
+        this.childrenLevel = newChildrenLevel;
+        this.focusUnit(+this.focusedUnitId);
+      }
+    }
   }
 
   private addUnit(unit: Unit) {
@@ -281,8 +304,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } catch (error) {}
   }
 
+  private getSelectedUnitId(target): string {
+    return target.id.toString().substring(1, target.id.length);
+  }
+
   private updateUnitName() {
-    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
+    const selectedUnit: Unit = this.getUnitById(this.getSelectedUnitId(this.selectedTarget));
     this.changed = ((this.changed) || (selectedUnit.name !== this.umlNodeOptions.nativeElement.firstChild.value));
     selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
     this.setShowUmlNodeOptions(false);
@@ -291,7 +318,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private createUnit(relationType): Unit {
-    const selectedUnit: Unit = this.getUnitById(this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length));
+    const selectedUnit: Unit = this.getUnitById(this.getSelectedUnitId(this.selectedTarget));
     const newUnitName = 'Nueva unidad';
     const newUnit: Unit = {
       id: this.getNewUnitId().toString(),
@@ -302,7 +329,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const newRelation: Relation = {
       id: this.getNewRelationId().toString(),
       relationType,
-      incoming: this.selectedTarget.id.toString().substring(0, this.selectedTarget.id.length),
+      incoming: this.getSelectedUnitId(this.selectedTarget),
       outgoing: newUnit.id.toString()
     };
     newUnit.outgoingRelations.push(newRelation);
@@ -363,8 +390,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       window.scroll(0, 0);
       if (result === 1) {
-        this.unitService.deleteUnit(+this.selectedTarget.id).subscribe(() => {
-          if (+this.focusedUnitId === +this.selectedTarget.id) {
+        this.unitService.deleteUnit(+this.getSelectedUnitId(this.selectedTarget)).subscribe(() => {
+          if (+this.focusedUnitId === +this.getSelectedUnitId(this.selectedTarget)) {
             let focused = false;
             this.getUnitById(this.focusedUnitId.toString()).incomingRelations.forEach((relation: Relation) => {
               if ((!focused) && (this.focusedUnitId.toString() !== relation.outgoing.toString())) {
@@ -409,7 +436,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     let target: HTMLInputElement = null;
     this.umlDiv.nativeElement.firstChild.childNodes.forEach((childNode) => {
       const firstChild = childNode.firstChild as HTMLInputElement;
-      if ((!found) && (firstChild) && (firstChild.id) && (firstChild.id.toString().substring(0, firstChild.id.length) === id.toString())) {
+      if ((!found) && (firstChild) && (firstChild.id) && (this.getSelectedUnitId(firstChild) === id.toString())) {
         target = firstChild;
         found = true;
       }
@@ -432,12 +459,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
     optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
     optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
-    this.disableUpButton = true;
-    if (+this.focusedUnitId === +this.selectedTarget.id) {
-      this.unitService.getParent(+this.focusedUnitId).subscribe((parent: Unit) => {
-        this.disableUpButton = (parent === null);
-      });
-    }
   }
 
   private updateUmlNodeOptions() {
@@ -559,7 +580,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
         this.creatingRelation = {
           relationType: RelationType.COMPOSITION,
-          outgoing: this.selectedTarget.id.toString(),
+          outgoing: this.getSelectedUnitId(this.selectedTarget),
           boundingClientRect: this.selectedTarget.getBoundingClientRect()
         };
         this.closeUmlNodeOptions();
@@ -606,7 +627,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       }
     } else {
       if ((target.tagName === 'rect') || (target.tagName === 'text')) {
-        this.createRelation(this.creatingRelation.relationType, this.getUnitById(target.id.toString().substring(0, target.id.toString().length)), this.getUnitById(this.creatingRelation.outgoing));
+        this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.getSelectedUnitId(target)), this.getUnitById(this.creatingRelation.outgoing));
       }
       this.creatingRelation = null;
       this.umlNewPath.nativeElement.setAttribute('d','');
@@ -618,7 +639,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.creatingRelation = null;
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
-      const id = target.id.toString().substring(0, target.id.toString().length);
+      const id = this.getSelectedUnitId(target);
       if (this.changed) {
         const dialogRef = this.dialog.open(ConfirmActionComponent, {
           data: {
@@ -790,7 +811,13 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private parseUnitName(id: string): string {
-    let name = id;
+    let name = "";
+    if (id.toString() === this.focusedUnitId.toString()) {
+      name = 'F';
+    } else {
+      name = 'N';
+    }
+    name += id;
     const unit = this.getUnitById(id);
     if (unit) {
       name += unit.name;
