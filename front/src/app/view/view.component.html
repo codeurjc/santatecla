@@ -2,9 +2,13 @@
 <html>
   <body>
 
-    <div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
+    <div id="top-panel">
+
       <mat-form-field appearance="outline" id="search">
-        <mat-label>Buscar unidad</mat-label>
+        <mat-label>
+          <mat-icon id="search-icon">search</mat-icon>
+          <span id="search-label">Buscar unidad</span>
+        </mat-label>
         <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)"/>
         <div id="result-list" *ngIf="showResults">
           <div id="result" *ngFor="let result of results; let i = index" [class.active]="i==arrowKeyLocation" (mouseover)="setActive(i)">
@@ -13,36 +17,39 @@
           </div>
         </div>
       </mat-form-field>
+
+      <span *ngIf="loadedUnit">
+        <mat-form-field class="level-selector">
+          <mat-label>Nivel padres</mat-label>
+          <mat-select [value]="parentLevel">
+            <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(level, null)">
+              <span *ngIf="level == -1">Todos</span>
+              <span *ngIf="level != -1">{{level}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="level-selector">
+          <mat-label>Nivel hijos</mat-label>
+          <mat-select [value]="childrenLevel">
+            <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(null, level)">
+              <span *ngIf="level == -1">Todos</span>
+              <span *ngIf="level != -1">{{level}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </span>
+
     </div>
-    <mat-icon id="hide-menu-button" [ngClass]="showMenu ? 'show-hide-menu-button' : 'hidden-hide-menu-button'" (click)="setShowMenu(!showMenu)">reorder</mat-icon>
 
-    <div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
-
-      <mat-form-field class="level-selector">
-        <mat-label>Nivel padres</mat-label>
-        <mat-select [value]="parentLevel">
-          <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(level, null)">
-            <span *ngIf="level == -1">Todos</span>
-            <span *ngIf="level != -1">{{level}}</span>
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="level-selector">
-        <mat-label>Nivel hijos</mat-label>
-        <mat-select [value]="childrenLevel">
-          <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(null, level)">
-            <span *ngIf="level == -1">Todos</span>
-            <span *ngIf="level != -1">{{level}}</span>
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div *ngIf="!loadedUnit" id="tips">
+      Busca una unidad para ver su diagrama
     </div>
 
     <div id="json-editor-container" [hidden]="hideJson">
       <json-editor [options]="editorOptions" [(ngModel)]="data"></json-editor>
     </div>
 
-    <button mat-button [ngClass]="changed ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
+    <button *ngIf="loadedUnit" mat-button [ngClass]="changed ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
       <mat-icon>save</mat-icon>
       Guardar
     </button>
@@ -52,7 +59,7 @@
       <span id="spinner-text">Cargando...</span>
     </div>
 
-    <div [ngClass]="showMenu ? 'uml-content uml-content-with-menu' : 'uml-content uml-content-without-menu'" #uml></div>
+    <div class="uml-content" #uml></div>
 
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">

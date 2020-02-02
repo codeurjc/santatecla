@@ -38,8 +38,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     relations: []
   };
 
+  private loadedUnit = false;
+
   private parentLevel = 1;
-  private childrenLevel = -1;
+  private childrenLevel = 5;
   private selectLevelOptions = [-1, 1, 2, 3, 5];
 
   private focusedUnitId;
@@ -76,7 +78,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     window.document.body.style.overflow = 'hidden';
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.mode = 'code';
-    this.focusUnit(1);
+    this.focusUnit(null);
   }
 
   ngAfterContentInit() {
@@ -98,12 +100,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Data
 
   private focusUnit(id: number) {
-    this.showSpinner = true;
-    this.focusedUnitId = id;
-    this.units.clear();
-    this.relations.clear();
-    this.remainingUnits = 0;
-    this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>(), this.parentLevel, this.childrenLevel);
+    if (id) {
+      this.loadedUnit = true;
+      this.showSpinner = true;
+      this.focusedUnitId = id;
+      this.units.clear();
+      this.relations.clear();
+      this.remainingUnits = 0;
+      this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>(), this.parentLevel, this.childrenLevel);
+    } else {
+      this.loadedUnit = false;
+    }
   }
 
   private getUnitAndUpdateUml(id: number, visited: Set<number>, remainingParentLevel: number, remainingChildrenLevel: number) {
@@ -552,10 +559,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       // Search
       if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
         this.focusUnit(+this.results[this.arrowKeyLocation].id);
-      } else if ((target.attributes) && (target.attributes['class']) &&
-        ((target.attributes['class'].nodeValue === 'mat-form-field-flex') ||
-          (target.attributes['class'].nodeValue.includes('mat-form-field-outline')) ||
-          (target.attributes['class'].nodeValue === 'mat-form-field-infix') || (target.id === 'search-input'))) {
+      } else if ((target.attributes) && (target.attributes['class']) && (target.id === 'search-input')) {
         this.setShowResults(true);
       } else {
         this.setShowResults(false);
