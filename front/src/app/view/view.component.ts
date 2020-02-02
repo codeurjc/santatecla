@@ -41,8 +41,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private loadedUnit = false;
 
   private parentLevel = 1;
-  private childrenLevel = 5;
-  private selectLevelOptions = [-1, 1, 2, 3, 5];
+  private childrenLevel = 3;
+  private selectLevelOptions = [0, 1, 2, 3, -1];
 
   private focusedUnitId;
   private units: Map<string, Unit> = new Map<string, Unit>();
@@ -175,12 +175,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private reloadLevels(newParentLevel, newChildrenLevel) {
-    if (newParentLevel) {
+    if (newParentLevel != null) {
       if (newParentLevel !== this.parentLevel) {
         this.parentLevel = newParentLevel;
         this.focusUnit(+this.focusedUnitId);
       }
-    } else if (newChildrenLevel) {
+    } else if (newChildrenLevel != null) {
       if (newChildrenLevel !== this.childrenLevel) {
         this.childrenLevel = newChildrenLevel;
         this.focusUnit(+this.focusedUnitId);
