@@ -336,6 +336,9 @@ public class DatabaseInitializer {
                 DefinitionQuestion definition3 = new DefinitionQuestion("Defina, según sus palabras, dos tipos de paradigmas");
                 DefinitionQuestion definition4 = new DefinitionQuestion("Defina, según sus palabras, tres tipos de paradigmas");
 
+                definition1.setTotalCorrectAnswers(3);
+                definition1.setTotalWrongAnswers(8);
+
                 definition2.addModule(module6);
                 definition3.addModule(module7);
                 definition4.addModule(module8);

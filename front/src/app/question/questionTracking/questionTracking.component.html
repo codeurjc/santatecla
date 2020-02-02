@@ -5,14 +5,17 @@
     <title>Title</title>
 </head>
 <body class="question-tracking">
-  <h1>HOLA</h1>
+  <h1 class="center-title">Resumen de resultados</h1>
+
+  <h3 class="center-title">Pregunta: {{this.question?.questionText}}</h3>
 
   <div *ngIf="this.resultsReady" class="display-flex">
     <mat-card class="charts-cards">
-      <mat-card-content class="center-charts">
+      <mat-card-title class="center-title">Respuestas Correctas e Incorrectas</mat-card-title>
+      <mat-card-content class="center-pie-chart">
         <ngx-charts-pie-chart
           [view]="[400, 250]"
-          [results]="this.chartResults"
+          [results]="this.pieChartResults"
           [animations]="true"
           [customColors]="[{name:'Respuestas Correctas',value:'#26d469'}, {name:'Respuestas Incorrectas',value:'#de4d40'}]"
           [legend]="true"
@@ -21,11 +24,12 @@
         </ngx-charts-pie-chart>
       </mat-card-content>
     </mat-card>
-    <mat-card class="charts-cards" *ngIf="this.questionType == 'TestQuestion'">
-      <mat-card-content class="center-charts">
+    <mat-card class="charts-cards" *ngIf="this.questionType != 'DefinitionQuestion'">
+      <mat-card-title class="center-title">Dentro de las respuestas incorrectas, las respuestas erróneas elegidas son las siguientes</mat-card-title>
+      <mat-card-content class="center-bar-chart">
         <ngx-charts-bar-vertical
-        [view]="[400, 250]"
-        [results]="this.testChartResults"
+        [view]="[600, 250]"
+        [results]="this.barChartResults"
         [animations]="true"
         [xAxis]="true"
         [showXAxisLabel]="true"

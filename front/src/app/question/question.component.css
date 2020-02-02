@@ -147,12 +147,22 @@ th.mat-sort-header-sorted {
   width: 50%;
 }
 
-.center-charts {
-  margin-left: 25%;
+.center-pie-chart {
+  margin-left: 20%;
+  margin-top: 10%;
+}
+
+.center-bar-chart {
+  margin-left: 10%;
+  margin-top: 10%
 }
 
 .question-tracking {
   margin-top: 4rem;
   margin-left: 4rem;
   position: relative;
+}
+
+.center-title{
+  text-align: center;
 }

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {QuestionService} from '../question.service';
+import {Question} from '../question.model';
 
 
 @Component({
@@ -14,13 +15,15 @@ export class QuestionTrackingComponent implements OnInit {
   questionId: number;
   questionType: string;
 
+  question: Question;
+
   correctCount: number;
   wrongCount: number;
 
   resultsReady = false;
 
-  chartResults = [];
-  testChartResults = [];
+  pieChartResults = [];
+  barChartResults = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,15 +49,33 @@ export class QuestionTrackingComponent implements OnInit {
       if (this.questionType === 'TestQuestion') {
         this.questionService.getTestQuestionWrongAnswerCount(this.unitId, this.questionId).subscribe((data: any) => {
           for (let element of data) {
-            this.testChartResults.push({name: element[0], value: element[1]});
+            this.barChartResults.push({name: element[0], value: element[1]});
           }
+        }, error => { console.log(error); });
+
+        this.questionService.getUnitTestQuestion(this.unitId, this.questionId).subscribe((data: any) => {
+          this.question = data;
+        }, error => { console.log(error); });
+      } else if (this.questionType === 'ListQuestion') {
+        this.questionService.getListQuestionWrongAnswerCount(this.unitId, this.questionId).subscribe((data: any) => {
+          for (let element of data) {
+            this.barChartResults.push({name: element[0], value: element[1]});
+          }
+        }, error => { console.log(error); });
+
+        this.questionService.getUnitListQuestion(this.unitId, this.questionId).subscribe((data: any) => {
+          this.question = data;
+        }, error => { console.log(error); });
+      } else if (this.questionType === 'DefinitionQuestion') {
+        this.questionService.getUnitDefinitionQuestion(this.unitId, this.questionId).subscribe((data: any) => {
+          this.question = data;
         }, error => { console.log(error); });
       }
     });
   }
 
   buildCorrectWrongChart() {
-    this.chartResults.push({name: 'Respuestas Correctas', value: this.correctCount});
-    this.chartResults.push({name: 'Respuestas Incorrectas', value: this.wrongCount});
+    this.pieChartResults.push({name: 'Respuestas Correctas', value: this.correctCount});
+    this.pieChartResults.push({name: 'Respuestas Incorrectas', value: this.wrongCount});
   }
 }
