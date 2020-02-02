@@ -269,7 +269,7 @@ mat-label {
   top: -1.6em;
 }
 
-::ng-deep #search > .mat-form-field-wrapper > .mat-form-field-flex > .mat-form-field-infix {
+::ng-deep .mat-form-field-infix {
   padding: 0.2em 0 !important;
 }
 
