@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {QuestionService} from '../question.service';
 import {Question} from '../question.model';
+import {MatTableDataSource} from '@angular/material';
+import {Answer} from '../answer.model';
 
 
 @Component({
@@ -16,6 +18,9 @@ export class QuestionTrackingComponent implements OnInit {
   questionType: string;
 
   question: Question;
+
+  displayedColumns: string[] = ['answer', 'correct', 'incorrect'];
+  dataSource;
 
   correctCount: number;
   wrongCount: number;
@@ -67,8 +72,16 @@ export class QuestionTrackingComponent implements OnInit {
           this.question = data;
         }, error => { console.log(error); });
       } else if (this.questionType === 'DefinitionQuestion') {
+
+        // init data source
+        this.dataSource = new MatTableDataSource<Answer>();
+
         this.questionService.getUnitDefinitionQuestion(this.unitId, this.questionId).subscribe((data: any) => {
           this.question = data;
+        }, error => { console.log(error); });
+
+        this.questionService.getUnitDefinitionAnswers(this.unitId, this.questionId).subscribe((data: Answer[]) => {
+          this.dataSource.data = data;
         }, error => { console.log(error); });
       }
     });
@@ -77,5 +90,11 @@ export class QuestionTrackingComponent implements OnInit {
   buildCorrectWrongChart() {
     this.pieChartResults.push({name: 'Respuestas Correctas', value: this.correctCount});
     this.pieChartResults.push({name: 'Respuestas Incorrectas', value: this.wrongCount});
+  }
+
+  correctAnswer(questionID: number) {
+  }
+
+  incorrectAnswer(questionID: number) {
   }
 }

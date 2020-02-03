@@ -11,7 +11,7 @@
 
   <div *ngIf="this.resultsReady" class="display-flex">
     <mat-card class="charts-cards">
-      <mat-card-title class="center-title">Respuestas Correctas e Incorrectas</mat-card-title>
+      <mat-card-title class="center-title">Respuestas correctas e incorrectas</mat-card-title>
       <mat-card-content class="center-pie-chart">
         <ngx-charts-pie-chart
           [view]="[400, 250]"
@@ -24,8 +24,42 @@
         </ngx-charts-pie-chart>
       </mat-card-content>
     </mat-card>
+
+    <mat-card class="charts-cards" *ngIf="this.questionType == 'DefinitionQuestion'">
+      <mat-card-title class="center-title">Respuestas sin corregir</mat-card-title>
+      <mat-card-content class="center-bar-chart">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="answer">
+            <th mat-header-cell *matHeaderCellDef> Respuesta </th>
+            <td mat-cell *matCellDef="let answer"> {{answer.text}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="correct">
+            <th mat-header-cell *matHeaderCellDef> Correcta </th>
+            <td mat-cell *matCellDef="let answer">
+              <button mat-button (click)="correctAnswer(question.id)">
+                <mat-icon class="edit-icon">create</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="incorrect">
+            <th mat-header-cell *matHeaderCellDef> Incorrecta </th>
+            <td mat-cell *matCellDef="let answer">
+              <button mat-button (click)="incorrectAnswer(question.id)">
+                <mat-icon class="edit-icon">create</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
     <mat-card class="charts-cards" *ngIf="this.questionType != 'DefinitionQuestion'">
-      <mat-card-title class="center-title">Dentro de las respuestas incorrectas, las respuestas erróneas elegidas son las siguientes</mat-card-title>
+      <mat-card-title class="center-title">Elementos seleccionados (dentro de las respuestas erróneas/incompletas)</mat-card-title>
       <mat-card-content class="center-bar-chart">
         <ngx-charts-bar-vertical
         [view]="[600, 250]"

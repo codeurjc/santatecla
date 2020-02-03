@@ -159,7 +159,8 @@ th.mat-sort-header-sorted {
 
 .question-tracking {
   margin-top: 4rem;
-  margin-left: 4rem;
+  margin-left: 4%;
+  margin-right: 4%;
   position: relative;
 }
 
