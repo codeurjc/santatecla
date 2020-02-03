@@ -1,7 +1,6 @@
 import { Unit } from '../unit/unit.model';
 import { UnitService } from '../unit/unit.service';
 import { Component, ViewChild, OnInit, AfterContentInit, ElementRef, HostListener, OnDestroy } from '@angular/core';
-import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
@@ -29,14 +28,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private showResults = false;
   private results: Unit[] = [];
   private arrowKeyLocation = 0;
-
-  private hideJson = true;
-  @ViewChild(JsonEditorComponent, null) editor: JsonEditorComponent;
-  private editorOptions: JsonEditorOptions;
-  private data = {
-    units: [],
-    relations: []
-  };
 
   private loadedUnit = false;
 
@@ -76,8 +67,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.tabService.setUnits();
     window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
-    this.editorOptions = new JsonEditorOptions();
-    this.editorOptions.mode = 'code';
     this.focusUnit(null);
   }
 
@@ -150,23 +139,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.updateUml();
         this.emptyResults();
         this.showSpinner = false;
-
-        let i = 0;
-        this.units.forEach((unit: Unit) => {
-          this.unitService.getAbsoluteName(+unit.id).subscribe((u: Unit) => {
-            this.data.units.push(new VisibleUnit(unit.id, u.name));
-            i++;
-            if (i === this.units.size) {
-              this.relations.forEach((relation: Relation) => {
-                this.data.relations.push(new VisibleRelation(relation.relationType, relation.incoming, relation.outgoing));
-              });
-              this.editor.data = this.data;
-            }
-          }, error => {
-            console.log(error);
-          });
-        });
-
       }
 
     }, error => {
@@ -539,10 +511,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (($event.metaKey || $event.ctrlKey) && ($event.key === 's')) {
       $event.preventDefault();
       this.save(null);
-    }
-    if (($event.metaKey || $event.ctrlKey) && ($event.key === 'e')) {
-      $event.preventDefault();
-      this.hideJson = !this.hideJson;
     }
   }
 

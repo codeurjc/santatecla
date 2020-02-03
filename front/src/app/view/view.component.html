@@ -45,10 +45,6 @@
       Busca una unidad para ver su diagrama
     </div>
 
-    <div id="json-editor-container" [hidden]="hideJson">
-      <json-editor [options]="editorOptions" [(ngModel)]="data"></json-editor>
-    </div>
-
     <button *ngIf="loadedUnit" mat-button [ngClass]="changed ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
       <mat-icon>save</mat-icon>
       Guardar
