@@ -798,25 +798,3 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
 }
-
-class VisibleUnit implements Unit {
-  id: string;
-  name: string;
-
-  constructor(id: string, name: string) {
-    this.id = id;
-    this.name = name;
-  }
-}
-
-class VisibleRelation implements Relation {
-  relationType: string;
-  incoming: string;
-  outgoing: string;
-
-  constructor(relationType: string, incoming: string, outgoing: string) {
-    this.relationType = relationType;
-    this.incoming = incoming;
-    this.outgoing = outgoing;
-  }
-}
