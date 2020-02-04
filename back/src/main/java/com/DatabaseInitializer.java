@@ -14,6 +14,7 @@ import com.itinerary.lesson.LessonRepository;
 import com.itinerary.module.Module;
 import com.itinerary.module.ModuleRepository;
 import com.question.Question;
+import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_answer.ListAnswer;
@@ -336,8 +337,25 @@ public class DatabaseInitializer {
                 DefinitionQuestion definition3 = new DefinitionQuestion("Defina, según sus palabras, dos tipos de paradigmas");
                 DefinitionQuestion definition4 = new DefinitionQuestion("Defina, según sus palabras, tres tipos de paradigmas");
 
-                definition1.setTotalCorrectAnswers(3);
-                definition1.setTotalWrongAnswers(8);
+                List<DefinitionAnswer> defList = new ArrayList<>();
+                DefinitionAnswer da1 = new DefinitionAnswer("Un problema al programar", false);
+                DefinitionAnswer da2 = new DefinitionAnswer("Un lenguaje de programación", false);
+                DefinitionAnswer da3 = new DefinitionAnswer("Un error dificil de resolver al programar", false);
+                DefinitionAnswer da4 = new DefinitionAnswer("Programar usando patrones de diseño", false);
+                DefinitionAnswer da5 = new DefinitionAnswer("Es parecido a un patrón", false);
+                DefinitionAnswer da6 = new DefinitionAnswer("Es un modelo básico de diseño y desarrollo de programas", true);
+                DefinitionAnswer da7 = new DefinitionAnswer("Un paradigma de programación es un modelo básico de diseño y desarrollo de programas siguiendo unas normas", true);
+                defList.add(da1);
+                defList.add(da2);
+                defList.add(da3);
+                defList.add(da4);
+                defList.add(da5);
+                defList.add(da6);
+                defList.add(da7);
+
+                definition1.setAnswers(defList);
+                definition1.setTotalCorrectAnswers(2);
+                definition1.setTotalWrongAnswers(5);
 
                 definition2.addModule(module6);
                 definition3.addModule(module7);
