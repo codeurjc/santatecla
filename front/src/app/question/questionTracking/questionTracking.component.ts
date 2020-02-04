@@ -19,7 +19,7 @@ export class QuestionTrackingComponent implements OnInit {
 
   question: Question;
 
-  displayedColumns: string[] = ['answer', 'correct', 'incorrect'];
+  displayedColumns: string[] = ['answer', 'correct', 'wrong'];
   dataSource;
 
   correctCount: number;
@@ -95,6 +95,6 @@ export class QuestionTrackingComponent implements OnInit {
   correctAnswer(questionID: number) {
   }
 
-  incorrectAnswer(questionID: number) {
+  wrongAnswer(questionID: number) {
   }
 }

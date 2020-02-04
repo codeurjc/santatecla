@@ -134,6 +134,14 @@ th.mat-sort-header-sorted {
   color: darkorange;
 }
 
+.correct-icon {
+  color: darkgreen;
+}
+
+.wrong-icon {
+  color: indianred;
+}
+
 .text-secondary {
   color: gray;
 }
