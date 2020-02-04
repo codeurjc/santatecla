@@ -27,7 +27,7 @@ public class TestQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping("/{questionID}")
-    public ResponseEntity<TestQuestion> getListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<TestQuestion> getTestQuestion(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<TestQuestion> question = this.testQuestionService.findOne(questionID);
 
