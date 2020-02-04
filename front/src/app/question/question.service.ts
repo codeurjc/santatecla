@@ -118,6 +118,14 @@ export class QuestionService {
     return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer');
   }
 
+  getUnitDefinitionAnswersCorrected(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer?corrected=true');
+  }
+
+  getUnitDefinitionAnswersNotCorrected(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer?corrected=false');
+  }
+
   getQuestionCorrectCount(unitId, questionId: number) {
     return this.http.get(this.baseUrl + unitId + '/question/' + questionId + '/correctCount');
   }

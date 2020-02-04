@@ -21,10 +21,13 @@ export class QuestionTrackingComponent implements OnInit {
   questionType: string;
 
   question: Question;
-  unit: Unit;
+  unitName: string;
 
-  displayedColumns: string[] = ['answer', 'correct', 'wrong'];
-  dataSource;
+  displayedColumnsNotCorrected: string[] = ['answer', 'correct', 'wrong'];
+  dataSourceNotCorrected;
+
+  displayedColumnsCorrected: string[] = ['answer', 'result'];
+  dataSourceCorrected;
 
   correctCount: number;
   wrongCount: number;
@@ -61,50 +64,53 @@ export class QuestionTrackingComponent implements OnInit {
 
       if (this.questionType === 'TestQuestion') {
         this.questionService.getTestQuestionWrongAnswerCount(this.unitId, this.questionId).subscribe((data: any) => {
-          for (let element of data) {
+          for (const element of data) {
             this.barChartResults.push({name: element[0], value: element[1]});
           }
         }, error => { console.log(error); });
 
         this.questionService.getUnitTestQuestion(this.unitId, this.questionId).subscribe((data: any) => {
           this.question = data;
-          this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-            this.unit = data;
-            this.tabService.setQuestion(this.questionId, this.question.questionText, this.unit.name, this.unitId);
-          }, error => { console.log(error); });
+          this.getUnitNameAndSetTab();
         }, error => { console.log(error); });
       } else if (this.questionType === 'ListQuestion') {
         this.questionService.getListQuestionWrongAnswerCount(this.unitId, this.questionId).subscribe((data: any) => {
-          for (let element of data) {
+          for (const element of data) {
             this.barChartResults.push({name: element[0], value: element[1]});
           }
         }, error => { console.log(error); });
 
         this.questionService.getUnitListQuestion(this.unitId, this.questionId).subscribe((data: any) => {
           this.question = data;
-          this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-            this.unit = data;
-            this.tabService.setQuestion(this.questionId, this.question.questionText, this.unit.name, this.unitId);
-          }, error => { console.log(error); });
+          this.getUnitNameAndSetTab();
         }, error => { console.log(error); });
       } else if (this.questionType === 'DefinitionQuestion') {
 
         // init data source
-        this.dataSource = new MatTableDataSource<Answer>();
+        this.dataSourceNotCorrected = new MatTableDataSource<Answer>();
+        this.dataSourceCorrected = new MatTableDataSource<Answer>()
 
         this.questionService.getUnitDefinitionQuestion(this.unitId, this.questionId).subscribe((data: any) => {
           this.question = data;
-          this.unitService.getUnit(this.unitId).subscribe((data: Unit) => {
-            this.unit = data;
-            this.tabService.setQuestion(this.questionId, this.question.questionText, this.unit.name, this.unitId);
-          }, error => { console.log(error); });
+          this.getUnitNameAndSetTab();
         }, error => { console.log(error); });
 
-        this.questionService.getUnitDefinitionAnswers(this.unitId, this.questionId).subscribe((data: Answer[]) => {
-          this.dataSource.data = data;
+        this.questionService.getUnitDefinitionAnswersNotCorrected(this.unitId, this.questionId).subscribe((data: Answer[]) => {
+          this.dataSourceNotCorrected.data = data;
+        }, error => { console.log(error); });
+
+        this.questionService.getUnitDefinitionAnswersCorrected(this.unitId, this.questionId).subscribe((data: Answer[]) => {
+          this.dataSourceCorrected.data = data;
         }, error => { console.log(error); });
       }
     });
+  }
+
+  getUnitNameAndSetTab() {
+    this.unitService.getUnitName(this.unitId).subscribe((data: string) => {
+      this.unitName = data;
+      this.tabService.setQuestion(this.questionId, this.question.questionText, this.unitName, this.unitId);
+    }, error => { console.log(error); });
   }
 
   buildCorrectWrongChart() {
