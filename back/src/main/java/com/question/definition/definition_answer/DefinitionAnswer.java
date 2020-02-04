@@ -17,7 +17,11 @@ public class DefinitionAnswer{
 
     private String answerText;
 
+    //Correct or wrong
     private boolean correct;
+
+    //Corrected by the teacher
+    private boolean corrected;
 
     private String justification;
 
@@ -30,9 +34,10 @@ public class DefinitionAnswer{
 
     public DefinitionAnswer(){}
 
-    public DefinitionAnswer(String answerText, boolean correct){
+    public DefinitionAnswer(String answerText){
         this.answerText = answerText;
-        this.correct = correct;
+        this.correct = false;
+        this.corrected = false;
     }
 
     public void update(DefinitionAnswer a) {
@@ -60,6 +65,18 @@ public class DefinitionAnswer{
 
     public boolean isCorrect() {
         return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
+
+    public boolean isCorrected() {
+        return corrected;
+    }
+
+    public void setCorrected(boolean corrected) {
+        this.corrected = corrected;
     }
 
     public String getJustification() {
