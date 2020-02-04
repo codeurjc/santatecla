@@ -337,14 +337,29 @@ public class DatabaseInitializer {
                 DefinitionQuestion definition3 = new DefinitionQuestion("Defina, según sus palabras, dos tipos de paradigmas");
                 DefinitionQuestion definition4 = new DefinitionQuestion("Defina, según sus palabras, tres tipos de paradigmas");
 
+                //Corrected
                 List<DefinitionAnswer> defList = new ArrayList<>();
-                DefinitionAnswer da1 = new DefinitionAnswer("Un problema al programar", false);
-                DefinitionAnswer da2 = new DefinitionAnswer("Un lenguaje de programación", false);
-                DefinitionAnswer da3 = new DefinitionAnswer("Un error dificil de resolver al programar", false);
-                DefinitionAnswer da4 = new DefinitionAnswer("Programar usando patrones de diseño", false);
-                DefinitionAnswer da5 = new DefinitionAnswer("Es parecido a un patrón", false);
-                DefinitionAnswer da6 = new DefinitionAnswer("Es un modelo básico de diseño y desarrollo de programas", true);
-                DefinitionAnswer da7 = new DefinitionAnswer("Un paradigma de programación es un modelo básico de diseño y desarrollo de programas siguiendo unas normas", true);
+                DefinitionAnswer da1 = new DefinitionAnswer("Un problema al programar");
+                da1.setCorrected(true);
+                da1.setCorrect(false);
+                DefinitionAnswer da2 = new DefinitionAnswer("Un lenguaje de programación");
+                da2.setCorrected(true);
+                da2.setCorrect(false);
+                DefinitionAnswer da3 = new DefinitionAnswer("Un error dificil de resolver al programar");
+                da3.setCorrected(true);
+                da3.setCorrect(false);
+                DefinitionAnswer da4 = new DefinitionAnswer("Programar usando patrones de diseño");
+                da4.setCorrected(true);
+                da4.setCorrect(false);
+                DefinitionAnswer da5 = new DefinitionAnswer("Es parecido a un patrón");
+                da5.setCorrected(true);
+                da5.setCorrect(false);
+                DefinitionAnswer da6 = new DefinitionAnswer("Es un modelo básico de diseño y desarrollo de programas");
+                da6.setCorrected(true);
+                da6.setCorrect(true);
+                DefinitionAnswer da7 = new DefinitionAnswer("Es un modelo básico de diseño y desarrollo de programas siguiendo unas normas");
+                da7.setCorrected(true);
+                da7.setCorrect(true);
                 defList.add(da1);
                 defList.add(da2);
                 defList.add(da3);
@@ -353,6 +368,16 @@ public class DatabaseInitializer {
                 defList.add(da6);
                 defList.add(da7);
 
+                //Not corrected
+                DefinitionAnswer da8 = new DefinitionAnswer("Son los distintos lenguajes para programar");
+                DefinitionAnswer da9 = new DefinitionAnswer("Es una manera de programar usando distintas estrategias");
+                DefinitionAnswer da10 = new DefinitionAnswer("Programar siguiento unas normas para abordar distintos tipos de problemas");
+                DefinitionAnswer da11 = new DefinitionAnswer("Son patrones de diseño");
+                defList.add(da8);
+                defList.add(da9);
+                defList.add(da10);
+                defList.add(da11);
+                
                 definition1.setAnswers(defList);
                 definition1.setTotalCorrectAnswers(2);
                 definition1.setTotalWrongAnswers(5);
