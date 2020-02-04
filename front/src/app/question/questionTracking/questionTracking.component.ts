@@ -26,7 +26,7 @@ export class QuestionTrackingComponent implements OnInit {
   displayedColumnsNotCorrected: string[] = ['answer', 'correct', 'wrong'];
   dataSourceNotCorrected;
 
-  displayedColumnsCorrected: string[] = ['answer', 'result'];
+  displayedColumnsCorrected: string[] = ['result', 'answer'];
   dataSourceCorrected;
 
   correctCount: number;
