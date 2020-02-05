@@ -21,6 +21,7 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {CourseComponent} from './course/course.component';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
 import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
+import {ImageComponent} from './images/image.component';
 
 
 const appRoutes = [
@@ -48,7 +49,8 @@ const appRoutes = [
   { path: 'courses', component: MyCoursesComponent },
   { path: 'progress', component: ModuleProgressComponent },
   { path: 'newCourse', component: NewCourseComponent},
-  { path: 'course/:courseId', component: CourseComponent}
+  { path: 'course/:courseId', component: CourseComponent},
+  { path: 'images', component: ImageComponent}
 
 ];
 

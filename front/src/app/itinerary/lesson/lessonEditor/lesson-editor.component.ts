@@ -20,6 +20,8 @@ import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
 import {ModuleService} from '../../module/module.service';
 import {Module} from '../../module/module.model';
+import {ImageService} from '../../../images/image.service';
+import {ImageComponent} from '../../../images/image.component';
 
 
 function convertToHTML(text) {
@@ -76,7 +78,8 @@ export class LessonEditorComponent implements OnInit {
               private moduleService: ModuleService,
               private bottomSheet: MatBottomSheet,
               private unitLessonService: UnitLessonService,
-              private tabService: TabService) {
+              private tabService: TabService,
+              private imageService: ImageService) {
     this.showSpinner = true;
   }
 
@@ -170,8 +173,27 @@ export class LessonEditorComponent implements OnInit {
       contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
       const url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;
       this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]');
+    } else if (type === 'image') {
+      contentEmbebed = await this.imageService.getImage(contentId).toPromise();
+      const image = this.convertImage(contentEmbebed.image);
+      const id = 3;
+      const img = '++++\n' +
+        '<img class="img-lesson" src="' + image + '">\n' +
+        '++++\n' +
+        '\n';
+      this.extractedData.splice(contentCounter, 1, img);
     }
     this.addExtractedData(content);
+  }
+
+  prueba() {
+    console.log('hola');
+  }
+
+  convertImage(bytes: any) {
+    return 'data:image/png;base64,' + btoa(new Uint8Array(bytes).reduce((data, byte) =>
+      data + String.fromCharCode(byte),
+      ''));
   }
 
   contentCounterFunction(content: string) {
@@ -181,7 +203,7 @@ export class LessonEditorComponent implements OnInit {
     lines.forEach((line: string) => {
       let words: string[];
       words = line.split('.');
-      if (words[0] === 'assert') {
+      if (words[0] === 'insert') {
         this.contentCount = this.contentCount + 1;
       }
     });
@@ -202,7 +224,7 @@ export class LessonEditorComponent implements OnInit {
     lines.forEach((line: string) => {
       let words: string[];
       words = line.split('.');
-      if (words[0] === 'assert') {
+      if (words[0] === 'insert') {
         let parameters: string[];
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
@@ -216,6 +238,10 @@ export class LessonEditorComponent implements OnInit {
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
           this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[2]), content, contentCounter, 'question');
+          contentCounter = contentCounter + 1;
+        } else if (parameters[0] === 'image') {
+          this.position.push(counter);
+          this.getEmbebedContent(Number(parameters[1]), null, null, content, contentCounter, 'image');
           contentCounter = contentCounter + 1;
         }
       }
@@ -301,6 +327,10 @@ export class LessonEditorComponent implements OnInit {
 
   openBottomSheet(): void {
     this.bottomSheet.open(UnitsCardsToolComponent);
+  }
+
+  openImageBottomSheet(): void {
+    this.bottomSheet.open(ImageComponent);
   }
 
   nextSlide() {
