@@ -42,6 +42,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private changed = false;
   private showSpinner = false;
 
+  private showDiagram = false;
   @ViewChild('uml') umlDiv;
 
   private selectedTarget: HTMLInputElement;
@@ -87,6 +88,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.focusedUnitIds.size === 0) {
       this.focusedUnitIds = new Set<string>();
       this.units = new Map<string, Unit>();
+      this.showDiagram = false;
     } else {
       this.showSpinner = true;
       this.units.clear();
@@ -136,6 +138,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       if ((this.remainingUnits === 0) && (this.remainingFocusedUnits === 0)) {
         this.updateUml();
         this.showSpinner = false;
+        this.showDiagram = true;
       }
 
     }, error => {

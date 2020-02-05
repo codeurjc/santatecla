@@ -29,7 +29,7 @@
     <mat-icon id="hide-menu-button" [ngClass]="showMenu ? 'show-hide-menu-button' : 'hidden-hide-menu-button'" (click)="setShowMenu(!showMenu)">reorder</mat-icon>
 
     <div id="top-panel">
-      <span *ngIf="focusedUnitIds.size > 0">
+      <span *ngIf="showDiagram">
         <mat-form-field [ngClass]="showMenu ? 'level-selector level-selector-with-menu' : 'level-selector'">
           <mat-label>Nivel padres</mat-label>
           <mat-select [value]="parentLevel">
@@ -51,7 +51,7 @@
       </span>
     </div>
 
-    <button *ngIf="focusedUnitIds.size > 0" mat-button [ngClass]="changed ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
+    <button *ngIf="showDiagram" mat-button [ngClass]="changed ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
       <mat-icon>save</mat-icon>
       Guardar
     </button>
@@ -61,11 +61,11 @@
       <span id="spinner-text">Cargando...</span>
     </div>
 
-    <div *ngIf="focusedUnitIds.size <= 0" id="tips">
+    <div *ngIf="!showDiagram" id="tips">
       Busca una unidad para ver su diagrama
     </div>
 
-    <div [hidden]="focusedUnitIds.size <= 0" [ngClass]="showMenu ? 'uml-content uml-content-with-menu' : 'uml-content uml-content-without-menu'" #uml></div>
+    <div [hidden]="!showDiagram" [ngClass]="showMenu ? 'uml-content uml-content-with-menu' : 'uml-content uml-content-without-menu'" #uml></div>
 
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">
