@@ -12,14 +12,14 @@
       </mat-form-field>
 
       <mat-selection-list class="result-list" *ngIf="results.length > 0">
-        <mat-list-option class="result" *ngFor="let result of results" (click)="selectUnit(result, units.get(result.id.toString()) && !focusedUnitIds.has(result.id.toString()))" [selected]="units.get(result.id.toString())" [disabled]="units.get(result.id.toString()) && !focusedUnitIds.has(result.id.toString())">
+        <mat-list-option class="result" *ngFor="let result of results" (click)="selectUnit(result)" [selected]="focusedUnitIds.has(result.id.toString())">
           <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
           <span class="unit-name">{{getUnitName(result.name)}}</span>
         </mat-list-option>
       </mat-selection-list>
 
       <mat-selection-list class="result-list" *ngIf="results.length <= 0">
-        <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="selectUnit(unit, false)" [selected]="true">
+        <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="selectUnit(unit)" [selected]="true">
           <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>
           <span class="unit-name">{{getUnitName(unit.name)}}</span>
         </mat-list-option>
