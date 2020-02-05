@@ -13,7 +13,6 @@ import com.itinerary.lesson.Lesson;
 import com.itinerary.lesson.LessonRepository;
 import com.itinerary.module.Module;
 import com.itinerary.module.ModuleRepository;
-import com.question.Question;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
 import com.question.list.list_question.ListQuestion;
@@ -29,6 +28,8 @@ import com.unit.UnitRepository;
 import com.user.User;
 import com.user.UserRepository;
 
+import com.image.Image;
+import com.image.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -67,6 +68,7 @@ public class DatabaseInitializer {
   
         @Autowired
         private CourseRepository courseRepository;
+        
 
         @PostConstruct
         public void init() {
@@ -147,12 +149,12 @@ public class DatabaseInitializer {
                         "imperativos y OO\n");
 
                 slide03.addContent("\n" +
-                        "assert.card/1/1\n" +
+                        "insert.card/1/1\n" +
                         "\n" +
-                        "assert.card/2/1\n");
+                        "insert.card/2/1\n");
 
                 slide04.addContent("\n" +
-                        "assert.slide/1/1/1\n");
+                        "insert.slide/1/1/1\n");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide01);
