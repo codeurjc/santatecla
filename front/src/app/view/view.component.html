@@ -2,24 +2,35 @@
 <html>
   <body>
 
-    <div id="top-panel">
-
+    <div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
       <mat-form-field appearance="outline" id="search">
         <mat-label>
           <mat-icon id="search-icon">search</mat-icon>
-          <span id="search-label">Buscar unidad</span>
+          <span id="search-label">&nbsp;Buscar unidad</span>
         </mat-label>
-        <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()" (keydown)="keyDown($event)"/>
-        <div id="result-list" *ngIf="showResults">
-          <div id="result" *ngFor="let result of results; let i = index" [class.active]="i==arrowKeyLocation" (mouseover)="setActive(i)">
-            <span id="unit-prefix">{{getUnitPrefix(result.name)}}</span>
-            <span id="unit-name">{{getUnitName(result.name)}}</span>
-          </div>
-        </div>
+        <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()"/>
       </mat-form-field>
 
-      <span *ngIf="loadedUnit">
-        <mat-form-field class="level-selector">
+      <mat-selection-list class="result-list" *ngIf="results.length > 0">
+        <mat-list-option class="result" *ngFor="let result of results" (click)="selectUnit(result, units.get(result.id.toString()) && !focusedUnitIds.has(result.id.toString()))" [selected]="units.get(result.id.toString())" [disabled]="units.get(result.id.toString()) && !focusedUnitIds.has(result.id.toString())">
+          <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
+          <span class="unit-name">{{getUnitName(result.name)}}</span>
+        </mat-list-option>
+      </mat-selection-list>
+
+      <mat-selection-list class="result-list" *ngIf="results.length <= 0">
+        <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="selectUnit(unit, false)" [selected]="true">
+          <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>
+          <span class="unit-name">{{getUnitName(unit.name)}}</span>
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+
+    <mat-icon id="hide-menu-button" [ngClass]="showMenu ? 'show-hide-menu-button' : 'hidden-hide-menu-button'" (click)="setShowMenu(!showMenu)">reorder</mat-icon>
+
+    <div id="top-panel">
+      <span *ngIf="focusedUnitIds.size > 0">
+        <mat-form-field [ngClass]="showMenu ? 'level-selector level-selector-with-menu' : 'level-selector'">
           <mat-label>Nivel padres</mat-label>
           <mat-select [value]="parentLevel">
             <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(level, null)">
@@ -28,7 +39,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="level-selector">
+        <mat-form-field [ngClass]="showMenu ? 'level-selector level-selector-with-menu' : 'level-selector'">
           <mat-label>Nivel hijos</mat-label>
           <mat-select [value]="childrenLevel">
             <mat-option *ngFor="let level of selectLevelOptions" [value]="level" (click)="reloadLevels(null, level)">
@@ -38,14 +49,9 @@
           </mat-select>
         </mat-form-field>
       </span>
-
     </div>
 
-    <div *ngIf="!loadedUnit" id="tips">
-      Busca una unidad para ver su diagrama
-    </div>
-
-    <button *ngIf="loadedUnit" mat-button [ngClass]="changed ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
+    <button *ngIf="focusedUnitIds.size > 0" mat-button [ngClass]="changed ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
       <mat-icon>save</mat-icon>
       Guardar
     </button>
@@ -55,7 +61,11 @@
       <span id="spinner-text">Cargando...</span>
     </div>
 
-    <div class="uml-content" #uml></div>
+    <div *ngIf="focusedUnitIds.size <= 0" id="tips">
+      Busca una unidad para ver su diagrama
+    </div>
+
+    <div [hidden]="focusedUnitIds.size <= 0" [ngClass]="showMenu ? 'uml-content uml-content-with-menu' : 'uml-content uml-content-without-menu'" #uml></div>
 
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">

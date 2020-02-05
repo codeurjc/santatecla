@@ -20,22 +20,15 @@ declare var mermaid: any;
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private UNIT_NAME_SEPARATOR = '/';
-  private ENTER_KEY = 'Enter';
-  private ARROW_UP_KEY = 'ArrowUp';
-  private ARROW_DOWN_KEY = 'ArrowDown';
 
   private searchField = '';
-  private showResults = false;
   private results: Unit[] = [];
-  private arrowKeyLocation = 0;
-
-  private loadedUnit = false;
 
   private parentLevel = 1;
   private childrenLevel = 3;
   private selectLevelOptions = [0, 1, 2, 3, -1];
 
-  private focusedUnitId;
+  private focusedUnitIds: Set<string> = new Set<string>();
   private units: Map<string, Unit> = new Map<string, Unit>();
   private relations = new Map<string, Relation>();
   private remainingUnits = 0;
@@ -89,20 +82,24 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Data
 
   private focusUnit(id: number) {
-    if (id) {
-      this.loadedUnit = true;
+    if (id) { this.focusedUnitIds.add(id.toString()); }
+    if (this.focusedUnitIds.size === 0) {
+      this.focusedUnitIds = new Set<string>();
+      this.units = new Map<string, Unit>();
+    } else {
       this.showSpinner = true;
-      this.focusedUnitId = id;
       this.units.clear();
       this.relations.clear();
       this.remainingUnits = 0;
-      this.getUnitAndUpdateUml(this.focusedUnitId, new Set<number>(), this.parentLevel, this.childrenLevel);
-    } else {
-      this.loadedUnit = false;
+      let remainingUnits = this.focusedUnitIds.size;
+      this.focusedUnitIds.forEach((id) => {
+        remainingUnits--;
+        this.getUnitAndUpdateUml(+id, new Set<number>(), this.parentLevel, this.childrenLevel, remainingUnits);
+      });
     }
   }
 
-  private getUnitAndUpdateUml(id: number, visited: Set<number>, remainingParentLevel: number, remainingChildrenLevel: number) {
+  private getUnitAndUpdateUml(id: number, visited: Set<number>, remainingParentLevel: number, remainingChildrenLevel: number, remainingUnits: number) {
     this.remainingUnits--;
     visited.add(id);
     this.unitService.getUnit(id).subscribe((data: Unit) => {
@@ -115,7 +112,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           const outgoing = +relation.outgoing;
           if (remainingChildrenLevel !== 0) {
             if (!visited.has(outgoing)) {
-              this.getUnitAndUpdateUml(outgoing, visited, 0, remainingChildrenLevel - 1);
+              this.getUnitAndUpdateUml(outgoing, visited, 0, remainingChildrenLevel - 1, remainingUnits);
             }
             this.addRelation(relation);
           }
@@ -128,16 +125,15 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           const incoming = +relation.incoming;
           if (remainingParentLevel !== 0) {
             if (!visited.has(incoming)) {
-              this.getUnitAndUpdateUml(incoming, visited, remainingParentLevel - 1, 0);
+              this.getUnitAndUpdateUml(incoming, visited, remainingParentLevel - 1, 0, remainingUnits);
             }
             this.addRelation(relation);
           }
         }
       });
 
-      if (this.remainingUnits === 0) {
+      if ((this.remainingUnits === 0) && (remainingUnits === 0)) {
         this.updateUml();
-        this.emptyResults();
         this.showSpinner = false;
       }
 
@@ -146,16 +142,20 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
+  private getFocusedUnits(): Unit[] {
+    return Array.from(this.units.values()).filter((unit: Unit) => this.focusedUnitIds.has(unit.id.toString()));
+  }
+
   private reloadLevels(newParentLevel, newChildrenLevel) {
     if (newParentLevel != null) {
       if (newParentLevel !== this.parentLevel) {
         this.parentLevel = newParentLevel;
-        this.focusUnit(+this.focusedUnitId);
+        this.focusUnit(null);
       }
     } else if (newChildrenLevel != null) {
       if (newChildrenLevel !== this.childrenLevel) {
         this.childrenLevel = newChildrenLevel;
-        this.focusUnit(+this.focusedUnitId);
+        this.focusUnit(null);
       }
     }
   }
@@ -258,7 +258,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
-      this.focusUnit(this.focusedUnitId);
+      this.focusUnit(null);
       if (goToUnit) {
         this.goToUnit(goToUnit);
       }
@@ -370,16 +370,18 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       window.scroll(0, 0);
       if (result === 1) {
         this.unitService.deleteUnit(+this.getSelectedUnitId(this.selectedTarget)).subscribe(() => {
-          if (+this.focusedUnitId === +this.getSelectedUnitId(this.selectedTarget)) {
+          if (this.focusedUnitIds.has(this.getSelectedUnitId(this.selectedTarget))) {
             let focused = false;
-            this.getUnitById(this.focusedUnitId.toString()).incomingRelations.forEach((relation: Relation) => {
-              if ((!focused) && (this.focusedUnitId.toString() !== relation.outgoing.toString())) {
-                this.focusedUnitId = relation.outgoing.toString();
-                focused = true;
-              }
+            this.focusedUnitIds.forEach((focusedUnitId) => {
+              this.getUnitById(focusedUnitId.toString()).incomingRelations.forEach((relation: Relation) => {
+                if ((!focused) && (focusedUnitId.toString() !== relation.outgoing.toString())) {
+                  this.focusedUnitIds.add(relation.outgoing.toString());
+                  focused = true;
+                }
+              });
             });
           }
-          this.focusUnit(this.focusedUnitId);
+          this.focusUnit(null);
         });
       }
     });
@@ -402,7 +404,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
           if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
             this.unitService.deleteRelation(+relation.id).subscribe(() => {
-              this.focusUnit(this.focusedUnitId);
+              this.focusUnit(null);
             });
           }
         });
@@ -523,15 +525,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const target = event.target as HTMLInputElement;
 
     if (!this.creatingRelation) {
-
-      // Search
-      if ((target.id === 'result') || (target.id === 'unit-prefix') || (target.id === 'unit-name')) {
-        this.focusUnit(+this.results[this.arrowKeyLocation].id);
-      } else if ((target.attributes) && (target.attributes['class']) && (target.id === 'search-input')) {
-        this.setShowResults(true);
-      } else {
-        this.setShowResults(false);
-      }
 
       // Uml
       if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
@@ -693,7 +686,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.searchField.length > 0) {
       this.unitService.searchByNameContaining(this.searchField).subscribe((data: any) => {
         this.results = data;
-        this.arrowKeyLocation = 0;
       }, error => {
         console.log(error);
       });
@@ -702,31 +694,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  private setShowResults(showResults: boolean) {
-    if (showResults) {
-      this.search();
-    } else {
-      this.emptyResults();
-    }
-    this.showResults = showResults;
-  }
-
   private emptyResults() {
     this.results = [];
-  }
-
-  private keyDown(event: KeyboardEvent) {
-    if ((event.key === this.ENTER_KEY) && (this.results.length > 0)) {
-      this.focusUnit(+this.results[this.arrowKeyLocation].id);
-    } else if ((event.key === this.ARROW_UP_KEY) && (this.arrowKeyLocation > 0)) {
-      this.arrowKeyLocation--;
-    } else if ((event.key === this.ARROW_DOWN_KEY) && (this.arrowKeyLocation < (this.results.length - 1))) {
-      this.arrowKeyLocation++;
-    }
-  }
-
-  private setActive(i: number) {
-    this.arrowKeyLocation = i;
   }
 
   private getUnitPrefix(completeName: string) {
@@ -736,6 +705,18 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private getUnitName(completeName: string) {
     return completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1];
+  }
+
+  private selectUnit(result: Unit, disabled: boolean) {
+    if (!disabled) {
+      const id = result.id.toString();
+      if (this.focusedUnitIds.has(id)) {
+        this.focusedUnitIds.delete(id);
+      } else {
+        this.focusedUnitIds.add(id);
+      }
+      this.focusUnit(null);
+    }
   }
 
 
@@ -754,7 +735,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const parsedRelations = this.getRelationsDiagram(relations);
     if (parsedRelations !== '') {
       return 'classDiagram\n' + parsedRelations;
-    } else if (this.getUnitById(this.focusedUnitId.toString())) {
+    } else if (this.getUnitById(this.focusedUnitIds.toString())) {
       return 'classDiagram\n' + this.getOneUnitDiagram();
     } else {
       throw new Error('Invalid data. Unable to display uml');
@@ -762,7 +743,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private getOneUnitDiagram() {
-    return this.parseUnitName(this.focusedUnitId.toString()) + '<|--|>' + this.parseUnitName(this.focusedUnitId.toString());
+    return this.parseUnitName(this.focusedUnitIds.toString()) + '<|--|>' + this.parseUnitName(this.focusedUnitIds.toString());
   }
 
   private getRelationsDiagram(relations: any): string {
@@ -784,7 +765,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private parseUnitName(id: string): string {
     let name = "";
-    if (id.toString() === this.focusedUnitId.toString()) {
+    if (this.focusedUnitIds.has(id.toString())) {
       name = 'F';
     } else {
       name = 'N';

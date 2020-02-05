@@ -1,25 +1,30 @@
+#lateral-panel {
+  z-index: 600;
+}
+
 #top-panel {
   width: 100%;
   text-align: left;
 }
 
 #tips {
-  margin-left: 2rem;
-  margin-top: 8rem;
+  position: absolute;
+  margin-top: 20rem;
+  width: calc(100% - 22rem);
+  text-align: center;
+  right: 0;
 }
 
-#result-list {
-  margin-top: 0.3rem;
-  margin-bottom: -0.15rem;
+.result-list {
+  margin-left: 1rem;
 }
 
-#result {
-  border-top: 1px solid #9e2abb;
+.result {
+  border-radius: 0.2rem;
   background-color: #6a3b77;
-}
-
-.active {
-  background-color: #896196 !important;
+  cursor: pointer;
+  margin: 0.5rem -0.7em 0 -0.7em;
+  color: #ffffff;
 }
 
 mat-label {
@@ -32,11 +37,11 @@ mat-label {
   overflow: auto;
 }
 
-#unit-prefix {
+.unit-prefix {
   color: #b99bcd;
 }
 
-#unit-name {
+.unit-name {
   font-weight: bold;
 }
 
@@ -154,6 +159,10 @@ mat-label {
   color: #9e2abb !important;
 }
 
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 1em 0 0.15em 0;
+}
+
 ::ng-deep .mat-input-element {
   caret-color: #9e2abb !important;
 }
@@ -199,6 +208,26 @@ mat-label {
   height: 100vh;
 }
 
+.uml-content-with-menu {
+  left: 22rem;
+}
+
+.uml-content-without-menu {
+  left: 11rem;
+}
+
+.hidden-menu {
+  left: -22rem;
+}
+
+.hidden-hide-menu-button {
+  left: 0;
+}
+
+.without-menu {
+  width: 100%;
+}
+
 #svg {
   position: absolute;
   width: 100%;
@@ -213,6 +242,11 @@ mat-label {
   margin-left: 5rem;
   top: 0.2rem;
   width: 5rem;
+  left: 3rem;
+}
+
+.level-selector-with-menu {
+  left: 25rem !important;
 }
 
 ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix {
@@ -237,34 +271,12 @@ mat-label {
 
 #search {
   color: white;
-  width: 20rem;
+  width: 100%;
   z-index: 120;
-  margin-left: 0.6rem;
-}
-
-#search-icon {
-  position: absolute;
-  top: 0.05rem;
-  left: 0;
+  margin-bottom: -1rem;
 }
 
 #search-label {
-  margin-left: 1.3rem;
-}
-
-#search-input {
-  margin-bottom: 0 !important;
-}
-
-::ng-deep #search > .mat-form-field-wrapper > .mat-form-field-flex > .mat-form-field-infix > .mat-form-field-label-wrapper {
-  overflow: visible !important;
-  top: -1.6em;
-}
-
-::ng-deep .mat-form-field-infix {
-  padding: 0.2em 0 !important;
-}
-
-::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-  transform: translateY(-0.9em) scale(0.75);
+  position: relative;
+  top: -0.15rem;
 }
