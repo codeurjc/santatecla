@@ -713,7 +713,7 @@ public class DatabaseInitializer {
                 unit10.addOutgoingRelation(relation14);
                 Relation relation15 = new Relation(Relation.RelationType.INHERITANCE, unit9.getId(), unit11.getId());
                 relationRepository.save(relation15);
-                unit11.addIncomingRelation(relation15);
+                unit9.addIncomingRelation(relation15);
                 unit11.addOutgoingRelation(relation15);
                 Relation relation16 = new Relation(Relation.RelationType.AGGREGATION, unit5.getId(), unit14.getId());
                 relationRepository.save(relation16);
