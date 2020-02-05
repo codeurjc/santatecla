@@ -346,6 +346,14 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.changed = true;
   }
 
+  private initCreatingRelation() {
+    this.creatingRelation = {
+      outgoing: this.getSelectedUnitId(this.selectedTarget),
+      boundingClientRect: this.selectedTarget.getBoundingClientRect(),
+      relationType: null
+    };
+  }
+
   private checkDuplicateRelation(unit: Unit, relation: Relation): boolean {
     let duplicate = false;
     unit.incomingRelations.forEach((incomingRelation: Relation) => {
@@ -547,39 +555,24 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.selectedTarget = this.findUnitTarget(this.createUnit(RelationType.USE).id);
         this.drawUmlNodeOptions();
       } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
-        this.creatingRelation = {
-          relationType: RelationType.COMPOSITION,
-          outgoing: this.getSelectedUnitId(this.selectedTarget),
-          boundingClientRect: this.selectedTarget.getBoundingClientRect()
-        };
+        this.initCreatingRelation();
+        this.creatingRelation.relationType = RelationType.COMPOSITION;
         this.closeUmlNodeOptions();
       } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement.id === 'inheritance-outgoing-button')) {
-        this.creatingRelation = {
-          relationType: RelationType.INHERITANCE,
-          outgoing: this.selectedTarget.id.toString(),
-          boundingClientRect: this.selectedTarget.getBoundingClientRect()
-        };
+        this.initCreatingRelation();
+        this.creatingRelation.relationType = RelationType.INHERITANCE;
         this.closeUmlNodeOptions();
       } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement.id === 'aggregation-outgoing-button')) {
-        this.creatingRelation = {
-          relationType: RelationType.AGGREGATION,
-          outgoing: this.selectedTarget.id.toString(),
-          boundingClientRect: this.selectedTarget.getBoundingClientRect()
-        };
+        this.initCreatingRelation();
+        this.creatingRelation.relationType = RelationType.AGGREGATION;
         this.closeUmlNodeOptions();
       } else if ((target.id === 'association-outgoing-button') || (target.parentElement.id === 'association-outgoing-button')) {
-        this.creatingRelation = {
-          relationType: RelationType.ASSOCIATION,
-          outgoing: this.selectedTarget.id.toString(),
-          boundingClientRect: this.selectedTarget.getBoundingClientRect()
-        };
+        this.initCreatingRelation();
+        this.creatingRelation.relationType = RelationType.ASSOCIATION;
         this.closeUmlNodeOptions();
       } else if ((target.id === 'use-outgoing-button') || (target.parentElement.id === 'use-outgoing-button')) {
-        this.creatingRelation = {
-          relationType: RelationType.USE,
-          outgoing: this.selectedTarget.id.toString(),
-          boundingClientRect: this.selectedTarget.getBoundingClientRect()
-        };
+        this.initCreatingRelation();
+        this.creatingRelation.relationType = RelationType.USE;
         this.closeUmlNodeOptions();
       } else if ((target.id === 'composition-relation-button') || (target.parentElement.id === 'composition-relation-button')) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.COMPOSITION);
