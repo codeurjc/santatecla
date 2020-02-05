@@ -75,6 +75,13 @@
     </mat-card>
   </div>
 
+  <mat-card class="question-warning" *ngIf="this.wrongCount > (this.correctCount + this.wrongCount) * 0.75">
+    <mat-card-title class="center-title">
+      <mat-icon class="warning-icon">warning</mat-icon>
+      La pregunta necesita revisión
+    </mat-card-title>
+  </mat-card>
+
   <div>
     <mat-card class="questions-card" *ngIf="this.resultsReady">
       <mat-card-title class="card-title">Respuestas corregidas</mat-card-title>

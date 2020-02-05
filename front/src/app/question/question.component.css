@@ -175,3 +175,14 @@ th.mat-sort-header-sorted {
 .center-title{
   text-align: center;
 }
+
+.question-warning{
+  margin-left:30%;
+  margin-right: 30%;
+  margin-top:3%;
+  background-color: rgba(255, 0, 0, 0.4)
+}
+
+.warning-icon{
+  margin-right: 10%
+}

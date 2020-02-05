@@ -75,5 +75,7 @@ public class DefinitionQuestionService {
         return Optional.empty();
     }
 
-
+    public Integer findNotCorrectedAnswersCount(long questionId) {
+        return this.definitionRepository.findNotCorrectedAnswersCount(questionId);
+    }
 }

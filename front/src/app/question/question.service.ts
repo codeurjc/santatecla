@@ -141,4 +141,8 @@ export class QuestionService {
   getListQuestionWrongAnswerCount(unitId, questionId: number) {
     return this.http.get(this.baseUrl + unitId + '/question/list/' + questionId + '/chosenWrongAnswersCount');
   }
+
+  getUncorrectedDefinitionAnswers(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/definition/' + questionId + '/uncorrectedCount');
+  }
 }

@@ -138,6 +138,17 @@ public class DefinitionQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/{questionID}/uncorrectedCount")
+    public ResponseEntity<Integer> getCorrected(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent())
+            return new ResponseEntity<>(this.definitionQuestionService.findNotCorrectedAnswersCount(questionID), HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     /*
     @GetMapping("/{id}/answer/user/{userId}")
     public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {

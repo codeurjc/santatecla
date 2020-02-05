@@ -31,13 +31,12 @@ export class QuestionTrackingComponent implements OnInit {
 
   correctCount: number;
   wrongCount: number;
+  uncorrectedCount = 0;
 
   resultsReady = false;
 
   pieChartResults = [];
   barChartResults = [];
-
-  showMenu = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,16 +52,8 @@ export class QuestionTrackingComponent implements OnInit {
       this.questionId = params.questionId;
       this.questionType = params.questionType;
 
-      this.questionService.getQuestionCorrectCount(this.unitId, this.questionId).subscribe((data: number) => {
-        this.correctCount = data;
-        this.questionService.getQuestionWrongCount(this.unitId, this.questionId).subscribe((data: number) => {
-          this.wrongCount = data;
-          this.resultsReady = true;
-          this.buildCorrectWrongChart();
-        }, error => { console.log(error); });
-      }, error => { console.log(error); });
-
       if (this.questionType === 'TestQuestion') {
+        this.getCorrectWrongAnswerCount();
         this.questionService.getTestQuestionWrongAnswerCount(this.unitId, this.questionId).subscribe((data: any) => {
           for (const element of data) {
             this.barChartResults.push({name: element[0], value: element[1]});
@@ -74,6 +65,7 @@ export class QuestionTrackingComponent implements OnInit {
           this.getUnitNameAndSetTab();
         }, error => { console.log(error); });
       } else if (this.questionType === 'ListQuestion') {
+        this.getCorrectWrongAnswerCount();
         this.questionService.getListQuestionWrongAnswerCount(this.unitId, this.questionId).subscribe((data: any) => {
           for (const element of data) {
             this.barChartResults.push({name: element[0], value: element[1]});
@@ -86,9 +78,21 @@ export class QuestionTrackingComponent implements OnInit {
         }, error => { console.log(error); });
       } else if (this.questionType === 'DefinitionQuestion') {
 
+        this.questionService.getQuestionCorrectCount(this.unitId, this.questionId).subscribe((data: number) => {
+          this.correctCount = data;
+          this.questionService.getQuestionWrongCount(this.unitId, this.questionId).subscribe((data: number) => {
+            this.wrongCount = data;
+            this.questionService.getUncorrectedDefinitionAnswers(this.unitId, this.questionId).subscribe((data: number) => {
+              this.uncorrectedCount = data;
+              this.buildCorrectWrongChart();
+              this.resultsReady = true;
+            }, error => { console.log(error); });
+          }, error => { console.log(error); });
+        }, error => { console.log(error); });
+
         // init data source
         this.dataSourceNotCorrected = new MatTableDataSource<Answer>();
-        this.dataSourceCorrected = new MatTableDataSource<Answer>()
+        this.dataSourceCorrected = new MatTableDataSource<Answer>();
 
         this.questionService.getUnitDefinitionQuestion(this.unitId, this.questionId).subscribe((data: any) => {
           this.question = data;
@@ -107,8 +111,8 @@ export class QuestionTrackingComponent implements OnInit {
   }
 
   getUnitNameAndSetTab() {
-    this.unitService.getUnitName(this.unitId).subscribe((data: string) => {
-      this.unitName = data;
+    this.unitService.getUnitName(this.unitId).subscribe((data: any) => {
+      this.unitName = data.response;
       this.tabService.setQuestion(this.questionId, this.question.questionText, this.unitName, this.unitId);
     }, error => { console.log(error); });
   }
@@ -116,6 +120,18 @@ export class QuestionTrackingComponent implements OnInit {
   buildCorrectWrongChart() {
     this.pieChartResults.push({name: 'Respuestas Correctas', value: this.correctCount});
     this.pieChartResults.push({name: 'Respuestas Incorrectas', value: this.wrongCount});
+    this.pieChartResults.push({name: 'Respuestas Sin Corregir', value: this.uncorrectedCount});
+  }
+
+  getCorrectWrongAnswerCount() {
+    this.questionService.getQuestionCorrectCount(this.unitId, this.questionId).subscribe((data: number) => {
+      this.correctCount = data;
+      this.questionService.getQuestionWrongCount(this.unitId, this.questionId).subscribe((data: number) => {
+        this.wrongCount = data;
+        this.resultsReady = true;
+        this.buildCorrectWrongChart();
+      }, error => { console.log(error); });
+    }, error => { console.log(error); });
   }
 
   correctAnswer(questionID: number) {
