@@ -414,7 +414,11 @@ g.classGroup line {
   cursor: pointer;
   stroke: #27273c;
   stroke-width: 1;
-  fill: none;
+  fill: rgba(0,0,0,0);
+}
+
+.relation:hover {
+  stroke: #997e9f;
 }
 
 .invisible-relation {
