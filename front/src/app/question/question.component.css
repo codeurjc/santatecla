@@ -153,11 +153,14 @@ th.mat-sort-header-sorted {
 .charts-cards {
   position: relative;
   width: 50%;
+  text-align: center;
 }
 
 .center-pie-chart {
-  margin-left: 20%;
-  margin-top: 10%;
+  display: inline-block;
+  margin-left: 10%;
+  margin-top: 5%;
+  margin-right: 10%;
 }
 
 .center-bar-chart {
@@ -172,17 +175,30 @@ th.mat-sort-header-sorted {
   position: relative;
 }
 
-.center-title{
+.center-title {
   text-align: center;
 }
 
-.question-warning{
+.center-uncorrected-table {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%
+}
+
+.center-corrected-table {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 2%;
+  margin-bottom: 5%
+}
+
+.question-warning {
   margin-left:30%;
   margin-right: 30%;
   margin-top:3%;
   background-color: rgba(255, 0, 0, 0.4)
 }
 
-.warning-icon{
+.warning-icon {
   margin-right: 10%
 }

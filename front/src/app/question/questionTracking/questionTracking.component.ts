@@ -3,10 +3,9 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {QuestionService} from '../question.service';
 import {Question} from '../question.model';
 import {MatTableDataSource} from '@angular/material';
-import {Answer} from '../answer.model';
 import {TabService} from '../../tab/tab.service';
 import {UnitService} from '../../unit/unit.service';
-import {Unit} from '../../unit/unit.model';
+import {DefinitionAnswer} from '../definitionQuestion/definitionAnswer.model';
 
 
 @Component({
@@ -91,19 +90,19 @@ export class QuestionTrackingComponent implements OnInit {
         }, error => { console.log(error); });
 
         // init data source
-        this.dataSourceNotCorrected = new MatTableDataSource<Answer>();
-        this.dataSourceCorrected = new MatTableDataSource<Answer>();
+        this.dataSourceNotCorrected = new MatTableDataSource<DefinitionAnswer>();
+        this.dataSourceCorrected = new MatTableDataSource<DefinitionAnswer>();
 
         this.questionService.getUnitDefinitionQuestion(this.unitId, this.questionId).subscribe((data: any) => {
           this.question = data;
           this.getUnitNameAndSetTab();
         }, error => { console.log(error); });
 
-        this.questionService.getUnitDefinitionAnswersNotCorrected(this.unitId, this.questionId).subscribe((data: Answer[]) => {
+        this.questionService.getUnitDefinitionAnswersNotCorrected(this.unitId, this.questionId).subscribe((data: DefinitionAnswer[]) => {
           this.dataSourceNotCorrected.data = data;
         }, error => { console.log(error); });
 
-        this.questionService.getUnitDefinitionAnswersCorrected(this.unitId, this.questionId).subscribe((data: Answer[]) => {
+        this.questionService.getUnitDefinitionAnswersCorrected(this.unitId, this.questionId).subscribe((data: DefinitionAnswer[]) => {
           this.dataSourceCorrected.data = data;
         }, error => { console.log(error); });
       }
@@ -134,9 +133,33 @@ export class QuestionTrackingComponent implements OnInit {
     }, error => { console.log(error); });
   }
 
-  correctAnswer(questionID: number) {
+  correctAnswer(answer: DefinitionAnswer) {
+    answer.correct = true;
+    answer.corrected = true;
+    this.questionService.editUnitDefinitionAnswer(this.unitId, this.questionId, answer.id, answer).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+        (error) => {
+          console.log(error);
+          this.ngOnInit();
+        }
+    );
   }
 
-  wrongAnswer(questionID: number) {
+  wrongAnswer(answer: DefinitionAnswer) {
+    answer.correct = false;
+    answer.corrected = true;
+    this.questionService.editUnitDefinitionAnswer(this.unitId, this.questionId, answer.id, answer).subscribe(
+      (_) => {
+        // TODO Remove it
+        this.ngOnInit();
+      },
+      (error) => {
+        console.log(error);
+        this.ngOnInit();
+      }
+    );
   }
 }

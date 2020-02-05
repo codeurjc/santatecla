@@ -49,6 +49,7 @@ public class DefinitionAnswer{
         }
 
         this.correct = a.isCorrect();
+        this.corrected = a.isCorrected();
     }
 
     public long getId() {

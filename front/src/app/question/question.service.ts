@@ -114,6 +114,16 @@ export class QuestionService {
     return this.http.post(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer', body, {headers});
   }
 
+  editUnitDefinitionAnswer(unitID, questionID, answerID: number, answer: DefinitionAnswer) {
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer/' + answerID, body, {headers});
+  }
+
   getUnitDefinitionAnswers(unitID, questionID: number) {
     return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer');
   }

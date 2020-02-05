@@ -128,6 +128,13 @@ public class DefinitionQuestionRestController extends GeneralRestController {
             //TODO query
             Optional<DefinitionAnswer> oldAnswer = this.definitionQuestionService.findOneAnswer(question.get(), answerID);
             if (oldAnswer.isPresent()) {
+                if(newAnswer.isCorrected()) {
+                    if (newAnswer.isCorrect()) {
+                        question.get().increaseTotalCorrectAnswers();
+                    } else {
+                        question.get().increaseTotalWrongAnswers();
+                    }
+                }
                 oldAnswer.get().update(newAnswer);
                 question.get().getAnswers().remove(oldAnswer.get());
                 question.get().addAnswer(oldAnswer.get());

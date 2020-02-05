@@ -40,6 +40,7 @@ public class DefinitionQuestion extends Question {
 
     public void addAnswer(DefinitionAnswer answer) {
         this.definitionAnswers.add(answer);
+        this.totalAnswers += 1;
     }
 
     /**
