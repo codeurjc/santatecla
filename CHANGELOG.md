@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Help tooltip when you add a module to a course
+- Teacher can correct uncorrected questions
+- Definition Questions tracking with pie chart, uncorrected and corrected answers
+- List and Test Questions tracking with pie and bar charts
 
 ### Fixed
 
