@@ -303,8 +303,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private updateUnitName() {
     const selectedUnit: Unit = this.getUnitById(this.getSelectedUnitId(this.selectedTarget));
-    this.changed = ((this.changed) || (selectedUnit.name !== this.umlNodeOptions.nativeElement.firstChild.value));
-    selectedUnit.name = this.umlNodeOptions.nativeElement.firstChild.value;
+    const newName = this.umlNodeOptions.nativeElement.firstChild.value;
+    this.changed = ((this.changed) || ((newName) && (selectedUnit.name !== newName)));
+    selectedUnit.name = (newName ? newName : selectedUnit.name);
     this.setShowUmlNodeOptions(false);
     this.setShowUmlPathOptions(false);
     this.updateUml();
@@ -773,8 +774,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       }
       uml += this.parseUnitName(relation.incoming.toString()) + connector + this.parseUnitName(relation.outgoing.toString()) + '\n';
     });
-    this.units.forEach((unit: Unit) => {
-      if ((unit.outgoingRelations.length === 0) && (unit.incomingRelations.length === 0)) {
+    Array.from(this.focusedUnits.keys()).forEach((focusedUnitId) => {
+      const unit = this.getUnitById(focusedUnitId);
+      if (((unit.outgoingRelations.length === 0) && (unit.incomingRelations.length === 0)) ||
+        ((this.parentLevel === 0) && (this.childrenLevel === 0)) ||
+        ((unit.outgoingRelations.length === 0) && (this.childrenLevel === 0)) ||
+        ((this.parentLevel === 0) && (unit.incomingRelations.length === 0))) {
         uml += this.parseUnitName(unit.id.toString()) + '<|--|>' + this.parseUnitName(unit.id.toString()) + '\n';
       }
     });

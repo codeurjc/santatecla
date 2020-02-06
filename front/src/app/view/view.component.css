@@ -55,6 +55,7 @@ mat-label {
 #uml-edit-input {
   background: transparent;
   border: none;
+  outline: none;
   top: 120%;
 }
 
