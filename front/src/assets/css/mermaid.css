@@ -385,7 +385,11 @@ g.classGroup rect {
 g.classGroup rect[id^="N0"] {
   fill: #fafffb;
   stroke: #03ca24;
-  cursor: pointer;
+}
+
+g.classGroup rect[id^="F0"] {
+  fill: #fafffb !important;
+  stroke: #03ca24;
 }
 
 g.classGroup rect[id^="F"] {

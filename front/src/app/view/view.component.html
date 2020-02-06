@@ -11,8 +11,12 @@
         <input id="search-input" matInput [(ngModel)]="searchField" (ngModelChange)="search()"/>
       </mat-form-field>
 
+      <button mat-button class="new-unit-button" (click)="createEmptyUnit()">
+        <mat-icon>add</mat-icon>Nueva unidad
+      </button>
+
       <mat-selection-list class="result-list" *ngIf="results.length > 0">
-        <mat-list-option class="result" *ngFor="let result of results" (click)="selectUnit(result)" [selected]="focusedUnitIds.has(result.id.toString())">
+        <mat-list-option class="result" *ngFor="let result of results" (click)="selectUnit(result)" [selected]="focusedUnits.has(result.id.toString())">
           <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
           <span class="unit-name">{{getUnitName(result.name)}}</span>
         </mat-list-option>

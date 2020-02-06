@@ -16,14 +16,16 @@
 }
 
 .result-list {
-  margin-left: 1rem;
+  padding: 0 0.2rem 0 0.2rem;
+  height: calc(100vh - 9rem);
+  overflow-y: auto;
 }
 
 .result {
   border-radius: 0.2rem;
   background-color: #6a3b77;
   cursor: pointer;
-  margin: 0.5rem -0.7em 0 -0.7em;
+  margin-top: 0.5rem;
   color: #ffffff;
 }
 
@@ -271,7 +273,7 @@ mat-label {
 
 #search {
   color: white;
-  width: 100%;
+  width: 50%;
   z-index: 120;
   margin-bottom: -1rem;
 }
@@ -279,4 +281,18 @@ mat-label {
 #search-label {
   position: relative;
   top: -0.15rem;
+}
+
+.new-unit-button {
+  color: white;
+  background-color: #7d3c90;
+  position: absolute;
+  width: 40%;
+  height: 3rem;
+  margin-top: 0.6rem;
+  right: 5%;
+}
+
+.new-unit-button:hover {
+  background-color: #a769b8;
 }
