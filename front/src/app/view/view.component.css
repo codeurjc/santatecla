@@ -21,6 +21,10 @@
   overflow-y: auto;
 }
 
+::ng-deep .mat-list-text {
+  display: inline !important;
+}
+
 .result {
   border-radius: 0.2rem;
   background-color: #6a3b77;

@@ -242,7 +242,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
             this.saveUnitsAndRelations(goToUnit, createSeparateUnit);
           }
         }, error => {
-          console.log(error);
+          if (error.status === 409) {
+            this.dialog.open(ConfirmActionComponent, {
+              data: {
+                confirmText: 'No se ha podido guardar la unidad "' + unit.name + '". Ya existe una unidad con ese nombre en el contexto actual',
+                button1: 'Volver'
+              }
+            });
+          } else {
+            console.log(error);
+          }
         });
       });
       if (unitsToCreate.length === 0) {
@@ -414,25 +423,33 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       data: {
         confirmText: 'Se eliminará definitivamente la unidad y su contenido.',
         button1: 'Cancelar',
-        button2: 'Eliminar'}
+        button2: 'Eliminar'
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       window.scroll(0, 0);
       if (result === 1) {
-        this.unitService.deleteUnit(+this.getSelectedUnitId(this.selectedTarget)).subscribe(() => {
-          if (this.focusedUnits.has(this.getSelectedUnitId(this.selectedTarget))) {
-            let focused = false;
-            this.focusedUnits.forEach((focusedUnit) => {
-              this.getUnitById(focusedUnit.id.toString()).incomingRelations.forEach((relation: Relation) => {
-                if ((!focused) && (focusedUnit.id.toString() !== relation.outgoing.toString())) {
-                  this.focusedUnits.set(relation.outgoing.toString(), this.getUnitById(relation.outgoing.toString()));
-                  focused = true;
-                }
-              });
-            });
-          }
+        const id = this.getSelectedUnitId(this.selectedTarget).toString();
+        if (this.isNewId(id)) {
+          this.focusedUnits.delete(id);
+          this.units.delete(id);
           this.focusUnit();
-        });
+        } else {
+          this.unitService.deleteUnit(+id).subscribe(() => {
+            if (this.focusedUnits.has(id)) {
+              let focused = false;
+              this.focusedUnits.forEach((focusedUnit) => {
+                this.getUnitById(focusedUnit.id.toString()).incomingRelations.forEach((relation: Relation) => {
+                  if ((!focused) && (focusedUnit.id.toString() !== relation.outgoing.toString())) {
+                    this.focusedUnits.set(relation.outgoing.toString(), this.getUnitById(relation.outgoing.toString()));
+                    focused = true;
+                  }
+                });
+              });
+            }
+            this.focusUnit();
+          });
+        }
       }
     });
   }

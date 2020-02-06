@@ -42,10 +42,10 @@ public class UnitService {
 					Unit uniti = duplicates.get(i);
 					Unit unitj = duplicates.get(j);
 					while (uniti.getName().contains(unitj.getName()) || unitj.getName().contains(uniti.getName())) {
-						if (uniti.getName().contains(unitj.getName())) {
+						if ((uniti.getName().contains(unitj.getName())) && (getAncestor(unitj, getLevel(unitj.getName())) != null)) {
 							setParentOnName(unitj);
 						}
-						if (unitj.getName().contains(uniti.getName())) {
+						if ((unitj.getName().contains(uniti.getName())) && (getAncestor(uniti, getLevel(uniti.getName())) != null)) {
 							setParentOnName(uniti);
 						}
 					}
@@ -121,6 +121,15 @@ public class UnitService {
 			parent = getParent(parent, visited);
 		}
 		return absoluteName;
+	}
+
+	public boolean isValidName(Unit unit) {
+		for(Unit nameContaining : this.findByNameContaining(unit.getName())) {
+			if (getAbsoluteName(unit).equals(getAbsoluteName(nameContaining))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

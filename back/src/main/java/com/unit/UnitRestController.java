@@ -33,10 +33,14 @@ public class UnitRestController extends GeneralRestController {
 
     @PostMapping(value = "/")
     public ResponseEntity<Unit> createUnit(@RequestBody Unit unit) {
-        Unit savedUnit = new Unit();
-        updateUnit(savedUnit, unit);
-        this.unitService.save(savedUnit);
-        return new ResponseEntity<>(savedUnit, HttpStatus.OK);
+        if (unitService.isValidName(unit)) {
+            Unit savedUnit = new Unit();
+            updateUnit(savedUnit, unit);
+            this.unitService.save(savedUnit);
+            return new ResponseEntity<>(savedUnit, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @PutMapping(value = "/")
