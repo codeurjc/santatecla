@@ -107,7 +107,7 @@ public class Question {
     }
 
     public void increaseTotalWrongAnswers() {
-        this.totalCorrectAnswers += 1;
+        this.totalWrongAnswers += 1;
         this.totalAnswers += 1;
     }
 }

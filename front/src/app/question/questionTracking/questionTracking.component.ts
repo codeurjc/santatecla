@@ -117,6 +117,7 @@ export class QuestionTrackingComponent implements OnInit {
   }
 
   buildCorrectWrongChart() {
+    this.pieChartResults = [];
     this.pieChartResults.push({name: 'Respuestas Correctas', value: this.correctCount});
     this.pieChartResults.push({name: 'Respuestas Incorrectas', value: this.wrongCount});
     this.pieChartResults.push({name: 'Respuestas Sin Corregir', value: this.uncorrectedCount});
