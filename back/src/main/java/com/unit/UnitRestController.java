@@ -33,14 +33,14 @@ public class UnitRestController extends GeneralRestController {
 
     @PostMapping(value = "/")
     public ResponseEntity<Unit> createUnit(@RequestBody Unit unit) {
-        if (unitService.isValidName(unit)) {
-            Unit savedUnit = new Unit();
+        Unit savedUnit = new Unit();
+        try {
             updateUnit(savedUnit, unit);
-            this.unitService.save(savedUnit);
-            return new ResponseEntity<>(savedUnit, HttpStatus.OK);
-        } else {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+        this.unitService.save(savedUnit);
+        return new ResponseEntity<>(savedUnit, HttpStatus.OK);
     }
 
     @PutMapping(value = "/")
@@ -49,7 +49,11 @@ public class UnitRestController extends GeneralRestController {
         for (Unit unit : units) {
             Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
             if (savedUnit.isPresent()) {
-                updateUnit(savedUnit.get(), unit);
+                try {
+                    updateUnit(savedUnit.get(), unit);
+                } catch (Exception e) {
+                     return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
                 this.unitService.save(savedUnit.get());
                 savedUnits.add(savedUnit.get());
             } else {
@@ -59,7 +63,10 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(savedUnits, HttpStatus.OK);
     }
 
-    private void updateUnit(Unit savedUnit, Unit unit) {
+    private void updateUnit(Unit savedUnit, Unit unit) throws Exception {
+        if (!unitService.isValidName(unit)) {
+            throw new Exception("Invalid name");
+        }
         savedUnit.setName(unit.getName());
         for (Relation relation : unit.getIncomingRelations()) {
             if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
@@ -133,6 +140,11 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<Unit> getUnitParent(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
         return unit.map(value -> new ResponseEntity<>(unitService.getParent(value, new HashSet<>()), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping(value="/valid")
+    public ResponseEntity<Boolean> validName(@RequestBody Unit unit) {
+        return new ResponseEntity<>(unitService.isValidName(unit), HttpStatus.OK);
     }
 
 }

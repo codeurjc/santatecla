@@ -124,8 +124,8 @@ public class UnitService {
 	}
 
 	public boolean isValidName(Unit unit) {
-		for(Unit nameContaining : this.findByNameContaining(unit.getName())) {
-			if (getAbsoluteName(unit).equals(getAbsoluteName(nameContaining))) {
+		for(Unit nameContaining : unitRepository.findByNameContaining(unit.getName())) {
+			if ((nameContaining.getId() != unit.getId()) && (getAbsoluteName(nameContaining).equals(getAbsoluteName(unit)))) {
 				return false;
 			}
 		}

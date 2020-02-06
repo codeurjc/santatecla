@@ -39,6 +39,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private newUnitId = 0;
   private newRelationId = 0;
 
+  private unitNameErrors = false;
   private changed = false;
   private showSpinner = false;
 
@@ -198,7 +199,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return id.substring(0, 1) === '0';
   }
 
-  private save(goToUnit, createSeparateUnit) {
+  private save(goToUnit) {
     if (this.changed) {
       this.changed = false;
       this.showSpinner = true;
@@ -239,15 +240,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
           i++;
           if (i === unitsToCreate.length) {
-            this.saveUnitsAndRelations(goToUnit, createSeparateUnit);
+            this.saveUnitsAndRelations(goToUnit);
           }
         }, error => {
+          this.showSpinner = false;
           if (error.status === 409) {
-            this.dialog.open(ConfirmActionComponent, {
+            const dialogRef = this.dialog.open(ConfirmActionComponent, {
               data: {
                 confirmText: 'No se ha podido guardar la unidad "' + unit.name + '". Ya existe una unidad con ese nombre en el contexto actual',
                 button1: 'Volver'
               }
+            });
+            dialogRef.afterClosed().subscribe(() => {
+              this.updateUml();
             });
           } else {
             console.log(error);
@@ -255,12 +260,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         });
       });
       if (unitsToCreate.length === 0) {
-        this.saveUnitsAndRelations(goToUnit, createSeparateUnit);
+        this.saveUnitsAndRelations(goToUnit);
       }
     }
   }
 
-  private saveUnitsAndRelations(goToUnit, createSeparateUnit) {
+  private saveUnitsAndRelations(goToUnit) {
     const unitsToSave: Unit[] = [];
     this.units.forEach((unit: Unit) => {
       const unitToSave = {
@@ -286,16 +291,25 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
-      if (createSeparateUnit) {
-        this.createSeparateUnit();
-      } else {
-        this.focusUnit();
-      }
+      this.focusUnit();
       if (goToUnit) {
         this.goToUnit(goToUnit);
       }
     }, error => {
       console.log(error);
+    });
+  }
+
+  private checkUnitNames() {
+    this.unitNameErrors = false;
+    this.units.forEach((unit) => {
+      this.unitService.validName(unit).subscribe((valid) => {
+        if (!valid) {
+          this.changed = false;
+          this.unitNameErrors = true;
+          this.findUnitTarget(unit.id.toString()).id = 'E' + unit.id.toString();
+        }
+      });
     });
   }
 
@@ -310,6 +324,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       const uml = this.parseUml(this.relations);
       mermaid.render('uml', uml, (svgCode, bindFunctions) => {
         element.innerHTML = svgCode;
+        this.checkUnitNames();
         this.updateUmlNodeOptions();
       });
     } catch (error) {}
@@ -322,7 +337,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private updateUnitName() {
     const selectedUnit: Unit = this.getUnitById(this.getSelectedUnitId(this.selectedTarget));
     const newName = this.umlNodeOptions.nativeElement.firstChild.value;
-    this.changed = ((this.changed) || ((newName) && (selectedUnit.name !== newName)));
+    this.changed = (((this.changed) || ((newName) && (selectedUnit.name !== newName))) && (!this.unitNameErrors));
     selectedUnit.name = (newName ? newName : selectedUnit.name);
     this.setShowUmlNodeOptions(false);
     this.setShowUmlPathOptions(false);
@@ -349,26 +364,23 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     selectedUnit.incomingRelations.push(newRelation);
     this.addRelation(newRelation);
     this.updateUml();
-    this.changed = true;
+    this.changed =  (!this.unitNameErrors);
     return newUnit;
   }
 
   private createSeparateUnit() {
-    if (this.changed) {
-      this.save(null, true);
-    } else {
-      const id = this.getNewUnitId().toString();
-      const newUnit: Unit = {
-        id: id,
-        name: 'Nueva unidad',
-        incomingRelations: [],
-        outgoingRelations: []
-      };
-      this.addUnit(newUnit);
-      this.focusedUnits.set(id.toString(), newUnit);
-      this.focusUnit();
-      this.changed = true;
-    }
+    const id = this.getNewUnitId().toString();
+    const newUnit: Unit = {
+      id: id,
+      name: 'Nueva unidad',
+      incomingRelations: [],
+      outgoingRelations: []
+    };
+    this.addUnit(newUnit);
+    this.focusedUnits.set(id.toString(), newUnit);
+    this.showDiagram = true;
+    this.updateUml();
+    this.changed = (!this.unitNameErrors);
   }
 
   private createRelation(relationType, incoming: Unit, outgoing: Unit) {
@@ -390,7 +402,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.addRelation(newRelation);
     }
     this.updateUml();
-    this.changed = true;
+    this.changed = (!this.unitNameErrors);
   }
 
   private initCreatingRelation() {
@@ -436,17 +448,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           this.focusUnit();
         } else {
           this.unitService.deleteUnit(+id).subscribe(() => {
-            if (this.focusedUnits.has(id)) {
-              let focused = false;
-              this.focusedUnits.forEach((focusedUnit) => {
-                this.getUnitById(focusedUnit.id.toString()).incomingRelations.forEach((relation: Relation) => {
-                  if ((!focused) && (focusedUnit.id.toString() !== relation.outgoing.toString())) {
-                    this.focusedUnits.set(relation.outgoing.toString(), this.getUnitById(relation.outgoing.toString()));
-                    focused = true;
-                  }
-                });
-              });
-            }
+            this.emptyResults();
+            this.focusedUnits.delete(id);
+            this.units.delete(id);
             this.focusUnit();
           });
         }
@@ -552,7 +556,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
     this.setShowUmlPathOptions(false);
     this.updateUml();
-    this.changed = true;
+    this.changed = (!this.unitNameErrors);
   }
 
   private getRelationTypeEquivalent(relationType: string): string {
@@ -579,7 +583,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   onKeyPress($event: KeyboardEvent) {
     if (($event.metaKey || $event.ctrlKey) && ($event.key === 's')) {
       $event.preventDefault();
-      this.save(null, false);
+      this.save(null);
     }
   }
 
@@ -668,7 +672,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           if (result === 1) {
             this.goToUnit(id);
           } else if (result === 2) {
-            this.save(id, false);
+            this.save(id);
           }
         });
       } else {
@@ -767,7 +771,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.focusedUnits.set(id, this.getUnitById(id));
     }
     if (this.changed) {
-      this.save(null, false);
+      this.save(null);
     } else {
       this.focusUnit();
     }

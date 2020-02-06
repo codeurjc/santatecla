@@ -397,6 +397,12 @@ g.classGroup rect[id^="F"] {
   stroke-width: 0.15rem;
 }
 
+g.classGroup rect[id^="E"] {
+  fill: #faf0f0;
+  stroke: #f22723;
+  stroke-width: 0.15rem;
+}
+
 g.classGroup line {
   stroke: #9e2abb;
   stroke-width: 1;

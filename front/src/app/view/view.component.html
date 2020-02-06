@@ -65,6 +65,10 @@
       <span id="spinner-text">Cargando...</span>
     </div>
 
+    <span *ngIf="unitNameErrors" id="name-errors">
+      Hay unidades con nombres repetidos
+    </span>
+
     <div *ngIf="!showDiagram" id="tips">
       Busca una unidad para ver su diagrama
     </div>

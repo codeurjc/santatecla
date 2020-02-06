@@ -7,6 +7,14 @@
   text-align: left;
 }
 
+#name-errors {
+  position: absolute;
+  z-index: 80000;
+  top: 3.9rem;
+  right: 10rem;
+  color: #ff7878;
+}
+
 #tips {
   position: absolute;
   margin-top: 20rem;
