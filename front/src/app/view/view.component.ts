@@ -198,7 +198,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return id.substring(0, 1) === '0';
   }
 
-  private save(goToUnit) {
+  private save(goToUnit, createSeparateUnit) {
     if (this.changed) {
       this.changed = false;
       this.showSpinner = true;
@@ -223,6 +223,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           testQuestions: []
         };
         this.unitService.createUnit(unitToCreate).subscribe((data: Unit) => {
+          const oldId = unit.id.toString();
           unit.id = data.id;
           unit.name = data.name;
           unit.incomingRelations.forEach((relation: Relation) => {
@@ -231,22 +232,26 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           unit.outgoingRelations.forEach((relation: Relation) => {
             relation.outgoing = data.id.toString();
           });
+          if (this.focusedUnits.get(oldId)) {
+            this.focusedUnits.delete(oldId);
+            this.focusedUnits.set(unit.id.toString(), unit);
+          }
 
           i++;
           if (i === unitsToCreate.length) {
-            this.saveUnitsAndRelations(goToUnit);
+            this.saveUnitsAndRelations(goToUnit, createSeparateUnit);
           }
         }, error => {
           console.log(error);
         });
       });
       if (unitsToCreate.length === 0) {
-        this.saveUnitsAndRelations(goToUnit);
+        this.saveUnitsAndRelations(goToUnit, createSeparateUnit);
       }
     }
   }
 
-  private saveUnitsAndRelations(goToUnit) {
+  private saveUnitsAndRelations(goToUnit, createSeparateUnit) {
     const unitsToSave: Unit[] = [];
     this.units.forEach((unit: Unit) => {
       const unitToSave = {
@@ -272,7 +277,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
-      this.focusUnit();
+      if (createSeparateUnit) {
+        this.createSeparateUnit();
+      } else {
+        this.focusUnit();
+      }
       if (goToUnit) {
         this.goToUnit(goToUnit);
       }
@@ -335,18 +344,22 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return newUnit;
   }
 
-  private createEmptyUnit() {
-    const id = this.getNewUnitId().toString();
-    const newUnit: Unit = {
-      id: id,
-      name: 'Nueva unidad',
-      incomingRelations: [],
-      outgoingRelations: []
-    };
-    this.addUnit(newUnit);
-    this.focusedUnits.set(id.toString(), newUnit);
-    this.focusUnit();
-    this.changed = true;
+  private createSeparateUnit() {
+    if (this.changed) {
+      this.save(null, true);
+    } else {
+      const id = this.getNewUnitId().toString();
+      const newUnit: Unit = {
+        id: id,
+        name: 'Nueva unidad',
+        incomingRelations: [],
+        outgoingRelations: []
+      };
+      this.addUnit(newUnit);
+      this.focusedUnits.set(id.toString(), newUnit);
+      this.focusUnit();
+      this.changed = true;
+    }
   }
 
   private createRelation(relationType, incoming: Unit, outgoing: Unit) {
@@ -549,7 +562,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   onKeyPress($event: KeyboardEvent) {
     if (($event.metaKey || $event.ctrlKey) && ($event.key === 's')) {
       $event.preventDefault();
-      this.save(null);
+      this.save(null, false);
     }
   }
 
@@ -638,7 +651,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           if (result === 1) {
             this.goToUnit(id);
           } else if (result === 2) {
-            this.save(id);
+            this.save(id, false);
           }
         });
       } else {
@@ -736,7 +749,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.focusedUnits.set(id, this.getUnitById(id));
     }
-    this.focusUnit();
+    if (this.changed) {
+      this.save(null, false);
+    } else {
+      this.focusUnit();
+    }
   }
 
 
