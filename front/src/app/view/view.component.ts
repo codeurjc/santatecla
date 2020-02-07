@@ -320,6 +320,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         }
       });
       dialogRef.afterClosed().subscribe(() => {
+        window.scroll(0, 0);
         this.updateUml();
       });
     } else {
@@ -738,6 +739,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
             button2: 'Descartar'}
         });
         dialogRef.afterClosed().subscribe(result => {
+          window.scroll(0, 0);
           if (result === 1) {
             this.goToUnit(id);
           } else if (result === 2) {
