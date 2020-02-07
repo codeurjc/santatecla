@@ -253,20 +253,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
             this.saveUnitsAndRelations(goToUnit);
           }
         }, error => {
-          this.showSpinner = false;
-          if (error.status === 409) {
-            const dialogRef = this.dialog.open(ConfirmActionComponent, {
-              data: {
-                confirmText: 'No se ha podido guardar la unidad "' + unit.name + '". Ya existe una unidad con ese nombre en el contexto actual',
-                button1: 'Volver'
-              }
-            });
-            dialogRef.afterClosed().subscribe(() => {
-              this.updateUml();
-            });
-          } else {
-            console.log(error);
-          }
+          this.saveError(error);
         });
       });
       if (unitsToCreate.length === 0) {
@@ -306,23 +293,41 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.goToUnit(goToUnit);
       }
     }, error => {
-      console.log(error);
+      this.saveError(error);
     });
+  }
+
+  private saveError(error) {
+    this.showSpinner = false;
+    if (error.status === 409) {
+      const dialogRef = this.dialog.open(ConfirmActionComponent, {
+        data: {
+          confirmText: 'Se ha producido un error al guardar. Hay unidades con nombres repetidos en el contexto actual',
+          button1: 'Volver'
+        }
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.updateUml();
+      });
+    } else {
+      console.log(error);
+    }
   }
 
   private checkUnitNames() {
     this.unitNameErrors = false;
     let i = 0;
     this.units.forEach((unit) => {
+      const isNewId = (this.isNewId(unit.id.toString()));
       const unitToCheck: Unit = {
-        id: ((this.isNewId(unit.id.toString())) ? '0' : unit.id),
+        id: ((isNewId) ? '0' : unit.id),
         name: unit.name,
         incomingRelations: unit.incomingRelations,
         outgoingRelations: unit.outgoingRelations
       };
       this.unitService.validName(unitToCheck).subscribe((valid) => {
         i++;
-        if (!valid) {
+        if ((!valid) || (isNewId && this.isNewRepeated(unit))) {
           this.ableToSave = false;
           this.unitNameErrors = true;
           this.findUnitTarget(unit.id.toString()).id = 'E' + unit.id.toString();
@@ -332,6 +337,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         }
       });
     });
+  }
+
+  private isNewRepeated(unit: Unit) {
+    let repeated = false;
+    this.focusedUnits.forEach((focusedUnit) => {
+      if ((!repeated) && (focusedUnit) && (focusedUnit.id !== unit.id) && (focusedUnit.name === unit.name)) {
+        repeated = true;
+      }
+    });
+    return repeated;
   }
 
 
