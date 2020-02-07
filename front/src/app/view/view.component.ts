@@ -39,8 +39,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private newUnitId = 0;
   private newRelationId = 0;
 
-  private unitNameErrors = false;
   private changed = false;
+  private unitNameErrors = false;
+  private ableToSave = false;
   private showSpinner = false;
 
   private showDiagram = false;
@@ -200,7 +201,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private save(goToUnit) {
-    if (this.changed) {
+    if (this.ableToSave) {
+      this.ableToSave = false;
       this.changed = false;
       this.showSpinner = true;
 
@@ -302,12 +304,23 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private checkUnitNames() {
     this.unitNameErrors = false;
+    let i = 0;
     this.units.forEach((unit) => {
-      this.unitService.validName(unit).subscribe((valid) => {
+      const unitToCheck: Unit = {
+        id: ((this.isNewId(unit.id)) ? '0' : unit.id),
+        name: unit.name,
+        incomingRelations: unit.incomingRelations,
+        outgoingRelations: unit.outgoingRelations
+      };
+      this.unitService.validName(unitToCheck).subscribe((valid) => {
+        i++;
         if (!valid) {
-          this.changed = false;
+          this.ableToSave = false;
           this.unitNameErrors = true;
           this.findUnitTarget(unit.id.toString()).id = 'E' + unit.id.toString();
+        }
+        if (i === this.units.size) {
+          this.ableToSave = ((this.changed) && (!this.unitNameErrors));
         }
       });
     });
@@ -337,7 +350,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private updateUnitName() {
     const selectedUnit: Unit = this.getUnitById(this.getSelectedUnitId(this.selectedTarget));
     const newName = this.umlNodeOptions.nativeElement.firstChild.value;
-    this.changed = (((this.changed) || ((newName) && (selectedUnit.name !== newName))) && (!this.unitNameErrors));
+    this.changed = ((this.changed) || ((newName) && (selectedUnit.name !== newName)));
     selectedUnit.name = (newName ? newName : selectedUnit.name);
     this.setShowUmlNodeOptions(false);
     this.setShowUmlPathOptions(false);
@@ -364,7 +377,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     selectedUnit.incomingRelations.push(newRelation);
     this.addRelation(newRelation);
     this.updateUml();
-    this.changed =  (!this.unitNameErrors);
+    this.changed = true;
     return newUnit;
   }
 
@@ -380,7 +393,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.focusedUnits.set(id.toString(), newUnit);
     this.showDiagram = true;
     this.updateUml();
-    this.changed = (!this.unitNameErrors);
+    this.changed = true;
   }
 
   private createRelation(relationType, incoming: Unit, outgoing: Unit) {
@@ -402,7 +415,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.addRelation(newRelation);
     }
     this.updateUml();
-    this.changed = (!this.unitNameErrors);
+    this.changed = true;
   }
 
   private initCreatingRelation() {
@@ -556,7 +569,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
     this.setShowUmlPathOptions(false);
     this.updateUml();
-    this.changed = (!this.unitNameErrors);
+    this.changed = true;
   }
 
   private getRelationTypeEquivalent(relationType: string): string {
@@ -661,7 +674,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
       const id = this.getSelectedUnitId(target);
-      if (this.changed) {
+      if (this.ableToSave) {
         const dialogRef = this.dialog.open(ConfirmActionComponent, {
           data: {
             confirmText: 'Se han realizado cambios',
@@ -770,7 +783,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.focusedUnits.set(id, this.getUnitById(id));
     }
-    if (this.changed) {
+    if (this.ableToSave) {
       this.save(null);
     } else {
       this.focusUnit();
