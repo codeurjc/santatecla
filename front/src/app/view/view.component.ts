@@ -174,6 +174,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private addFocusedUnit(id, unit) {
     this.focusedUnits.set(id.toString(), unit);
+    if (unit) {
+      this.units.set(unit.id.toString(), unit);
+    }
   }
 
   private addUnit(unit: Unit) {
@@ -359,6 +362,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const newName = this.umlNodeOptions.nativeElement.firstChild.value;
     this.changed = ((this.changed) || ((newName) && (selectedUnit.name !== newName)));
     selectedUnit.name = (newName ? newName : selectedUnit.name);
+    this.units.get(this.getSelectedUnitId(this.selectedTarget)).name =  (newName ? newName : selectedUnit.name);
     this.setShowUmlNodeOptions(false);
     this.setShowUmlPathOptions(false);
     this.updateUml();
@@ -396,7 +400,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       incomingRelations: [],
       outgoingRelations: []
     };
-    this.addUnit(newUnit);
     this.addFocusedUnit(id.toString(), newUnit);
     this.showDiagram = true;
     this.updateUml();
@@ -670,7 +673,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
       }
-      this.closeUmlNodeOptions();
+      if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
+        this.closeUmlNodeOptions();
+      }
     } else {
       if ((target.tagName === 'rect') || (target.tagName === 'text')) {
         this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.getSelectedUnitId(target)), this.getUnitById(this.creatingRelation.outgoing));
@@ -686,7 +691,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
       const id = this.getSelectedUnitId(target);
-      if (this.ableToSave) {
+      if (this.changed && this.ableToSave) {
         const dialogRef = this.dialog.open(ConfirmActionComponent, {
           data: {
             confirmText: 'Se han realizado cambios',
@@ -700,7 +705,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
             this.save(id);
           }
         });
-      } else {
+      } else if (!this.changed) {
         this.goToUnit(id);
       }
     }

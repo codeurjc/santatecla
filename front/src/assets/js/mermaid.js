@@ -49164,7 +49164,7 @@ const drawClass = function (elem, classDef) {
 
 
   const g = elem.append('g').attr('id', id).attr('class', 'classGroup');
-  const splittedClassDef = classDef.id.match(/[FN][0-9]+|[^\n\"\-\.<>0-9]*|([^\n\"\-<>])+/g);
+  const splittedClassDef = classDef.id.match(/[FN][0-9]+|[^\n\"\-\.<>]*|([^\n\"\-<>])+/g);
   g.append('text').attr('x', conf.padding).attr('y', conf.textHeight + conf.padding)
     .attr('id', splittedClassDef[0]).text(splittedClassDef[1]);
 
