@@ -1,9 +1,6 @@
 package com.unit;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.GeneralRestController;
 import com.relation.Relation;
@@ -129,6 +126,16 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<Unit> getUnitParent(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
         return unit.map(value -> new ResponseEntity<>(unitService.getParent(value, new HashSet<>()), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value = "/{id}/name")
+    public ResponseEntity<Object> getUnitName(@PathVariable int id) {
+        Optional<Unit> unit = this.unitService.findOne(id);
+        if (unit.isPresent()) {
+            return new ResponseEntity<>(Collections.singletonMap("response", unit.get().getName()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

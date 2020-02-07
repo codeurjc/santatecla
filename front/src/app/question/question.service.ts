@@ -113,4 +113,46 @@ export class QuestionService {
 
     return this.http.post(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer', body, {headers});
   }
+
+  editUnitDefinitionAnswer(unitID, questionID, answerID: number, answer: DefinitionAnswer) {
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer/' + answerID, body, {headers});
+  }
+
+  getUnitDefinitionAnswers(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer');
+  }
+
+  getUnitDefinitionAnswersCorrected(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer?corrected=true');
+  }
+
+  getUnitDefinitionAnswersNotCorrected(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer?corrected=false');
+  }
+
+  getQuestionCorrectCount(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/' + questionId + '/correctCount');
+  }
+
+  getQuestionWrongCount(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/' + questionId + '/wrongCount');
+  }
+
+  getTestQuestionWrongAnswerCount(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/test/' + questionId + '/chosenWrongAnswersCount');
+  }
+
+  getListQuestionWrongAnswerCount(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/list/' + questionId + '/chosenWrongAnswersCount');
+  }
+
+  getUncorrectedDefinitionAnswers(unitId, questionId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/definition/' + questionId + '/uncorrectedCount');
+  }
 }

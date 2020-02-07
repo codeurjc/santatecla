@@ -134,6 +134,71 @@ th.mat-sort-header-sorted {
   color: darkorange;
 }
 
+.correct-icon {
+  color: darkgreen;
+}
+
+.wrong-icon {
+  color: indianred;
+}
+
 .text-secondary {
   color: gray;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.charts-cards {
+  position: relative;
+  width: 50%;
+  text-align: center;
+}
+
+.center-pie-chart {
+  display: inline-block;
+  margin-left: 10%;
+  margin-top: 5%;
+  margin-right: 10%;
+}
+
+.center-bar-chart {
+  margin-left: 10%;
+  margin-top: 10%
+}
+
+.question-tracking {
+  margin-top: 4rem;
+  margin-left: 4%;
+  margin-right: 4%;
+  position: relative;
+}
+
+.center-title {
+  text-align: center;
+}
+
+.center-uncorrected-table {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%
+}
+
+.center-corrected-table {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 2%;
+  margin-bottom: 5%
+}
+
+.question-warning {
+  margin-left:30%;
+  margin-right: 30%;
+  margin-top:3%;
+  background-color: rgba(255, 0, 0, 0.4)
+}
+
+.warning-icon {
+  margin-right: 10%
 }
