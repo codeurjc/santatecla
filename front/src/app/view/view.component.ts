@@ -120,15 +120,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.remainingFocusedUnits = this.focusedUnits.size;
       this.focusedUnits.forEach((id) => {
         this.remainingFocusedUnits--;
-        if (this.isNewId(id.toString())) {console.log('alguna vez entra aqui???');
-          this.addUnit(this.getUnitById(id.toString()));
-        } else {
-          this.getUnitAndUpdateUml(+id, new Set<number>(), this.parentLevel, this.childrenLevel);
-        }
+        this.getUnitAndUpdateUml(+id, new Set<number>(), this.parentLevel, this.childrenLevel);
         if ((this.remainingUnits === 0) && (this.remainingFocusedUnits === 0)) {
           this.updateUml();
-          this.showSpinner = false;
-          this.showDiagram = true;
         }
       });
     }
@@ -169,8 +163,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
       if ((this.remainingUnits === 0) && (this.remainingFocusedUnits === 0)) {
         this.updateUml();
-        this.showSpinner = false;
-        this.showDiagram = true;
       }
 
     }, error => {
@@ -355,6 +347,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         }
         if (i === this.units.size) {
           this.ableToSave = ((this.changed) && (!this.unitNameErrors));
+          this.showSpinner = false;
+          this.showDiagram = true;
         }
       });
     });
@@ -384,6 +378,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Uml
 
   private updateUml() {
+    this.showSpinner = true;
     const element: any = this.umlDiv.nativeElement;
     element.innerHTML = '';
     try {
@@ -446,7 +441,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       outgoingRelations: []
     };
     this.addFocusedUnit(id.toString(), newUnit);
-    this.showDiagram = true;
     this.updateUml();
     this.changed = true;
   }
