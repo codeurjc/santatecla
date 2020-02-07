@@ -529,8 +529,24 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     input.focus();
     input.setSelectionRange(0, input.value.length);
     const optionsStyle = this.umlNodeOptions.nativeElement.lastChild.style;
-    optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
-    optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    const left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset);
+    const right = (this.selectedTarget.getBoundingClientRect().left + window.pageXOffset);
+    if (left < (window.innerWidth / 1.25)) {
+      optionsStyle.left = (left + 'px');
+      optionsStyle.right = '';
+    } else {
+      optionsStyle.left = '';
+      optionsStyle.right = ((window.innerWidth - right) + 'px');
+    }
+    const top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset);
+    const bottom = (this.selectedTarget.getBoundingClientRect().bottom + window.pageYOffset);
+    if (top < (window.innerHeight / 1.25)) {
+      optionsStyle.top = (top + 'px');
+      optionsStyle.bottom = '';
+    } else {
+      optionsStyle.top = 'auto';
+      optionsStyle.bottom = ((window.innerHeight - bottom) + 'px');
+    }
   }
 
   private updateUmlNodeOptions() {
