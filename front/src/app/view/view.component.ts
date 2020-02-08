@@ -87,7 +87,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private focusUnit() {
     if (this.ableToSave) {
-      this.save(null, null);
+      this.save(null, null, null);
     } else if (this.changed) {
       const dialogRef = this.reloadDialog();
       dialogRef.afterClosed().subscribe(result => {
@@ -215,7 +215,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return id.toString().substring(0, 1) === '0';
   }
 
-  private save(goToUnit, deleteUnit) {
+  private save(goToUnit, deleteUnit, deleteRelation) {
     if (this.ableToSave) {
       this.ableToSave = false;
       this.changed = false;
@@ -258,19 +258,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
           i++;
           if (i === unitsToCreate.length) {
-            this.saveUnitsAndRelations(goToUnit, deleteUnit);
+            this.saveUnitsAndRelations(goToUnit, deleteUnit, deleteRelation);
           }
         }, error => {
           this.saveError(error);
         });
       });
       if (unitsToCreate.length === 0) {
-        this.saveUnitsAndRelations(goToUnit, deleteUnit);
+        this.saveUnitsAndRelations(goToUnit, deleteUnit, deleteRelation);
       }
     }
   }
 
-  private saveUnitsAndRelations(goToUnit, deleteUnit) {
+  private saveUnitsAndRelations(goToUnit, deleteUnit, deleteRelation) {
     const unitsToSave: Unit[] = [];
     this.units.forEach((unit: Unit) => {
       const unitToSave = {
@@ -300,6 +300,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.goToUnit(goToUnit);
       } else if (deleteUnit) {
         this.deleteUnit(deleteUnit);
+      } else if (deleteRelation) {
+        this.deleteRelation(deleteRelation);
       } else {
         this.focusUnit();
       }
@@ -329,8 +331,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       const unitToCheck: Unit = {
         id: ((isNewId) ? '0' : unit.id),
         name: unit.name,
-        incomingRelations: [],
-        outgoingRelations: []
+        incomingRelations: ((isNewId) ? [] : unit.incomingRelations),
+        outgoingRelations: ((isNewId) ? [] : unit.outgoingRelations)
       };
       this.unitService.validName(unitToCheck).subscribe((valid) => {
         i++;
@@ -506,7 +508,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         window.scroll(0, 0);
         if (result === 1) {
-          this.save(null, id);
+          this.save(null, id, null);
         }
       });
     }
@@ -576,7 +578,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           dialogRef.afterClosed().subscribe(result => {
             window.scroll(0, 0);
             if (result === 1) {
-              this.deleteRelation(relation);
+              this.save(null, null, relation);
             }
           });
         }
@@ -706,7 +708,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   onKeyPress($event: KeyboardEvent) {
     if (($event.metaKey || $event.ctrlKey) && ($event.key === 's')) {
       $event.preventDefault();
-      this.save(null, null);
+      this.save(null, null, null);
     }
   }
 
@@ -782,7 +784,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           if (result === 1) {
             this.goToUnit(id);
           } else if (result === 2) {
-            this.save(id, null);
+            this.save(id, null, null);
           }
         });
       } else if (!this.changed) {
