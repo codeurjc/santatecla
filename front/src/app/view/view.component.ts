@@ -87,7 +87,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private focusUnit() {
     if (this.ableToSave) {
-      this.save(null);
+      this.save(null, null);
     } else if (this.changed) {
       const dialogRef = this.reloadDialog();
       dialogRef.afterClosed().subscribe(result => {
@@ -215,7 +215,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return id.toString().substring(0, 1) === '0';
   }
 
-  private save(goToUnit) {
+  private save(goToUnit, deleteUnit) {
     if (this.ableToSave) {
       this.ableToSave = false;
       this.changed = false;
@@ -258,19 +258,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
           i++;
           if (i === unitsToCreate.length) {
-            this.saveUnitsAndRelations(goToUnit);
+            this.saveUnitsAndRelations(goToUnit, deleteUnit);
           }
         }, error => {
           this.saveError(error);
         });
       });
       if (unitsToCreate.length === 0) {
-        this.saveUnitsAndRelations(goToUnit);
+        this.saveUnitsAndRelations(goToUnit, deleteUnit);
       }
     }
   }
 
-  private saveUnitsAndRelations(goToUnit) {
+  private saveUnitsAndRelations(goToUnit, deleteUnit) {
     const unitsToSave: Unit[] = [];
     this.units.forEach((unit: Unit) => {
       const unitToSave = {
@@ -296,9 +296,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
-      this.focusUnit();
       if (goToUnit) {
         this.goToUnit(goToUnit);
+      } else if (deleteUnit) {
+        this.deleteUnit(deleteUnit);
+      } else {
+        this.focusUnit();
       }
     }, error => {
       this.saveError(error);
@@ -503,7 +506,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         window.scroll(0, 0);
         if (result === 1) {
-          this.deleteUnit(id);
+          this.save(null, id);
         }
       });
     }
@@ -703,7 +706,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   onKeyPress($event: KeyboardEvent) {
     if (($event.metaKey || $event.ctrlKey) && ($event.key === 's')) {
       $event.preventDefault();
-      this.save(null);
+      this.save(null, null);
     }
   }
 
@@ -779,7 +782,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           if (result === 1) {
             this.goToUnit(id);
           } else if (result === 2) {
-            this.save(id);
+            this.save(id, null);
           }
         });
       } else if (!this.changed) {
