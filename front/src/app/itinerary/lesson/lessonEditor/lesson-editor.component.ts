@@ -22,6 +22,7 @@ import {ModuleService} from '../../module/module.service';
 import {Module} from '../../module/module.model';
 import {ImageService} from '../../../images/image.service';
 import {ImageComponent} from '../../../images/image.component';
+import {CardService} from '../../../card/card.service';
 
 
 function convertToHTML(text) {
@@ -79,7 +80,8 @@ export class LessonEditorComponent implements OnInit {
               private bottomSheet: MatBottomSheet,
               private unitLessonService: UnitLessonService,
               private tabService: TabService,
-              private imageService: ImageService) {
+              private imageService: ImageService,
+              private cardService: CardService) {
     this.showSpinner = true;
   }
 
@@ -160,34 +162,49 @@ export class LessonEditorComponent implements OnInit {
     }
   }
 
-  async getEmbebedContent(contentId: number, contentId2: number, unitId: number, content: string, contentCounter: number, type: string) {
+  async getEmbebedContent(content1: any, content2: any, unit: any, content: string, contentCounter: number, type: string) {
     let contentEmbebed;
-    if (type === 'card') {
-      contentEmbebed = await this.unitService.getCard(contentId, unitId).toPromise();
-      this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
-    } else if (type === 'slide') {
-      this.subSlide = true;
-      contentEmbebed = await this.unitLessonService.getSlideFormLesson(contentId, contentId2, unitId).toPromise();
-      this.extractedData.splice(contentCounter, 1, contentEmbebed.content.split('=== ')[1]);
-    } else if (type === 'question') {
-      contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(contentId).toPromise();
-      const url = 'http://localhost:4200/#/units/' + unitId + '/itineraries/11/definitionQuestion/' + contentId;
-      this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]');
-    } else if (type === 'image') {
-      contentEmbebed = await this.imageService.getImage(contentId).toPromise();
-      const image = this.convertImage(contentEmbebed.image);
-      const id = 3;
-      const img = '++++\n' +
-        '<img class="img-lesson" src="' + image + '">\n' +
-        '++++\n' +
-        '\n';
-      this.extractedData.splice(contentCounter, 1, img);
+    if (+unit) {
+      if (type === 'card') {
+        contentEmbebed = await this.unitService.getCard(+content1, +unit).toPromise();
+        this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
+      } else if (type === 'slide') {
+        this.subSlide = true;
+        contentEmbebed = await this.unitLessonService.getSlideFormLesson(+content1, +content2, +unit).toPromise();
+        this.extractedData.splice(contentCounter, 1, contentEmbebed.content.split('=== ')[1]);
+      } else if (type === 'question') {
+        /* contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(content1).toPromise();
+        const url = 'http://localhost:4200/#/units/' + unit + '/itineraries/11/definitionQuestion/' + content1;
+        this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]'); */
+      } else if (type === 'image') {
+        contentEmbebed = await this.imageService.getImage(content1).toPromise();
+        const image = this.convertImage(contentEmbebed.image);
+        const img = '++++\n' +
+          '<img class="img-lesson" src="' + image + '">\n' +
+          '++++\n' +
+          '\n';
+        this.extractedData.splice(contentCounter, 1, img);
+      }
+    } else {
+      if (type === 'card') {
+        contentEmbebed = await this.cardService.getCardByName(unit, content1).toPromise().catch((error) => console.log(error));
+        if (contentEmbebed.length > 1) {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        } else {
+          this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content);
+        }
+      } else if (type === 'slide') {
+        this.subSlide = true;
+        contentEmbebed = await this.slideService.getSlideByName(unit, content2, content1).toPromise().catch((error) => console.log(error));
+        if (contentEmbebed.length > 1) {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        } else {
+          this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content.split('=== ')[1]);
+        }
+      }
     }
-    this.addExtractedData(content);
-  }
 
-  prueba() {
-    console.log('hola');
+    this.addExtractedData(content);
   }
 
   convertImage(bytes: any) {
@@ -229,11 +246,11 @@ export class LessonEditorComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[2]), content, contentCounter, 'card');
+          this.getEmbebedContent(parameters[1], null, parameters[2], content, contentCounter, 'card');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'slide') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), Number(parameters[2]), Number(parameters[3]), content, contentCounter, 'slide');
+          this.getEmbebedContent(parameters[1], parameters[2], parameters[3], content, contentCounter, 'slide');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
@@ -283,8 +300,9 @@ export class LessonEditorComponent implements OnInit {
     if (slidesContent[0].split(' ')[0] === '==') {
       this.lesson.name = '';
       for (let i = 1; i < slidesContent[0].split(' ').length; i ++) {
-        this.lesson.name = this.lesson.name + slidesContent[0].split(' ')[i].split('\n')[0] + ' ';
+        this.lesson.name = this.lesson.name + slidesContent[0].split(' ')[i] + ' ';
       }
+      this.lesson.name = this.lesson.name.split('\n')[0];
     }
     this.contentToSlides(slidesContent);
   }
