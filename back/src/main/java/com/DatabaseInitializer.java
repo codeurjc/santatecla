@@ -154,7 +154,7 @@ public class DatabaseInitializer {
                         "insert.card/2/1\n");
 
                 slide04.addContent("\n" +
-                        "insert.slide/Programación funcional/Introducción a la programación funcional/Paradigmas de la programación\n");
+                        "insert.slide/Paradigmas de la programación/Introducción a la programación funcional/Programación funcional\n");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide01);
