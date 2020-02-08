@@ -16,8 +16,6 @@ export class UnitsCardsToolComponent implements OnInit {
   units: Unit[];
   unitsResult: Unit[];
 
-  copyInfoPosition = 'after';
-
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
