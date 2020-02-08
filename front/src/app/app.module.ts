@@ -71,12 +71,14 @@ import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-bl
 import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rename.component';
 import {ImageComponent} from './images/image.component';
 import {ImageService} from './images/image.service';
+import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LessonFormComponent,
     LessonComponent,
+    LessonSlidesToolComponent,
     ModuleComponent,
     ModuleFormComponent,
     LoginComponent,

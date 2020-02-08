@@ -23,6 +23,7 @@ import {Module} from '../../module/module.model';
 import {ImageService} from '../../../images/image.service';
 import {ImageComponent} from '../../../images/image.component';
 import {CardService} from '../../../card/card.service';
+import {LessonSlidesToolComponent} from '../lessonTools/lesson-slides-tool.component';
 
 
 function convertToHTML(text) {
@@ -357,12 +358,16 @@ export class LessonEditorComponent implements OnInit {
     });
   }
 
-  openBottomSheet(): void {
+  openCardsBottomSheet(): void {
     this.bottomSheet.open(UnitsCardsToolComponent);
   }
 
   openImageBottomSheet(): void {
     this.bottomSheet.open(ImageComponent);
+  }
+
+  openSlidesBottomSheet(): void {
+    this.bottomSheet.open(LessonSlidesToolComponent);
   }
 
   nextSlide() {
