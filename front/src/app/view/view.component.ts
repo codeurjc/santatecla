@@ -6,8 +6,8 @@ import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
 import { TdDialogService } from '@covalent/core';
 import {TabService} from '../tab/tab.service';
-import {MatDialog} from '@angular/material/dialog';
-import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmActionComponent } from '../confirmAction/confirm-action.component';
 
 declare var mermaid: any;
 
@@ -89,13 +89,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.ableToSave) {
       this.save(null);
     } else if (this.changed) {
-      const dialogRef = this.dialog.open(ConfirmActionComponent, {
-        data: {
-          confirmText: 'Se recargará el diagrama',
-          button1: 'Cancelar',
-          button2: 'Descartar cambios'
-        }
-      });
+      const dialogRef = this.reloadDialog();
       dialogRef.afterClosed().subscribe(result => {
         window.scroll(0, 0);
         if (result === 1) {
@@ -113,6 +107,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.deleteNewUnits();
     this.changed = false;
     if (this.focusedUnits.size === 0) {
+      this.showSpinner = false;
       this.showDiagram = false;
     } else {
       this.showSpinner = true;
@@ -313,12 +308,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   private saveError(error) {
     this.showSpinner = false;
     if (error.status === 409) {
-      const dialogRef = this.dialog.open(ConfirmActionComponent, {
-        data: {
-          confirmText: 'Se ha producido un error al guardar. Hay unidades con nombres repetidos en el contexto actual',
-          button1: 'Volver'
-        }
-      });
+      const dialogRef = this.saveErrorDialog();
       dialogRef.afterClosed().subscribe(() => {
         window.scroll(0, 0);
         this.updateUml();
@@ -493,56 +483,107 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return duplicate;
   }
 
-  private deleteUnit() {
-    const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      data: {
-        confirmText: 'Se eliminará definitivamente la unidad y su contenido.',
-        button1: 'Cancelar',
-        button2: 'Eliminar'
-      }
+  private confirmDeleteUnit() {
+    const id = this.getSelectedUnitId(this.selectedTarget).toString();
+    if (this.isNewId(id)) {
+      this.deleteNewUnit(id);
+      this.setShowUmlNodeOptions(false);
+      this.updateUml();
+    } else  if (this.changed && (!this.ableToSave)) {
+      const dialogRef = this.reloadDialog();
+      dialogRef.afterClosed().subscribe(result => {
+        window.scroll(0, 0);
+        if (result === 1) {
+          this.changed = false;
+          this.deleteUnit(id);
+        }
+      });
+    } else {
+      const dialogRef = this.confirmDeleteUnitDialog();
+      dialogRef.afterClosed().subscribe(result => {
+        window.scroll(0, 0);
+        if (result === 1) {
+          this.deleteUnit(id);
+        }
+      });
+    }
+  }
+
+  private deleteUnit(id: string) {
+    this.unitService.deleteUnit(+id).subscribe(() => {
+      this.emptyResults();
+      this.focusedUnits.delete(id);
+      this.units.delete(id);
+      this.focusUnit();
     });
-    dialogRef.afterClosed().subscribe(result => {
-      window.scroll(0, 0);
-      if (result === 1) {
-        const id = this.getSelectedUnitId(this.selectedTarget).toString();
-        if (this.isNewId(id)) {
-          this.focusedUnits.delete(id);
-          this.units.delete(id);
+  }
+
+  private deleteNewUnit(id: string) {
+    const unit = this.getUnitById(id);
+    unit.incomingRelations.forEach((relation) => {
+      this.deleteNewIncomingRelation(relation);
+    });
+    unit.outgoingRelations.forEach((relation) => {
+      this.deleteNewOutgoingRelation(relation);
+    });
+    this.focusedUnits.delete(id);
+    this.units.delete(id);
+  }
+
+  private deleteNewIncomingRelation(relation: Relation) {
+    this.relations.delete(relation.id.toString());
+    const outgoingRelations = this.getUnitById(relation.outgoing.toString()).outgoingRelations;
+    const index = outgoingRelations.indexOf(relation, 0);
+    if (index > -1) {
+      outgoingRelations.splice(index, 1);
+    }
+  }
+
+  private deleteNewOutgoingRelation(relation: Relation) {
+    this.relations.delete(relation.id.toString());
+    const outgoingRelations = this.getUnitById(relation.incoming.toString()).incomingRelations;
+    const index = outgoingRelations.indexOf(relation, 0);
+    if (index > -1) {
+      outgoingRelations.splice(index, 1);
+    }
+  }
+
+  private confirmDeleteRelation() {
+    const splittedRelation: string[] = this.selectedTarget.id.split('-');
+    const incoming = splittedRelation[0];
+    const outgoing = splittedRelation[1];
+    const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
+    this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
+      if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
+        if (this.isNewId(relation.id)) {
+          this.deleteNewIncomingRelation(relation);
+          this.deleteNewOutgoingRelation(relation);
+          this.setShowUmlPathOptions(false);
           this.updateUml();
+        } else if (this.changed && (!this.ableToSave)) {
+          const dialogRef = this.reloadDialog();
+          dialogRef.afterClosed().subscribe(result => {
+            window.scroll(0, 0);
+            if (result === 1) {
+              this.deleteRelation(relation);
+            }
+          });
         } else {
-          this.unitService.deleteUnit(+id).subscribe(() => {
-            this.emptyResults();
-            this.focusedUnits.delete(id);
-            this.units.delete(id);
-            this.focusUnit();
+          const dialogRef = this.confirmDeleteRelationDialog();
+          dialogRef.afterClosed().subscribe(result => {
+            window.scroll(0, 0);
+            if (result === 1) {
+              this.deleteRelation(relation);
+            }
           });
         }
       }
     });
   }
 
-  private deleteRelation() {
-    const dialogRef = this.dialog.open(ConfirmActionComponent, {
-      data: {
-        confirmText: 'Se eliminará la relación',
-        button1: 'Cancelar',
-        button2: 'Eliminar'}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      window.scroll(0, 0);
-      if (result === 1) {
-        const splittedRelation: string[] = this.selectedTarget.id.split('-');
-        const incoming = splittedRelation[0];
-        const outgoing = splittedRelation[1];
-        const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
-        this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
-          if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
-            this.unitService.deleteRelation(+relation.id).subscribe(() => {
-              this.focusUnit();
-            });
-          }
-        });
-      }
+  private deleteRelation(relation: Relation) {
+    this.unitService.deleteRelation(+relation.id).subscribe(() => {
+      this.focusUnit();
     });
   }
 
@@ -732,12 +773,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
       const id = this.getSelectedUnitId(target);
       if (this.changed && this.ableToSave) {
-        const dialogRef = this.dialog.open(ConfirmActionComponent, {
-          data: {
-            confirmText: 'Se han realizado cambios',
-            button1: 'Guardar',
-            button2: 'Descartar'}
-        });
+        const dialogRef = this.changedDialog();
         dialogRef.afterClosed().subscribe(result => {
           window.scroll(0, 0);
           if (result === 1) {
@@ -834,16 +870,80 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1];
   }
 
-  private selectUnit(result: Unit) {
-    if (this.ableToSave || (!this.changed)) {
-      const id = result.id.toString();
-      if (this.focusedUnits.has(id)) {
-        this.focusedUnits.delete(id);
-      } else {
-        this.addFocusedUnit(id.toString(), this.getUnitById(id));
-      }
+  private confirmSelectUnit(unit: Unit) {
+    if (this.changed && (!this.ableToSave)) {
+      const dialogRef = this.reloadDialog();
+      dialogRef.afterClosed().subscribe(result => {
+        window.scroll(0, 0);
+        if (result === 1) {
+          this.changed = false;
+          this.selectUnit(unit);
+        }
+      });
+    } else {
+      this.selectUnit(unit);
+    }
+  }
+
+  private selectUnit(unit: Unit) {
+    const id = unit.id.toString();
+    if (this.focusedUnits.has(id)) {
+      this.focusedUnits.delete(id);
+    } else {
+      this.addFocusedUnit(id.toString(), this.getUnitById(id));
     }
     this.focusUnit();
+  }
+
+
+
+  // Dialogs
+
+  private changedDialog() {
+    return this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se han realizado cambios',
+        button1: 'Guardar',
+        button2: 'Descartar'}
+    });
+  }
+
+  private reloadDialog() {
+    return this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se recargará el diagrama',
+        button1: 'Cancelar',
+        button2: 'Descartar cambios'
+      }
+    });
+  }
+
+  private saveErrorDialog() {
+    return this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se ha producido un error al guardar. Hay unidades con nombres repetidos en el contexto actual',
+        button1: 'Volver'
+      }
+    });
+  }
+
+  private confirmDeleteUnitDialog() {
+    return this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se eliminará definitivamente la unidad y su contenido.',
+        button1: 'Cancelar',
+        button2: 'Eliminar'
+      }
+    });
+  }
+
+  private confirmDeleteRelationDialog() {
+    return this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'Se eliminará la relación',
+        button1: 'Cancelar',
+        button2: 'Eliminar'}
+    });
   }
 
 

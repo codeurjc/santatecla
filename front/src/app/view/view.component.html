@@ -16,14 +16,14 @@
       </button>
 
       <mat-selection-list class="result-list" *ngIf="results.length > 0">
-        <mat-list-option class="result" *ngFor="let result of results" (click)="selectUnit(result)" [selected]="focusedUnits.has(result.id.toString())">
+        <mat-list-option class="result" *ngFor="let result of results" (click)="confirmSelectUnit(result)" [selected]="focusedUnits.has(result.id.toString())">
           <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
           <span class="unit-name">{{getUnitName(result.name)}}</span>
         </mat-list-option>
       </mat-selection-list>
 
       <mat-selection-list class="result-list" *ngIf="results.length <= 0">
-        <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="selectUnit(unit)" [selected]="true">
+        <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="confirmSelectUnit(unit)" [selected]="true">
           <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>
           <span class="unit-name">{{getUnitName(unit.name)}}</span>
         </mat-list-option>
@@ -95,7 +95,7 @@
         <button id="use-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-use-outgoing.png" height="15"></button>
         <br>
 
-        <button title="Eliminar unidad" class="delete-button uml-options-button" (click)="deleteUnit()">
+        <button title="Eliminar unidad" class="delete-button uml-options-button" (click)="confirmDeleteUnit()">
           <mat-icon class="button-icon">delete</mat-icon>
         </button>
 
@@ -124,7 +124,7 @@
           <button id="use-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-use-incoming.png" height="15"></button>
         </div>
 
-        <button title="Eliminar relación" class="delete-button uml-options-button" (click)="deleteRelation()">
+        <button title="Eliminar relación" class="delete-button uml-options-button" (click)="confirmDeleteRelation()">
           <mat-icon class="button-icon">delete</mat-icon>
         </button>
 
