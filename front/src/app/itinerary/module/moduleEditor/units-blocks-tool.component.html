@@ -2,17 +2,12 @@
 <html>
   <body>
 
-  <p></p>
+    <h2 *ngIf="this.data != undefined">Selecciona una unidad para ver sus itinerarios y lecciones</h2>
+    <h2 *ngIf="this.data == undefined">Selecciona una unidad para ver sus itinerarios</h2>
+    <h4>Después seleciona para añadir</h4>
 
-  <button mat-raised-button [matTooltipClass]="'tooltip'"
-          matTooltip="En primer lugar selecciona una unidad. A continuación, podrás elegir entre los módulos de dicha unidad que puedes introducir al curso."
-          class="add-course-tooltip">
-    <mat-icon>live_help</mat-icon>
-  </button>
 
-  <p></p>
-
-    <mat-form-field id="searcher">
+    <mat-form-field >
       <input matInput (keyup)="applyFilterUnits($event.target.value)" placeholder="Nombre de la unidad">
     </mat-form-field>
 
@@ -35,7 +30,7 @@
               </mat-card>
             </div>
           </mat-tab>
-          <mat-tab *ngIf="unit.modules.length > 0" label="Módulos">
+          <mat-tab *ngIf="unit.modules.length > 0" label="Itinerarios">
             <div *ngFor = "let module of unit.modules">
               <mat-card class="cardin">
                 {{module.name}}
