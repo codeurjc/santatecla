@@ -499,7 +499,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         window.scroll(0, 0);
         if (result === 1) {
-          this.changed = false;
           this.deleteUnit(id);
         }
       });
@@ -508,7 +507,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         window.scroll(0, 0);
         if (result === 1) {
-          this.save(null, id, null);
+          if (this.changed) {
+            this.save(null, id, null);
+          } else {
+            this.deleteUnit(id);
+          }
         }
       });
     }
@@ -516,6 +519,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private deleteUnit(id: string) {
     this.unitService.deleteUnit(+id).subscribe(() => {
+      this.changed = false;
       this.emptyResults();
       this.focusedUnits.delete(id);
       this.units.delete(id);
@@ -578,7 +582,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           dialogRef.afterClosed().subscribe(result => {
             window.scroll(0, 0);
             if (result === 1) {
-              this.save(null, null, relation);
+              if (this.changed) {
+                this.save(null, null, relation);
+              } else {
+                this.deleteRelation(relation);
+              }
             }
           });
         }
@@ -588,6 +596,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private deleteRelation(relation: Relation) {
     this.unitService.deleteRelation(+relation.id).subscribe(() => {
+      this.changed = false;
       this.focusUnit();
     });
   }
