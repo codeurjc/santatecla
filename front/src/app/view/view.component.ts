@@ -786,18 +786,20 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
       const id = this.getSelectedUnitId(target);
-      if (this.changed && this.ableToSave) {
-        const dialogRef = this.changedDialog();
-        dialogRef.afterClosed().subscribe(result => {
-          window.scroll(0, 0);
-          if (result === 1) {
-            this.goToUnit(id);
-          } else if (result === 2) {
-            this.save(id, null, null);
-          }
-        });
-      } else if (!this.changed) {
-        this.goToUnit(id);
+      if (!this.isNewId(id.toString())) {
+        if (this.changed && this.ableToSave) {
+          const dialogRef = this.changedDialog();
+          dialogRef.afterClosed().subscribe(result => {
+            window.scroll(0, 0);
+            if (result === 1) {
+              this.goToUnit(id);
+            } else if (result === 2) {
+              this.save(id, null, null);
+            }
+          });
+        } else if (!this.changed) {
+          this.goToUnit(id);
+        }
       }
     }
   }
