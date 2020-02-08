@@ -184,18 +184,6 @@ export class LessonEditorComponent implements OnInit {
         /* contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(content1).toPromise();
         const url = 'http://localhost:4200/#/units/' + unit + '/itineraries/11/definitionQuestion/' + content1;
         this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]'); */
-      } else if (type === 'image') {
-        contentEmbebed = await this.imageService.getImage(content1).toPromise().catch((error) => console.log(error));
-        if (typeof contentEmbebed !== 'undefined') {
-          const image = this.convertImage(contentEmbebed.image);
-          const img = '++++\n' +
-            '<img class="img-lesson" src="' + image + '">\n' +
-            '++++\n' +
-            '\n';
-          this.extractedData.splice(contentCounter, 1, img);
-        } else {
-          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
-        }
       }
     } else {
       if (type === 'card') {
@@ -213,6 +201,20 @@ export class LessonEditorComponent implements OnInit {
         } else {
           this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content.split('=== ')[1]);
         }
+      }
+    }
+
+    if (type === 'image') {
+      contentEmbebed = await this.imageService.getImage(content1).toPromise().catch((error) => console.log(error));
+      if (typeof contentEmbebed !== 'undefined') {
+        const image = this.convertImage(contentEmbebed.image);
+        const img = '++++\n' +
+          '<img class="img-lesson" src="' + image + '">\n' +
+          '++++\n' +
+          '\n';
+        this.extractedData.splice(contentCounter, 1, img);
+      } else {
+        this.extractedData.splice(contentCounter, 1, 'ERROR\n');
       }
     }
 
