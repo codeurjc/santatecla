@@ -39,14 +39,18 @@ public class UnitService {
 			List<Unit> duplicates = duplicatesMap.get(key);
 			for (int i = 0; i < duplicates.size(); i++) {
 				for (int j = i + 1; j < duplicates.size(); j++) {
-					Unit uniti = duplicates.get(i);
-					Unit unitj = duplicates.get(j);
-					while (uniti.getName().contains(unitj.getName()) || unitj.getName().contains(uniti.getName())) {
-						if ((uniti.getName().contains(unitj.getName())) && (getAncestor(unitj, getLevel(unitj.getName())) != null)) {
-							setParentOnName(unitj);
+					Unit unitI = duplicates.get(i);
+					Unit unitJ = duplicates.get(j);
+					String oldNameI = "";
+					String oldNameJ = "";
+					while (((!oldNameI.equals(unitI.getName())) && (!oldNameJ.equals(unitJ.getName()))) && (unitI.getName().contains(unitJ.getName()) || unitJ.getName().contains(unitI.getName()))) {
+						if ((unitI.getName().contains(unitJ.getName())) && (getAncestor(unitJ, getLevel(unitJ.getName())) != null)) {
+							oldNameJ = unitJ.getName();
+							setParentOnName(unitJ);
 						}
-						if ((unitj.getName().contains(uniti.getName())) && (getAncestor(uniti, getLevel(uniti.getName())) != null)) {
-							setParentOnName(uniti);
+						if ((unitJ.getName().contains(unitI.getName())) && (getAncestor(unitI, getLevel(unitI.getName())) != null)) {
+							oldNameI = unitI.getName();
+							setParentOnName(unitI);
 						}
 					}
 				}
