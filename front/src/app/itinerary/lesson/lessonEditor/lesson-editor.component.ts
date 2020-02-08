@@ -166,29 +166,41 @@ export class LessonEditorComponent implements OnInit {
     let contentEmbebed;
     if (+unit) {
       if (type === 'card') {
-        contentEmbebed = await this.unitService.getCard(+content1, +unit).toPromise();
-        this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
+        contentEmbebed = await this.unitService.getCard(+content1, +unit).toPromise().catch((error) => console.log(error));
+        if (typeof contentEmbebed !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
+        } else {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        }
       } else if (type === 'slide') {
         this.subSlide = true;
-        contentEmbebed = await this.unitLessonService.getSlideFormLesson(+content1, +content2, +unit).toPromise();
-        this.extractedData.splice(contentCounter, 1, contentEmbebed.content.split('=== ')[1]);
+        contentEmbebed = await this.unitLessonService.getSlideFormLesson(+content1, +content2, +unit).toPromise().catch((error) => console.log(error));
+        if (typeof contentEmbebed !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, contentEmbebed.content.split('=== ')[1]);
+        } else {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        }
       } else if (type === 'question') {
         /* contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(content1).toPromise();
         const url = 'http://localhost:4200/#/units/' + unit + '/itineraries/11/definitionQuestion/' + content1;
         this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]'); */
       } else if (type === 'image') {
-        contentEmbebed = await this.imageService.getImage(content1).toPromise();
-        const image = this.convertImage(contentEmbebed.image);
-        const img = '++++\n' +
-          '<img class="img-lesson" src="' + image + '">\n' +
-          '++++\n' +
-          '\n';
-        this.extractedData.splice(contentCounter, 1, img);
+        contentEmbebed = await this.imageService.getImage(content1).toPromise().catch((error) => console.log(error));
+        if (typeof contentEmbebed !== 'undefined') {
+          const image = this.convertImage(contentEmbebed.image);
+          const img = '++++\n' +
+            '<img class="img-lesson" src="' + image + '">\n' +
+            '++++\n' +
+            '\n';
+          this.extractedData.splice(contentCounter, 1, img);
+        } else {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        }
       }
     } else {
       if (type === 'card') {
         contentEmbebed = await this.cardService.getCardByName(unit, content1).toPromise().catch((error) => console.log(error));
-        if (contentEmbebed.length > 1) {
+        if ((typeof contentEmbebed === 'undefined') || (contentEmbebed.length > 1)) {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         } else {
           this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content);
@@ -196,7 +208,7 @@ export class LessonEditorComponent implements OnInit {
       } else if (type === 'slide') {
         this.subSlide = true;
         contentEmbebed = await this.slideService.getSlideByName(unit, content2, content1).toPromise().catch((error) => console.log(error));
-        if (contentEmbebed.length > 1) {
+        if ((typeof contentEmbebed === 'undefined') || (contentEmbebed.length > 1)) {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         } else {
           this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content.split('=== ')[1]);
