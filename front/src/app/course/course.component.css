@@ -258,6 +258,17 @@
   padding-left: 0.5rem;
 }
 
+.add-students-button{
+  margin-left: 0.5rem;
+  background-color: #7d3c90;
+  color: white;
+  margin-right: 3%;
+}
+
+.add-students-button:hover{
+  background-color: #a769b8;
+}
+
 .admin {
   background-color: #5d306a;
 }

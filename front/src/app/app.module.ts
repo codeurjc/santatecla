@@ -68,6 +68,7 @@ import {UnitModuleService} from './itinerary/module/unit-module.service';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
 import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
 import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rename.component';
+import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rena
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
+    QuestionTrackingComponent,
     ModuleProgressComponent,
     ClassProgressComponent,
     TestQuestionComponent,

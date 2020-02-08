@@ -54,4 +54,28 @@ public class QuestionRestController extends GeneralRestController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping(value = "/{questionID}/correctCount")
+    public ResponseEntity<Integer> getQuestionCorrectCount(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<Question> question = this.questionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent()) {
+            return new ResponseEntity<>(question.get().getTotalCorrectAnswers(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/{questionID}/wrongCount")
+    public ResponseEntity<Integer> getQuestionWrongCount(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<Question> question = this.questionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent()) {
+            return new ResponseEntity<>(question.get().getTotalWrongAnswers(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
