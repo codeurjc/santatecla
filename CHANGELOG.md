@@ -23,4 +23,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Dont show empty units adding a new course
-- The lesson view dosn´t crush when an insert error happens
+- The lesson view dosn´t crash when an insert error happens
