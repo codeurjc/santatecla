@@ -44,13 +44,11 @@ import {QuestionService} from './question/question.service';
 import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {TestQuestionService} from './question/testQuestion/testQuestion.service';
 import {MyCoursesComponent} from './course/myCourses.component';
-import {MyCoursesService} from './course/myCourses.service';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
 import {TabService} from './tab/tab.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NewCourseComponent} from './course/newCourse.component';
-import {NewCourseService} from './course/newCourse.service';
 import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
 import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
@@ -155,7 +153,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
   ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
-    QuestionService, ProgressService, TestQuestionService, MyCoursesService, CourseService, TabService, UnitService, NewCourseService,
+    QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService,
     MenuComponent, UnitLessonService, UnitModuleService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
