@@ -49090,7 +49090,7 @@ const drawEdge = function (elem, path, relation) {
 
 
 
-  const relationId = relation.id1.match(/[0-9]+|[^0-9]*/g)[0] + '-' + relation.id2.match(/[0-9]+|[^0-9]*/g)[0] + '-' + getRelationType(relation.relation.type1);
+  const relationId = relation.id1.match(/[FN]|[0-9]+|[^0-9]*/g)[1] + '-' + relation.id2.match(/[FN]|[0-9]+|[^0-9]*/g)[1] + '-' + getRelationType(relation.relation.type1);
   let svgPath;
   // if <|--|> then invisible
   if ((relation.relation.type1 == 1) && (relation.relation.type2 == 1)) {
@@ -49164,7 +49164,7 @@ const drawClass = function (elem, classDef) {
 
 
   const g = elem.append('g').attr('id', id).attr('class', 'classGroup');
-  const splittedClassDef = classDef.id.match(/[0-9]+|[^\n\"\-\.<>0-9]*|([^\n\"\-<>])+/g);
+  const splittedClassDef = classDef.id.match(/[FN][0-9]+|[^\n\"\-\.<>]*|([^\n\"\-<>])+/g);
   g.append('text').attr('x', conf.padding).attr('y', conf.textHeight + conf.padding)
     .attr('id', splittedClassDef[0]).text(splittedClassDef[1]);
 

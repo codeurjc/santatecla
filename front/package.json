@@ -23,7 +23,6 @@
     "@angular/router": "~7.2.0",
     "@covalent/core": "^2.1.1",
     "@swimlane/ngx-charts": "^12.0.1",
-    "ang-jsoneditor": "^1.8.3",
     "asciidoctor": "^2.0.3",
     "core-js": "^2.5.4",
     "covalent": "^0.2.1",

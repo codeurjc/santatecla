@@ -20,7 +20,6 @@ import { ErrorInterceptor } from './auth/error.interceptor';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 
-import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppComponent } from './app.component';
@@ -151,7 +150,6 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     MatTreeModule,
     FormsModule,
     routing,
-    NgJsonEditorModule,
     CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
