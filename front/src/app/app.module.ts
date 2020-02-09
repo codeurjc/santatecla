@@ -20,7 +20,6 @@ import { ErrorInterceptor } from './auth/error.interceptor';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 
-import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppComponent } from './app.component';
@@ -72,6 +71,7 @@ import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rena
 import {ImageComponent} from './images/image.component';
 import {ImageService} from './images/image.service';
 import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
+import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +94,7 @@ import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-s
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
+    QuestionTrackingComponent,
     ModuleProgressComponent,
     ClassProgressComponent,
     TestQuestionComponent,
@@ -154,7 +155,6 @@ import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-s
     MatTreeModule,
     FormsModule,
     routing,
-    NgJsonEditorModule,
     CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
     CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
     CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule

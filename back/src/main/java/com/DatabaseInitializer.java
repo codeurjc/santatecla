@@ -13,10 +13,14 @@ import com.itinerary.lesson.Lesson;
 import com.itinerary.lesson.LessonRepository;
 import com.itinerary.module.Module;
 import com.itinerary.module.ModuleRepository;
+import com.question.Question;
+import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
+import com.question.list.list_answer.ListAnswer;
 import com.question.list.list_question.ListQuestion;
 import com.question.list.list_question.ListQuestionRepository;
+import com.question.test.test_answer.TestAnswer;
 import com.question.test.test_question.TestQuestion;
 import com.question.test.test_question.TestQuestionRepository;
 import com.relation.Relation;
@@ -30,6 +34,7 @@ import com.user.UserRepository;
 
 import com.image.Image;
 import com.image.ImageRepository;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -335,6 +340,51 @@ public class DatabaseInitializer {
                 DefinitionQuestion definition3 = new DefinitionQuestion("Defina, según sus palabras, dos tipos de paradigmas");
                 DefinitionQuestion definition4 = new DefinitionQuestion("Defina, según sus palabras, tres tipos de paradigmas");
 
+                //Corrected
+                List<DefinitionAnswer> defList = new ArrayList<>();
+                DefinitionAnswer da1 = new DefinitionAnswer("Un problema al programar");
+                da1.setCorrected(true);
+                da1.setCorrect(false);
+                DefinitionAnswer da2 = new DefinitionAnswer("Un lenguaje de programación");
+                da2.setCorrected(true);
+                da2.setCorrect(false);
+                DefinitionAnswer da3 = new DefinitionAnswer("Un error dificil de resolver al programar");
+                da3.setCorrected(true);
+                da3.setCorrect(false);
+                DefinitionAnswer da4 = new DefinitionAnswer("Programar usando patrones de diseño");
+                da4.setCorrected(true);
+                da4.setCorrect(false);
+                DefinitionAnswer da5 = new DefinitionAnswer("Es parecido a un patrón");
+                da5.setCorrected(true);
+                da5.setCorrect(false);
+                DefinitionAnswer da6 = new DefinitionAnswer("Es un modelo básico de diseño y desarrollo de programas");
+                da6.setCorrected(true);
+                da6.setCorrect(true);
+                DefinitionAnswer da7 = new DefinitionAnswer("Es un modelo básico de diseño y desarrollo de programas siguiendo unas normas");
+                da7.setCorrected(true);
+                da7.setCorrect(true);
+                defList.add(da1);
+                defList.add(da2);
+                defList.add(da3);
+                defList.add(da4);
+                defList.add(da5);
+                defList.add(da6);
+                defList.add(da7);
+
+                //Not corrected
+                DefinitionAnswer da8 = new DefinitionAnswer("Son los distintos lenguajes para programar");
+                DefinitionAnswer da9 = new DefinitionAnswer("Es una manera de programar usando distintas estrategias");
+                DefinitionAnswer da10 = new DefinitionAnswer("Programar siguiento unas normas para abordar distintos tipos de problemas");
+                DefinitionAnswer da11 = new DefinitionAnswer("Son patrones de diseño");
+                defList.add(da8);
+                defList.add(da9);
+                defList.add(da10);
+                defList.add(da11);
+                
+                definition1.setAnswers(defList);
+                definition1.setTotalCorrectAnswers(2);
+                definition1.setTotalWrongAnswers(5);
+
                 definition2.addModule(module6);
                 definition3.addModule(module7);
                 definition4.addModule(module8);
@@ -350,8 +400,39 @@ public class DatabaseInitializer {
                 possibleAnswers.add("Paradigma orientado a objetos");
                 possibleAnswers.add("Paradigmal imperativo");
                 TestQuestion test1 = new TestQuestion("Los lenguajes comunes de este paradigma son: LISP, Scheme, Haskell, Scala", possibleAnswers, "Paradigma funcional");
+                TestAnswer testAnswer1 = new TestAnswer();
+                testAnswer1.setAnswerText("Paradigma lógico");
+                testAnswer1.setCorrect(false);
+                TestAnswer testAnswer2 = new TestAnswer();
+                testAnswer2.setAnswerText("Paradigma lógico");
+                testAnswer2.setCorrect(false);
+                TestAnswer testAnswer3 = new TestAnswer();
+                testAnswer3.setAnswerText("Paradigma lógico");
+                testAnswer3.setCorrect(false);
+                TestAnswer testAnswer4 = new TestAnswer();
+                testAnswer4.setAnswerText("Paradigma orientado a objetos");
+                testAnswer4.setCorrect(false);
+                TestAnswer testAnswer5 = new TestAnswer();
+                testAnswer5.setAnswerText("Paradigmal imperativo");
+                testAnswer5.setCorrect(false);
+                TestAnswer testAnswer6 = new TestAnswer();
+                testAnswer6.setAnswerText("Paradigmal imperativo");
+                testAnswer6.setCorrect(false);
+                TestAnswer testAnswer7 = new TestAnswer();
+                testAnswer7.setAnswerText("Paradigmal funcional");
+                testAnswer7.setCorrect(true);
+
+                test1.addAnswer(testAnswer1);
+                test1.addAnswer(testAnswer2);
+                test1.addAnswer(testAnswer3);
+                test1.addAnswer(testAnswer4);
+                test1.addAnswer(testAnswer5);
+                test1.addAnswer(testAnswer6);
+                test1.addAnswer(testAnswer7);
 
                 test1.addModule(module5);
+                test1.setTotalCorrectAnswers(1);
+                test1.setTotalWrongAnswers(6);
 
                 possibleAnswers = new ArrayList<>();
                 possibleAnswers.add("Programación orientada a objetos");
@@ -376,6 +457,54 @@ public class DatabaseInitializer {
                 correctAnswers.add("Paradigma orientado a objetos");
                 correctAnswers.add("Paradigmal imperativo");
                 ListQuestion list1 = new ListQuestion("¿Cuáles son paradigmas?", possibleAnswers, correctAnswers);
+                ListAnswer listAnswer1 = new ListAnswer();
+                List<String> answers1 = new ArrayList<>();
+                answers1.add("Paradigma euclídeo");
+                answers1.add("Paradigma orientado a estructuras");
+                listAnswer1.setAnswer(answers1);
+                listAnswer1.setCorrect(false);
+                ListAnswer listAnswer2 = new ListAnswer();
+                List<String> answers2 = new ArrayList<>();
+                answers2.add("Paradigma euclídeo");
+                listAnswer2.setAnswer(answers2);
+                listAnswer2.setCorrect(false);
+                ListAnswer listAnswer3 = new ListAnswer();
+                List<String> answers3 = new ArrayList<>();
+                answers3.add("Paradigma euclídeo");
+                answers3.add("Paradigma orientado a estructuras");
+                answers3.add("Paradigmal imperativo");
+                listAnswer3.setAnswer(answers3);
+                listAnswer3.setCorrect(false);
+                ListAnswer listAnswer4 = new ListAnswer();
+                List<String> answers4 = new ArrayList<>();
+                answers4.add("Paradigma orientado a objetos");
+                answers4.add("Paradigmal imperativo");
+                listAnswer4.setAnswer(answers4);
+                listAnswer4.setCorrect(true);
+                ListAnswer listAnswer5 = new ListAnswer();
+                List<String> answers5 = new ArrayList<>();
+                answers5.add("Paradigmal imperativo");
+                answers5.add("Paradigma orientado a estructuras");
+                listAnswer5.setAnswer(answers5);
+                listAnswer5.setCorrect(false);
+                ListAnswer listAnswer6 = new ListAnswer();
+                List<String> answers6 = new ArrayList<>();
+                answers6.add("Paradigma euclídeo");
+                answers6.add("Paradigma orientado a estructuras");
+                answers6.add("Paradigma orientado a objetos");
+                answers6.add("Paradigmal imperativo");
+                listAnswer6.setAnswer(answers6);
+                listAnswer6.setCorrect(false);
+
+                list1.addAnswer(listAnswer1);
+                list1.addAnswer(listAnswer2);
+                list1.addAnswer(listAnswer3);
+                list1.addAnswer(listAnswer4);
+                list1.addAnswer(listAnswer5);
+                list1.addAnswer(listAnswer6);
+
+                list1.setTotalCorrectAnswers(1);
+                list1.setTotalWrongAnswers(5);
 
                 unit1Lists.add(list1);
 
@@ -715,7 +844,7 @@ public class DatabaseInitializer {
                 unit10.addOutgoingRelation(relation14);
                 Relation relation15 = new Relation(Relation.RelationType.INHERITANCE, unit9.getId(), unit11.getId());
                 relationRepository.save(relation15);
-                unit11.addIncomingRelation(relation15);
+                unit9.addIncomingRelation(relation15);
                 unit11.addOutgoingRelation(relation15);
                 Relation relation16 = new Relation(Relation.RelationType.AGGREGATION, unit5.getId(), unit14.getId());
                 relationRepository.save(relation16);

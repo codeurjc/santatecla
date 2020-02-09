@@ -100,4 +100,14 @@ public class Question {
     public void setModules(List<Module> modules) {
         this.modules = modules;
     }
+
+    public void increaseTotalCorrectAnswers() {
+        this.totalCorrectAnswers += 1;
+        this.totalAnswers += 1;
+    }
+
+    public void increaseTotalWrongAnswers() {
+        this.totalWrongAnswers += 1;
+        this.totalAnswers += 1;
+    }
 }

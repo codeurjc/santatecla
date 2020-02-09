@@ -55,6 +55,13 @@
             <span class="nav-button-content">{{tabService.lesson}}</span>
           </div>
         </button>
+
+        <button mat-button *ngIf="tabService.questions" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+          <div class="nav-button-name">
+            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Pregunta</span>
+            <span class="nav-button-content">{{tabService.question}}</span>
+          </div>
+        </button>
       </div>
 
       <span id="user-name">{{loginService.user.name}}</span>

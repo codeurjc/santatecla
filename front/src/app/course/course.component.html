@@ -22,7 +22,12 @@
   </div>
   <mat-icon id="hide-menu-button" [ngClass]="showMenu ? 'show-hide-menu-button' : 'hidden-hide-menu-button'" (click)="setShowMenu(!showMenu)">reorder</mat-icon>
 
-  <div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'"></div>
+  <div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
+      <button mat-button class="add-students-button" (click)="addStudents()">
+        <mat-icon>add</mat-icon>
+        Añadir alumnos
+      </button>
+  </div>
 
   <div id="course-content" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
     <div *ngIf="this.activeTab == 0">

@@ -37,12 +37,11 @@ export class UnitService {
     return this.http.put<Unit[]>(this.baseUrl, units, { headers });
   }
 
-  getAbsoluteName(id: number) {
-    return this.http.get(this.baseUrl + id + '/absoluteName');
-  }
-
-  getParent(id: number) {
-    return this.http.get(this.baseUrl + id + '/parent');
+  validName(unit: Unit) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post<Unit>(this.baseUrl + 'valid/', unit, { headers });
   }
 
   deleteUnit(id: number) {
@@ -55,6 +54,10 @@ export class UnitService {
 
   getCard(cardId: number, unitId: number) {
     return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
+  }
+
+  getUnitName(id: number) {
+    return this.http.get(this.baseUrl + id + '/name');
   }
 
 }

@@ -1,9 +1,6 @@
 package com.unit;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.GeneralRestController;
 import com.relation.Relation;
@@ -34,7 +31,11 @@ public class UnitRestController extends GeneralRestController {
     @PostMapping(value = "/")
     public ResponseEntity<Unit> createUnit(@RequestBody Unit unit) {
         Unit savedUnit = new Unit();
-        updateUnit(savedUnit, unit);
+        try {
+            updateUnit(savedUnit, unit);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         this.unitService.save(savedUnit);
         return new ResponseEntity<>(savedUnit, HttpStatus.OK);
     }
@@ -45,7 +46,11 @@ public class UnitRestController extends GeneralRestController {
         for (Unit unit : units) {
             Optional<Unit> savedUnit = this.unitService.findOne(unit.getId());
             if (savedUnit.isPresent()) {
-                updateUnit(savedUnit.get(), unit);
+                try {
+                    updateUnit(savedUnit.get(), unit);
+                } catch (Exception e) {
+                     return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
                 this.unitService.save(savedUnit.get());
                 savedUnits.add(savedUnit.get());
             } else {
@@ -55,7 +60,10 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(savedUnits, HttpStatus.OK);
     }
 
-    private void updateUnit(Unit savedUnit, Unit unit) {
+    private void updateUnit(Unit savedUnit, Unit unit) throws Exception {
+        if (!unitService.isValidName(unit)) {
+            throw new Exception("Invalid name");
+        }
         savedUnit.setName(unit.getName());
         for (Relation relation : unit.getIncomingRelations()) {
             if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
@@ -129,6 +137,21 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<Unit> getUnitParent(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
         return unit.map(value -> new ResponseEntity<>(unitService.getParent(value, new HashSet<>()), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping(value="/valid")
+    public ResponseEntity<Boolean> validName(@RequestBody Unit unit) {
+        return new ResponseEntity<>(unitService.isValidName(unit), HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/{id}/name")
+    public ResponseEntity<Object> getUnitName(@PathVariable int id) {
+        Optional<Unit> unit = this.unitService.findOne(id);
+        if (unit.isPresent()) {
+            return new ResponseEntity<>(Collections.singletonMap("response", unit.get().getName()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

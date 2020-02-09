@@ -19,6 +19,10 @@ export class TabService {
   module = '';
   moduleId: number;
 
+  questions = false;
+  questionId: number;
+  question = '';
+
   constructor(private loginService: LoginService) {}
 
   emptyAll() {
@@ -30,6 +34,8 @@ export class TabService {
     this.lesson = '';
     this.modules = false;
     this.module = '';
+    this.questions = false;
+    this.question = '';
   }
 
   setHome() {
@@ -102,6 +108,16 @@ export class TabService {
     this.courseId = courseId;
     this.courses = true;
     this.course = name;
+  }
+
+  setQuestion(questionId: number, question: string, unit: string, unitId: number) {
+    this.emptyAll();
+    this.units = true;
+    this.unit = unit;
+    this.unitId = unitId;
+    this.questions = true;
+    this.questionId = questionId;
+    this.question = question;
   }
 
 }
