@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Posibility to insert card and slides by name
 - Ability to store images
 - Insert images in slides
+- Cards editor with asciidoc parser
 
 ### Fixed
 
