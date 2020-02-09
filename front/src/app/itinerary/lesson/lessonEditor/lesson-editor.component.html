@@ -18,6 +18,24 @@
           <mat-icon>description</mat-icon>Buscar ejercicios
         </button>
       </mat-chip-list>
+
+      <mat-chip-list *ngIf="!loginService.isAdmin" class="tools">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon></mat-icon>
+          <span>Ejercicios</span>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <span>Ejercicio 1</span>
+          </button>
+          <button mat-menu-item>
+            <span>Ejercicio 2</span>
+          </button>
+          <button mat-menu-item>
+            <span>Ejercicio 3</span>
+          </button>
+        </mat-menu>
+      </mat-chip-list>
     </div>
 
     <!-- TOOLS BAR COURSE-->
