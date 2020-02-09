@@ -58,7 +58,7 @@ public class CardsApiTests {
     }
 
     @Test
-    public void testWrongGetCards() throws Exception{
+    public void testNotFoundGetCards() throws Exception{
 
         given(unitService.findOne(2)).willReturn(Optional.empty());
 
@@ -88,7 +88,7 @@ public class CardsApiTests {
     }
 
     @Test
-    public void testWrongCreateCard() throws Exception{
+    public void testNotFoundCreateCard() throws Exception{
         Card card1 = new Card();
         card1.setId(1);
         card1.setContent("TestContent");
@@ -129,7 +129,7 @@ public class CardsApiTests {
     }
 
     @Test
-    public void testWrongUploadCard() throws Exception{
+    public void testNotFoundUploadCard() throws Exception{
         Unit unit1 = new Unit();
 
         Card card1 = new Card();
@@ -171,7 +171,7 @@ public class CardsApiTests {
     }
 
     @Test
-    public void testWrongGetCard() throws Exception{
+    public void testNotFoundGetCard() throws Exception{
         Unit unit1 = new Unit();
 
         given(unitService.findOne(1)).willReturn(Optional.of(unit1));

@@ -1,5 +1,6 @@
 package com.itinerary.block;
 
+import com.google.gson.annotations.SerializedName;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class Block {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("blockId")
     protected long id;
 
     protected String name;
