@@ -5,8 +5,7 @@
 
 .sub-card {
   margin: 0.5rem;
-  width: auto;
-  float: left;
+  width: fit-content;
   cursor: pointer;
 }
 

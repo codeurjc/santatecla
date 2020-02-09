@@ -1,6 +1,6 @@
 import { Card } from './card.model';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 @Injectable()
 export class CardService {
@@ -25,6 +25,11 @@ export class CardService {
       'Content-Type': 'application/json',
     });
     return this.http.put<Card>('/api/units/' + unitId + '/cards/' + card.id, body, { headers });
+  }
+
+  getCardByName(unitName: string, cardName: string) {
+    const params = new HttpParams().set('unitName', unitName).set('cardName', cardName);
+    return this.http.get('/api/units/search/card', { params: params });
   }
 
 }

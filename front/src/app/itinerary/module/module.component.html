@@ -4,12 +4,12 @@
 
 <button mat-button *ngIf="this.loginService.isAdmin" class="tool new-module-button" (click)="addModule()">
   <mat-icon>add</mat-icon>
-  Nuevo Módulo
+  Nuevo Itinerario
 </button>
 
 <div id="module-search">
   <mat-form-field appearance="outline" id="search">
-    <mat-label>Buscar módulo</mat-label>
+    <mat-label>Buscar itinerario</mat-label>
     <input id="search-input" matInput (keyup)="searchModule($event.target.value)"/>
   </mat-form-field>
 </div>

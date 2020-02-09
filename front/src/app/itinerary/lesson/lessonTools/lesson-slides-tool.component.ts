@@ -7,11 +7,11 @@ import { ClipboardService } from 'ngx-clipboard';
 
 
 @Component({
-  templateUrl: './units-cards-tool.component.html',
-  styleUrls: ['./units-cards-tool.component.css']
+  templateUrl: './lesson-slides-tool.component.html',
+  styleUrls: ['./lesson-slides-tool.component.css']
 })
 
-export class UnitsCardsToolComponent implements OnInit {
+export class LessonSlidesToolComponent implements OnInit {
 
   units: Unit[];
   unitsResult: Unit[];
@@ -19,7 +19,7 @@ export class UnitsCardsToolComponent implements OnInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
-              private bottomSheetRef: MatBottomSheetRef<UnitsCardsToolComponent>,
+              private bottomSheetRef: MatBottomSheetRef<LessonSlidesToolComponent>,
               private clipboardService: ClipboardService) {
   }
 
