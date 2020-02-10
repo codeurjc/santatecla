@@ -31,6 +31,7 @@ import {QuestionService} from '../../../question/question.service';
 import {AddQuestionDialogComponent} from '../../../question/addQuestionDialog/addQuestionDialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDialog/answerQuestionDialog.component';
+import {Question} from '../../../question/question.model';
 
 
 function convertToHTML(text) {
@@ -74,6 +75,9 @@ export class LessonEditorComponent implements OnInit {
   componentsChecker: number;
 
   subSlide: boolean;
+
+  newQuestionsIds: number[];
+  questions: Question[];
 
   constructor(private slideService: SlideService,
               private router: Router,
@@ -134,12 +138,24 @@ export class LessonEditorComponent implements OnInit {
       this.lesson = {
         id: data.id,
         name: data.name,
-        slides: data.slides
+        slides: data.slides,
+        questionsIds: data.questionsIds
       };
+      this.newQuestionsIds = [];
+      this.loadQuestions();
       this.lessonContent = '== ' + this.lesson.name + '\n';
       this.lessonContentExtended = '';
       this.slidesToContent(this.lesson.slides);
       this.extendContent(this.lessonContent);
+    });
+  }
+
+  loadQuestions() {
+    this.questions = [];
+    this.lesson.questionsIds.forEach((questionId) => {
+      this.questionService.getQuestion(questionId).subscribe((data: Question) => {
+        this.questions.push(data);
+      });
     });
   }
 
@@ -191,9 +207,20 @@ export class LessonEditorComponent implements OnInit {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       } else if (type === 'question') {
-        /* contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(content1).toPromise();
-        const url = 'http://localhost:4200/#/units/' + unit + '/itineraries/11/definitionQuestion/' + content1;
-        this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]'); */
+        contentEmbebed = await this.questionService.getUnitQuestion(unit, content1).toPromise().catch((error) => console.log(error));
+        if (typeof contentEmbebed !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, '*Ejercicio* ' + contentEmbebed.questionText);
+          let exist = false;
+          this.newQuestionsIds.forEach((question) => {
+            if (question === contentEmbebed.id) {
+              exist = true;
+              return;
+            }
+          });
+          if (!exist) { this.newQuestionsIds.push(contentEmbebed.id); }
+        } else {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        }
       }
     } else {
       if (type === 'card') {
@@ -313,6 +340,8 @@ export class LessonEditorComponent implements OnInit {
       } else {
         this.showSpinner = false;
         this.viewHTMLVersion();
+        this.contentToItinerary(this.lessonContent);
+        this.lessonService.updateLesson(this.lesson).subscribe();
         this.progress = (1 / (this.contentHTML.length)) * 100;
       }
     }
@@ -355,6 +384,7 @@ export class LessonEditorComponent implements OnInit {
       }
       this.lesson.slides.push(slide);
     }
+    this.lesson.questionsIds = this.newQuestionsIds;
   }
 
   updateHTMLView() {

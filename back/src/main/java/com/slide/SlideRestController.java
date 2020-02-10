@@ -65,9 +65,6 @@ public class SlideRestController extends GeneralRestController {
 
     @GetMapping(value = "/search")
     public ResponseEntity<List<Slide>> getSlideByName(@RequestParam String unitName, @RequestParam String lessonName, @RequestParam String slideName) {
-        System.out.println(unitName);
-        System.out.println(lessonName);
-        System.out.println(slideName);
         List<Slide> slides = this.slideService.findByName(unitName, lessonName, slideName);
         if (slides.size() == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

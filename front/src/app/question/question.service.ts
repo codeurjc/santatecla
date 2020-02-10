@@ -16,6 +16,14 @@ export class QuestionService {
     return this.http.get(this.baseUrl + id + '/question');
   }
 
+  getQuestion(id: number) {
+    return this.http.get('/api/questions/' + id);
+  }
+
+  getUnitQuestion(unitId: number, questId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/' + questId);
+  }
+
   getUnitDefinitionQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/definition');
   }

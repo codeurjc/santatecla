@@ -26,9 +26,11 @@
         </button>
         <!-- TODO openQuestion -->
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="openQuestion(1, 'DefinitionQuestion')">
-            <span>Ejercicio de prueba</span>
-          </button>
+          <div  *ngFor="let question of questions">
+            <button mat-menu-item (click)="openQuestion(question.id, question.subtype)">
+              <span>{{question.questionText}}</span>
+            </button>
+          </div>
         </mat-menu>
       </mat-chip-list>
     </div>
