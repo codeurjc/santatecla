@@ -146,7 +146,7 @@ public class DefinitionQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping("/{questionID}/uncorrectedCount")
-    public ResponseEntity<Integer> getCorrected(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<Integer> getUncorrected(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(questionID);
 
