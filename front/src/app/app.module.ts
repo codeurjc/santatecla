@@ -55,7 +55,7 @@ import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
 import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
 import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.component';
-import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
+import {AnswerQuestionDialogComponent} from './question/answerQuestionDialog/answerQuestionDialog.component';
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
@@ -101,7 +101,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     MyCoursesComponent,
     CourseComponent,
     NewCourseComponent,
-    AnswerDefinitionDialogComponent,
+    AnswerQuestionDialogComponent,
     AddQuestionDialogComponent,
     HomeComponent,
     ConfirmActionComponent,

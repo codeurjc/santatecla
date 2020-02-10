@@ -21,7 +21,6 @@ public class ListAnswer {
 
     private long unitId;
     private long moduleId;
-    private long courseId;
 
     @OneToOne
     private User user;

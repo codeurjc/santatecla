@@ -7,7 +7,8 @@ export interface DefinitionAnswer {
     corrected?: boolean;
     justification?: string;
 
-    user?: User;
     unitId?: number;
     moduleId?: number;
+
+    user?: User;
 }

@@ -23,12 +23,16 @@ public class Question {
     @ManyToMany(fetch = FetchType.EAGER)
     protected List<Module> modules;
 
+    @ElementCollection
+    private List<Long> lessonIds;
+
     public Question() {
         this.subtype = this.getClass().getSimpleName();
         this.totalAnswers = 0;
         this.totalCorrectAnswers = 0;
         this.totalWrongAnswers = 0;
         this.modules = new ArrayList<>();
+        this.lessonIds = new ArrayList<>();
     }
 
     public Question(String questionText) {
@@ -75,6 +79,14 @@ public class Question {
 
     public void addModule(Module module){
         this.modules.add(module);
+    }
+
+    public List<Long> getLessonIds() {
+        return lessonIds;
+    }
+
+    public void addLessonId(Long l){
+        this.lessonIds.add(l);
     }
 
     public void setSubtype(String subtype) {

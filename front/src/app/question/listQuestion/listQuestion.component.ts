@@ -46,10 +46,10 @@ export class ListQuestionComponent implements OnInit {
     });
 
     this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: ListAnswer[]) => {
-      if (data.length != 0) {
+      if (data.length !== 0) {
         this.alreadyDone = true;
         console.log(data);
-        for (let answer of data){
+        for (const answer of data) {
           if (answer[1] === true) {
             this.questionListCorrect = true;
             break;
@@ -81,7 +81,7 @@ export class ListQuestionComponent implements OnInit {
     } else {
       this.questionListCorrect = false;
     }
-    this.questionAnswer = {user: this.loginService.getCurrentUser(), correct: this.questionListCorrect, unitId: this.unitId};
+    this.questionAnswer = {answer: [], user: this.loginService.getCurrentUser(), correct: this.questionListCorrect, unitId: this.unitId};
     this.questionService.addAnswer(this.id, this.questionAnswer).subscribe(
       (_) => {
         this.questionDone = true;

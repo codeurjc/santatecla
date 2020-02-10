@@ -9,7 +9,7 @@ import {Lesson} from '../itinerary/lesson/lesson.model';
 import {LoginService} from '../auth/login.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
-import {AnswerDefinitionDialogComponent} from './answerQuestionDialog/answerDefinitionDialog.component';
+import {AnswerQuestionDialogComponent} from './answerQuestionDialog/answerQuestionDialog.component';
 import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
 import {AddQuestionDialogComponent} from './addQuestionDialog/addQuestionDialog.component';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
@@ -246,7 +246,7 @@ export class QuestionComponent implements OnInit {
   }
 
   openAnswerDialog(q: Question): void {
-    const dialogRef = this.dialog.open(AnswerDefinitionDialogComponent, {
+    const dialogRef = this.dialog.open(AnswerQuestionDialogComponent, {
       width: '250px',
       data: {question: q, answerInput: this.answerInput}
     });

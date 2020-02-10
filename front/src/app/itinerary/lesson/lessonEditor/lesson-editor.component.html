@@ -24,15 +24,10 @@
           <mat-icon></mat-icon>
           <span>Ejercicios</span>
         </button>
+        <!-- TODO openQuestion -->
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>
-            <span>Ejercicio 1</span>
-          </button>
-          <button mat-menu-item>
-            <span>Ejercicio 2</span>
-          </button>
-          <button mat-menu-item>
-            <span>Ejercicio 3</span>
+          <button mat-menu-item (click)="openQuestion(1, 'DefinitionQuestion')">
+            <span>Ejercicio de prueba</span>
           </button>
         </mat-menu>
       </mat-chip-list>

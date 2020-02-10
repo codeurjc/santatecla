@@ -17,7 +17,6 @@ public class TestAnswer {
 
     private long unitId;
     private long moduleId;
-    private long courseId;
 
     @OneToOne
     private User user;
@@ -76,14 +75,6 @@ public class TestAnswer {
 
     public void setModuleId(long moduleId) {
         this.moduleId = moduleId;
-    }
-
-    public long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(long courseId) {
-        this.courseId = courseId;
     }
 }
 

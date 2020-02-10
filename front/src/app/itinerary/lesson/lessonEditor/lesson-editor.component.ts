@@ -24,6 +24,13 @@ import {ImageService} from '../../../images/image.service';
 import {ImageComponent} from '../../../images/image.component';
 import {CardService} from '../../../card/card.service';
 import {LessonSlidesToolComponent} from '../lessonTools/lesson-slides-tool.component';
+import {DefinitionQuestion} from '../../../question/definitionQuestion/definitionQuestion.model';
+import {ListQuestion} from '../../../question/listQuestion/listQuestion.model';
+import {TestQuestion} from '../../../question/testQuestion/testQuestion.model';
+import {QuestionService} from '../../../question/question.service';
+import {AddQuestionDialogComponent} from '../../../question/addQuestionDialog/addQuestionDialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDialog/answerQuestionDialog.component';
 
 
 function convertToHTML(text) {
@@ -82,7 +89,9 @@ export class LessonEditorComponent implements OnInit {
               private unitLessonService: UnitLessonService,
               private tabService: TabService,
               private imageService: ImageService,
-              private cardService: CardService) {
+              private cardService: CardService,
+              private questionService: QuestionService,
+              public dialog: MatDialog) {
     this.showSpinner = true;
   }
 
@@ -386,4 +395,61 @@ export class LessonEditorComponent implements OnInit {
     div.scrollTop = div2.scrollTop;
   }
 
+  openQuestion(questionID: number, subtype: string) {
+    switch (subtype) {
+      case 'DefinitionQuestion': {
+        this.getDefinitionQuestion(questionID);
+        break;
+      }
+      case 'ListQuestion': {
+        this.getListQuestion(questionID);
+        break;
+      }
+      case 'TestQuestion': {
+        this.getTestQuestion(questionID);
+        break;
+      }
+      default: {
+        console.log('Not valid');
+        break;
+      }
+    }
+  }
+
+  getDefinitionQuestion(questionID: number) {
+    this.questionService.getUnitDefinitionQuestion(this.unitId, questionID).subscribe(
+      (data: DefinitionQuestion) => {
+        this.openEditQuestionDialog(data);
+      }
+    );
+  }
+
+  getListQuestion(questionID: number) {
+    this.questionService.getUnitListQuestion(this.unitId, questionID).subscribe(
+      (data: ListQuestion) => {
+        this.openEditQuestionDialog(data);
+      }
+    );
+  }
+
+  getTestQuestion(questionID: number) {
+    this.questionService.getUnitTestQuestion(this.unitId, questionID).subscribe(
+      (data: TestQuestion) => {
+        this.openEditQuestionDialog(data);
+      }
+    );
+  }
+
+  openEditQuestionDialog(editingQuestion) {
+    const dialogRef = this.dialog.open(AnswerQuestionDialogComponent, {
+      width: '600px',
+      data: {isEditing: true, unitId: this.unitId, question: editingQuestion}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.ngOnInit();
+      }
+    });
+  }
 }

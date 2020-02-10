@@ -2,8 +2,18 @@
 <html>
   <body>
     <h1 mat-dialog-title>{{ data.question.questionText }}</h1>
-    <h2 mat-dialog-title>Intentos realizados: {{definitionAnswers?.length}}</h2>
-    <div mat-dialog-content>
+
+    <h2 *ngIf="data.question.subtype == 'DefinitionQuestion'" mat-dialog-title>
+      Intentos realizados: {{definitionAnswers?.length}}
+    </h2>
+    <h2 *ngIf="data.question.subtype == 'ListQuestion'" mat-dialog-title>
+      Intentos realizados: {{listAnswers?.length}}
+    </h2>
+    <h2 *ngIf="data.question.subtype == 'TestQuestion'" mat-dialog-title>
+      Intentos realizados: {{testAnswers?.length}}
+    </h2>
+
+    <!-- <div mat-dialog-content>
       <mat-form-field>
         <input matInput placeholder="Respuesta" [(ngModel)]="questionAnswer.answerText" />
       </mat-form-field>
@@ -13,6 +23,6 @@
       <button mat-button [mat-dialog-close]="questionAnswer.answerText" cdkFocusInitial>
         Responder
       </button>
-    </div>
+    </div> -->
   </body>
 </html>
