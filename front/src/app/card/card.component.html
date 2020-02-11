@@ -13,14 +13,36 @@
     </div>
 
     <div #cardList>
-      <mat-card [ngClass]="card.id != 0 ? 'card saved-card' : 'card new-card'" *ngFor = "let card of cards">
-        <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
-          <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save(card)">
-        </mat-form-field>
-        <mat-icon id="delete-card-button" (click)="deleteCard(card.id)" matTooltip="Eliminar">delete</mat-icon>
-        <mat-form-field class="example-full-width card-input card-input-area">
-          <textarea matInput class="card-input" placeholder="Contenido" required (change)="save(card)" (input)="changeTextArea($event)" [(ngModel)]="card.content"></textarea>
-        </mat-form-field>
+      <mat-card [ngClass]="card.id != 0 ? 'card saved-card' : 'card new-card'" *ngFor = "let card of cards; let i = index">
+
+        <mat-icon id="delete-card-button" (click)="deleteCard(card.id, i)" matTooltip="Eliminar">delete</mat-icon>
+        <mat-icon *ngIf="cardsView[i]" class="edit-card-button" (click)="editCard(i)" matTooltip="Editar">edit</mat-icon>
+        <mat-icon *ngIf="!cardsView[i] "class="edit-card-button" (click)="viewCard(i)" matTooltip="Visualizar">remove_red_eye</mat-icon>
+
+        <div *ngIf="!cardsView[i]">
+          <mat-form-field id="card-title" class="example-full-width card-input card-input-container">
+            <input matInput class="card-input" placeholder="Título" [(ngModel)]="card.name" required (change)="save(card, i)">
+          </mat-form-field>
+          <mat-form-field class="example-full-width card-input card-input-area">
+            <textarea matInput class="card-input" placeholder="Contenido" required (change)="save(card, i)" (input)="changeTextArea($event)" [(ngModel)]="card.content"></textarea>
+          </mat-form-field>
+
+          <mat-chip-list class="tools">
+            <button mat-button matTooltip="Añadir foto" class="tool" (click)="openImageBottomSheet()">
+              <mat-icon>add_photo_alternate</mat-icon>
+            </button>
+            <button mat-button matTooltip="Añadir ejercicio" class="tool">
+              <mat-icon>description</mat-icon>
+            </button>
+          </mat-chip-list>
+
+        </div>
+
+        <div *ngIf="cardsView[i]">
+          <h4>{{card.name}}</h4>
+          <div [innerHTML]="prettyCards[i]"></div>
+        </div>
+
       </mat-card>
       <div *ngIf="cards.length == 0" id="empty-message">
         Esta unidad no tiene ninguna ficha

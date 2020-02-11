@@ -296,3 +296,15 @@ body {
   font-size: 13px;
 }
 
+.img-lesson {
+  width: 350px;
+}
+
+.btn-resolve {
+  padding: 0.5rem;
+  background-color: #5d306a;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 5rem;
+}

@@ -16,9 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the specified level of parents and children in the diagram
 - Create separate units
 - Show errors when there are units with invalid name
+- Posibility to insert card and slides by name
+- Ability to store images
+- Insert images in slides
+- Cards editor with asciidoc parser
 - Back security included
 - Basic API Testing
 
 ### Fixed
 
 - Dont show empty units adding a new course
+- The lesson view dosn´t crash when an insert error happens

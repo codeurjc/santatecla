@@ -44,7 +44,7 @@
 
         <button mat-button *ngIf="loginService.isAdmin && tabService.module" [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'" [routerLink]="['/units/' + tabService.unitId + '/modules/' + tabService.moduleId]">
           <div class="nav-button-name">
-            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Módulo</span>
+            <span [ngClass]="loginService.isAdmin ? 'nav-button-title admin-nav-button-title' : 'nav-button-title user-nav-button-title'">Itinerario</span>
             <span class="nav-button-content">{{tabService.module}}</span>
           </div>
         </button>

@@ -2,8 +2,8 @@
 <html>
   <body>
 
-    <h2>Selecciona una unidad para ver sus fichas</h2>
-    <h4>Después seleciona una ficha para copiar su ruta</h4>
+    <h2>Selecciona una unidad para ver sus lecciones</h2>
+    <h4>Después seleciona una slide para copiar su ruta</h4>
 
     <mat-form-field id="unitSearcher">
       <input matInput (keyup)="applyFilterUnits($event.target.value)" placeholder="Nombre de la unidad">
@@ -16,9 +16,14 @@
             {{unit.name}}
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div *ngFor = "let card of unit.cards">
-          <mat-card class="sub-card" (click)="openLink($event, 'insert.card/' + card.name + '/' + unit.name)">
-            {{card.name}}
+        <div *ngFor = "let lesson of unit.lessons">
+          <mat-card class="lesson-card">
+            {{lesson.name}}
+            <div *ngFor = "let slide of lesson.slides">
+              <mat-card class="sub-card" (click)="openLink($event, 'insert.slide/' + slide.name + '/' + lesson.name + '/' + unit.name)">
+                {{slide.name}}
+              </mat-card>
+            </div>
           </mat-card>
         </div>
       </mat-expansion-panel>

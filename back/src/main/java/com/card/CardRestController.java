@@ -1,5 +1,6 @@
 package com.card;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
@@ -27,6 +28,14 @@ public class CardRestController extends GeneralRestController {
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
         return unit.map(value -> new ResponseEntity<>(value.getCards(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value = "/search/card")
+    public ResponseEntity<List<Card>> getCardByName(@RequestParam String unitName, @RequestParam String cardName) {
+        List<Card> cards = this.cardService.findByName(unitName, cardName);
+        if (cards.size() == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(cards, HttpStatus.OK);
     }
 
     @PostMapping(value = "/{unitId}/cards")

@@ -66,6 +66,9 @@ import {UnitModuleService} from './itinerary/module/unit-module.service';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
 import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
 import {ModuleRenameComponent} from './itinerary/module/moduleRename/module-rename.component';
+import {ImageComponent} from './images/image.component';
+import {ImageService} from './images/image.service';
+import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
 import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
 
 @NgModule({
@@ -73,6 +76,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     AppComponent,
     LessonFormComponent,
     LessonComponent,
+    LessonSlidesToolComponent,
     ModuleComponent,
     ModuleFormComponent,
     LoginComponent,
@@ -80,6 +84,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     ViewComponent,
     UnitComponent,
     CardComponent,
+    ImageComponent,
     LessonEditorComponent,
     ModuleEditorComponent,
     UnitsCardsToolComponent,
@@ -154,7 +159,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
   ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
     QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService,
-    MenuComponent, UnitLessonService, UnitModuleService,
+    MenuComponent, UnitLessonService, UnitModuleService, ImageService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy}],
