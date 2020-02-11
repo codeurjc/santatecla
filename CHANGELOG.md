@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the specified level of parents and children in the diagram
 - Create separate units
 - Show errors when there are units with invalid name
+- Back security included
+- Basic API Testing
 
 ### Fixed
 
