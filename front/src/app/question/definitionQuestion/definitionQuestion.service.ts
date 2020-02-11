@@ -32,8 +32,4 @@ export class DefinitionQuestionService {
 
     return this.http.post<DefinitionAnswer>('/api/definition/' + id, body, {headers});
   }
-
-  getUserAnswers(questionId: number, userId: number) {
-    return this.http.get('api/definition/' + questionId + '/answer/user/' + userId);
-  }
 }

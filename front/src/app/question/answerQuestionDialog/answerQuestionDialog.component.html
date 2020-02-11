@@ -3,26 +3,67 @@
   <body>
     <h1 mat-dialog-title>{{ data.question.questionText }}</h1>
 
-    <h2 *ngIf="data.question.subtype == 'DefinitionQuestion'" mat-dialog-title>
+    <h3 *ngIf="data.question.subtype == 'DefinitionQuestion'" mat-dialog-title>
       Intentos realizados: {{definitionAnswers?.length}}
-    </h2>
-    <h2 *ngIf="data.question.subtype == 'ListQuestion'" mat-dialog-title>
+    </h3>
+    <h3 *ngIf="data.question.subtype == 'ListQuestion'" mat-dialog-title>
       Intentos realizados: {{listAnswers?.length}}
-    </h2>
-    <h2 *ngIf="data.question.subtype == 'TestQuestion'" mat-dialog-title>
+    </h3>
+    <h3 *ngIf="data.question.subtype == 'TestQuestion'" mat-dialog-title>
       Intentos realizados: {{testAnswers?.length}}
-    </h2>
+    </h3>
 
-    <!-- <div mat-dialog-content>
-      <mat-form-field>
-        <input matInput placeholder="Respuesta" [(ngModel)]="questionAnswer.answerText" />
-      </mat-form-field>
+    <div mat-dialog-content>
+
+      <!-- DEFINITION ANSWER -->
+      <div *ngIf="subtype == 'DefinitionQuestion'">
+        <form class="add-question-form">
+          <mat-form-field>
+            <textarea matInput name="answer" (input)="changeTextArea($event)" placeholder="Pregunta" [(ngModel)]="definitionAnswer.answerText" type="text" required>
+            </textarea>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <!-- LIST ANSWER -->
+      <div *ngIf="subtype == 'ListQuestion'">
+        <form class="add-question-form">
+          <p>Respuestas posibles</p>
+          <span *ngFor="let answer of availableListAnswers">
+            <input type="button" name="answer" value="{{answer}}" (click)="newChosenAnswer(answer)">
+          </span>
+        </form>
+        <form name="choosenListAnswers">
+          <p>Respuestas seleccionadas</p>
+          <span *ngFor="let answer of chosenListAnswers">
+            <input type="button" name="answer" value="{{answer}}" (click)="deleteChosenAnswer(answer)">
+          </span>
+        </form>
+      </div>
+
+      <!-- TEST ANSWER -->
+      <div *ngIf="subtype == 'TestQuestion'">
+        <form class="add-question-form">
+          <div class="add-question-form-list">
+            <mat-radio-group>
+              <mat-radio-button *ngFor="let answer of availableListAnswers">
+                {{answer}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </form>
+      </div>
+
     </div>
+
     <div mat-dialog-actions>
       <button mat-button (click)="onNoClick()">Cancelar</button>
-      <button mat-button [mat-dialog-close]="questionAnswer.answerText" cdkFocusInitial>
+      <!--<button mat-button [mat-dialog-close]="true" cdkFocusInitial>
+        Responder
+      </button>-->
+      <button (click)="sendAnswer()" [mat-dialog-close]="true" class="mat-button question-button tool">
         Responder
       </button>
-    </div> -->
+    </div>
   </body>
 </html>

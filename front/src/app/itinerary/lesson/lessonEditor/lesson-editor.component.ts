@@ -470,10 +470,10 @@ export class LessonEditorComponent implements OnInit {
     );
   }
 
-  openEditQuestionDialog(editingQuestion) {
+  openEditQuestionDialog(answeringQuestion) {
     const dialogRef = this.dialog.open(AnswerQuestionDialogComponent, {
       width: '600px',
-      data: {isEditing: true, unitId: this.unitId, question: editingQuestion}
+      data: {unitId: this.unitId, question: answeringQuestion}
     });
 
     dialogRef.afterClosed().subscribe(result => {

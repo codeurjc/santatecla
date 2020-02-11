@@ -163,4 +163,16 @@ export class QuestionService {
   getUncorrectedDefinitionAnswers(unitId, questionId: number) {
     return this.http.get(this.baseUrl + unitId + '/question/definition/' + questionId + '/uncorrectedCount');
   }
+
+  getDefinitionUserAnswers(unitId, questionId, userId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/definition/' + questionId + '/answer/user/' + userId);
+  }
+
+  getListUserAnswers(unitId, questionId, userId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/list/' + questionId + '/answer/user/' + userId);
+  }
+
+  getTestUserAnswers(unitId, questionId, userId: number) {
+    return this.http.get(this.baseUrl + unitId + '/question/test/' + questionId + '/answer/user/' + userId);
+  }
 }
