@@ -483,7 +483,7 @@ export class LessonEditorComponent implements OnInit {
     );
   }
 
-  openEditQuestionDialog(answeringQuestion) {
+  openAnswerQuestionDialog(answeringQuestion) {
     const dialogRef = this.dialog.open(AnswerQuestionDialogComponent, {
       width: '600px',
       data: {unitId: this.unitId, question: answeringQuestion}

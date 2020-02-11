@@ -43,7 +43,7 @@ public class UnitQuestionRestController extends GeneralRestController {
     }
 
     @DeleteMapping("/{questionID}")
-    public ResponseEntity<Question> deleteListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<Question> deleteQuestion(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<Question> question = this.questionService.findOne(questionID);
 
