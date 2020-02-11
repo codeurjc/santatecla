@@ -6,6 +6,7 @@ import com.question.test.test_question.TestQuestion;
 import com.question.test.test_question.TestQuestionService;
 import com.unit.Unit;
 import com.unit.UnitService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class TestQuestionApiTests {
 
     private Gson jsonParser = new Gson();
 
-    @Test
-    public void testGetTestQuestionsFromUnit() throws Exception{
+    @Before
+    public void initialize() {
         Unit unit1 = new Unit();
         TestQuestion testQuestion = new TestQuestion();
         testQuestion.setQuestionText("Test Test Question");
@@ -55,7 +56,12 @@ public class TestQuestionApiTests {
         unit1.addTestQuestion(testQuestion1);
 
         given(unitService.findOne(1)).willReturn(Optional.of(unit1));
+        given(unitService.findOne(2)).willReturn(Optional.empty());
+        given(testQuestionService.findOne(1)).willReturn(Optional.of(testQuestion));
+    }
 
+    @Test
+    public void testGetTestQuestionsFromUnit() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/test")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -65,8 +71,6 @@ public class TestQuestionApiTests {
 
     @Test
     public void testNotFoundGetTestQuestionsFromUnit() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/test")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -74,14 +78,6 @@ public class TestQuestionApiTests {
 
     @Test
     public void testGetTestQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        TestQuestion testQuestion = new TestQuestion();
-        testQuestion.setQuestionText("Test Test Question");
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(testQuestionService.findOne(1)).willReturn(Optional.of(testQuestion));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/test/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -90,8 +86,6 @@ public class TestQuestionApiTests {
 
     @Test
     public void testNotFoundGetTestQuestion() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/test/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -119,8 +113,6 @@ public class TestQuestionApiTests {
         TestQuestion testQuestion = new TestQuestion();
         testQuestion.setQuestionText("Test Test Question");
 
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.post("/api/units/2/question/test/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(testQuestion)))
@@ -129,16 +121,6 @@ public class TestQuestionApiTests {
 
     @Test
     public void testDeleteTestQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        TestQuestion testQuestion = new TestQuestion();
-        testQuestion.setQuestionText("Test Test Question");
-
-        unit1.addTestQuestion(testQuestion);
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(testQuestionService.findOne(1)).willReturn(Optional.of(testQuestion));
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/1/question/test/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -146,8 +128,6 @@ public class TestQuestionApiTests {
 
     @Test
     public void testNotFoundDeleteTestQuestion() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/2/question/test/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -180,9 +160,7 @@ public class TestQuestionApiTests {
         TestQuestion testQuestion2 = new TestQuestion();
         testQuestion2.setQuestionText("Test Test Question 2");
 
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.put("/api/units/1/question/test/1")
+        mvc.perform(MockMvcRequestBuilders.put("/api/units/2/question/test/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(testQuestion2)))
                 .andExpect(status().is(404));
@@ -211,8 +189,6 @@ public class TestQuestionApiTests {
 
     @Test
     public void testNotFoundGetTestQuestionAnswers() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/test/1/answer")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -242,9 +218,7 @@ public class TestQuestionApiTests {
     public void testNotFoundAddTestAnswer() throws Exception{
         TestAnswer testAnswer = new TestAnswer();
 
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/units/1/question/test/1/answer")
+        mvc.perform(MockMvcRequestBuilders.post("/api/units/2/question/test/1/answer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(testAnswer)))
                 .andExpect(status().is(404));
@@ -273,8 +247,6 @@ public class TestQuestionApiTests {
 
     @Test
     public void testNotFoundGetChosenWrongTestQuestionAnswers() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/test/1/chosenWrongAnswersCount")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));

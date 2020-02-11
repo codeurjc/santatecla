@@ -5,6 +5,7 @@ import com.itinerary.block.Block;
 import com.itinerary.block.BlockService;
 import com.itinerary.module.Module;
 import com.itinerary.module.ModuleService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,15 +43,20 @@ public class ModuleApiTests {
 
     private Gson jsonParser = new Gson();
 
-    @Test
-    public void testGetModules() throws Exception{
+    @Before
+    public void initialize() {
         Module module = new Module();
         module.setName("Test Module");
         ArrayList<Module> modules = new ArrayList<>();
         modules.add(module);
 
         given(moduleService.findAll()).willReturn(modules);
+        given(moduleService.findOne(1)).willReturn(Optional.of(module));
+        given(moduleService.findOne(2)).willReturn(Optional.empty());
+    }
 
+    @Test
+    public void testGetModules() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/modules/")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -59,12 +65,6 @@ public class ModuleApiTests {
 
     @Test
     public void testGetModule() throws Exception{
-        Module module = new Module();
-        module.setId(1);
-        module.setName("Test Module");
-
-        given(moduleService.findOne(1)).willReturn(Optional.of(module));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/modules/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -73,23 +73,15 @@ public class ModuleApiTests {
 
     @Test
     public void testNotFoundGetModule() throws Exception{
-        given(moduleService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.get("/api/modules/1")
+        mvc.perform(MockMvcRequestBuilders.get("/api/modules/2")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
     }
 
     @Test
     public void testUpdateModule() throws Exception{
-        Module module = new Module();
-        module.setId(1);
-        module.setName("Test Module");
-
         Module module2 = new Module();
         module2.setName("Test Module 2");
-
-        given(moduleService.findOne(1)).willReturn(Optional.of(module));
 
         mvc.perform(MockMvcRequestBuilders.put("/api/modules/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,8 +94,6 @@ public class ModuleApiTests {
     public void testNotFoundUpdateModule() throws Exception{
         Module module2 = new Module();
         module2.setName("Test Module 2");
-
-        given(moduleService.findOne(2)).willReturn(Optional.empty());
 
         mvc.perform(MockMvcRequestBuilders.put("/api/modules/2")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -153,8 +143,6 @@ public class ModuleApiTests {
 
     @Test
     public void testNotFoundDeleteBlockFromModule() throws Exception{
-        given(moduleService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/modules/2/blocks/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));

@@ -7,6 +7,7 @@ import com.slide.Slide;
 import com.slide.SlideService;
 import com.unit.Unit;
 import com.unit.UnitService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class UnitLessonApiTests {
 
     private Gson jsonParser = new Gson();
 
-    @Test
-    public void testGetSlideFromLesson() throws Exception{
+    @Before
+    public void initialize() {
         Unit unit = new Unit();
         unit.setId(1);
         unit.setName("Test Unit");
@@ -61,9 +62,13 @@ public class UnitLessonApiTests {
         slide.setContent("Test Content");
 
         given(unitService.findOne(1)).willReturn(Optional.of(unit));
+        given(unitService.findOne(2)).willReturn(Optional.empty());
         given(lessonService.findOne(1)).willReturn(Optional.of(lesson));
         given(slideService.findOne(1)).willReturn(Optional.of(slide));
+    }
 
+    @Test
+    public void testGetSlideFromLesson() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/lessons/1/slides/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -72,8 +77,6 @@ public class UnitLessonApiTests {
 
     @Test
     public void testNotFoundGetSlideFromLesson() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/lessons/1/slides/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -123,8 +126,6 @@ public class UnitLessonApiTests {
 
     @Test
     public void testNotFoundDeleteLesson() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/2/lessons/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));

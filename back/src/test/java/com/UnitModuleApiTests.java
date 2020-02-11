@@ -2,12 +2,11 @@ package com;
 
 import com.google.gson.Gson;
 import com.itinerary.block.BlockService;
-import com.itinerary.lesson.LessonService;
 import com.itinerary.module.Module;
 import com.itinerary.module.ModuleService;
-import com.slide.SlideService;
 import com.unit.Unit;
 import com.unit.UnitService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.Assert.assertThat;
 
@@ -47,6 +45,11 @@ public class UnitModuleApiTests {
     private BlockService blockService;
 
     private Gson jsonParser = new Gson();
+
+    @Before
+    public void initialize() {
+        given(unitService.findOne(2)).willReturn(Optional.empty());
+    }
 
     @Test
     public void testAddModuleToUnit() throws Exception{
@@ -95,8 +98,6 @@ public class UnitModuleApiTests {
 
     @Test
     public void testNotFoundDeleteModuleFromUnit() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/2/modules/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));

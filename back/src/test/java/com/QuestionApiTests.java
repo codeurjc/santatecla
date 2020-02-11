@@ -6,6 +6,7 @@ import com.question.list.list_question.ListQuestion;
 import com.question.test.test_question.TestQuestion;
 import com.unit.Unit;
 import com.unit.UnitService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,8 @@ public class QuestionApiTests {
     @MockBean
     private UnitService unitService;
 
-    @Test
-    public void testGetQuestionsFromUnit() throws Exception{
+    @Before
+    public void initialize() {
         Unit unit1 = new Unit();
         DefinitionQuestion definitionQuestion = new DefinitionQuestion();
         definitionQuestion.setQuestionText("Test Definition Question");
@@ -56,7 +57,12 @@ public class QuestionApiTests {
         unit1.addListQuestion(listQuestion);
 
         given(unitService.findOne(1)).willReturn(Optional.of(unit1));
+        given(unitService.findOne(2)).willReturn(Optional.empty());
+        given(questionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
+    }
 
+    @Test
+    public void testGetQuestionsFromUnit() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -66,8 +72,6 @@ public class QuestionApiTests {
 
     @Test
     public void testNotFoundGetQuestionsFromUnit() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -75,14 +79,6 @@ public class QuestionApiTests {
 
     @Test
     public void testGetQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        DefinitionQuestion definitionQuestion = new DefinitionQuestion();
-        definitionQuestion.setQuestionText("Test Definition Question");
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(questionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -91,8 +87,6 @@ public class QuestionApiTests {
 
     @Test
     public void testNotFoundGetQuestion() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -100,16 +94,6 @@ public class QuestionApiTests {
 
     @Test
     public void testDeleteQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        DefinitionQuestion definitionQuestion = new DefinitionQuestion();
-        definitionQuestion.setQuestionText("Test Definition Question");
-
-        unit1.addDefinitionQuestion(definitionQuestion);
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(questionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/1/question/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -118,9 +102,7 @@ public class QuestionApiTests {
 
     @Test
     public void testNotFoundDeleteQuestion() throws Exception{
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.delete("/api/units/1/question/1")
+        mvc.perform(MockMvcRequestBuilders.delete("/api/units/2/question/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
     }
@@ -146,8 +128,6 @@ public class QuestionApiTests {
 
     @Test
     public void testNotFoundGetQuestionCorrectCount() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/1/correctCount")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -174,8 +154,6 @@ public class QuestionApiTests {
 
     @Test
     public void testGetQuestionNotFoundWrongCount() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/1/wrongCount")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));

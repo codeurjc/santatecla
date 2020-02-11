@@ -6,6 +6,7 @@ import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionService;
 import com.unit.Unit;
 import com.unit.UnitService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,19 +45,29 @@ public class DefinitionQuestionApiTests {
 
     private Gson jsonParser = new Gson();
 
-    @Test
-    public void testGetDefinitionQuestionsFromUnit() throws Exception{
+    @Before
+    public void initialize() {
         Unit unit1 = new Unit();
         DefinitionQuestion definitionQuestion = new DefinitionQuestion();
         definitionQuestion.setQuestionText("Test Definition Question");
         DefinitionQuestion definitionQuestion1 = new DefinitionQuestion();
         definitionQuestion1.setQuestionText("Test Definition Question 2");
 
+        DefinitionAnswer definitionAnswer = new DefinitionAnswer();
+        definitionAnswer.setJustification("Test Justification");
+
+        definitionQuestion.addAnswer(definitionAnswer);
+
         unit1.addDefinitionQuestion(definitionQuestion);
         unit1.addDefinitionQuestion(definitionQuestion1);
 
         given(unitService.findOne(1)).willReturn(Optional.of(unit1));
+        given(unitService.findOne(2)).willReturn(Optional.empty());
+        given(definitionQuestionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
+    }
 
+    @Test
+    public void testGetDefinitionQuestionsFromUnit() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/definition")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -66,8 +77,6 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testNotFoundGetDefinitionQuestionsFromUnit() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/definition")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -75,14 +84,6 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testGetDefinitionQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        DefinitionQuestion definitionQuestion = new DefinitionQuestion();
-        definitionQuestion.setQuestionText("Test Definition Question");
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(definitionQuestionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/definition/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -91,8 +92,6 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testNotFoundGetDefinitionQuestion() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/definition/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -120,8 +119,6 @@ public class DefinitionQuestionApiTests {
         DefinitionQuestion definitionQuestion = new DefinitionQuestion();
         definitionQuestion.setQuestionText("Test Definition Question");
 
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.post("/api/units/2/question/definition/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(definitionQuestion)))
@@ -130,16 +127,6 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testDeleteDefinitionQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        DefinitionQuestion definitionQuestion = new DefinitionQuestion();
-        definitionQuestion.setQuestionText("Test Definition Question");
-
-        unit1.addDefinitionQuestion(definitionQuestion);
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(definitionQuestionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/1/question/definition/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -147,8 +134,6 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testNotFoundDeleteDefinitionQuestion() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/2/question/definition/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -156,18 +141,8 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testUpdateDefinitionQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        DefinitionQuestion definitionQuestion = new DefinitionQuestion();
-        definitionQuestion.setQuestionText("Test Definition Question");
-
-        unit1.addDefinitionQuestion(definitionQuestion);
-
         DefinitionQuestion definitionQuestion2 = new DefinitionQuestion();
         definitionQuestion2.setQuestionText("Test Definition Question 2");
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(definitionQuestionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
 
         mvc.perform(MockMvcRequestBuilders.put("/api/units/1/question/definition/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -181,9 +156,7 @@ public class DefinitionQuestionApiTests {
         DefinitionQuestion definitionQuestion2 = new DefinitionQuestion();
         definitionQuestion2.setQuestionText("Test Definition Question 2");
 
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.put("/api/units/1/question/definition/1")
+        mvc.perform(MockMvcRequestBuilders.put("/api/units/2/question/definition/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(definitionQuestion2)))
                 .andExpect(status().is(404));
@@ -191,19 +164,6 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testGetAllDefinitionQuestionAnswers() throws Exception{
-        Unit unit1 = new Unit();
-
-        DefinitionQuestion definitionQuestion = new DefinitionQuestion();
-        definitionQuestion.setQuestionText("Test Definition Question");
-
-        DefinitionAnswer definitionAnswer = new DefinitionAnswer();
-        definitionAnswer.setJustification("Test Justification");
-
-        definitionQuestion.addAnswer(definitionAnswer);
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(definitionQuestionService.findOne(1)).willReturn(Optional.of(definitionQuestion));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/definition/1/answer")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -274,8 +234,6 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testNotFoundGetDefinitionQuestionAnswers() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/definition/1/answer")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -305,9 +263,7 @@ public class DefinitionQuestionApiTests {
     public void testNotFoundAddDefinitionAnswer() throws Exception{
         DefinitionAnswer definitionAnswer = new DefinitionAnswer();
 
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/units/1/question/definition/1/answer")
+        mvc.perform(MockMvcRequestBuilders.post("/api/units/2/question/definition/1/answer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(definitionAnswer)))
                 .andExpect(status().is(404));
@@ -346,9 +302,7 @@ public class DefinitionQuestionApiTests {
         DefinitionAnswer definitionAnswer = new DefinitionAnswer();
         definitionAnswer.setCorrected(false);
 
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.put("/api/units/1/question/definition/1/answer/1")
+        mvc.perform(MockMvcRequestBuilders.put("/api/units/2/question/definition/1/answer/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(definitionAnswer)))
                 .andExpect(status().is(404));
@@ -383,9 +337,7 @@ public class DefinitionQuestionApiTests {
 
     @Test
     public void testNotFoundGetUncorrectedDefinitionQuestionAnswers() throws Exception{
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/definition/1/uncorrectedCount")
+        mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/definition/1/uncorrectedCount")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
     }

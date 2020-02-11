@@ -3,6 +3,7 @@ package com;
 import com.google.gson.Gson;
 import com.itinerary.lesson.Lesson;
 import com.itinerary.lesson.LessonService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +37,20 @@ public class LessonApiTests {
 
     private Gson jsonParser = new Gson();
 
-    @Test
-    public void testGetLessons() throws Exception{
+    @Before
+    public void initialize() {
         Lesson lesson = new Lesson();
         lesson.setName("Test Lesson");
         ArrayList<Lesson> lessons = new ArrayList<>();
         lessons.add(lesson);
 
         given(lessonService.findAll()).willReturn(lessons);
+        given(lessonService.findOne(1)).willReturn(Optional.of(lesson));
+        given(lessonService.findOne(2)).willReturn(Optional.empty());
+    }
 
+    @Test
+    public void testGetLessons() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/lessons/")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -53,11 +59,6 @@ public class LessonApiTests {
 
     @Test
     public void testGetLesson() throws Exception{
-        Lesson lesson = new Lesson();
-        lesson.setName("Test Lesson");
-
-        given(lessonService.findOne(1)).willReturn(Optional.of(lesson));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/lessons/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -66,8 +67,6 @@ public class LessonApiTests {
 
     @Test
     public void testNotFoundGetLesson() throws Exception{
-        given(lessonService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/lessons/2")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -75,11 +74,6 @@ public class LessonApiTests {
 
     @Test
     public void testDeleteLesson() throws Exception{
-        Lesson lesson = new Lesson();
-        lesson.setName("Test Lesson");
-
-        given(lessonService.findOne(1)).willReturn(Optional.of(lesson));
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/lessons/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -87,8 +81,6 @@ public class LessonApiTests {
 
     @Test
     public void testNotFoundDeleteLesson() throws Exception{
-        given(lessonService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/lessons/2")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -96,13 +88,8 @@ public class LessonApiTests {
 
     @Test
     public void testEditLesson() throws Exception{
-        Lesson lesson = new Lesson();
-        lesson.setName("Test Lesson");
-
         Lesson lesson2 = new Lesson();
         lesson2.setName("Test Lesson 2");
-
-        given(lessonService.findOne(1)).willReturn(Optional.of(lesson));
 
         mvc.perform(MockMvcRequestBuilders.put("/api/lessons/1")
                 .contentType(MediaType.APPLICATION_JSON)

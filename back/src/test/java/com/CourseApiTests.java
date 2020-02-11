@@ -8,6 +8,7 @@ import com.itinerary.module.ModuleService;
 import com.question.Question;
 import com.question.QuestionService;
 import com.user.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +49,41 @@ public class CourseApiTests {
 
     private Gson jsonParser = new Gson();
 
-    @Test
-    public void testGetAllCourses() throws Exception{
+    @Before
+    public void initialize() {
         Course course = new Course();
         course.setName("Test Course");
+        course.setId(1);
         ArrayList<Course> courses = new ArrayList<>();
         courses.add(course);
 
-        given(courseService.findAll()).willReturn(courses);
+        Module module = new Module();
+        module.setName("Test Module");
+        module.setId(1);
 
+        course.setModule(module);
+
+        ArrayList<Long> userCourses = new ArrayList<>();
+        userCourses.add((long)1);
+
+        Question question = new Question();
+        ArrayList<Question> questions = new ArrayList<>();
+        questions.add(question);
+
+        given(courseService.findAll()).willReturn(courses);
+        given(courseService.findOne(1)).willReturn(Optional.of(course));
+        given(courseService.findOne(2)).willReturn(Optional.empty());
+        given(courseService.findUserCourses(1)).willReturn(userCourses);
+        given(courseService.findTeachingCourses(1)).willReturn(courses);
+        given(courseService.searchCourseByNameContaining("Tes")).willReturn(courses);
+        given(courseService.findModuleRealization(course.getStudents(), 1, 1, 1)).willReturn((double)1);
+        given(courseService.findModuleGrade(course.getStudents(), 1, 1)).willReturn((double)1);
+        given(questionService.findQuestionsByModuleId(1)).willReturn(questions);
+        given(questionService.findModuleQuestionCount(1)).willReturn(1);
+    }
+
+    @Test
+    public void testGetAllCourses() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/course/")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -65,11 +92,6 @@ public class CourseApiTests {
 
     @Test
     public void testGetCourse() throws Exception{
-        Course course = new Course();
-        course.setName("Test Course");
-
-        given(courseService.findOne(1)).willReturn(Optional.of(course));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -78,8 +100,6 @@ public class CourseApiTests {
 
     @Test
     public void testNotFoundGetCourse() throws Exception{
-        given(courseService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/2")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -100,15 +120,8 @@ public class CourseApiTests {
 
     @Test
     public void testEditCourse() throws Exception{
-        Module module = new Module();
-        Course course = new Course();
-        course.setName("Test Course");
-        course.setModule(module);
-
         Course course2 = new Course();
         course2.setName("Test Edit Course");
-
-        given(courseService.findOne(1)).willReturn(Optional.of(course));
 
         mvc.perform(MockMvcRequestBuilders.put("/api/course/1")
                 .content(jsonParser.toJson(course2))
@@ -123,8 +136,6 @@ public class CourseApiTests {
         Course course2 = new Course();
         course2.setName("Test Edit Course");
 
-        given(courseService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.put("/api/course/2")
                 .content(jsonParser.toJson(course2))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -133,13 +144,6 @@ public class CourseApiTests {
 
     @Test
     public void testDeleteCourse() throws Exception{
-        Module module = new Module();
-        Course course = new Course();
-        course.setName("Test Course");
-        course.setModule(module);
-
-        given(courseService.findOne(1)).willReturn(Optional.of(course));
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/course/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -147,8 +151,6 @@ public class CourseApiTests {
 
     @Test
     public void testNotFoundDeleteCourse() throws Exception{
-        given(courseService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/course/2")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -156,15 +158,6 @@ public class CourseApiTests {
 
     @Test
     public void testGetUserCourses() throws Exception{
-        Course course = new Course();
-        course.setName("Test Course");
-
-        ArrayList<Long> userCourses = new ArrayList<>();
-        userCourses.add((long)1);
-
-        given(courseService.findUserCourses(1)).willReturn(userCourses);
-        given(courseService.findOne(1)).willReturn(Optional.of(course));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/user/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -173,13 +166,6 @@ public class CourseApiTests {
 
     @Test
     public void testGetTeacherCourses() throws Exception{
-        Course course = new Course();
-        course.setName("Test Course");
-        ArrayList<Course> courses = new ArrayList<>();
-        courses.add(course);
-
-        given(courseService.findTeachingCourses(1)).willReturn(courses);
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/teacher/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -209,9 +195,7 @@ public class CourseApiTests {
         User user = new User();
         user.setName("Test");
 
-        given(courseService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/course/1/students/")
+        mvc.perform(MockMvcRequestBuilders.post("/api/course/2/students/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(user)))
                 .andExpect(status().is(404));
@@ -219,13 +203,6 @@ public class CourseApiTests {
 
     @Test
     public void testSearchByNameContaining() throws Exception{
-        Course course = new Course();
-        course.setName("Test Course");
-        ArrayList<Course> courses = new ArrayList<>();
-        courses.add(course);
-
-        given(courseService.searchCourseByNameContaining("Tes")).willReturn(courses);
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/search/Tes")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -234,25 +211,6 @@ public class CourseApiTests {
 
     @Test
     public void testGetModuleProgress() throws Exception{
-        Question question = new Question();
-        ArrayList<Question> questions = new ArrayList<>();
-        questions.add(question);
-
-        Course course = new Course();
-        course.setName("Test Course");
-
-        Module module = new Module();
-        module.setName("Test Module");
-        module.setId(1);
-
-        course.setModule(module);
-
-        given(courseService.findOne(1)).willReturn(Optional.of(course));
-        given(courseService.findModuleRealization(course.getStudents(), 1, 1, 1)).willReturn((double)1);
-        given(courseService.findModuleGrade(course.getStudents(), 1, 1)).willReturn((double)1);
-        given(questionService.findQuestionsByModuleId(1)).willReturn(questions);
-        given(questionService.findModuleQuestionCount(1)).willReturn(1);
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/1/module/progress")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -261,8 +219,6 @@ public class CourseApiTests {
 
     @Test
     public void testNotFoundGetModuleProgress() throws Exception{
-        given(courseService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/2/module/progress")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -303,8 +259,6 @@ public class CourseApiTests {
 
     @Test
     public void testNotFoundGetStudentProgress() throws Exception{
-        given(courseService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/course/2/students/progress")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));

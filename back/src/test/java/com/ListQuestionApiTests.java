@@ -6,6 +6,7 @@ import com.question.list.list_question.ListQuestion;
 import com.question.list.list_question.ListQuestionService;
 import com.unit.Unit;
 import com.unit.UnitService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,19 +44,30 @@ public class ListQuestionApiTests {
 
     private Gson jsonParser = new Gson();
 
-    @Test
-    public void testGetListQuestionsFromUnit() throws Exception{
+    @Before
+    public void initialize() {
         Unit unit1 = new Unit();
         ListQuestion listQuestion = new ListQuestion();
         listQuestion.setQuestionText("Test List Question");
         ListQuestion listQuestion1 = new ListQuestion();
         listQuestion1.setQuestionText("Test List Question 2");
 
+        ListAnswer listAnswer = new ListAnswer();
+        listAnswer.setCorrect(true);
+
+        listQuestion.addAnswer(listAnswer);
+
         unit1.addListQuestion(listQuestion);
         unit1.addListQuestion(listQuestion1);
 
         given(unitService.findOne(1)).willReturn(Optional.of(unit1));
+        given(unitService.findOne(2)).willReturn(Optional.empty());
+        given(listQuestionService.findOne(1)).willReturn(Optional.of(listQuestion));
+        given(listQuestionService.findChosenWrongAnswersCount(1)).willReturn(new ArrayList<>());
+    }
 
+    @Test
+    public void testGetListQuestionsFromUnit() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/list")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -65,8 +77,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testNotFoundGetListQuestionsFromUnit() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/list")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -74,14 +84,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testGetListQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        ListQuestion listQuestion = new ListQuestion();
-        listQuestion.setQuestionText("Test List Question");
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(listQuestionService.findOne(1)).willReturn(Optional.of(listQuestion));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/list/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -90,8 +92,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testNotFoundGetListQuestion() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/list/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -119,8 +119,6 @@ public class ListQuestionApiTests {
         ListQuestion listQuestion = new ListQuestion();
         listQuestion.setQuestionText("Test List Question");
 
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.post("/api/units/2/question/list/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(listQuestion)))
@@ -129,16 +127,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testDeleteListQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        ListQuestion listQuestion = new ListQuestion();
-        listQuestion.setQuestionText("Test List Question");
-
-        unit1.addListQuestion(listQuestion);
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(listQuestionService.findOne(1)).willReturn(Optional.of(listQuestion));
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/1/question/list/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -146,8 +134,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testNotFoundDeleteListQuestion() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.delete("/api/units/2/question/list/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -155,18 +141,8 @@ public class ListQuestionApiTests {
 
     @Test
     public void testUpdateListQuestion() throws Exception{
-        Unit unit1 = new Unit();
-
-        ListQuestion listQuestion = new ListQuestion();
-        listQuestion.setQuestionText("Test List Question");
-
-        unit1.addListQuestion(listQuestion);
-
         ListQuestion listQuestion1 = new ListQuestion();
         listQuestion1.setQuestionText("Test List Question 2");
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(listQuestionService.findOne(1)).willReturn(Optional.of(listQuestion));
 
         mvc.perform(MockMvcRequestBuilders.put("/api/units/1/question/list/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -180,9 +156,7 @@ public class ListQuestionApiTests {
         ListQuestion listQuestion2 = new ListQuestion();
         listQuestion2.setQuestionText("Test List Question 2");
 
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.put("/api/units/1/question/list/1")
+        mvc.perform(MockMvcRequestBuilders.put("/api/units/2/question/list/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(listQuestion2)))
                 .andExpect(status().is(404));
@@ -190,19 +164,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testGetListQuestionAnswers() throws Exception{
-        Unit unit1 = new Unit();
-
-        ListQuestion listQuestion = new ListQuestion();
-        listQuestion.setQuestionText("Test List Question");
-
-        ListAnswer listAnswer = new ListAnswer();
-        listAnswer.setCorrect(true);
-
-        listQuestion.addAnswer(listAnswer);
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(listQuestionService.findOne(1)).willReturn(Optional.of(listQuestion));
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/list/1/answer")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -211,8 +172,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testNotFoundGetListQuestionAnswers() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/list/1/answer")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
@@ -242,9 +201,7 @@ public class ListQuestionApiTests {
     public void testNotFoundAddListAnswer() throws Exception{
         ListAnswer listAnswer = new ListAnswer();
 
-        given(unitService.findOne(1)).willReturn(Optional.empty());
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/units/1/question/list/1/answer")
+        mvc.perform(MockMvcRequestBuilders.post("/api/units/2/question/list/1/answer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(listAnswer)))
                 .andExpect(status().is(404));
@@ -252,19 +209,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testGetChosenWrongListQuestionAnswers() throws Exception{
-        Unit unit1 = new Unit();
-
-        ListQuestion listQuestion = new ListQuestion();
-        listQuestion.setQuestionText("Test List Question");
-
-        ListAnswer listAnswer = new ListAnswer();
-
-        listQuestion.addAnswer(listAnswer);
-
-        given(unitService.findOne(1)).willReturn(Optional.of(unit1));
-        given(listQuestionService.findOne(1)).willReturn(Optional.of(listQuestion));
-        given(listQuestionService.findChosenWrongAnswersCount(1)).willReturn(new ArrayList<>());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/1/question/list/1/chosenWrongAnswersCount")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -273,8 +217,6 @@ public class ListQuestionApiTests {
 
     @Test
     public void testNotFoundGetChosenWrongListQuestionAnswers() throws Exception{
-        given(unitService.findOne(2)).willReturn(Optional.empty());
-
         mvc.perform(MockMvcRequestBuilders.get("/api/units/2/question/list/1/chosenWrongAnswersCount")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(404));
