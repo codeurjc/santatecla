@@ -1,5 +1,6 @@
 package com.question.test.test_question;
 
+import com.google.gson.annotations.SerializedName;
 import com.question.Question;
 import com.question.test.test_answer.TestAnswer;
 import org.hibernate.annotations.Fetch;
@@ -14,6 +15,7 @@ public class TestQuestion extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("testQuestionId")
     private long id;
 
     @ElementCollection(fetch = FetchType.EAGER)

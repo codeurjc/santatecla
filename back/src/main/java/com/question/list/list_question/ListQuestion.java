@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.SerializedName;
 import com.question.Question;
 import com.question.list.list_answer.ListAnswer;
 import org.hibernate.annotations.Fetch;
@@ -15,6 +16,7 @@ public class ListQuestion extends Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("listQuestionId")
     private long id;
 
     @ElementCollection(fetch = FetchType.EAGER)

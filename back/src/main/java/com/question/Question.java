@@ -1,5 +1,6 @@
 package com.question;
 
+import com.google.gson.annotations.SerializedName;
 import com.itinerary.module.Module;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("questionId")
     protected long id;
 
     protected String subtype;

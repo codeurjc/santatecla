@@ -52,14 +52,4 @@ public class UserRestController extends GeneralRestController {
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
 	}
-
-	@GetMapping(value="/student/")
-	public ResponseEntity<List<User>> getUsers(){
-		return new ResponseEntity<>(this.userService.findStudents(), HttpStatus.OK);
-	}
-
-	@GetMapping(value = "/student/search/{name}")
-	public ResponseEntity<List<User>> searchByNameContaining(@PathVariable String name){
-		return new ResponseEntity<>(this.userService.findStudentByNameContaining(name), HttpStatus.OK);
-	}
 }

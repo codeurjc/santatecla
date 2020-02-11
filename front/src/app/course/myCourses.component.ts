@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../auth/login.service';
-import {MyCoursesService} from './myCourses.service';
 import {Course} from './course.model';
 import {Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
 import {TdDialogService} from '@covalent/core';
 import {MatDialog} from '@angular/material';
 import {NewCourseComponent} from './newCourse.component';
+import {CourseService} from './course.service';
 
 @Component({
   templateUrl: './myCourses.component.html',
@@ -19,7 +19,7 @@ export class MyCoursesComponent implements OnInit {
   showingCourses: Course[];
 
   constructor(private loginService: LoginService,
-              private courseService: MyCoursesService,
+              private courseService: CourseService,
               private router: Router,
               private tabService: TabService,
               private dialogService: TdDialogService,
