@@ -78,6 +78,7 @@ export class LessonEditorComponent implements OnInit {
 
   newQuestionsIds: number[];
   questions: Question[];
+  questionsCount: number;
 
   constructor(private slideService: SlideService,
               private router: Router,
@@ -102,6 +103,7 @@ export class LessonEditorComponent implements OnInit {
   ngOnInit() {
 
     this.contentSlide = 0;
+    this.newQuestionsIds = [];
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
@@ -123,7 +125,7 @@ export class LessonEditorComponent implements OnInit {
           this.moduleId = params.moduleId;
           this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
             this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
-                this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
+              this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
             });
           });
         }
@@ -141,7 +143,6 @@ export class LessonEditorComponent implements OnInit {
         slides: data.slides,
         questionsIds: data.questionsIds
       };
-      this.newQuestionsIds = [];
       this.loadQuestions();
       this.lessonContent = '== ' + this.lesson.name + '\n';
       this.lessonContentExtended = '';
@@ -153,8 +154,11 @@ export class LessonEditorComponent implements OnInit {
   loadQuestions() {
     this.questions = [];
     this.lesson.questionsIds.forEach((questionId) => {
+      this.questions.push();
+    });
+    this.lesson.questionsIds.forEach((questionId, index) => {
       this.questionService.getQuestion(questionId).subscribe((data: Question) => {
-        this.questions.push(data);
+        this.questions.splice(index, 0, data);
       });
     });
   }
@@ -209,7 +213,7 @@ export class LessonEditorComponent implements OnInit {
       } else if (type === 'question') {
         contentEmbebed = await this.questionService.getUnitQuestion(unit, content1).toPromise().catch((error) => console.log(error));
         if (typeof contentEmbebed !== 'undefined') {
-          this.extractedData.splice(contentCounter, 1, '*Ejercicio* ' + contentEmbebed.questionText);
+          this.extractedData.splice(contentCounter, 1, '*Ejercicio ' + content2 + '* ' + contentEmbebed.questionText);
           let exist = false;
           this.newQuestionsIds.forEach((question) => {
             if (question === contentEmbebed.id) {
@@ -217,7 +221,7 @@ export class LessonEditorComponent implements OnInit {
               return;
             }
           });
-          if (!exist) { this.newQuestionsIds.push(contentEmbebed.id); }
+          if (!exist) { this.newQuestionsIds.splice(content2, 0, contentEmbebed.id); }
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
@@ -266,6 +270,7 @@ export class LessonEditorComponent implements OnInit {
 
   contentCounterFunction(content: string) {
     this.contentCount = 0;
+    this.questionsCount = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
@@ -273,6 +278,9 @@ export class LessonEditorComponent implements OnInit {
       words = line.split('.');
       if (words[0] === 'insert') {
         this.contentCount = this.contentCount + 1;
+        if (words[1].split('/')[0] === 'question') {
+          this.questionsCount = this.questionsCount + 1;
+        }
       }
     });
   }
@@ -284,9 +292,13 @@ export class LessonEditorComponent implements OnInit {
     for (let i = 0; i < this.contentCount; i++) {
       this.extractedData.push('');
     }
+    for (let i = 0; i < this.questionsCount; i++) {
+      this.newQuestionsIds.push();
+    }
     this.position = [];
     let counter = 0;
     let contentCounter = 0;
+    let questionCounter = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
@@ -305,7 +317,8 @@ export class LessonEditorComponent implements OnInit {
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[2]), content, contentCounter, 'question');
+          this.getEmbebedContent(Number(parameters[1]), questionCounter, Number(parameters[2]), content, contentCounter, 'question');
+          questionCounter = questionCounter + 1;
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'image') {
           this.position.push(counter);

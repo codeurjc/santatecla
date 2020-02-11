@@ -20,6 +20,7 @@ public class Lesson extends Block {
     private List<Slide> slides;
 
     @ElementCollection
+    @OrderColumn
     private List<Long> questionsIds;
 
     public Lesson(){

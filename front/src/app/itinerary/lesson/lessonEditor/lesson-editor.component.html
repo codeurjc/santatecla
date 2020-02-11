@@ -26,9 +26,9 @@
         </button>
         <!-- TODO openQuestion -->
         <mat-menu #menu="matMenu">
-          <div  *ngFor="let question of questions">
+          <div  *ngFor="let question of questions; let i = index">
             <button mat-menu-item (click)="openQuestion(question.id, question.subtype)">
-              <span>{{question.questionText}}</span>
+              <span><b>Ejercicio {{i}}</b> {{question.questionText}}</span>
             </button>
           </div>
         </mat-menu>

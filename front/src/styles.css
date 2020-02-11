@@ -308,3 +308,7 @@ body {
   cursor: pointer;
   width: 5rem;
 }
+
+.mat-menu-panel {
+  max-width: 800px !important;
+}
