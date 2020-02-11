@@ -462,7 +462,7 @@ export class LessonEditorComponent implements OnInit {
   getDefinitionQuestion(questionID: number) {
     this.questionService.getUnitDefinitionQuestion(this.unitId, questionID).subscribe(
       (data: DefinitionQuestion) => {
-        this.openEditQuestionDialog(data);
+        this.openAnswerQuestionDialog(data);
       }
     );
   }
@@ -470,7 +470,7 @@ export class LessonEditorComponent implements OnInit {
   getListQuestion(questionID: number) {
     this.questionService.getUnitListQuestion(this.unitId, questionID).subscribe(
       (data: ListQuestion) => {
-        this.openEditQuestionDialog(data);
+        this.openAnswerQuestionDialog(data);
       }
     );
   }
@@ -478,7 +478,7 @@ export class LessonEditorComponent implements OnInit {
   getTestQuestion(questionID: number) {
     this.questionService.getUnitTestQuestion(this.unitId, questionID).subscribe(
       (data: TestQuestion) => {
-        this.openEditQuestionDialog(data);
+        this.openAnswerQuestionDialog(data);
       }
     );
   }
