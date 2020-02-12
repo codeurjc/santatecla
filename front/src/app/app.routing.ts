@@ -24,6 +24,7 @@ import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-bl
 import {ImageComponent} from './images/image.component';
 import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
 import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
+import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-questions-tool.component';
 
 
 const appRoutes = [
@@ -33,6 +34,7 @@ const appRoutes = [
   { path: 'unitsCardsTool', component: UnitsCardsToolComponent },
   { path: 'lessonSlidesTool', component: LessonSlidesToolComponent },
   { path: 'unitsBlocksTool', component: UnitsBlocksToolComponent },
+  { path: 'unitsQuestionsTool', component: UnitsQuestionsToolComponent },
   { path: 'lessonForm', component: LessonFormComponent },
   { path: 'moduleForm', component: ModuleFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },

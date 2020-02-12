@@ -6,16 +6,16 @@
     <div [ngClass]="loginService.isAdmin ? 'toolsBar admin' : 'toolsBar student'">
       <mat-chip-list *ngIf="loginService.isAdmin" class="tools">
         <button mat-button class="tool" (click)="openImageBottomSheet()">
-          <mat-icon>add_photo_alternate</mat-icon>Añadir imagen
+          <mat-icon>add_photo_alternate</mat-icon> Imagenes
         </button>
         <button mat-button class="tool" (click)="openCardsBottomSheet()">
-          <mat-icon>assignment</mat-icon>Buscar fichas
+          <mat-icon>assignment</mat-icon> Fichas
         </button>
         <button mat-button class="tool" (click)="openSlidesBottomSheet()">
-          <mat-icon>book</mat-icon>Buscar slides
+          <mat-icon>book</mat-icon> Slides
         </button>
-        <button mat-button class="tool">
-          <mat-icon>description</mat-icon>Buscar ejercicios
+        <button mat-button class="tool" (click)="openQuestionsBottomSheet()">
+          <mat-icon>description</mat-icon> Ejercicios
         </button>
       </mat-chip-list>
 

@@ -312,3 +312,7 @@ body {
 .mat-menu-panel {
   max-width: 800px !important;
 }
+
+.mat-tab-body-content {
+  overflow-y: hidden !important;
+}

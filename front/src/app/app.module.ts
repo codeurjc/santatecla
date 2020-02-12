@@ -9,7 +9,7 @@ import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, Covale
   CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
   CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule } from '@covalent/core';
 
-import {FormsModule, NgModel} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -72,6 +72,7 @@ import {ImageComponent} from './images/image.component';
 import {ImageService} from './images/image.service';
 import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
 import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
+import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-questions-tool.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     ModuleEditorComponent,
     UnitsCardsToolComponent,
     UnitsBlocksToolComponent,
+    UnitsQuestionsToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,

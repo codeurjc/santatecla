@@ -32,6 +32,8 @@ import {AddQuestionDialogComponent} from '../../../question/addQuestionDialog/ad
 import {MatDialog} from '@angular/material/dialog';
 import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDialog/answerQuestionDialog.component';
 import {Question} from '../../../question/question.model';
+import {UnitsBlocksToolComponent} from "../../module/moduleEditor/units-blocks-tool.component";
+import {UnitsQuestionsToolComponent} from "../lessonTools/units-questions-tool.component";
 
 
 function convertToHTML(text) {
@@ -420,6 +422,10 @@ export class LessonEditorComponent implements OnInit {
 
   openSlidesBottomSheet(): void {
     this.bottomSheet.open(LessonSlidesToolComponent);
+  }
+
+  openQuestionsBottomSheet(): void {
+    this.bottomSheet.open(UnitsQuestionsToolComponent);
   }
 
   nextSlide() {
