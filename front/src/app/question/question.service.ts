@@ -4,6 +4,7 @@ import {ListQuestion} from './listQuestion/listQuestion.model';
 import {DefinitionQuestion} from './definitionQuestion/definitionQuestion.model';
 import {TestQuestion} from './testQuestion/testQuestion.model';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
+import {ListAnswer} from './listQuestion/listAnswer.model';
 
 @Injectable()
 export class QuestionService {
@@ -86,6 +87,16 @@ export class QuestionService {
     });
 
     return this.http.put<ListQuestion>(this.baseUrl + unitId + '/question/list/' + questionId, body, {headers});
+  }
+
+  addUnitListAnswer(unitID, questionID: number, answer: ListAnswer) {
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(this.baseUrl + unitID + '/question/list/' + questionID + '/answer', body, {headers});
   }
 
   addUnitTestQuestion(id: number, question: TestQuestion) {

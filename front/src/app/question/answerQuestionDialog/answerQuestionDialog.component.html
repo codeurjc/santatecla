@@ -3,20 +3,41 @@
   <body>
     <h1 mat-dialog-title>{{ data.question.questionText }}</h1>
 
-    <h3 *ngIf="data.question.subtype == 'DefinitionQuestion'" mat-dialog-title>
-      Intentos realizados: {{definitionAnswers?.length}}
-    </h3>
-    <h3 *ngIf="data.question.subtype == 'ListQuestion'" mat-dialog-title>
-      Intentos realizados: {{listAnswers?.length}}
-    </h3>
-    <h3 *ngIf="data.question.subtype == 'TestQuestion'" mat-dialog-title>
-      Intentos realizados: {{testAnswers?.length}}
-    </h3>
+    <div *ngIf="spinner" mat-dialog-content>
+      <img src="../../../assets/img/spinner.gif" id="spinner">
+    </div>
 
-    <div mat-dialog-content>
+    <div *ngIf="!spinner" mat-dialog-content>
+
+      <h3 *ngIf="data.question.subtype == 'DefinitionQuestion' && questionDone" mat-dialog-title>
+        <div *ngIf="definitionAnswers[0][3]">
+          Ejercicio resuelto: <br>
+          " {{definitionAnswers[0][1]}} " <br>
+          <span *ngIf="definitionAnswers[0][2]">Correcto</span>
+          <span *ngIf="!definitionAnswers[0][2]">Incorrecto</span>
+        </div>
+        <div *ngIf="!definitionAnswers[0][3]">
+          Ejercicio respondido a la espera de corrección: <br>
+          " {{definitionAnswers[0][1]}} " <br>
+        </div>
+      </h3>
+
+      <h3 *ngIf="data.question.subtype == 'ListQuestion' && questionDone" mat-dialog-title>
+        Respuesta: {{listAnswer.correct}} <br>
+        Respuestas posibles: <br>
+        {{data.question.possibleAnswers}} <br>
+        Tus respuestas seleccionadas: <br>
+        {{listAnswers[1]}} <br>
+        Respuestas correctas: <br>
+        {{data.question.correctAnswers}} <br>
+      </h3>
+
+      <h3 *ngIf="data.question.subtype == 'TestQuestion'" mat-dialog-title>
+        Intentos realizados: {{testAnswers?.length}}
+      </h3>
 
       <!-- DEFINITION ANSWER -->
-      <div *ngIf="subtype == 'DefinitionQuestion'">
+      <div *ngIf="subtype == 'DefinitionQuestion' && !questionDone">
         <form class="add-question-form">
           <mat-form-field>
             <textarea matInput name="answer" (input)="changeTextArea($event)" placeholder="Pregunta" [(ngModel)]="definitionAnswer.answerText" type="text" required>
@@ -26,6 +47,33 @@
       </div>
 
       <!-- LIST ANSWER -->
+      <div *ngIf="subtype == 'ListQuestion' && !questionDone" class="listanswer-container">
+        <h2>Posibles respuestas</h2>
+        <div
+          cdkDropList
+          id="availableList"
+          [cdkDropListData]="availableListAnswers"
+          [cdkDropListConnectedTo]="['chosenList']"
+          class="listanswer-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="listanswer-box" *ngFor="let item of availableListAnswers" cdkDrag>{{item}}</div>
+        </div>
+      </div>
+
+      <div *ngIf="subtype == 'ListQuestion' && !questionDone" class="listanswer-container">
+        <h2>Respuestas correctas</h2>
+        <div
+          cdkDropList
+          id="chosenList"
+          [cdkDropListData]="chosenListAnswers"
+          [cdkDropListConnectedTo]="['availableList']"
+          class="listanswer-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="listanswer-box" *ngFor="let item of chosenListAnswers" cdkDrag>{{item}}</div>
+        </div>
+      </div>
+
+      <!--
       <div *ngIf="subtype == 'ListQuestion'">
         <form class="add-question-form">
           <p>Respuestas posibles</p>
@@ -40,9 +88,10 @@
           </span>
         </form>
       </div>
+      -->
 
       <!-- TEST ANSWER -->
-      <div *ngIf="subtype == 'TestQuestion'">
+      <div *ngIf="subtype == 'TestQuestion' && !questionDone">
         <form class="add-question-form">
           <div class="add-question-form-list">
             <mat-radio-group>
@@ -61,8 +110,11 @@
       <!--<button mat-button [mat-dialog-close]="true" cdkFocusInitial>
         Responder
       </button>-->
-      <button (click)="sendAnswer()" [mat-dialog-close]="true" class="mat-button question-button tool">
+      <button *ngIf="!answerSent && !questionDone" (click)="sendAnswer()" class="mat-button question-button tool">
         Responder
+      </button>
+      <button *ngIf="answerSent" (click)="closeDialog()" [mat-dialog-close]="true" class="mat-button question-button tool">
+        Cerrar
       </button>
     </div>
   </body>

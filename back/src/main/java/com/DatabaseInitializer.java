@@ -223,7 +223,7 @@ public class DatabaseInitializer {
                 lessonRepository.save(lesson12);
 
                 //Modules
-                Module module1 = new Module("Programeación funcional");
+                Module module1 = new Module("Programación funcional");
                 Module module2 = new Module("Programación imperativa estructurada");
                 Module module3 = new Module("Programación con lenguajes interpretados");
                 Module module4 = new Module("Paradigmas de la programación");

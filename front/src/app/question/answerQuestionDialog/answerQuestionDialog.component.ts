@@ -15,6 +15,8 @@ import {QuestionService} from '../question.service';
 import {ListQuestionService} from '../listQuestion/listQuestion.service';
 import {TestQuestionService} from '../testQuestion/testQuestion.service';
 import {LessonEditorComponent} from '../../itinerary/lesson/lessonEditor/lesson-editor.component';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {forEach} from '@angular/router/src/utils/collection';
 
 const QUESTION_TYPES = [
   {id: 'DefinitionQuestion', name: 'Definición'},
@@ -40,16 +42,18 @@ export class AnswerQuestionDialogComponent implements OnInit {
   listAnswer: ListAnswer;
   testAnswer: TestAnswer;
 
-  definitionAnswers: DefinitionAnswer[];
-  listAnswers: ListAnswer[];
-  testAnswers: TestAnswer[];
+  definitionAnswers;
+  listAnswers;
+  testAnswers;
 
   subtype: string;
+  spinner: boolean;
 
   // Form attributes
   availableListAnswers: string[];
   chosenListAnswers: string[];
   questionDone: boolean;
+  answerSent: boolean;
 
   unitId: number;
 
@@ -68,6 +72,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
   ngOnInit() {
     this.questionTypes = QUESTION_TYPES;
     this.unitId = this.data.unitId;
+    this.spinner = true;
     this.initAnswers();
     this.getPreviousUserAnswers();
   }
@@ -83,6 +88,11 @@ export class AnswerQuestionDialogComponent implements OnInit {
     this.subtype = this.data.question.subtype;
     this.availableListAnswers = this.data.question.possibleAnswers;
     this.chosenListAnswers = [];
+    this.answerSent = false;
+  }
+
+  private updateQuestionDone() {
+    this.questionDone = this.definitionAnswers.length > 0 || this.listAnswers.length > 0 || this.testAnswers.length > 0;
   }
 
   getPreviousUserAnswers() {
@@ -91,6 +101,8 @@ export class AnswerQuestionDialogComponent implements OnInit {
         this.questionService.getDefinitionUserAnswers(this.unitId, this.data.question.id, this.loginService.getCurrentUser().id).subscribe(
           (data: DefinitionAnswer[]) => {
             this.definitionAnswers = data;
+            this.updateQuestionDone();
+            this.spinner = false;
           });
         break;
       }
@@ -98,6 +110,8 @@ export class AnswerQuestionDialogComponent implements OnInit {
         this.questionService.getListUserAnswers(this.unitId, this.data.question.id, this.loginService.getCurrentUser().id).subscribe(
           (data: ListAnswer[]) => {
             this.listAnswers = data;
+            this.updateQuestionDone();
+            this.spinner = false;
           });
         break;
       }
@@ -105,6 +119,8 @@ export class AnswerQuestionDialogComponent implements OnInit {
         this.questionService.getTestUserAnswers(this.unitId, this.data.question.id, this.loginService.getCurrentUser().id).subscribe(
           (data: TestAnswer[]) => {
             this.testAnswers = data;
+            this.updateQuestionDone();
+            this.spinner = false;
           });
         break;
       }
@@ -134,6 +150,9 @@ export class AnswerQuestionDialogComponent implements OnInit {
         break;
       }
     }
+  }
+
+  closeDialog() {
     this.dialogRef.close(1);
   }
 
@@ -143,6 +162,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
       console.log('error: inputs cannot be empty');
       return;
     }
+
     this.definitionAnswer = {
       answerText: this.definitionAnswer.answerText,
       correct: false,
@@ -154,35 +174,59 @@ export class AnswerQuestionDialogComponent implements OnInit {
     };
 
     this.questionService.addUnitDefinitionAnswer(this.unitId, this.data.question.id, this.definitionAnswer).subscribe(
-      (_) => {
-        this.finishDefinitionQuestion();
+      () => {
+        this.ngOnInit();
+        this.answerSent = true;
       },
       (err) => console.log(err)
     );
-
-  }
-
-  finishDefinitionQuestion() {
-    // TODO
-    console.log('question done');
   }
 
   sendListAnswer() {
+    if (this.chosenListAnswers.length === 0) {
+      // TODO
+      console.log('error: answer cannot be empty');
+      return;
+    }
 
+    let isCorrect = true;
+    this.chosenListAnswers.forEach(element => {
+        if (!this.data.question.correctAnswers.includes(element)) {
+          isCorrect = false;
+        }
+      }
+    );
+
+    this.listAnswer = {
+      answer: this.chosenListAnswers,
+      correct: isCorrect,
+      unitId: this.unitId,
+      // TODO moduleId: 1
+      user: this.loginService.getCurrentUser()
+    };
+
+    this.questionService.addUnitListAnswer(this.unitId, this.data.question.id, this.listAnswer).subscribe(
+      () => {
+        this.ngOnInit();
+        this.answerSent = true;
+      },
+      (err) => console.log(err)
+    );
   }
 
   sendTestAnswer() {
 
   }
 
-  newChosenAnswer(answer: string) {
-    this.chosenListAnswers.push(answer);
-    this.availableListAnswers.splice(this.availableListAnswers.indexOf(answer), 1);
-  }
-
-  deleteChosenAnswer(answer: string) {
-    this.availableListAnswers.push(answer);
-    this.chosenListAnswers.splice(this.chosenListAnswers.indexOf(answer), 1);
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
   }
 
   changeTextArea(event: Event) {

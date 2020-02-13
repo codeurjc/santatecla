@@ -110,8 +110,6 @@ public class TestQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(this.testQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
     }
 
-
-
     @GetMapping(value = "/{questionID}/chosenWrongAnswersCount")
     public ResponseEntity<Object> getChosenWrongAnswersCount(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
