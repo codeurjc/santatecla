@@ -26,7 +26,7 @@ public class DefinitionAnswer{
     private String justification;
 
     private long unitId;
-    private long moduleId;
+    private long blockId;
     private long courseId;
 
     @OneToOne
@@ -104,11 +104,19 @@ public class DefinitionAnswer{
         this.unitId = unitId;
     }
 
-    public long getModuleId() {
-        return moduleId;
+    public long getBlockId() {
+        return blockId;
     }
 
-    public void setModuleId(long moduleId) {
-        this.moduleId = moduleId;
+    public void setBlockId(long blockId) {
+        this.blockId = blockId;
+    }
+
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
     }
 }

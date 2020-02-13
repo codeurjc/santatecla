@@ -385,9 +385,11 @@ public class DatabaseInitializer {
                 definition1.setTotalCorrectAnswers(2);
                 definition1.setTotalWrongAnswers(5);
 
-                definition2.addModule(module6);
-                definition3.addModule(module7);
-                definition4.addModule(module8);
+                definition1.addBlock(lesson1);
+                definition2.addBlock(lesson1);
+                definition3.addBlock(lesson1);
+                definition3.addBlock(lesson2);
+                definition4.addBlock(lesson3);
 
                 unit1Definitions.add(definition1);
                 unit1Definitions.add(definition2);
@@ -430,7 +432,7 @@ public class DatabaseInitializer {
                 test1.addAnswer(testAnswer6);
                 test1.addAnswer(testAnswer7);
 
-                test1.addModule(module5);
+                test1.addBlock(lesson5);
                 test1.setTotalCorrectAnswers(1);
                 test1.setTotalWrongAnswers(6);
 
@@ -443,7 +445,7 @@ public class DatabaseInitializer {
                         "utilizando solo tres estructuras: secuencial, selectiva e iterativa",
                         possibleAnswers, "Programación estructurada");
 
-                test2.addModule(module5);
+                test2.addBlock(lesson8);
 
                 unit1Tests.add(test1);
                 unit1Tests.add(test2);
@@ -515,6 +517,27 @@ public class DatabaseInitializer {
                 listQuestionRepository.save(list1);
                 testQuestionRepository.save(test1);
                 testQuestionRepository.save(test2);
+
+                lesson1.getQuestionsIds().add(definition2.getId());
+                lesson1.getQuestionsIds().add(definition1.getId());
+                lesson1.getQuestionsIds().add(definition3.getId());
+                lesson2.getQuestionsIds().add(definition3.getId());
+                lesson3.getQuestionsIds().add(definition4.getId());
+                lesson5.getQuestionsIds().add(test1.getId());
+                lesson8.getQuestionsIds().add(test2.getId());
+
+                lessonRepository.save(lesson1);
+                lessonRepository.save(lesson2);
+                lessonRepository.save(lesson3);
+                lessonRepository.save(lesson4);
+                lessonRepository.save(lesson5);
+                lessonRepository.save(lesson6);
+                lessonRepository.save(lesson7);
+                lessonRepository.save(lesson8);
+                lessonRepository.save(lesson9);
+                lessonRepository.save(lesson10);
+                lessonRepository.save(lesson11);
+                lessonRepository.save(lesson12);
 
                 //Units
                 List<Unit> units = new ArrayList<>();
@@ -1003,6 +1026,50 @@ public class DatabaseInitializer {
             course6.setModule(module3);
 
             courseRepository.save(course6);
+
+            DefinitionAnswer da12 = new DefinitionAnswer("Paradigma lógico");
+            da12.setCorrect(true);
+            da12.setBlockId(lesson1.getId());
+            da12.setCourseId(1);
+            da12.setUser(user1);
+            definition2.addAnswer(da12);
+
+            DefinitionAnswer da13 = new DefinitionAnswer("Paradigma lógico");
+            da13.setCorrect(true);
+            da13.setBlockId(lesson1.getId());
+            da13.setCourseId(1);
+            da13.setUser(user2);
+            definition2.addAnswer(da13);
+
+            DefinitionAnswer da14 = new DefinitionAnswer("Paradigma lógico");
+            da14.setCorrect(true);
+            da14.setBlockId(lesson1.getId());
+            da14.setCourseId(1);
+            da14.setUser(user3);
+            definition2.addAnswer(da14);
+
+            DefinitionAnswer da15 = new DefinitionAnswer("Paradigma lógico");
+            da15.setCorrect(true);
+            da15.setBlockId(lesson1.getId());
+            da15.setCourseId(1);
+            da15.setUser(user4);
+            definition2.addAnswer(da15);
+
+            DefinitionAnswer da16 = new DefinitionAnswer("Paradigma lógico");
+            da16.setCorrect(true);
+            da16.setBlockId(lesson1.getId());
+            da16.setCourseId(1);
+            da16.setUser(user5);
+            definition2.addAnswer(da16);
+
+            DefinitionAnswer da17 = new DefinitionAnswer("Paradigma lógico");
+            da17.setCorrect(false);
+            da17.setBlockId(lesson1.getId());
+            da17.setCourseId(1);
+            da17.setUser(user6);
+            definition2.addAnswer(da17);
+
+            definitionQuestionRepository.save(definition2);
 	}
 
 }

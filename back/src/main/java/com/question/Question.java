@@ -1,5 +1,6 @@
 package com.question;
 
+import com.itinerary.block.Block;
 import com.itinerary.module.Module;
 
 import javax.persistence.*;
@@ -21,24 +22,20 @@ public class Question {
     protected int totalWrongAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    protected List<Module> modules;
-
-    @ElementCollection
-    private List<Long> lessonIds;
+    protected List<Block> blocks;
 
     public Question() {
         this.subtype = this.getClass().getSimpleName();
         this.totalAnswers = 0;
         this.totalCorrectAnswers = 0;
         this.totalWrongAnswers = 0;
-        this.modules = new ArrayList<>();
-        this.lessonIds = new ArrayList<>();
+        this.blocks = new ArrayList<>();
     }
 
     public Question(String questionText) {
         this();
         this.questionText = questionText;
-        this.modules = new ArrayList<>();
+        this.blocks = new ArrayList<>();
     }
 
     /**
@@ -73,20 +70,12 @@ public class Question {
         return totalWrongAnswers;
     }
 
-    public List<Module> getModules() {
-        return modules;
+    public List<Block> getBlocks() {
+        return blocks;
     }
 
-    public void addModule(Module module){
-        this.modules.add(module);
-    }
-
-    public List<Long> getLessonIds() {
-        return lessonIds;
-    }
-
-    public void addLessonId(Long l){
-        this.lessonIds.add(l);
+    public void addBlock(Block block){
+        this.blocks.add(block);
     }
 
     public void setSubtype(String subtype) {
@@ -109,8 +98,8 @@ public class Question {
         this.totalWrongAnswers = totalWrongAnswers;
     }
 
-    public void setModules(List<Module> modules) {
-        this.modules = modules;
+    public void setBlocks(List<Block> blocks) {
+        this.blocks = blocks;
     }
 
     public void increaseTotalCorrectAnswers() {

@@ -19,13 +19,8 @@ export class ClassProgressComponent implements OnInit {
   classResults: StudentProgressItem[];
   showingClassResults: StudentProgressItem[];
   courseFormat: ModuleFormat[];
-  moduleFormat: ModuleFormat;
-  moduleExtendedResults: StudentProgressItem[];
-  showingExtendedResults: StudentProgressItem[];
   classColumnsToDisplay = ['name'];
-  extendedColumnsToDisplay = ['name'];
   classResultsReady = false;
-  extendedInfo = false;
 
   constructor(private courseService: CourseService,
               private loginService: LoginService,
@@ -49,10 +44,6 @@ export class ClassProgressComponent implements OnInit {
       this.progressService.getModuleFormat(this.courseId).subscribe((data: ModuleFormat[]) => {
         this.courseFormat = data;
 
-        for (let module of this.courseFormat) {
-          this.classColumnsToDisplay.push(module.moduleName);
-        }
-
         this.classColumnsToDisplay.push('studentAverage');
         this.classResultsReady = true;
       }, error => {console.log(error); });
@@ -60,42 +51,11 @@ export class ClassProgressComponent implements OnInit {
     });
   }
 
-  showModuleExtendedInfo(moduleId: number, moduleName: string) {
-    this.classResultsReady = false;
-    this.progressService.getExtendedModuleInfo(this.courseId, moduleId).subscribe((data: StudentProgressItem[]) => {
-      this.moduleExtendedResults = data;
-      this.showingExtendedResults = this.moduleExtendedResults;
-      this.classResultsReady = true;
-      this.extendedInfo = true;
-    }, error => {console.log(error); });
-
-    for (let module of this.courseFormat){
-      if (module.moduleName === moduleName){
-        this.moduleFormat = module;
-      }
-    }
-
-    for (let question of this.moduleFormat.questions){
-      this.extendedColumnsToDisplay.push(question);
-    }
-
-    this.extendedColumnsToDisplay.push('studentAverage');
-  }
-
   applyFilterStudent(value: string) {
     this.showingClassResults = [];
     for (let result of this.classResults) {
       if (result.studentName.toLowerCase().includes(value.toLowerCase())) {
         this.showingClassResults.push(result);
-      }
-    }
-  }
-
-  applyFilterExtendedStudent(value: string) {
-    this.showingExtendedResults = [];
-    for (let result of this.moduleExtendedResults) {
-      if (result.studentName.toLowerCase().includes(value.toLowerCase())) {
-        this.showingExtendedResults.push(result);
       }
     }
   }

@@ -22,12 +22,12 @@ public class QuestionService {
         this.questionRepository.deleteById(id);
     }
 
-    public List<Question> findQuestionsByModuleId(long id){
-        return this.questionRepository.findByModuleId(id);
+    public List<Question> findQuestionsByBlockId(long id){
+        return this.questionRepository.findByBlockId(id);
     }
 
-    public Integer findModuleQuestionCount(long id){
-        return this.questionRepository.findModuleQuestionCount(id);
+    public Integer findBlockQuestionCount(long id){
+        return this.questionRepository.findBlockQuestionCount(id);
     }
 
 }

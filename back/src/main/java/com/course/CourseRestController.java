@@ -102,24 +102,24 @@ public class CourseRestController extends GeneralRestController {
     @GetMapping(value="/{courseId}/module/progress")
     public ResponseEntity<List<ProgressItem>> getModuleProgress(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
-        ArrayList<Module> questionModules = new ArrayList<>();
+        ArrayList<Block> questionBlocks = new ArrayList<>();
         ArrayList<ProgressItem> result = new ArrayList<>();
         ArrayList<Double> values;
 
         if(optional.isPresent()){
-            findModulesWithQuestionRecursive(optional.get().getModule(), questionModules);
+            findBlocksWithQuestionRecursive(optional.get().getModule(), questionBlocks);
 
-            for (Module m : questionModules){
+            for (Block b : questionBlocks){
                 values = new ArrayList<>();
 
-                int questionCount = this.questionService.findModuleQuestionCount(m.getId());
-                double moduleRealization = this.courseService.findModuleRealization(optional.get().getStudents(), questionCount, m.getId(), courseId);
-                double moduleGrade = this.courseService.findModuleGrade(optional.get().getStudents(), m.getId(), courseId);
+                int questionCount = this.questionService.findBlockQuestionCount(b.getId());
+                double moduleRealization = this.courseService.findBlockRealization(optional.get().getStudents(), questionCount, b.getId(), courseId);
+                double blockGrade = this.courseService.findBlockGrade(optional.get().getStudents(), b.getId(), courseId);
                 values.add(moduleRealization);
-                values.add(moduleGrade);
+                values.add(blockGrade);
 
 
-                result.add(new ProgressItem(m.getName(), values));
+                result.add(new ProgressItem(b.getName(), values));
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
@@ -127,16 +127,15 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    private void findModulesWithQuestionRecursive(Block block, List<Module> result){
-        if (!(block instanceof Lesson)){
-            Module module = (Module)block;
+    private void findBlocksWithQuestionRecursive(Block block, List<Block> result){
+        if(this.questionService.findQuestionsByBlockId(block.getId()).size() > 0){
+            result.add(block);
+        }
 
-            if(this.questionService.findQuestionsByModuleId(module.getId()).size() > 0){
-                result.add(module);
-            }
-
-            for (Block b : module.getBlocks()){
-                findModulesWithQuestionRecursive(b, result);
+        if(block instanceof Module) {
+            Module module = (Module) block;
+            for (Block b : module.getBlocks()) {
+                findBlocksWithQuestionRecursive(b, result);
             }
         }
     }
@@ -144,7 +143,7 @@ public class CourseRestController extends GeneralRestController {
     @GetMapping(value = "/{courseId}/students/progress")
     public ResponseEntity<List<StudentProgressItem>> getStudentsProgress(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
-        ArrayList<Module> questionModules = new ArrayList<>();
+        ArrayList<Block> questionBlocks = new ArrayList<>();
         double sumQuestionAux;
         double sumModuleAux;
         double average;
@@ -153,21 +152,21 @@ public class CourseRestController extends GeneralRestController {
         ArrayList<StudentProgressItem> result = new ArrayList<>();
 
         if(optional.isPresent()){
-            findModulesWithQuestionRecursive(optional.get().getModule(), questionModules);
+            findBlocksWithQuestionRecursive(optional.get().getModule(), questionBlocks);
 
             for (User u : optional.get().getStudents()){
                 item = new StudentProgressItem(u.getName());
                 sumModuleAux = 0;
-                for (Module m : questionModules){
-                    questions = this.questionService.findQuestionsByModuleId(m.getId());
+                for (Block b : questionBlocks){
+                    questions = this.questionService.findQuestionsByBlockId(b.getId());
                     sumQuestionAux = 0;
                     for (Question q: questions){
-                        sumQuestionAux += this.courseService.findUserQuestionGrade(u.getId(), m.getId(), courseId, q);
+                        sumQuestionAux += this.courseService.findUserQuestionGrade(u.getId(), b.getId(), courseId, q);
                     }
                     sumModuleAux += sumQuestionAux / questions.size();
                     item.addGrade(sumQuestionAux / questions.size());
                 }
-                average = sumModuleAux / questionModules.size();
+                average = sumModuleAux / questionBlocks.size();
 
                 if (Double.isNaN(average)){
                     average = 0;
@@ -196,7 +195,7 @@ public class CourseRestController extends GeneralRestController {
             for (User u : course.get().getStudents()){
                 item = new StudentProgressItem(u.getName());
                 sumModuleAux = 0;
-                questions = this.questionService.findQuestionsByModuleId(moduleId);
+                questions = this.questionService.findQuestionsByBlockId(moduleId);
                 for (Question q: questions){
                     grade = this.courseService.findUserQuestionGrade(u.getId(), moduleId, courseId, q);
                     item.addGrade(grade);
@@ -214,18 +213,18 @@ public class CourseRestController extends GeneralRestController {
     @GetMapping(value = "/{courseId}/module/format")
     public ResponseEntity<List<ModuleFormat>> getModuleQuestions(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
-        ArrayList<Module> questionModules = new ArrayList<>();
+        ArrayList<Block> questionBlocks = new ArrayList<>();
         List<Question> questions;
         ArrayList<ModuleFormat> result = new ArrayList<>();
         ModuleFormat item;
 
         if(optional.isPresent()){
-            findModulesWithQuestionRecursive(optional.get().getModule(), questionModules);
+            findBlocksWithQuestionRecursive(optional.get().getModule(), questionBlocks);
 
-            for (Module m : questionModules){
-                item = new ModuleFormat(m.getName());
-                item.setId(m.getId());
-                questions = this.questionService.findQuestionsByModuleId(m.getId());
+            for (Block b : questionBlocks){
+                item = new ModuleFormat(b.getName());
+                item.setId(b.getId());
+                questions = this.questionService.findQuestionsByBlockId(b.getId());
 
                 for (Question q: questions){
                     item.addQuestion(q.getQuestionText());
