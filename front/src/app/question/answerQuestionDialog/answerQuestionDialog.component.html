@@ -9,32 +9,53 @@
 
     <div *ngIf="!spinner" mat-dialog-content>
 
-      <h3 *ngIf="data.question.subtype == 'DefinitionQuestion' && questionDone" mat-dialog-title>
-        <div *ngIf="definitionAnswers[0][3]">
+      <!-- DEFINITION ANSWER CHECK -->
+      <div *ngIf="data.question.subtype == 'DefinitionQuestion' && questionDone" mat-dialog-title>
+        <h4 *ngIf="definitionAnswers[0][3]">
           Ejercicio resuelto: <br>
           " {{definitionAnswers[0][1]}} " <br>
-          <span *ngIf="definitionAnswers[0][2]">Correcto</span>
-          <span *ngIf="!definitionAnswers[0][2]">Incorrecto</span>
-        </div>
+          <span *ngIf="definitionAnswers[0][2]" class="correct-icon">Correcto</span>
+          <span *ngIf="!definitionAnswers[0][2]" class="wrong-icon">Incorrecto</span>
+        </h4>
         <div *ngIf="!definitionAnswers[0][3]">
           Ejercicio respondido a la espera de corrección: <br>
           " {{definitionAnswers[0][1]}} " <br>
         </div>
-      </h3>
+      </div>
 
-      <h3 *ngIf="data.question.subtype == 'ListQuestion' && questionDone" mat-dialog-title>
-        Respuesta: {{listAnswer.correct}} <br>
+      <!-- LIST ANSWER CHECK -->
+      <div *ngIf="data.question.subtype == 'ListQuestion' && questionDone" mat-dialog-title>
+        <h4 *ngIf="listAnswers[0][1]" class="correct-icon">
+          <mat-icon>done</mat-icon> Respuesta correcta
+        </h4>
+        <h4 *ngIf="!listAnswers[0][1]" class="wrong-icon">
+          <mat-icon>clear</mat-icon> Respuesta incorrecta
+        </h4>
+        <br>
         Respuestas posibles: <br>
-        {{data.question.possibleAnswers}} <br>
-        Tus respuestas seleccionadas: <br>
-        {{listAnswers[1]}} <br>
+        <i>{{data.question.possibleAnswers}}</i> <br>
         Respuestas correctas: <br>
-        {{data.question.correctAnswers}} <br>
-      </h3>
+        <i>{{data.question.correctAnswers}}</i> <br>
+        Tus respuestas seleccionadas: <br>
+        <span [ngClass]="listAnswer.correct ? 'correct-icon':'wrong-icon'"><i><!-- TODO --></i></span><br>
+      </div>
 
-      <h3 *ngIf="data.question.subtype == 'TestQuestion'" mat-dialog-title>
-        Intentos realizados: {{testAnswers?.length}}
-      </h3>
+      <!-- TEST ANSWER CHECK -->
+      <div *ngIf="data.question.subtype == 'TestQuestion' && questionDone" mat-dialog-title>
+        <h4 *ngIf="testAnswers[0][1]" class="correct-icon">
+          <mat-icon>done</mat-icon> Respuesta correcta
+        </h4>
+        <h4 *ngIf="!testAnswers[0][1]" class="wrong-icon">
+          <mat-icon>clear</mat-icon> Respuesta incorrecta
+        </h4>
+        <br>
+        Respuestas posibles: <br>
+        <i>{{data.question.possibleAnswers}}</i> <br>
+        Respuestas correctas: <br>
+        <i>{{data.question.correctAnswer}}</i> <br>
+        Tu respuestas seleccionada: <br>
+        <span [ngClass]="testAnswers[0][2] ? 'correct-icon':'wrong-icon'"><i>{{testAnswers[0][1]}}</i></span><br>
+      </div>
 
       <!-- DEFINITION ANSWER -->
       <div *ngIf="subtype == 'DefinitionQuestion' && !questionDone">
@@ -73,33 +94,14 @@
         </div>
       </div>
 
-      <!--
-      <div *ngIf="subtype == 'ListQuestion'">
-        <form class="add-question-form">
-          <p>Respuestas posibles</p>
-          <span *ngFor="let answer of availableListAnswers">
-            <input type="button" name="answer" value="{{answer}}" (click)="newChosenAnswer(answer)">
-          </span>
-        </form>
-        <form name="choosenListAnswers">
-          <p>Respuestas seleccionadas</p>
-          <span *ngFor="let answer of chosenListAnswers">
-            <input type="button" name="answer" value="{{answer}}" (click)="deleteChosenAnswer(answer)">
-          </span>
-        </form>
-      </div>
-      -->
-
       <!-- TEST ANSWER -->
       <div *ngIf="subtype == 'TestQuestion' && !questionDone">
-        <form class="add-question-form">
-          <div class="add-question-form-list">
-            <mat-radio-group>
-              <mat-radio-button *ngFor="let answer of availableListAnswers">
-                {{answer}}
+        <form class="test-answer-form">
+            <mat-radio-group [(ngModel)]="answerSelected" [ngModelOptions]="{standalone: true}">
+              <mat-radio-button *ngFor="let answer of availableListAnswers" [value]="answer">
+                <p matLine>{{answer}}</p>
               </mat-radio-button>
             </mat-radio-group>
-          </div>
         </form>
       </div>
 

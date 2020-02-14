@@ -5,6 +5,7 @@ import {DefinitionQuestion} from './definitionQuestion/definitionQuestion.model'
 import {TestQuestion} from './testQuestion/testQuestion.model';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
 import {ListAnswer} from './listQuestion/listAnswer.model';
+import {TestAnswer} from './testQuestion/testAnswer.model';
 
 @Injectable()
 export class QuestionService {
@@ -117,6 +118,16 @@ export class QuestionService {
     });
 
     return this.http.put<TestQuestion>(this.baseUrl + unitId + '/question/test/' + questionId, body, {headers});
+  }
+
+  addUnitTestAnswer(unitID, questionID: number, answer: TestAnswer) {
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(this.baseUrl + unitID + '/question/test/' + questionID + '/answer', body, {headers});
   }
 
   deleteUnitQuestion(unitID, questionID: number) {

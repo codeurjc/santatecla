@@ -111,6 +111,11 @@ th.mat-sort-header-sorted {
   justify-content: center;
 }
 
+.test-answer-form {
+  text-align: left;
+  margin-right: 50%;
+}
+
 .add-question-form-list {
   display: flex;
   flex-direction: column;

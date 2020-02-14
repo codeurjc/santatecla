@@ -54,6 +54,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
   chosenListAnswers: string[];
   questionDone: boolean;
   answerSent: boolean;
+  answerSelected: string;
 
   unitId: number;
 
@@ -89,6 +90,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
     this.availableListAnswers = this.data.question.possibleAnswers;
     this.chosenListAnswers = [];
     this.answerSent = false;
+    this.answerSelected = '';
   }
 
   private updateQuestionDone() {
@@ -215,7 +217,29 @@ export class AnswerQuestionDialogComponent implements OnInit {
   }
 
   sendTestAnswer() {
+    if (this.answerSelected === '') {
+      // TODO
+      console.log('error: answer cannot be empty');
+      return;
+    }
 
+    const isCorrect = this.answerSelected === this.data.question.correctAnswer;
+
+    this.testAnswer = {
+      answerText: this.answerSelected,
+      correct: isCorrect,
+      unitId: this.unitId,
+      // TODO moduleId: 1
+      user: this.loginService.getCurrentUser()
+    };
+
+    this.questionService.addUnitTestAnswer(this.unitId, this.data.question.id, this.testAnswer).subscribe(
+      () => {
+        this.ngOnInit();
+        this.answerSent = true;
+      },
+      (err) => console.log(err)
+    );
   }
 
   drop(event: CdkDragDrop<string[]>) {

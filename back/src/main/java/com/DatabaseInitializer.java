@@ -400,7 +400,7 @@ public class DatabaseInitializer {
                 possibleAnswers.add("Paradigma funcional");
                 possibleAnswers.add("Paradigma lógico");
                 possibleAnswers.add("Paradigma orientado a objetos");
-                possibleAnswers.add("Paradigmal imperativo");
+                possibleAnswers.add("Paradigma imperativo");
                 TestQuestion test1 = new TestQuestion("Los lenguajes comunes de este paradigma son: LISP, Scheme, Haskell, Scala", possibleAnswers, "Paradigma funcional");
                 TestAnswer testAnswer1 = new TestAnswer();
                 testAnswer1.setAnswerText("Paradigma lógico");
