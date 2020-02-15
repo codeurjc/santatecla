@@ -102,6 +102,14 @@ public class Question {
         this.blocks = blocks;
     }
 
+    public void addBlocks(List<Block> blocks) {
+        this.blocks.addAll(blocks);
+    }
+
+    public void deleteBlocks(List<Block> blocks) {
+        this.blocks.removeAll(blocks);
+    }
+
     public void increaseTotalCorrectAnswers() {
         this.totalCorrectAnswers += 1;
         this.totalAnswers += 1;
