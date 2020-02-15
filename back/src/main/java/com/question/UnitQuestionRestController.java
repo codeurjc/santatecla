@@ -109,7 +109,7 @@ public class UnitQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/{questionID}/addBlocks")
+    @PutMapping(value = "/{questionID}/deleteBlocks")
     public ResponseEntity<Question> deleteQuestionBlocks(
             @PathVariable long unitID,
             @PathVariable long questionID,
