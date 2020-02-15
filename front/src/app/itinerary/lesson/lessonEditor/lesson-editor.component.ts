@@ -368,10 +368,19 @@ export class LessonEditorComponent implements OnInit {
     const toAdd = newQuestions.filter(x => !questions.includes(x));
     const toDelete = questions.filter(x => !newQuestions.includes(x));
 
-    console.log('Antiguos: ' + questions);
-    console.log('Nuevos: ' + newQuestions);
-    console.log('Borrar => ' + toDelete);
-    console.log('Añadir => ' + toAdd);
+    toAdd.forEach(q => {
+      this.questionService.addBlockToQuestion(this.unitId, q, this.lesson.id).subscribe(
+        () => {},
+        (err) => console.log(err)
+      );
+    });
+
+    toDelete.forEach(q => {
+      this.questionService.deleteQuestionBlock(this.unitId, q, this.lesson.id).subscribe(
+        () => {},
+        (err) => console.log(err)
+      );
+    });
   }
 
   contentToItinerary(content: string) {

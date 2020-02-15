@@ -78,6 +78,10 @@ public class Question {
         this.blocks.add(block);
     }
 
+    public void deleteBlock(Block block){
+        this.blocks.remove(block);
+    }
+
     public void setSubtype(String subtype) {
         this.subtype = subtype;
     }

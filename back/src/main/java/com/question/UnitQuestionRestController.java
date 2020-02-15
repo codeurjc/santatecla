@@ -81,27 +81,18 @@ public class UnitQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/{questionID}/addBlocks")
-    public ResponseEntity<Question> addBlocksToQuestion(
+    @GetMapping(value = "/{questionID}/addBlock/{blockID}")
+    public ResponseEntity<Question> addBlockToQuestion(
             @PathVariable long unitID,
             @PathVariable long questionID,
-            @RequestBody List<Long> newBlocks)
+            @PathVariable long blockID)
     {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<Question> question = this.questionService.findOne(questionID);
+        Optional<Block> block = this.blockService.findOne(blockID);
 
-        List<Block> blocks = new ArrayList<>();
-        for (Long id : newBlocks) {
-            Optional<Block> blockToAdd = this.blockService.findOne(id);
-            if (blockToAdd.isPresent()) {
-                blocks.add(blockToAdd.get());
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-
-        if (unit.isPresent() && question.isPresent()) {
-            question.get().addBlocks(blocks);
+        if (unit.isPresent() && question.isPresent() && block.isPresent()) {
+            question.get().addBlock(block.get());
             this.questionService.save(question.get());
             return new ResponseEntity<>(question.get(), HttpStatus.OK);
         }
@@ -109,27 +100,18 @@ public class UnitQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/{questionID}/deleteBlocks")
-    public ResponseEntity<Question> deleteQuestionBlocks(
+    @GetMapping(value = "/{questionID}/deleteBlock/{blockID}")
+    public ResponseEntity<Question> deleteQuestionBlock(
             @PathVariable long unitID,
             @PathVariable long questionID,
-            @RequestBody List<Long> BlocksDeleted)
+            @PathVariable long blockID)
     {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<Question> question = this.questionService.findOne(questionID);
+        Optional<Block> block = this.blockService.findOne(blockID);
 
-        List<Block> blocks = new ArrayList<>();
-        for (Long id : BlocksDeleted) {
-            Optional<Block> blockToDelete = this.blockService.findOne(id);
-            if (blockToDelete.isPresent()) {
-                blocks.add(blockToDelete.get());
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-
-        if (unit.isPresent() && question.isPresent()) {
-            question.get().deleteBlocks(blocks);
+        if (unit.isPresent() && question.isPresent() && block.isPresent()) {
+            question.get().deleteBlock(block.get());
             this.questionService.save(question.get());
             return new ResponseEntity<>(question.get(), HttpStatus.OK);
         }

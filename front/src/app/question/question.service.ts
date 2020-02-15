@@ -6,6 +6,7 @@ import {TestQuestion} from './testQuestion/testQuestion.model';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
 import {ListAnswer} from './listQuestion/listAnswer.model';
 import {TestAnswer} from './testQuestion/testAnswer.model';
+import {Unit} from '../unit/unit.model';
 
 @Injectable()
 export class QuestionService {
@@ -23,6 +24,7 @@ export class QuestionService {
   }
 
   getUnitQuestion(unitID: number, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID);
   }
 
   getUnitDefinitionQuestions(id: number) {
@@ -172,7 +174,7 @@ export class QuestionService {
   getQuestionWrongCount(unitID, questionID: number) {
     return this.http.get(this.baseUrl + unitID + '/question/' + questionID + '/wrongCount');
   }
-  
+
   getTestQuestionWrongAnswerCount(unitID, questionID: number) {
     return this.http.get(this.baseUrl + unitID + '/question/test/' + questionID + '/chosenWrongAnswersCount');
   }
@@ -197,23 +199,11 @@ export class QuestionService {
     return this.http.get(this.baseUrl + unitID + '/question/test/' + questionID + '/answer/user/' + userID);
   }
 
-  addBlocksToQuestion(unitID, questionID: number, newBlocks: number[]) {
-    const body = JSON.stringify(newBlocks);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.put(this.baseUrl + unitID + '/question/addBlocks', body, {headers});
+  addBlockToQuestion(unitID, questionID, blockID: number,) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID + '/addBlock/' + blockID);
   }
 
-  deleteQuestionBlocks(unitID, questionID: number, blocks: number[]) {
-    const body = JSON.stringify(blocks);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.put(this.baseUrl + unitID + '/question/deleteBlocks', body, {headers});
+  deleteQuestionBlock(unitID, questionID, blockID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID + '/deleteBlock/' + blockID);
   }
 }
