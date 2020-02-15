@@ -32,8 +32,8 @@ import {AddQuestionDialogComponent} from '../../../question/addQuestionDialog/ad
 import {MatDialog} from '@angular/material/dialog';
 import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDialog/answerQuestionDialog.component';
 import {Question} from '../../../question/question.model';
-import {UnitsBlocksToolComponent} from "../../module/moduleEditor/units-blocks-tool.component";
-import {UnitsQuestionsToolComponent} from "../lessonTools/units-questions-tool.component";
+import {UnitsBlocksToolComponent} from '../../module/moduleEditor/units-blocks-tool.component';
+import {UnitsQuestionsToolComponent} from '../lessonTools/units-questions-tool.component';
 
 
 function convertToHTML(text) {
@@ -105,7 +105,6 @@ export class LessonEditorComponent implements OnInit {
   ngOnInit() {
 
     this.contentSlide = 0;
-    this.newQuestionsIds = [];
 
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
@@ -138,6 +137,8 @@ export class LessonEditorComponent implements OnInit {
   }
 
   loadItinerary() {
+    this.newQuestionsIds = [];
+
     this.lessonService.getLesson(this.lessonId).subscribe((data: Lesson) => {
       this.lesson = {
         id: data.id,
@@ -355,11 +356,22 @@ export class LessonEditorComponent implements OnInit {
       } else {
         this.showSpinner = false;
         this.viewHTMLVersion();
+        this.updateQuestionsBlocks(this.lesson.questionsIds, this.newQuestionsIds);
         this.contentToItinerary(this.lessonContent);
         this.lessonService.updateLesson(this.lesson).subscribe();
         this.progress = (1 / (this.contentHTML.length)) * 100;
       }
     }
+  }
+
+  updateQuestionsBlocks(questions, newQuestions) {
+    const toAdd = newQuestions.filter(x => !questions.includes(x));
+    const toDelete = questions.filter(x => !newQuestions.includes(x));
+
+    console.log('Antiguos: ' + questions);
+    console.log('Nuevos: ' + newQuestions);
+    console.log('Borrar => ' + toDelete);
+    console.log('Añadir => ' + toAdd);
   }
 
   contentToItinerary(content: string) {
