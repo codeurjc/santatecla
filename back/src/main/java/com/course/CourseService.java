@@ -1,5 +1,6 @@
 package com.course;
 
+import com.course.items.StudentProgressItem;
 import com.itinerary.module.Module;
 import com.question.Question;
 import com.user.User;
@@ -110,5 +111,20 @@ public class CourseService {
         }
 
         return result*10;
+    }
+
+    public void buildInitialStudentGradeGroupedResult(ArrayList<StudentProgressItem> result){
+        StudentProgressItem item;
+        for (int i = 0; i<11; i++){
+            item = new StudentProgressItem("" + i);
+            item.setAverage(0);
+            result.add(item);
+        }
+    }
+
+    public void buildStudentGradeGroupedResult(ArrayList<StudentProgressItem> result, ArrayList<StudentProgressItem> averages){
+        for(StudentProgressItem studentProgressItem : averages){
+            result.get((int) Math.floor(studentProgressItem.getAverage())).setAverage(result.get((int) Math.floor(studentProgressItem.getAverage())).getAverage() + 1);
+        }
     }
 }

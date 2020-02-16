@@ -18,7 +18,6 @@ export class ClassProgressComponent implements OnInit {
   course: Course;
   classResults: StudentProgressItem[];
   showingClassResults: StudentProgressItem[];
-  courseFormat: ModuleFormat[];
   classColumnsToDisplay = ['name'];
   classResultsReady = false;
 
@@ -38,16 +37,10 @@ export class ClassProgressComponent implements OnInit {
       this.progressService.getClassProgress(this.courseId).subscribe((data: StudentProgressItem[]) => {
         this.classResults = data;
         this.showingClassResults = this.classResults;
-        console.log(this.classResults);
-      }, error => {console.log(error); });
-
-      this.progressService.getModuleFormat(this.courseId).subscribe((data: ModuleFormat[]) => {
-        this.courseFormat = data;
-
         this.classColumnsToDisplay.push('studentAverage');
         this.classResultsReady = true;
+        console.log(this.classResults);
       }, error => {console.log(error); });
-
     });
   }
 

@@ -12,16 +12,4 @@ export class ProgressService {
   getClassProgress(courseId: number) {
     return this.http.get('api/course/' + courseId + '/students/progress');
   }
-
-  getModuleFormat(courseId: number) {
-    return this.http.get('api/course/' + courseId + '/module/format');
-  }
-
-  getExtendedModuleInfo(courseId: number, moduleId: number) {
-    return this.http.get('api/course/' + courseId + '/module/' + moduleId + '/extended');
-  }
-
-  getHistogramInfo(courseId: number) {
-    return this.http.get('api/course/' + courseId + '/histogram/');
-  }
 }

@@ -385,7 +385,6 @@ public class DatabaseInitializer {
                 definition1.setTotalCorrectAnswers(2);
                 definition1.setTotalWrongAnswers(5);
 
-                definition1.addBlock(lesson1);
                 definition2.addBlock(lesson1);
                 definition3.addBlock(lesson1);
                 definition3.addBlock(lesson2);
@@ -519,7 +518,6 @@ public class DatabaseInitializer {
                 testQuestionRepository.save(test2);
 
                 lesson1.getQuestionsIds().add(definition2.getId());
-                lesson1.getQuestionsIds().add(definition1.getId());
                 lesson1.getQuestionsIds().add(definition3.getId());
                 lesson2.getQuestionsIds().add(definition3.getId());
                 lesson3.getQuestionsIds().add(definition4.getId());
