@@ -5,7 +5,6 @@ import {Course} from '../../course/course.model';
 import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../../course/course.service';
 import {StudentProgressItem} from '../items/studentProgressItem.model';
-import {ModuleFormat} from '../items/moduleFormat.model';
 
 @Component({
   selector: 'app-class-progress',
@@ -16,10 +15,15 @@ import {ModuleFormat} from '../items/moduleFormat.model';
 export class ClassProgressComponent implements OnInit {
   courseId: number;
   course: Course;
+
   classResults: StudentProgressItem[];
   showingClassResults: StudentProgressItem[];
   classColumnsToDisplay = ['name'];
   classResultsReady = false;
+
+  classGradesGrouped: StudentProgressItem[];
+  classGradesReady = false;
+  barChartResults = [];
 
   constructor(private courseService: CourseService,
               private loginService: LoginService,
@@ -39,7 +43,11 @@ export class ClassProgressComponent implements OnInit {
         this.showingClassResults = this.classResults;
         this.classColumnsToDisplay.push('studentAverage');
         this.classResultsReady = true;
-        console.log(this.classResults);
+      }, error => {console.log(error); });
+      this.progressService.getClassGradesGrouped(this.courseId).subscribe((data: StudentProgressItem[]) => {
+        this.classGradesGrouped = data;
+        this.buildBarChart();
+        this.classGradesReady = true;
       }, error => {console.log(error); });
     });
   }
@@ -50,6 +58,12 @@ export class ClassProgressComponent implements OnInit {
       if (result.studentName.toLowerCase().includes(value.toLowerCase())) {
         this.showingClassResults.push(result);
       }
+    }
+  }
+
+  buildBarChart() {
+    for (let result of this.classGradesGrouped){
+      this.barChartResults.push({name: result.studentName, value: result.average});
     }
   }
 

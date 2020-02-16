@@ -12,4 +12,8 @@ export class ProgressService {
   getClassProgress(courseId: number) {
     return this.http.get('api/course/' + courseId + '/students/progress');
   }
+
+  getClassGradesGrouped(courseId: number) {
+    return this.http.get('api/course/' + courseId + '/students/gradesGroup');
+  }
 }
