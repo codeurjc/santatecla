@@ -9,6 +9,7 @@ export interface DefinitionAnswer {
 
     unitId?: number;
     blockId?: number;
+    courseId?: number;
 
     user?: User;
 }

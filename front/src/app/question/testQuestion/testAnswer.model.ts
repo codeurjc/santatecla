@@ -7,6 +7,7 @@ export interface TestAnswer {
 
   unitId?: number;
   blockId?: number;
+  courseId?: number;
 
   user?: User;
 }

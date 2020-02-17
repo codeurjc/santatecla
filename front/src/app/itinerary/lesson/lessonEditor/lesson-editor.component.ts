@@ -70,6 +70,7 @@ export class LessonEditorComponent implements OnInit {
   unitId: number;
   moduleId: number;
   lessonId: number;
+  courseId: number;
 
   contentCount: number;
 
@@ -126,6 +127,7 @@ export class LessonEditorComponent implements OnInit {
           this.moduleId = params.moduleId;
           this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
             this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
+              this.courseId = course.id;
               this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
             });
           });
@@ -370,14 +372,14 @@ export class LessonEditorComponent implements OnInit {
 
     toAdd.forEach(q => {
       this.questionService.addBlockToQuestion(this.unitId, q, this.lesson.id).subscribe(
-        () => {console.log(q); },
+        () => {},
         (err) => console.log(err)
       );
     });
 
     toDelete.forEach(q => {
       this.questionService.deleteQuestionBlock(this.unitId, q, this.lesson.id).subscribe(
-        () => {console.log(q); },
+        () => {},
         (err) => console.log(err)
       );
     });
@@ -513,7 +515,7 @@ export class LessonEditorComponent implements OnInit {
   openAnswerQuestionDialog(answeringQuestion) {
     const dialogRef = this.dialog.open(AnswerQuestionDialogComponent, {
       width: '600px',
-      data: {unitId: this.unitId, question: answeringQuestion, blockId: this.lesson.id}
+      data: {unitId: this.unitId, question: answeringQuestion, blockId: this.lesson.id, courseId: this.courseId}
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -27,6 +27,7 @@ const QUESTION_TYPES = [
 export interface DialogData {
   unitId: number;
   blockId: number;
+  courseId: number;
   question: Question;
 }
 
@@ -173,6 +174,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
       justification: '',
       unitId: this.unitId,
       blockId: this.data.blockId,
+      courseId: this.data.courseId,
       user: this.loginService.getCurrentUser()
     };
 
@@ -201,6 +203,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
       correct: isCorrect,
       unitId: this.unitId,
       blockId: this.data.blockId,
+      courseId: this.data.courseId,
       user: this.loginService.getCurrentUser()
     };
 
@@ -227,6 +230,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
       correct: isCorrect,
       unitId: this.unitId,
       blockId: this.data.blockId,
+      courseId: this.data.courseId,
       user: this.loginService.getCurrentUser()
     };
 
