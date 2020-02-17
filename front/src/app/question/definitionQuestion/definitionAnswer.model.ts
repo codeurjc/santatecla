@@ -8,7 +8,7 @@ export interface DefinitionAnswer {
     justification?: string;
 
     unitId?: number;
-    moduleId?: number;
+    blockId?: number;
 
     user?: User;
 }

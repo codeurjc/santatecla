@@ -6,7 +6,7 @@ export interface TestAnswer {
   correct?: boolean;
 
   unitId?: number;
-  moduleId?: number;
+  blockId?: number;
 
   user?: User;
 }

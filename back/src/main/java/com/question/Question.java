@@ -2,10 +2,14 @@ package com.question;
 
 import com.itinerary.block.Block;
 import com.itinerary.module.Module;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Question {
@@ -22,20 +26,20 @@ public class Question {
     protected int totalWrongAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    protected List<Block> blocks;
+    protected Set<Block> blocks;
 
     public Question() {
         this.subtype = this.getClass().getSimpleName();
         this.totalAnswers = 0;
         this.totalCorrectAnswers = 0;
         this.totalWrongAnswers = 0;
-        this.blocks = new ArrayList<>();
+        this.blocks = new HashSet<>();
     }
 
     public Question(String questionText) {
         this();
         this.questionText = questionText;
-        this.blocks = new ArrayList<>();
+        this.blocks = new HashSet<>();
     }
 
     /**
@@ -70,7 +74,7 @@ public class Question {
         return totalWrongAnswers;
     }
 
-    public List<Block> getBlocks() {
+    public Set<Block> getBlocks() {
         return blocks;
     }
 
@@ -102,7 +106,7 @@ public class Question {
         this.totalWrongAnswers = totalWrongAnswers;
     }
 
-    public void setBlocks(List<Block> blocks) {
+    public void setBlocks(Set<Block> blocks) {
         this.blocks = blocks;
     }
 

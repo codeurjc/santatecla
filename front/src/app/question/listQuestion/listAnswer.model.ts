@@ -6,7 +6,7 @@ export interface ListAnswer {
   correct?: boolean;
 
   unitId?: number;
-  moduleId?: number;
+  blockId?: number;
 
   user?: User;
 }

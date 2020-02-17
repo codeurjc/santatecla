@@ -370,14 +370,14 @@ export class LessonEditorComponent implements OnInit {
 
     toAdd.forEach(q => {
       this.questionService.addBlockToQuestion(this.unitId, q, this.lesson.id).subscribe(
-        () => {},
+        () => {console.log(q); },
         (err) => console.log(err)
       );
     });
 
     toDelete.forEach(q => {
       this.questionService.deleteQuestionBlock(this.unitId, q, this.lesson.id).subscribe(
-        () => {},
+        () => {console.log(q); },
         (err) => console.log(err)
       );
     });
@@ -513,7 +513,7 @@ export class LessonEditorComponent implements OnInit {
   openAnswerQuestionDialog(answeringQuestion) {
     const dialogRef = this.dialog.open(AnswerQuestionDialogComponent, {
       width: '600px',
-      data: {unitId: this.unitId, question: answeringQuestion}
+      data: {unitId: this.unitId, question: answeringQuestion, blockId: this.lesson.id}
     });
 
     dialogRef.afterClosed().subscribe(result => {
