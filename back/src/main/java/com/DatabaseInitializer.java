@@ -414,13 +414,13 @@ public class DatabaseInitializer {
                 testAnswer4.setAnswerText("Paradigma orientado a objetos");
                 testAnswer4.setCorrect(false);
                 TestAnswer testAnswer5 = new TestAnswer();
-                testAnswer5.setAnswerText("Paradigmal imperativo");
+                testAnswer5.setAnswerText("Paradigma imperativo");
                 testAnswer5.setCorrect(false);
                 TestAnswer testAnswer6 = new TestAnswer();
-                testAnswer6.setAnswerText("Paradigmal imperativo");
+                testAnswer6.setAnswerText("Paradigma imperativo");
                 testAnswer6.setCorrect(false);
                 TestAnswer testAnswer7 = new TestAnswer();
-                testAnswer7.setAnswerText("Paradigmal funcional");
+                testAnswer7.setAnswerText("Paradigma funcional");
                 testAnswer7.setCorrect(true);
 
                 test1.addAnswer(testAnswer1);

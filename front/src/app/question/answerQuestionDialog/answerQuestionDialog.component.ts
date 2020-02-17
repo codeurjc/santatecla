@@ -192,13 +192,9 @@ export class AnswerQuestionDialogComponent implements OnInit {
       return;
     }
 
-    let isCorrect = true;
-    this.chosenListAnswers.forEach(element => {
-        if (!this.data.question.correctAnswers.includes(element)) {
-          isCorrect = false;
-        }
-      }
-    );
+    const answersToCompare1 = this.chosenListAnswers;
+    const answersToCompare2 = this.data.question.correctAnswers;
+    const isCorrect = JSON.stringify(answersToCompare1.sort()) === JSON.stringify(answersToCompare2.sort());
 
     this.listAnswer = {
       answer: this.chosenListAnswers,
