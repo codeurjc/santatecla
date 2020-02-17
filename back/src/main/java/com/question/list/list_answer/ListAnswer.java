@@ -82,4 +82,12 @@ public class ListAnswer {
     public void setBlockId(long blockId) {
         this.blockId = blockId;
     }
+
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
+    }
 }
