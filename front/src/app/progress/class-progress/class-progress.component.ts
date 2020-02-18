@@ -41,6 +41,7 @@ export class ClassProgressComponent implements OnInit {
       this.progressService.getClassProgress(this.courseId).subscribe((data: StudentProgressItem[]) => {
         this.classResults = data;
         this.showingClassResults = this.classResults;
+        this.classColumnsToDisplay.push('studentRealization');
         this.classColumnsToDisplay.push('studentAverage');
         this.classResultsReady = true;
       }, error => {console.log(error); });

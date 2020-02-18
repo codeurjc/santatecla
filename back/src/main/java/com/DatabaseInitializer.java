@@ -430,8 +430,6 @@ public class DatabaseInitializer {
                 test1.addAnswer(testAnswer5);
                 test1.addAnswer(testAnswer6);
                 test1.addAnswer(testAnswer7);
-
-                test1.addBlock(lesson5);
                 test1.setTotalCorrectAnswers(1);
                 test1.setTotalWrongAnswers(6);
 
@@ -443,8 +441,6 @@ public class DatabaseInitializer {
                 TestQuestion test2 = new TestQuestion( "Forma de escribir programación, " +
                         "utilizando solo tres estructuras: secuencial, selectiva e iterativa",
                         possibleAnswers, "Programación estructurada");
-
-                test2.addBlock(lesson8);
 
                 unit1Tests.add(test1);
                 unit1Tests.add(test2);
@@ -521,8 +517,6 @@ public class DatabaseInitializer {
                 lesson1.getQuestionsIds().add(definition3.getId());
                 lesson2.getQuestionsIds().add(definition3.getId());
                 lesson3.getQuestionsIds().add(definition4.getId());
-                lesson5.getQuestionsIds().add(test1.getId());
-                lesson8.getQuestionsIds().add(test2.getId());
 
                 lessonRepository.save(lesson1);
                 lessonRepository.save(lesson2);

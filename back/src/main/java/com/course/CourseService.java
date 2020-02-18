@@ -1,6 +1,7 @@
 package com.course;
 
 import com.course.items.StudentProgressItem;
+import com.itinerary.block.Block;
 import com.itinerary.module.Module;
 import com.question.Question;
 import com.user.User;
@@ -44,7 +45,7 @@ public class CourseService {
         return this.courseRepository.findByNameContaining(name);
     }
 
-    private int findUserRealization(Long blockId, Long userId, Long courseId){
+    public int findUserRealization(Long blockId, Long userId, Long courseId){
         return this.courseRepository.findUserListAnswerDistinctCount(blockId, userId, courseId) + this.courseRepository.findUserTestAnswerDistinctCount(blockId, userId, courseId) +
                 this.courseRepository.findUserDefinitionAnswerDistinctCount(blockId, userId, courseId);
     }
@@ -107,7 +108,7 @@ public class CourseService {
         }
 
         if (Double.isNaN(result)){
-            return 0;
+            return result;
         }
 
         return result*10;

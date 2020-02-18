@@ -147,6 +147,13 @@ public class CourseRestController extends GeneralRestController {
         double sumQuestionAux;
         double sumModuleAux;
         double average;
+        double sumRealization;
+        int size;
+        double userGrade;
+        double gradeAux;
+        int answeredCount;
+        int questionCount;
+
         List<Question> questions;
         StudentProgressItem item;
         ArrayList<StudentProgressItem> result = new ArrayList<>();
@@ -157,22 +164,42 @@ public class CourseRestController extends GeneralRestController {
             for (User u : optional.get().getStudents()){
                 item = new StudentProgressItem(u.getName());
                 sumModuleAux = 0;
+                sumRealization = 0;
+                answeredCount = 0;
+                questionCount = 0;
                 for (Block b : questionBlocks){
                     questions = this.questionService.findQuestionsByBlockId(b.getId());
+                    questionCount += questions.size();
+                    size = questions.size();
                     sumQuestionAux = 0;
                     for (Question q: questions){
-                        sumQuestionAux += this.courseService.findUserQuestionGrade(u.getId(), b.getId(), courseId, q);
+                        userGrade = this.courseService.findUserQuestionGrade(u.getId(), b.getId(), courseId, q);
+                        if(!Double.isNaN(userGrade)) {
+                            sumQuestionAux += this.courseService.findUserQuestionGrade(u.getId(), b.getId(), courseId, q);
+                            answeredCount++;
+                        }
+                        else {
+                            size -= 1;
+                        }
                     }
-                    sumModuleAux += sumQuestionAux / questions.size();
-                    item.addGrade(sumQuestionAux / questions.size());
+                    gradeAux = sumQuestionAux / size;
+                    if(!Double.isNaN(gradeAux)){
+                        sumModuleAux += gradeAux;
+                    }
+                    sumRealization += this.courseService.findUserRealization(b.getId(), u.getId(), courseId);
                 }
-                average = sumModuleAux / questionBlocks.size();
+                average = sumModuleAux / answeredCount;
 
                 if (Double.isNaN(average)){
                     average = 0;
                 }
 
                 item.setAverage(average);
+                if(Double.isNaN(sumRealization/questionCount)){
+                    item.addGrade(0.0);
+                } else {
+                    item.addGrade((sumRealization/questionCount) * 100);
+                }
                 result.add(item);
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
