@@ -264,3 +264,7 @@ th.mat-sort-header-sorted {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+.answer-info {
+  color: grey;
+  font-size: 15px;
+}

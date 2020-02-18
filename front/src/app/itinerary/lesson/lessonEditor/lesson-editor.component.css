@@ -22,6 +22,11 @@
   background-color: #7d3c90;
 }
 
+.std-tool {
+  margin-left: 0.5rem;
+  background-color: #05132f;
+}
+
 .tool:hover {
   background-color: #a769b8;
 }
@@ -47,6 +52,7 @@
 
 .slides-container {
   position: absolute;
+  width: calc(100% - 1.8rem);
   height: calc(100vh - 15rem);
   background-color: #f9f2fd;
   overflow-y: scroll;
@@ -129,4 +135,8 @@
 .progress {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.btn-span {
+  margin-left: 0.5rem;
 }

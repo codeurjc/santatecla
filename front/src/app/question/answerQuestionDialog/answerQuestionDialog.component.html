@@ -12,14 +12,14 @@
       <!-- DEFINITION ANSWER CHECK -->
       <div *ngIf="data.question.subtype == 'DefinitionQuestion' && questionDone" mat-dialog-title>
         <h4 *ngIf="definitionAnswers[0][3]">
-          Ejercicio resuelto: <br>
-          " {{definitionAnswers[0][1]}} " <br>
-          <span *ngIf="definitionAnswers[0][2]" class="correct-icon">Correcto</span>
-          <span *ngIf="!definitionAnswers[0][2]" class="wrong-icon">Incorrecto</span>
+          Ejercicio resuelto:
         </h4>
+        <div class="answer-info">" {{definitionAnswers[0][1]}} " </div><br>
+        <span *ngIf="definitionAnswers[0][2]" class="correct-icon">Correcto</span>
+        <span *ngIf="!definitionAnswers[0][2]" class="wrong-icon">Incorrecto</span>
         <div *ngIf="!definitionAnswers[0][3]">
           Ejercicio respondido a la espera de corrección: <br>
-          " {{definitionAnswers[0][1]}} " <br>
+          <div class="answer-info">" {{definitionAnswers[0][1]}} " </div><br>
         </div>
       </div>
 
@@ -33,28 +33,34 @@
         </h4>
         <br>
         Respuestas posibles: <br>
-        <i>{{data.question.possibleAnswers}}</i> <br>
+        <div class="answer-info" *ngFor="let answer of data.question.possibleAnswers">
+          {{answer}}
+        </div><br>
         Respuestas correctas: <br>
-        <i>{{data.question.correctAnswers}}</i> <br>
+        <div class="answer-info" *ngFor="let answer of data.question.correctAnswers">
+          {{answer}}
+        </div><br>
         <!-- TODO Tus respuestas seleccionadas: <br>
         <span [ngClass]="listAnswer.correct ? 'correct-icon':'wrong-icon'"><i></i></span><br> -->
       </div>
 
       <!-- TEST ANSWER CHECK -->
       <div *ngIf="data.question.subtype == 'TestQuestion' && questionDone" mat-dialog-title>
-        <h4 *ngIf="testAnswers[0][1]" class="correct-icon">
+        <h4 *ngIf="testAnswers[0][2]" class="correct-icon">
           <mat-icon>done</mat-icon> Respuesta correcta
         </h4>
-        <h4 *ngIf="!testAnswers[0][1]" class="wrong-icon">
+        <h4 *ngIf="!testAnswers[0][2]" class="wrong-icon">
           <mat-icon>clear</mat-icon> Respuesta incorrecta
         </h4>
         <br>
         Respuestas posibles: <br>
-        <i>{{data.question.possibleAnswers}}</i> <br>
+        <div class="answer-info" *ngFor="let answer of data.question.possibleAnswers">
+          {{answer}}
+        </div><br>
         Respuestas correctas: <br>
-        <i>{{data.question.correctAnswer}}</i> <br>
+        <div class="answer-info">{{data.question.correctAnswer}}</div><br>
         Tu respuestas seleccionada: <br>
-        <span [ngClass]="testAnswers[0][2] ? 'correct-icon':'wrong-icon'"><i>{{testAnswers[0][1]}}</i></span><br>
+        <span [ngClass]="testAnswers[0][2] ? 'correct-icon':'wrong-icon'"><div class="answer-info">{{testAnswers[0][1]}}</div></span><br>
       </div>
 
       <!-- DEFINITION ANSWER -->

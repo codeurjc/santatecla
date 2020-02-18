@@ -9,7 +9,7 @@
         <input matInput (keyup)="applyFilterImages($event.target.value)" placeholder="Nombre de la imagen">
       </mat-form-field>
 
-      <button mat-mini-fab color="accent" class="image-input-btn" (click)="fileInput.click()">
+      <button mat-mini-fab class="image-input-btn" (click)="fileInput.click()" matTooltip="Añadir imagen" [matTooltipPosition]="'after'">
         <mat-icon>insert_photo</mat-icon>
         <input hidden #fileInput type="file" (change)="saveImage(fileInput)">
       </button>
