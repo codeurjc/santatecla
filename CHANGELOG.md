@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to store images
 - Insert images in slides
 - Cards editor with asciidoc parser
+- Answer questions inside a lesson
+- Add questions to lesson
 
 ### Fixed
 
