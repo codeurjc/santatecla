@@ -11,7 +11,7 @@ import {MyCoursesComponent} from './course/myCourses.component';
 import {NewCourseComponent} from './course/newCourse.component';
 import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
 import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.component';
-import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
+import {AnswerQuestionDialogComponent} from './question/answerQuestionDialog/answerQuestionDialog.component';
 import {AddQuestionDialogComponent} from './question/addQuestionDialog/addQuestionDialog.component';
 import {UnitComponent} from './unit/unit.component';
 import {HomeComponent} from './home/home.component';
@@ -21,6 +21,10 @@ import {ModuleEditorComponent} from './itinerary/module/moduleEditor/module-edit
 import {CourseComponent} from './course/course.component';
 import {ModuleFormComponent} from './itinerary/module/moduleForm/module-form.component';
 import {UnitsBlocksToolComponent} from './itinerary/module/moduleEditor/units-blocks-tool.component';
+import {ImageComponent} from './images/image.component';
+import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
+import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
+import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-questions-tool.component';
 
 
 const appRoutes = [
@@ -28,7 +32,9 @@ const appRoutes = [
   { path: 'unit' , component: ViewComponent },
   { path: 'unit/:unitId', component: UnitComponent },
   { path: 'unitsCardsTool', component: UnitsCardsToolComponent },
+  { path: 'lessonSlidesTool', component: LessonSlidesToolComponent },
   { path: 'unitsBlocksTool', component: UnitsBlocksToolComponent },
+  { path: 'unitsQuestionsTool', component: UnitsQuestionsToolComponent },
   { path: 'lessonForm', component: LessonFormComponent },
   { path: 'moduleForm', component: ModuleFormComponent },
   { path: 'units/:unitId/cards', component: CardComponent },
@@ -39,7 +45,8 @@ const appRoutes = [
   { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'course/:courseId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },
-  { path: 'answerQuestionDialog', component: AnswerDefinitionDialogComponent},
+  { path: 'unit/:unitId/question/:questionType/:questionId', component: QuestionTrackingComponent },
+  { path: 'answerQuestionDialog', component: AnswerQuestionDialogComponent},
   { path: 'addQuestionDialog', component: AddQuestionDialogComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
   { path: 'units/:unitId/itineraries/:itineraryId/listQuestion/:questionId', component: ListQuestionComponent},
@@ -48,7 +55,8 @@ const appRoutes = [
   { path: 'courses', component: MyCoursesComponent },
   { path: 'progress', component: ModuleProgressComponent },
   { path: 'newCourse', component: NewCourseComponent},
-  { path: 'course/:courseId', component: CourseComponent}
+  { path: 'course/:courseId', component: CourseComponent},
+  { path: 'images', component: ImageComponent}
 
 ];
 

@@ -5,7 +5,6 @@ import {Course} from '../../course/course.model';
 import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../../course/course.service';
 import {StudentProgressItem} from '../items/studentProgressItem.model';
-import {ModuleFormat} from '../items/moduleFormat.model';
 
 @Component({
   selector: 'app-class-progress',
@@ -16,16 +15,15 @@ import {ModuleFormat} from '../items/moduleFormat.model';
 export class ClassProgressComponent implements OnInit {
   courseId: number;
   course: Course;
+
   classResults: StudentProgressItem[];
   showingClassResults: StudentProgressItem[];
-  courseFormat: ModuleFormat[];
-  moduleFormat: ModuleFormat;
-  moduleExtendedResults: StudentProgressItem[];
-  showingExtendedResults: StudentProgressItem[];
   classColumnsToDisplay = ['name'];
-  extendedColumnsToDisplay = ['name'];
   classResultsReady = false;
-  extendedInfo = false;
+
+  classGradesGrouped: StudentProgressItem[];
+  classGradesReady = false;
+  barChartResults = [];
 
   constructor(private courseService: CourseService,
               private loginService: LoginService,
@@ -43,43 +41,16 @@ export class ClassProgressComponent implements OnInit {
       this.progressService.getClassProgress(this.courseId).subscribe((data: StudentProgressItem[]) => {
         this.classResults = data;
         this.showingClassResults = this.classResults;
-        console.log(this.classResults);
-      }, error => {console.log(error); });
-
-      this.progressService.getModuleFormat(this.courseId).subscribe((data: ModuleFormat[]) => {
-        this.courseFormat = data;
-
-        for (let module of this.courseFormat) {
-          this.classColumnsToDisplay.push(module.moduleName);
-        }
-
+        this.classColumnsToDisplay.push('studentRealization');
         this.classColumnsToDisplay.push('studentAverage');
         this.classResultsReady = true;
       }, error => {console.log(error); });
-
+      this.progressService.getClassGradesGrouped(this.courseId).subscribe((data: StudentProgressItem[]) => {
+        this.classGradesGrouped = data;
+        this.buildBarChart();
+        this.classGradesReady = true;
+      }, error => {console.log(error); });
     });
-  }
-
-  showModuleExtendedInfo(moduleId: number, moduleName: string) {
-    this.classResultsReady = false;
-    this.progressService.getExtendedModuleInfo(this.courseId, moduleId).subscribe((data: StudentProgressItem[]) => {
-      this.moduleExtendedResults = data;
-      this.showingExtendedResults = this.moduleExtendedResults;
-      this.classResultsReady = true;
-      this.extendedInfo = true;
-    }, error => {console.log(error); });
-
-    for (let module of this.courseFormat){
-      if (module.moduleName === moduleName){
-        this.moduleFormat = module;
-      }
-    }
-
-    for (let question of this.moduleFormat.questions){
-      this.extendedColumnsToDisplay.push(question);
-    }
-
-    this.extendedColumnsToDisplay.push('studentAverage');
   }
 
   applyFilterStudent(value: string) {
@@ -91,12 +62,9 @@ export class ClassProgressComponent implements OnInit {
     }
   }
 
-  applyFilterExtendedStudent(value: string) {
-    this.showingExtendedResults = [];
-    for (let result of this.moduleExtendedResults) {
-      if (result.studentName.toLowerCase().includes(value.toLowerCase())) {
-        this.showingExtendedResults.push(result);
-      }
+  buildBarChart() {
+    for (let result of this.classGradesGrouped){
+      this.barChartResults.push({name: result.studentName, value: result.average});
     }
   }
 

@@ -1,8 +1,10 @@
 package com.question.definition.definition_question;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,4 +45,37 @@ public class DefinitionQuestionService {
         return this.definitionRepository.findUserAnswers(userId, questionId);
     }
 
+    public Optional<List<DefinitionAnswer>> findCorrectedAnswers(long questionId) {
+        Optional<DefinitionQuestion> question = this.findOne(questionId);
+
+        if (question.isPresent()) {
+            List<DefinitionAnswer> list = new ArrayList<>();
+            for(DefinitionAnswer answer : question.get().getAnswers()) {
+                if (answer.isCorrected()) {
+                    list.add(answer);
+                }
+            }
+            return Optional.of(list);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<List<DefinitionAnswer>> findNotCorrectedAnswers(long questionId) {
+        Optional<DefinitionQuestion> question = this.findOne(questionId);
+
+        if (question.isPresent()) {
+            List<DefinitionAnswer> list = new ArrayList<>();
+            for(DefinitionAnswer answer : question.get().getAnswers()) {
+                if (!answer.isCorrected()) {
+                    list.add(answer);
+                }
+            }
+            return Optional.of(list);
+        }
+        return Optional.empty();
+    }
+
+    public Integer findNotCorrectedAnswersCount(long questionId) {
+        return this.definitionRepository.findNotCorrectedAnswersCount(questionId);
+    }
 }

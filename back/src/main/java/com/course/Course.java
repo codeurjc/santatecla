@@ -1,5 +1,6 @@
 package com.course;
 
+import com.google.gson.annotations.SerializedName;
 import com.itinerary.module.Module;
 import com.unit.Unit;
 import com.user.User;
@@ -14,6 +15,7 @@ import java.util.List;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("courseId")
     private long id;
 
     private String name;
@@ -53,6 +55,10 @@ public class Course {
         this.description = course.description;
         this.module = course.module;
         this.teacher = course.teacher;
+    }
+
+    public String toJson(){
+        return "{\"name\":" + this.name + ",\n \"students\":[]}";
     }
 
     public long getId() {

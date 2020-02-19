@@ -4,7 +4,10 @@ export interface TestAnswer {
   id?: number;
   answerText?: string;
   correct?: boolean;
-  user?: User;
-  possibleAnswers ?: string[];
+
   unitId?: number;
+  blockId?: number;
+  courseId?: number;
+
+  user?: User;
 }

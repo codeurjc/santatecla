@@ -42,11 +42,11 @@ export class DefinitionQuestionComponent implements OnInit {
       }, error => {
       });
       console.log(this.loginService.getCurrentUser());
-      this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: DefinitionAnswer[]) => {
+      /*this.questionService.getUserAnswers(this.id, this.loginService.getCurrentUser().id).subscribe((data: DefinitionAnswer[]) => {
         if (data.length != 0) {
           this.questionDone = true;
         }
-      });
+      });*/
     });
   }
 

@@ -2,6 +2,9 @@
 <html>
   <body>
 
+    <h2>Selecciona una unidad para ver sus fichas</h2>
+    <h4>Después seleciona una ficha para copiar su ruta</h4>
+
     <mat-form-field id="unitSearcher">
       <input matInput (keyup)="applyFilterUnits($event.target.value)" placeholder="Nombre de la unidad">
     </mat-form-field>
@@ -14,12 +17,8 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div *ngFor = "let card of unit.cards">
-          {{card.name}}
-          <mat-card>
-            assert.card/{{card.id}}/{{unit.id}}
-            <button id="copyButton" mat-icon-button matTooltip="Copiar" [matTooltipPosition]="copyInfoPosition" (click)="openLink($event, 'assert.card/' + card.id + '/' + unit.id)">
-              <mat-icon>file_copy</mat-icon>
-            </button>
+          <mat-card class="sub-card" (click)="openLink($event, 'insert.card/' + card.name + '/' + unit.name)">
+            {{card.name}}
           </mat-card>
         </div>
       </mat-expansion-panel>

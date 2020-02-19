@@ -104,4 +104,21 @@ public class ListQuestionRestController extends GeneralRestController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping(value = "/{questionID}/chosenWrongAnswersCount")
+    public ResponseEntity<Object> getChosenWrongAnswersCount(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<ListQuestion> question = this.listQuestionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent()) {
+            return new ResponseEntity<>(this.listQuestionService.findChosenWrongAnswersCount(questionID), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{questionID}/answer/user/{userID}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long questionID, @PathVariable long userID) {
+        return new ResponseEntity<>(this.listQuestionService.findUserAnswers(userID, questionID), HttpStatus.OK);
+    }
 }

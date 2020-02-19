@@ -6,6 +6,7 @@ import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom
 import { ClipboardService } from 'ngx-clipboard';
 import {Block} from '../../block.model';
 import {ModuleService} from '../module.service';
+import {LoginService} from '../../../auth/login.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class UnitsBlocksToolComponent implements OnInit {
               private unitService: UnitService,
               private moduleService: ModuleService,
               private bottomSheetRef: MatBottomSheetRef<UnitsBlocksToolComponent>,
+              private loginService: LoginService,
               private clipboardService: ClipboardService,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
   }

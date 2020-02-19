@@ -4,6 +4,9 @@ import {ListQuestion} from './listQuestion/listQuestion.model';
 import {DefinitionQuestion} from './definitionQuestion/definitionQuestion.model';
 import {TestQuestion} from './testQuestion/testQuestion.model';
 import {DefinitionAnswer} from './definitionQuestion/definitionAnswer.model';
+import {ListAnswer} from './listQuestion/listAnswer.model';
+import {TestAnswer} from './testQuestion/testAnswer.model';
+import {Unit} from '../unit/unit.model';
 
 @Injectable()
 export class QuestionService {
@@ -16,28 +19,36 @@ export class QuestionService {
     return this.http.get(this.baseUrl + id + '/question');
   }
 
+  getQuestion(id: number) {
+    return this.http.get('/api/questions/' + id);
+  }
+
+  getUnitQuestion(unitID: number, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID);
+  }
+
   getUnitDefinitionQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/definition');
   }
 
-  getUnitDefinitionQuestion(unitId: number, questionId: number) {
-    return this.http.get(this.baseUrl + unitId + '/question/definition/' + questionId);
+  getUnitDefinitionQuestion(unitID: number, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID);
   }
 
   getUnitListQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/list');
   }
 
-  getUnitListQuestion(unitId: number, questionId: number) {
-    return this.http.get(this.baseUrl + unitId + '/question/list/' + questionId);
+  getUnitListQuestion(unitID: number, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/list/' + questionID);
   }
 
   getUnitTestQuestions(id: number) {
     return this.http.get(this.baseUrl + id + '/question/test');
   }
 
-  getUnitTestQuestion(unitId: number, questionId: number) {
-    return this.http.get(this.baseUrl + unitId + '/question/test/' + questionId);
+  getUnitTestQuestion(unitID: number, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/test/' + questionID);
   }
 
   addUnitDefinitionQuestion(id: number, question: DefinitionQuestion) {
@@ -50,14 +61,14 @@ export class QuestionService {
     return this.http.post<DefinitionQuestion>(this.baseUrl + id + '/question/definition', body, {headers});
   }
 
-  editUnitDefinitionQuestion(unitId: number, questionId: number, question: DefinitionQuestion) {
+  editUnitDefinitionQuestion(unitID: number, questionID: number, question: DefinitionQuestion) {
     const body = JSON.stringify(question);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
-    return this.http.put<DefinitionQuestion>(this.baseUrl + unitId + '/question/definition/' + questionId, body, {headers});
+    return this.http.put<DefinitionQuestion>(this.baseUrl + unitID + '/question/definition/' + questionID, body, {headers});
   }
 
   addUnitListQuestion(id: number, question: ListQuestion) {
@@ -70,14 +81,24 @@ export class QuestionService {
     return this.http.post<ListQuestion>(this.baseUrl + id + '/question/list', body, {headers});
   }
 
-  editUnitListQuestion(unitId: number, questionId: number, question: ListQuestion) {
+  editUnitListQuestion(unitID: number, questionID: number, question: ListQuestion) {
     const body = JSON.stringify(question);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
-    return this.http.put<ListQuestion>(this.baseUrl + unitId + '/question/list/' + questionId, body, {headers});
+    return this.http.put<ListQuestion>(this.baseUrl + unitID + '/question/list/' + questionID, body, {headers});
+  }
+
+  addUnitListAnswer(unitID, questionID: number, answer: ListAnswer) {
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(this.baseUrl + unitID + '/question/list/' + questionID + '/answer', body, {headers});
   }
 
   addUnitTestQuestion(id: number, question: TestQuestion) {
@@ -90,14 +111,24 @@ export class QuestionService {
     return this.http.post<TestQuestion>(this.baseUrl + id + '/question/test', body, {headers});
   }
 
-  editUnitTestQuestion(unitId: number, questionId: number, question: TestQuestion) {
+  editUnitTestQuestion(unitID: number, questionID: number, question: TestQuestion) {
     const body = JSON.stringify(question);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
-    return this.http.put<TestQuestion>(this.baseUrl + unitId + '/question/test/' + questionId, body, {headers});
+    return this.http.put<TestQuestion>(this.baseUrl + unitID + '/question/test/' + questionID, body, {headers});
+  }
+
+  addUnitTestAnswer(unitID, questionID: number, answer: TestAnswer) {
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(this.baseUrl + unitID + '/question/test/' + questionID + '/answer', body, {headers});
   }
 
   deleteUnitQuestion(unitID, questionID: number) {
@@ -112,5 +143,67 @@ export class QuestionService {
     });
 
     return this.http.post(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer', body, {headers});
+  }
+
+  editUnitDefinitionAnswer(unitID, questionID, answerID: number, answer: DefinitionAnswer) {
+    const body = JSON.stringify(answer);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer/' + answerID, body, {headers});
+  }
+
+  getUnitDefinitionAnswers(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer');
+  }
+
+  getUnitDefinitionAnswersCorrected(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer?corrected=true');
+  }
+
+  getUnitDefinitionAnswersNotCorrected(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer?corrected=false');
+  }
+
+  getQuestionCorrectCount(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID + '/correctCount');
+  }
+
+  getQuestionWrongCount(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID + '/wrongCount');
+  }
+
+  getTestQuestionWrongAnswerCount(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/test/' + questionID + '/chosenWrongAnswersCount');
+  }
+
+  getListQuestionWrongAnswerCount(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/list/' + questionID + '/chosenWrongAnswersCount');
+  }
+
+  getUncorrectedDefinitionAnswers(unitID, questionID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/uncorrectedCount');
+  }
+
+  getDefinitionUserAnswers(unitID, questionID, userID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/definition/' + questionID + '/answer/user/' + userID);
+  }
+
+  getListUserAnswers(unitID, questionID, userID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/list/' + questionID + '/answer/user/' + userID);
+  }
+
+  getTestUserAnswers(unitID, questionID, userID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/test/' + questionID + '/answer/user/' + userID);
+  }
+
+  addBlockToQuestion(unitID, questionID, blockID: number,) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID + '/addBlock/' + blockID);
+  }
+
+  deleteQuestionBlock(unitID, questionID, blockID: number) {
+    return this.http.get(this.baseUrl + unitID + '/question/' + questionID + '/deleteBlock/' + blockID);
   }
 }

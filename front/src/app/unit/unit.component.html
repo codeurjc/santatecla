@@ -16,12 +16,12 @@
 
     <button [ngClass]="activeTab == 2 ? 'tab activeTab mat-button' : 'tab mat-button'" (click)="activateTab(2)">
       <mat-icon [ngClass]="showMenu ? 'tab-icon' : 'tab-icon-without-menu'">slideshow</mat-icon>
-      <span class="tab-text" *ngIf="showMenu">Leciones</span>
+      <span class="tab-text" *ngIf="showMenu">Lecciones</span>
     </button>
 
     <button [ngClass]="activeTab == 3 ? 'tab activeTab mat-button' : 'tab mat-button'" (click)="activateTab(3)">
       <mat-icon [ngClass]="showMenu ? 'tab-icon' : 'tab-icon-without-menu'">vertical_split</mat-icon>
-      <span class="tab-text" *ngIf="showMenu">Módulos</span>
+      <span class="tab-text" *ngIf="showMenu">Itinerarios</span>
     </button>
 
   </div>

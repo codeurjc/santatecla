@@ -58,6 +58,7 @@ public class LessonRestController extends GeneralRestController {
             this.slideService.delete(diferenceId);
         }
         if(l.isPresent()){
+            System.out.println(lesson.getQuestionsIds());
             l.get().update(lesson);
             this.lessonService.save(l.get());
             return new ResponseEntity<>(l.get(), HttpStatus.OK);

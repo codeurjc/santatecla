@@ -169,14 +169,6 @@ body {
   margin-bottom: 1em;
 }
 
-#result {
-  padding: 1rem;
-  cursor: pointer;
-  margin: 0 -0.6em 0 -0.6em;
-  border-top: 1px solid #e5e9f0;
-  background-color: #ffffff;
-}
-
 .active {
   background-color: #e5e9f0 !important;
 }
@@ -298,4 +290,29 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #5d306a;
+}
+
+.mat-tooltip.tooltip {
+  font-size: 13px;
+}
+
+.img-lesson {
+  width: 350px;
+}
+
+.btn-resolve {
+  padding: 0.5rem;
+  background-color: #5d306a;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 5rem;
+}
+
+.mat-menu-panel {
+  max-width: 800px !important;
+}
+
+.mat-tab-body-content {
+  overflow-y: hidden !important;
 }

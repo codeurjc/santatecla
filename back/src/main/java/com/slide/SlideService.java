@@ -16,6 +16,8 @@ public class SlideService {
 		return repository.findById(id);
 	}
 
+	public List<Slide> findByName(String unitName, String lessonName, String slideName) { return repository.findByName(unitName, lessonName, slideName); }
+
 	public List<Slide> findAll() {
 		return repository.findAll();
 	}

@@ -1,6 +1,5 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {LoginService, User} from '../auth/login.service';
-import {NewCourseService} from './newCourse.service';
 import {Course} from './course.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TabService} from '../tab/tab.service';
@@ -10,6 +9,7 @@ import {MAT_DIALOG_DATA, MatBottomSheet, MatDialog, MatDialogRef, MatSnackBar} f
 import {UnitsBlocksToolComponent} from '../itinerary/module/moduleEditor/units-blocks-tool.component';
 import {MyCoursesComponent} from './myCourses.component';
 import {CourseComponent} from './course.component';
+import {CourseService} from './course.service';
 
 @Component({
   templateUrl: './newCourse.component.html',
@@ -24,7 +24,7 @@ export class NewCourseComponent implements OnInit {
   course: Course;
   showSpinner = false;
 
-  constructor(private courseService: NewCourseService,
+  constructor(private courseService: CourseService,
               private loginService: LoginService, private routing: Router,
               private activatedRoute: ActivatedRoute,
               private tabService: TabService,

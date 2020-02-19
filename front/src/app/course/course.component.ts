@@ -5,7 +5,7 @@ import {CourseService} from './course.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {Module} from '../itinerary/module/module.model';
-import {MatDialog, MatTreeNestedDataSource} from '@angular/material';
+import {MatDialog, MatSnackBar, MatTreeNestedDataSource} from '@angular/material';
 import {TabService} from '../tab/tab.service';
 import {NewCourseComponent} from './newCourse.component';
 
@@ -29,6 +29,7 @@ export class CourseComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private tabService: TabService,
+              private snackBar: MatSnackBar,
               public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -68,6 +69,23 @@ export class CourseComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.ngOnInit();
+    });
+  }
+
+  copyUrl() {
+    const url = window.location.href;
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (url));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+  }
+
+  addStudents() {
+    this.copyUrl();
+    this.snackBar.open('La URL para acceder al curso ha sido copiada al portapapeles', 'Entendido', {
+      duration: 4000,
     });
   }
 }

@@ -17,12 +17,16 @@ public class DefinitionAnswer{
 
     private String answerText;
 
+    //Correct or wrong
     private boolean correct;
+
+    //Corrected by the teacher
+    private boolean corrected;
 
     private String justification;
 
     private long unitId;
-    private long moduleId;
+    private long blockId;
     private long courseId;
 
     @OneToOne
@@ -30,9 +34,10 @@ public class DefinitionAnswer{
 
     public DefinitionAnswer(){}
 
-    public DefinitionAnswer(String answerText, boolean correct){
+    public DefinitionAnswer(String answerText){
         this.answerText = answerText;
-        this.correct = correct;
+        this.correct = false;
+        this.corrected = false;
     }
 
     public void update(DefinitionAnswer a) {
@@ -44,6 +49,7 @@ public class DefinitionAnswer{
         }
 
         this.correct = a.isCorrect();
+        this.corrected = a.isCorrected();
     }
 
     public long getId() {
@@ -60,6 +66,18 @@ public class DefinitionAnswer{
 
     public boolean isCorrect() {
         return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
+
+    public boolean isCorrected() {
+        return corrected;
+    }
+
+    public void setCorrected(boolean corrected) {
+        this.corrected = corrected;
     }
 
     public String getJustification() {
@@ -86,11 +104,19 @@ public class DefinitionAnswer{
         this.unitId = unitId;
     }
 
-    public long getModuleId() {
-        return moduleId;
+    public long getBlockId() {
+        return blockId;
     }
 
-    public void setModuleId(long moduleId) {
-        this.moduleId = moduleId;
+    public void setBlockId(long blockId) {
+        this.blockId = blockId;
+    }
+
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
     }
 }

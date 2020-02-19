@@ -31,4 +31,8 @@ public class TestQuestionService {
     public List<Object> findUserAnswers(long userId, long questionId){
         return this.testRepository.findUserAnswers(userId, questionId);
     }
+
+    public List<Object> findChosenWrongAnswersCount(long id){
+        return this.testRepository.findChosenAnswers(id);
+    }
 }

@@ -4,7 +4,12 @@ export interface DefinitionAnswer {
     id?: number;
     answerText: string;
     correct?: boolean;
+    corrected?: boolean;
     justification?: string;
-    user?: User;
+
     unitId?: number;
+    blockId?: number;
+    courseId?: number;
+
+    user?: User;
 }

@@ -1,77 +1,64 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div>
 
-<div>
+    <img src="../../../assets/img/spinner.gif" id="spinner" class="top-margin" *ngIf="!classResultsReady">
 
-  <img src="../../../assets/img/spinner.gif" id="spinner" class="top-margin" *ngIf="!classResultsReady">
+    <div class="top-margin">
+      <div class="row">
+        <div class="column" *ngIf="this.classResultsReady">
+          <mat-card>
+            <mat-card-title>Medias de los alumnos</mat-card-title>
+            <mat-card-content>
+              <div>
+                <mat-form-field class="">
+                  <input matInput (keyup)="applyFilterStudent($event.target.value)" placeholder="Nombre del alumno">
+                </mat-form-field>
+                <mat-icon>search</mat-icon>
+              </div>
 
-  <div class="top-margin">
-    <span *ngIf="classResultsReady && !extendedInfo">
+              <table mat-table [dataSource]="this.showingClassResults" class="mat-elevation-z8 center-table">
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Alumno</th>
+                  <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
+                </ng-container>
 
-      <div>
-        <mat-form-field class="">
-          <input matInput (keyup)="applyFilterStudent($event.target.value)" placeholder="Nombre del alumno">
-        </mat-form-field>
-        <mat-icon>search</mat-icon>
+                <ng-container matColumnDef="studentRealization">
+                  <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">% Realización</th>
+                  <td mat-cell *matCellDef="let element"> {{element.grades[0].toFixed(2)}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="studentAverage">
+                  <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Media</th>
+                  <td mat-cell *matCellDef="let element"> {{element.average.toFixed(2)}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="classColumnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let row; columns: classColumnsToDisplay;" class="columnWidth center-align"></tr>
+              </table>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="column" *ngIf="this.classGradesReady">
+          <mat-card>
+            <mat-card-title>Notas de los alumnos agrupadas</mat-card-title>
+            <mat-card-content>
+              <ngx-charts-bar-vertical
+                [results]="this.barChartResults"
+                [xAxis]="true"
+                [yAxis]="true"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxisLabel]="'Media'"
+                [yAxisLabel]="'Número de Alumnos'">
+              </ngx-charts-bar-vertical>
+            </mat-card-content>
+          </mat-card>
+        </div>
       </div>
+    </div>
 
-      <table mat-table [dataSource]="this.showingClassResults" class="mat-elevation-z8 center-table">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Alumno</th>
-          <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
-        </ng-container>
-
-        <span *ngFor="let module of this.courseFormat">
-          <ng-container matColumnDef="{{module.moduleName}}">
-            <th mat-header-cell *matHeaderCellDef class="columnWidth center-align extended-info" (click)="showModuleExtendedInfo(module.id, module.moduleName)"> {{module.moduleName}} </th>
-            <td mat-cell *matCellDef="let element">{{element.grades[this.courseFormat.indexOf(module)]}}</td>
-          </ng-container>
-        </span>
-
-        <ng-container matColumnDef="studentAverage">
-          <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Media</th>
-          <td mat-cell *matCellDef="let element"> {{element.average}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="classColumnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: classColumnsToDisplay;" class="columnWidth center-align"></tr>
-      </table>
-    </span>
   </div>
-
-  <div class="top-margin">
-    <span *ngIf="classResultsReady && extendedInfo">
-
-      <div>
-        <mat-form-field class="">
-          <input matInput (keyup)="applyFilterExtendedStudent($event.target.value)" placeholder="Nombre del alumno">
-        </mat-form-field>
-        <mat-icon>search</mat-icon>
-      </div>
-
-      <span *ngIf="extendedInfo" class="extended-info" align="center" (click)="extendedInfo = false; extendedColumnsToDisplay=['name']">
-        <mat-icon>keyboard_arrow_up</mat-icon>
-      </span>
-      <table mat-table [dataSource]="this.showingExtendedResults" class="mat-elevation-z8 center-table">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Alumno</th>
-          <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
-        </ng-container>
-
-        <span *ngFor="let question of this.moduleFormat.questions">
-          <ng-container matColumnDef="{{question}}">
-            <th mat-header-cell *matHeaderCellDef class="columnWidth center-align"> {{question}} </th>
-            <td mat-cell *matCellDef="let element">{{element.grades[this.moduleFormat.questions.indexOf(question)]}}</td>
-          </ng-container>
-        </span>
-
-        <ng-container matColumnDef="studentAverage">
-          <th mat-header-cell *matHeaderCellDef class="columnWidth center-align">Media</th>
-          <td mat-cell *matCellDef="let element"> {{element.average}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="extendedColumnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: extendedColumnsToDisplay;" class="columnWidth center-align"></tr>
-      </table>
-    </span>
-  </div>
-
-</div>
+</body>
+</html>

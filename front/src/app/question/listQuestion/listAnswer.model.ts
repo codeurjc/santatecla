@@ -2,8 +2,12 @@ import {User} from '../../auth/login.service';
 
 export interface ListAnswer {
   id?: number;
-  answerText?: string;
+  answer: string[];
   correct?: boolean;
-  user?: User;
+
   unitId?: number;
+  blockId?: number;
+  courseId?: number;
+
+  user?: User;
 }

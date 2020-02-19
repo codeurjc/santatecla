@@ -6,4 +6,6 @@ export interface Question {
   possibleAnswers?: string[];
   correctAnswers?: string[];
   correctAnswer?: string;
+
+  lessonIds?: number[];
 }

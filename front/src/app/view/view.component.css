@@ -1,22 +1,44 @@
-#json-editor-container {
+#lateral-panel {
+  z-index: 600;
+}
+
+#top-panel {
+  width: 100%;
+  text-align: left;
+}
+
+#name-errors {
   position: absolute;
-  width: 30%;
-  height: calc(100vh - 3rem);
-  top: 3rem;
-  z-index: 1000;
+  z-index: 80000;
+  top: 3.9rem;
+  right: 10rem;
+  color: #ff7878;
 }
 
-#search {
-  color: white;
+#tips {
+  position: absolute;
+  margin-top: 20rem;
+  width: calc(100% - 22rem);
+  text-align: center;
+  right: 0;
 }
 
-#result {
-  border-top: 1px solid #9e2abb;
+.result-list {
+  padding: 0 0.2rem 0 0.2rem;
+  height: calc(100vh - 9rem);
+  overflow-y: auto;
+}
+
+::ng-deep .mat-list-text {
+  display: inline !important;
+}
+
+.result {
+  border-radius: 0.2rem;
   background-color: #6a3b77;
-}
-
-.active {
-  background-color: #896196 !important;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  color: #ffffff;
 }
 
 mat-label {
@@ -29,11 +51,11 @@ mat-label {
   overflow: auto;
 }
 
-#unit-prefix {
+.unit-prefix {
   color: #b99bcd;
 }
 
-#unit-name {
+.unit-name {
   font-weight: bold;
 }
 
@@ -45,6 +67,7 @@ mat-label {
 #uml-edit-input {
   background: transparent;
   border: none;
+  outline: none;
   top: 120%;
 }
 
@@ -52,7 +75,8 @@ mat-label {
   position: absolute;
   padding: 0.1rem;
   background-color: #ffffff;
-  border: thin solid #A8A8A8;
+  border: thin solid #DCDCDC;
+  border-radius: 0.2rem;
   top: 120%;
   z-index: 2;
   width: 8rem;
@@ -69,13 +93,12 @@ mat-label {
 }
 
 .delete-button {
-  width: 100% !important;;
-  margin-top: 0.2rem !important;;
-  background-color: #ffdae8 !important;;
+  width: 100% !important;
+  background-color: #ffdae8 !important;
 }
 
 .delete-button:hover {
-  background-color: #ebcad7 !important;;
+  background-color: #ebcad7 !important;
 }
 
 .button-icon {
@@ -151,6 +174,10 @@ mat-label {
   color: #9e2abb !important;
 }
 
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 1em 0 0.15em 0;
+}
+
 ::ng-deep .mat-input-element {
   caret-color: #9e2abb !important;
 }
@@ -171,16 +198,12 @@ mat-label {
   color: #9e2abb !important;
 }
 
-#search {
-  width: 100%;
-  z-index: 120;
-}
-
 .uml-options-button {
   border-radius: 0.2rem;
   background-color: #fdf7ff;
   cursor: pointer;
   width: 50%;
+  border: none;
 }
 
 .uml-relation-button {
@@ -209,7 +232,6 @@ mat-label {
 }
 
 .hidden-menu {
-  width: 20rem;
   left: -22rem;
 }
 
@@ -229,4 +251,61 @@ mat-label {
 
 #path {
   stroke: #27273c;
+}
+
+.level-selector {
+  margin-left: 5rem;
+  top: 0.2rem;
+  width: 5rem;
+  left: 3rem;
+}
+
+.level-selector-with-menu {
+  left: 25rem !important;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix {
+  padding: 0.2em;
+}
+
+::ng-deep .level-selector > .mat-form-field-wrapper > .mat-form-field-underline {
+  display: none;
+}
+
+::ng-deep .mat-select-value {
+  color: white;
+}
+
+::ng-deep .mat-select-arrow  {
+  color: #9e2abb !important;
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #9e2abb;
+}
+
+#search {
+  color: white;
+  width: 50%;
+  z-index: 120;
+  margin-bottom: -1rem;
+}
+
+#search-label {
+  position: relative;
+  top: -0.15rem;
+}
+
+.new-unit-button {
+  color: white;
+  background-color: #7d3c90;
+  position: absolute;
+  width: 40%;
+  height: 3rem;
+  margin-top: 0.6rem;
+  right: 5%;
+}
+
+.new-unit-button:hover {
+  background-color: #a769b8;
 }

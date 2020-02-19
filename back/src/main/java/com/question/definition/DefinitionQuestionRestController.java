@@ -10,14 +10,7 @@ import com.question.definition.definition_question.DefinitionQuestion;
 import com.unit.Unit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/units/{unitID}/question/definition")
@@ -34,7 +27,7 @@ public class DefinitionQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping("/{questionID}")
-    public ResponseEntity<DefinitionQuestion> getListQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<DefinitionQuestion> getDefinitionQuestion(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(questionID);
 
@@ -86,12 +79,22 @@ public class DefinitionQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping(value = "/{questionID}/answer")
-    public ResponseEntity<List<DefinitionAnswer>> getDefinitionAnswers(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<List<DefinitionAnswer>> getDefinitionAnswers(
+            @PathVariable long unitID,
+            @PathVariable long questionID,
+            @RequestParam(required = false) String corrected) {
+
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(questionID);
 
         if (unit.isPresent() && question.isPresent()) {
-            return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
+            if(corrected == null) {
+                return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
+            } else if (corrected.equals("true")) {
+                return new ResponseEntity<>(this.definitionQuestionService.findCorrectedAnswers(questionID).get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(this.definitionQuestionService.findNotCorrectedAnswers(questionID).get(), HttpStatus.OK);
+            }
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -125,6 +128,13 @@ public class DefinitionQuestionRestController extends GeneralRestController {
             //TODO query
             Optional<DefinitionAnswer> oldAnswer = this.definitionQuestionService.findOneAnswer(question.get(), answerID);
             if (oldAnswer.isPresent()) {
+                if(newAnswer.isCorrected()) {
+                    if (newAnswer.isCorrect()) {
+                        question.get().increaseTotalCorrectAnswers();
+                    } else {
+                        question.get().increaseTotalWrongAnswers();
+                    }
+                }
                 oldAnswer.get().update(newAnswer);
                 question.get().getAnswers().remove(oldAnswer.get());
                 question.get().addAnswer(oldAnswer.get());
@@ -135,9 +145,19 @@ public class DefinitionQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    /*
-    @GetMapping("/{id}/answer/user/{userId}")
-    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
-        return new ResponseEntity<>(this.definitionQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
-    }*/
+    @GetMapping("/{questionID}/uncorrectedCount")
+    public ResponseEntity<Integer> getUncorrected(@PathVariable long unitID, @PathVariable long questionID) {
+        Optional<Unit> unit = this.unitService.findOne(unitID);
+        Optional<DefinitionQuestion> question = this.definitionQuestionService.findOne(questionID);
+
+        if (unit.isPresent() && question.isPresent())
+            return new ResponseEntity<>(this.definitionQuestionService.findNotCorrectedAnswersCount(questionID), HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{questionID}/answer/user/{userID}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long questionID, @PathVariable long userID) {
+        return new ResponseEntity<>(this.definitionQuestionService.findUserAnswers(userID, questionID), HttpStatus.OK);
+    }
 }

@@ -1,5 +1,6 @@
 package com.itinerary.module;
 
+import com.google.gson.annotations.SerializedName;
 import com.itinerary.block.Block;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.List;
 public class Module extends Block {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("moduleId")
     protected long id;
 
     @ManyToMany(fetch = FetchType.EAGER)

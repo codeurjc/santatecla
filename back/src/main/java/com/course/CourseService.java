@@ -1,5 +1,7 @@
 package com.course;
 
+import com.course.items.StudentProgressItem;
+import com.itinerary.block.Block;
 import com.itinerary.module.Module;
 import com.question.Question;
 import com.user.User;
@@ -43,37 +45,45 @@ public class CourseService {
         return this.courseRepository.findByNameContaining(name);
     }
 
-    private int findUserRealization(Long moduleId, Long userId, Long courseId){
-        return this.courseRepository.findUserListAnswerDistinctCount(moduleId, userId, courseId) + this.courseRepository.findUserTestAnswerDistinctCount(moduleId, userId, courseId) +
-                this.courseRepository.findUserDefinitionAnswerDistinctCount(moduleId, userId, courseId);
+    public int findUserRealization(Long blockId, Long userId, Long courseId){
+        return this.courseRepository.findUserListAnswerDistinctCount(blockId, userId, courseId) + this.courseRepository.findUserTestAnswerDistinctCount(blockId, userId, courseId) +
+                this.courseRepository.findUserDefinitionAnswerDistinctCount(blockId, userId, courseId);
     }
 
-    public Double findModuleRealization(List<User> students, int questionCount, long moduleId, long courseId){
+    public Double findBlockRealization(List<User> students, int questionCount, long blockId, long courseId){
         double sumRealization = 0;
         for (User u : students){
-            sumRealization += (double)findUserRealization(moduleId, u.getId(), courseId) / questionCount;
+            sumRealization += (double)findUserRealization(blockId, u.getId(), courseId) / questionCount;
         }
         return (sumRealization/students.size()) * 100;
     }
 
-    private double findUserGrade(Long moduleId, Long userId, Long courseId){
-        double result = ((double) (this.courseRepository.findUserCorrectDefinitionAnswers(moduleId, userId, courseId) + this.courseRepository.findUserCorrectListAnswers(moduleId, userId, courseId) +
-                this.courseRepository.findUserCorrectTestAnswers(moduleId, userId, courseId))) / (this.courseRepository.findUserDefinitionAnswers(moduleId, userId, courseId) +
-                this.courseRepository.findUserListAnswers(moduleId, userId, courseId) + this.courseRepository.findUserTestAnswers(moduleId, userId, courseId));
+    private double findUserGrade(Long blockId, Long userId, Long courseId){
+        double result = ((double) (this.courseRepository.findUserCorrectDefinitionAnswers(blockId, userId, courseId) + this.courseRepository.findUserCorrectListAnswers(blockId, userId, courseId) +
+                this.courseRepository.findUserCorrectTestAnswers(blockId, userId, courseId))) / (this.courseRepository.findUserDefinitionAnswers(blockId, userId, courseId) +
+                this.courseRepository.findUserListAnswers(blockId, userId, courseId) + this.courseRepository.findUserTestAnswers(blockId, userId, courseId));
 
         if(Double.isNaN(result)){
-            return 0;
+            return result;
         }
 
         return result*10;
     }
 
-    public double findModuleGrade(List<User> students, long moduleId, long courseId){
+    public double findBlockGrade(List<User> students, long blockId, long courseId){
         double sumGrade = 0;
+        int size = students.size();
+        double userGrade;
         for (User u : students){
-            sumGrade += findUserGrade(moduleId, u.getId(), courseId);
+            userGrade = findUserGrade(blockId, u.getId(), courseId);
+            if(Double.isNaN(userGrade)){
+                size -= 1;
+            }
+            else {
+                sumGrade += userGrade;
+            }
         }
-        double result = sumGrade/students.size();
+        double result = sumGrade/size;
 
         if (Double.isNaN(result)){
             return 0;
@@ -82,25 +92,40 @@ public class CourseService {
         return result;
     }
 
-    public double findUserQuestionGrade(Long userId, long moduleId, long courseId, Question question){
+    public double findUserQuestionGrade(Long userId, long blockId, long courseId, Question question){
         double result;
         if (question.getSubtype().equals("ListQuestion")){
-            result = (double)this.courseRepository.findUserListQuestionCorrectAnswers(moduleId, userId, courseId, question.getId()) /
-                    this.courseRepository.findUserListQuestionAnswers(moduleId, userId, courseId, question.getId());
+            result = (double)this.courseRepository.findUserListQuestionCorrectAnswers(blockId, userId, courseId, question.getId()) /
+                    this.courseRepository.findUserListQuestionAnswers(blockId, userId, courseId, question.getId());
         }
         else if(question.getSubtype().equals("TestQuestion")){
-            result = (double)this.courseRepository.findUserTestQuestionCorrectAnswers(moduleId, userId, courseId, question.getId()) /
-                    this.courseRepository.findUserTestQuestionAnswers(moduleId, userId, courseId, question.getId());
+            result = (double)this.courseRepository.findUserTestQuestionCorrectAnswers(blockId, userId, courseId, question.getId()) /
+                    this.courseRepository.findUserTestQuestionAnswers(blockId, userId, courseId, question.getId());
         }
         else {
-            result = (double)this.courseRepository.findUserDefinitionQuestionCorrectAnswers(moduleId, userId, courseId, question.getId()) /
-                    this.courseRepository.findUserDefinitionQuestionAnswers(moduleId, userId, courseId, question.getId());
+            result = (double)this.courseRepository.findUserDefinitionQuestionCorrectAnswers(blockId, userId, courseId, question.getId()) /
+                    this.courseRepository.findUserDefinitionQuestionAnswers(blockId, userId, courseId, question.getId());
         }
 
         if (Double.isNaN(result)){
-            return 0;
+            return result;
         }
 
         return result*10;
+    }
+
+    public void buildInitialStudentGradeGroupedResult(ArrayList<StudentProgressItem> result){
+        StudentProgressItem item;
+        for (int i = 0; i<11; i++){
+            item = new StudentProgressItem("" + i);
+            item.setAverage(0);
+            result.add(item);
+        }
+    }
+
+    public void buildStudentGradeGroupedResult(ArrayList<StudentProgressItem> result, ArrayList<StudentProgressItem> averages){
+        for(StudentProgressItem studentProgressItem : averages){
+            result.get((int) Math.floor(studentProgressItem.getAverage())).setAverage(result.get((int) Math.floor(studentProgressItem.getAverage())).getAverage() + 1);
+        }
     }
 }
