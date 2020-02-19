@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.google.gson.annotations.SerializedName;
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 
@@ -17,6 +18,7 @@ import com.question.definition.definition_answer.DefinitionAnswer;
 public class DefinitionQuestion extends Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("definitionQuestionId")
     private long id;
 
     @OneToMany(cascade = CascadeType.ALL)

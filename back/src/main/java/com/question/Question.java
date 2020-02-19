@@ -1,12 +1,9 @@
 package com.question;
 
 import com.itinerary.block.Block;
-import com.itinerary.module.Module;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import com.google.gson.annotations.SerializedName;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +13,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SerializedName("questionId")
     protected long id;
 
     protected String subtype;

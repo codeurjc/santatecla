@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cards editor with asciidoc parser
 - Answer questions inside a lesson
 - Add questions to lesson
+- Back security included
+- Basic API Testing
 
 ### Fixed
 
