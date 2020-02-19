@@ -116,4 +116,9 @@ public class ListQuestionRestController extends GeneralRestController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/{questionID}/answer/user/{userID}")
+    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long questionID, @PathVariable long userID) {
+        return new ResponseEntity<>(this.listQuestionService.findUserAnswers(userID, questionID), HttpStatus.OK);
+    }
 }

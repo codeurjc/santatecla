@@ -22,17 +22,14 @@ export class ModuleProgressComponent implements OnInit {
   columnsToDisplay = ['name', 'realization', 'average'];
   moduleResultsReady = false;
   histogram = [];
-  xAxisLabel = 'Tema';
+  xAxisLabel = 'Módulo';
   yAxisLabel = 'Media';
   showingModuleResults: UserResult[];
 
   constructor(private courseService: CourseService,
               private loginService: LoginService,
               private activatedRoute: ActivatedRoute,
-              private progressService: ProgressService,
-              private _changeDetectorRef: ChangeDetectorRef,
-              private _iconRegistry: MatIconRegistry,
-              private _domSanitizer: DomSanitizer) {
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -49,19 +46,11 @@ export class ModuleProgressComponent implements OnInit {
         this.moduleResultsReady = true;
       }, error => {console.log(error); });
     });
-
-    this._iconRegistry.addSvgIconInNamespace('assets', 'covalent',
-      this._domSanitizer.bypassSecurityTrustResourceUrl(
-        'https://raw.githubusercontent.com/Teradata/covalent-quickstart/develop/src/assets/icons/covalent.svg'));
-  }
-
-  axisDate(val: string): string {
-    return new DatePipe('en').transform(val, 'hh a');
   }
 
   buildHistogramData() {
     for (let module of this.moduleResults) {
-      this.histogram.push({'name': module.name, 'value': 516});
+      this.histogram.push({name: module.name, value: module.points[1]});
     }
   }
 

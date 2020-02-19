@@ -24,6 +24,16 @@ import {ImageService} from '../../../images/image.service';
 import {ImageComponent} from '../../../images/image.component';
 import {CardService} from '../../../card/card.service';
 import {LessonSlidesToolComponent} from '../lessonTools/lesson-slides-tool.component';
+import {DefinitionQuestion} from '../../../question/definitionQuestion/definitionQuestion.model';
+import {ListQuestion} from '../../../question/listQuestion/listQuestion.model';
+import {TestQuestion} from '../../../question/testQuestion/testQuestion.model';
+import {QuestionService} from '../../../question/question.service';
+import {AddQuestionDialogComponent} from '../../../question/addQuestionDialog/addQuestionDialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDialog/answerQuestionDialog.component';
+import {Question} from '../../../question/question.model';
+import {UnitsBlocksToolComponent} from '../../module/moduleEditor/units-blocks-tool.component';
+import {UnitsQuestionsToolComponent} from '../lessonTools/units-questions-tool.component';
 
 
 function convertToHTML(text) {
@@ -60,6 +70,7 @@ export class LessonEditorComponent implements OnInit {
   unitId: number;
   moduleId: number;
   lessonId: number;
+  courseId: number;
 
   contentCount: number;
 
@@ -67,6 +78,10 @@ export class LessonEditorComponent implements OnInit {
   componentsChecker: number;
 
   subSlide: boolean;
+
+  newQuestionsIds: number[];
+  questions: Question[];
+  questionsCount: number;
 
   constructor(private slideService: SlideService,
               private router: Router,
@@ -82,7 +97,9 @@ export class LessonEditorComponent implements OnInit {
               private unitLessonService: UnitLessonService,
               private tabService: TabService,
               private imageService: ImageService,
-              private cardService: CardService) {
+              private cardService: CardService,
+              private questionService: QuestionService,
+              public dialog: MatDialog) {
     this.showSpinner = true;
   }
 
@@ -110,7 +127,8 @@ export class LessonEditorComponent implements OnInit {
           this.moduleId = params.moduleId;
           this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
             this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
-                this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
+              this.courseId = course.id;
+              this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
             });
           });
         }
@@ -121,16 +139,32 @@ export class LessonEditorComponent implements OnInit {
   }
 
   loadItinerary() {
+    this.newQuestionsIds = [];
+
     this.lessonService.getLesson(this.lessonId).subscribe((data: Lesson) => {
       this.lesson = {
         id: data.id,
         name: data.name,
-        slides: data.slides
+        slides: data.slides,
+        questionsIds: data.questionsIds
       };
+      this.loadQuestions();
       this.lessonContent = '== ' + this.lesson.name + '\n';
       this.lessonContentExtended = '';
       this.slidesToContent(this.lesson.slides);
       this.extendContent(this.lessonContent);
+    });
+  }
+
+  loadQuestions() {
+    this.questions = [];
+    this.lesson.questionsIds.forEach((questionId) => {
+      this.questions.push();
+    });
+    this.lesson.questionsIds.forEach((questionId, index) => {
+      this.questionService.getQuestion(questionId).subscribe((data: Question) => {
+        this.questions.splice(index, 0, data);
+      });
     });
   }
 
@@ -182,9 +216,20 @@ export class LessonEditorComponent implements OnInit {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       } else if (type === 'question') {
-        /* contentEmbebed = await this.definitionQuestionService.getDefinitionQuestion(content1).toPromise();
-        const url = 'http://localhost:4200/#/units/' + unit + '/itineraries/11/definitionQuestion/' + content1;
-        this.extractedData.splice(contentCounter, 1, contentEmbebed.questionText + '\n\n- ' + url + '[Resolver^]'); */
+        contentEmbebed = await this.questionService.getUnitQuestion(unit, content1).toPromise().catch((error) => console.log(error));
+        if (typeof contentEmbebed !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, '*Ejercicio ' + content2 + '* ' + contentEmbebed.questionText);
+          let exist = false;
+          this.newQuestionsIds.forEach((question) => {
+            if (question === contentEmbebed.id) {
+              exist = true;
+              return;
+            }
+          });
+          if (!exist) { this.newQuestionsIds.splice(content2, 0, contentEmbebed.id); }
+        } else {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        }
       }
     } else {
       if (type === 'card') {
@@ -230,6 +275,7 @@ export class LessonEditorComponent implements OnInit {
 
   contentCounterFunction(content: string) {
     this.contentCount = 0;
+    this.questionsCount = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
@@ -237,6 +283,9 @@ export class LessonEditorComponent implements OnInit {
       words = line.split('.');
       if (words[0] === 'insert') {
         this.contentCount = this.contentCount + 1;
+        if (words[1].split('/')[0] === 'question') {
+          this.questionsCount = this.questionsCount + 1;
+        }
       }
     });
   }
@@ -248,9 +297,13 @@ export class LessonEditorComponent implements OnInit {
     for (let i = 0; i < this.contentCount; i++) {
       this.extractedData.push('');
     }
+    for (let i = 0; i < this.questionsCount; i++) {
+      this.newQuestionsIds.push();
+    }
     this.position = [];
     let counter = 0;
     let contentCounter = 0;
+    let questionCounter = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
@@ -269,7 +322,8 @@ export class LessonEditorComponent implements OnInit {
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), null, Number(parameters[2]), content, contentCounter, 'question');
+          this.getEmbebedContent(Number(parameters[1]), questionCounter, Number(parameters[2]), content, contentCounter, 'question');
+          questionCounter = questionCounter + 1;
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'image') {
           this.position.push(counter);
@@ -304,9 +358,31 @@ export class LessonEditorComponent implements OnInit {
       } else {
         this.showSpinner = false;
         this.viewHTMLVersion();
+        this.updateQuestionsBlocks(this.lesson.questionsIds, this.newQuestionsIds);
+        this.contentToItinerary(this.lessonContent);
+        this.lessonService.updateLesson(this.lesson).subscribe();
         this.progress = (1 / (this.contentHTML.length)) * 100;
       }
     }
+  }
+
+  updateQuestionsBlocks(questions, newQuestions) {
+    const toAdd = newQuestions.filter(x => !questions.includes(x));
+    const toDelete = questions.filter(x => !newQuestions.includes(x));
+
+    toAdd.forEach(q => {
+      this.questionService.addBlockToQuestion(this.unitId, q, this.lesson.id).subscribe(
+        () => {},
+        (err) => console.log(err)
+      );
+    });
+
+    toDelete.forEach(q => {
+      this.questionService.deleteQuestionBlock(this.unitId, q, this.lesson.id).subscribe(
+        () => {},
+        (err) => console.log(err)
+      );
+    });
   }
 
   contentToItinerary(content: string) {
@@ -346,6 +422,7 @@ export class LessonEditorComponent implements OnInit {
       }
       this.lesson.slides.push(slide);
     }
+    this.lesson.questionsIds = this.newQuestionsIds;
   }
 
   updateHTMLView() {
@@ -370,6 +447,10 @@ export class LessonEditorComponent implements OnInit {
     this.bottomSheet.open(LessonSlidesToolComponent);
   }
 
+  openQuestionsBottomSheet(): void {
+    this.bottomSheet.open(UnitsQuestionsToolComponent);
+  }
+
   nextSlide() {
     this.contentSlide++;
     this.progress = this.progress + ((1 / (this.contentHTML.length)) * 100);
@@ -386,4 +467,61 @@ export class LessonEditorComponent implements OnInit {
     div.scrollTop = div2.scrollTop;
   }
 
+  openQuestion(questionID: number, subtype: string) {
+    switch (subtype) {
+      case 'DefinitionQuestion': {
+        this.getDefinitionQuestion(questionID);
+        break;
+      }
+      case 'ListQuestion': {
+        this.getListQuestion(questionID);
+        break;
+      }
+      case 'TestQuestion': {
+        this.getTestQuestion(questionID);
+        break;
+      }
+      default: {
+        console.log('Not valid');
+        break;
+      }
+    }
+  }
+
+  getDefinitionQuestion(questionID: number) {
+    this.questionService.getUnitDefinitionQuestion(this.unitId, questionID).subscribe(
+      (data: DefinitionQuestion) => {
+        this.openAnswerQuestionDialog(data);
+      }
+    );
+  }
+
+  getListQuestion(questionID: number) {
+    this.questionService.getUnitListQuestion(this.unitId, questionID).subscribe(
+      (data: ListQuestion) => {
+        this.openAnswerQuestionDialog(data);
+      }
+    );
+  }
+
+  getTestQuestion(questionID: number) {
+    this.questionService.getUnitTestQuestion(this.unitId, questionID).subscribe(
+      (data: TestQuestion) => {
+        this.openAnswerQuestionDialog(data);
+      }
+    );
+  }
+
+  openAnswerQuestionDialog(answeringQuestion) {
+    const dialogRef = this.dialog.open(AnswerQuestionDialogComponent, {
+      width: '600px',
+      data: {unitId: this.unitId, question: answeringQuestion, blockId: this.lesson.id, courseId: this.courseId}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.ngOnInit();
+      }
+    });
+  }
 }

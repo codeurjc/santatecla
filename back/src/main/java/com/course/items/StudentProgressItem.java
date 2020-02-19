@@ -41,4 +41,15 @@ public class StudentProgressItem {
     public void setAverage(double totalAverage) {
         this.average = totalAverage;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof StudentProgressItem){
+            StudentProgressItem item = (StudentProgressItem) obj;
+            return item.getStudentName().equals(this.studentName);
+        }
+        else {
+            return false;
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.question;
 import java.util.List;
 import java.util.Optional;
 
+import com.question.definition.definition_question.DefinitionQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,10 @@ public class QuestionService {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    public Question save(Question q) {
+        return this.questionRepository.save(q);
+    }
 
     public List<Question> findAll() {
         return this.questionRepository.findAll();
@@ -22,12 +27,12 @@ public class QuestionService {
         this.questionRepository.deleteById(id);
     }
 
-    public List<Question> findQuestionsByModuleId(long id){
-        return this.questionRepository.findByModuleId(id);
+    public List<Question> findQuestionsByBlockId(long id){
+        return this.questionRepository.findByBlockId(id);
     }
 
-    public Integer findModuleQuestionCount(long id){
-        return this.questionRepository.findModuleQuestionCount(id);
+    public Integer findBlockQuestionCount(long id){
+        return this.questionRepository.findBlockQuestionCount(id);
     }
 
 }

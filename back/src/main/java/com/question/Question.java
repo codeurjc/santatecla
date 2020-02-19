@@ -1,11 +1,12 @@
 package com.question;
 
+import com.itinerary.block.Block;
 import com.google.gson.annotations.SerializedName;
-import com.itinerary.module.Module;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Question {
@@ -23,20 +24,20 @@ public class Question {
     protected int totalWrongAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    protected List<Module> modules;
+    protected Set<Block> blocks;
 
     public Question() {
         this.subtype = this.getClass().getSimpleName();
         this.totalAnswers = 0;
         this.totalCorrectAnswers = 0;
         this.totalWrongAnswers = 0;
-        this.modules = new ArrayList<>();
+        this.blocks = new HashSet<>();
     }
 
     public Question(String questionText) {
         this();
         this.questionText = questionText;
-        this.modules = new ArrayList<>();
+        this.blocks = new HashSet<>();
     }
 
     /**
@@ -71,12 +72,16 @@ public class Question {
         return totalWrongAnswers;
     }
 
-    public List<Module> getModules() {
-        return modules;
+    public Set<Block> getBlocks() {
+        return blocks;
     }
 
-    public void addModule(Module module){
-        this.modules.add(module);
+    public void addBlock(Block block){
+        this.blocks.add(block);
+    }
+
+    public void deleteBlock(Block block){
+        this.blocks.remove(block);
     }
 
     public void setSubtype(String subtype) {
@@ -99,8 +104,16 @@ public class Question {
         this.totalWrongAnswers = totalWrongAnswers;
     }
 
-    public void setModules(List<Module> modules) {
-        this.modules = modules;
+    public void setBlocks(Set<Block> blocks) {
+        this.blocks = blocks;
+    }
+
+    public void addBlocks(List<Block> blocks) {
+        this.blocks.addAll(blocks);
+    }
+
+    public void deleteBlocks(List<Block> blocks) {
+        this.blocks.removeAll(blocks);
     }
 
     public void increaseTotalCorrectAnswers() {

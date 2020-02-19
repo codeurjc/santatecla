@@ -70,16 +70,18 @@ public class CourseApiTests {
         ArrayList<Question> questions = new ArrayList<>();
         questions.add(question);
 
+
+
         given(courseService.findAll()).willReturn(courses);
         given(courseService.findOne(1)).willReturn(Optional.of(course));
         given(courseService.findOne(2)).willReturn(Optional.empty());
         given(courseService.findUserCourses(1)).willReturn(userCourses);
         given(courseService.findTeachingCourses(1)).willReturn(courses);
         given(courseService.searchCourseByNameContaining("Tes")).willReturn(courses);
-        given(courseService.findModuleRealization(course.getStudents(), 1, 1, 1)).willReturn((double)1);
-        given(courseService.findModuleGrade(course.getStudents(), 1, 1)).willReturn((double)1);
-        given(questionService.findQuestionsByModuleId(1)).willReturn(questions);
-        given(questionService.findModuleQuestionCount(1)).willReturn(1);
+        given(courseService.findBlockRealization(course.getStudents(), 1, 1, 1)).willReturn((double)1);
+        given(courseService.findBlockGrade(course.getStudents(), 1, 1)).willReturn((double)1);
+        given(questionService.findQuestionsByBlockId(1)).willReturn(questions);
+        given(questionService.findBlockQuestionCount(1)).willReturn(1);
     }
 
     @Test
@@ -247,8 +249,9 @@ public class CourseApiTests {
 
         given(courseService.findOne(1)).willReturn(Optional.of(course));
         given(courseService.findUserQuestionGrade((long)1, 1, 1, question)).willReturn((double)1);
-        given(questionService.findQuestionsByModuleId(1)).willReturn(questions);
-        given(questionService.findModuleQuestionCount(1)).willReturn(1);
+        given(courseService.findUserRealization((long)1, (long)1, (long)1)).willReturn(1);
+        given(questionService.findQuestionsByBlockId(1)).willReturn(questions);
+        given(questionService.findBlockQuestionCount(1)).willReturn(1);
 
         mvc.perform(MockMvcRequestBuilders.get("/api/course/1/students/progress")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -265,58 +268,9 @@ public class CourseApiTests {
     }
 
     @Test
-    public void testGetExtendedStudentProgress() throws Exception{
-        Question question = new Question();
-        ArrayList<Question> questions = new ArrayList<>();
-        questions.add(question);
-
-        Course course = new Course();
-        course.setName("Test Course");
-
-        User student = new User();
-        student.setName("Test User");
-        student.setId((long)(1));
-
-        course.addStudent(student);
-
-        Module module = new Module();
-        module.setName("Test Module");
-        module.setId(1);
-
-        course.setModule(module);
-
-        given(courseService.findOne(1)).willReturn(Optional.of(course));
-        given(courseService.findUserQuestionGrade((long)1, 1, 1, question)).willReturn((double)1);
-        given(questionService.findQuestionsByModuleId(1)).willReturn(questions);
-        given(moduleService.findOne(1)).willReturn(Optional.of(module));
-
-        mvc.perform(MockMvcRequestBuilders.get("/api/course/1/module/1/extended")
+    public void testGetStudentGradesGrouped() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get("/api/course/1/students/gradesGroup")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].studentName", is("Test User")));
-    }
-
-    @Test
-    public void testGetModuleFormat() throws Exception{
-        Question question = new Question();
-        ArrayList<Question> questions = new ArrayList<>();
-        questions.add(question);
-
-        Course course = new Course();
-        course.setName("Test Course");
-
-        Module module = new Module();
-        module.setName("Test Module");
-        module.setId(1);
-
-        course.setModule(module);
-
-        given(courseService.findOne(1)).willReturn(Optional.of(course));
-        given(questionService.findQuestionsByModuleId(1)).willReturn(questions);
-
-        mvc.perform(MockMvcRequestBuilders.get("/api/course/1/module/format")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].moduleName", is("Test Module")));
+                .andExpect(status().isOk());
     }
 }

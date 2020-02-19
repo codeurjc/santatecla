@@ -9,7 +9,7 @@ import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, Covale
   CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
   CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule } from '@covalent/core';
 
-import {FormsModule, NgModel} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -53,7 +53,7 @@ import {LoginComponent} from './login/login.component';
 import {MenuComponent} from './menu/menu.component';
 import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
 import {LessonFormComponent} from './itinerary/lesson/lessonForm/lesson-form.component';
-import {AnswerDefinitionDialogComponent} from './question/answerQuestionDialog/answerDefinitionDialog.component';
+import {AnswerQuestionDialogComponent} from './question/answerQuestionDialog/answerQuestionDialog.component';
 import {HomeComponent} from './home/home.component';
 import {LessonComponent} from './itinerary/lesson/lesson.component';
 import {ConfirmActionComponent} from './confirmAction/confirm-action.component';
@@ -70,6 +70,8 @@ import {ImageComponent} from './images/image.component';
 import {ImageService} from './images/image.service';
 import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
 import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
+import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-questions-tool.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -89,6 +91,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     ModuleEditorComponent,
     UnitsCardsToolComponent,
     UnitsBlocksToolComponent,
+    UnitsQuestionsToolComponent,
     DefinitionQuestionComponent,
     ListQuestionComponent,
     QuestionComponent,
@@ -99,7 +102,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     MyCoursesComponent,
     CourseComponent,
     NewCourseComponent,
-    AnswerDefinitionDialogComponent,
+    AnswerQuestionDialogComponent,
     AddQuestionDialogComponent,
     HomeComponent,
     ConfirmActionComponent,
@@ -109,54 +112,54 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
     ConfirmActionComponent,
     ModuleRenameComponent
   ],
-  imports: [
-    ClipboardModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatAutocompleteModule,
-    MatBadgeModule,
-    MatBottomSheetModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatStepperModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatTreeModule,
-    FormsModule,
-    routing,
-    CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
-    CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
-    CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule
-  ],
+    imports: [
+        ClipboardModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatAutocompleteModule,
+        MatBadgeModule,
+        MatBottomSheetModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatChipsModule,
+        MatDatepickerModule,
+        MatDialogModule,
+        MatDividerModule,
+        MatExpansionModule,
+        MatGridListModule,
+        MatIconModule,
+        MatInputModule,
+        MatListModule,
+        MatMenuModule,
+        MatNativeDateModule,
+        MatPaginatorModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatRadioModule,
+        MatRippleModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatSliderModule,
+        MatSlideToggleModule,
+        MatSnackBarModule,
+        MatSortModule,
+        MatStepperModule,
+        MatTableModule,
+        MatTabsModule,
+        MatToolbarModule,
+        MatTooltipModule,
+        MatTreeModule,
+        FormsModule,
+        routing,
+        CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
+        CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
+        CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule, DragDropModule
+    ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
     QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService,
     MenuComponent, UnitLessonService, UnitModuleService, ImageService,
