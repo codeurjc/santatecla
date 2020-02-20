@@ -10,10 +10,10 @@ docker run --rm --name angular-cli -v ${PWD}:/angular -w /angular node /bin/bash
 cd ../back
 
 # Copy new generated resources on back static
-xcopy /Y ..\front\dist\front\* src\main\resources\static\
+xcopy /Y /s ..\front\dist\front\* src\main\resources\static\
 
 # Create jar
-docker run -it --rm -v "%cd%":/usr/src/project -w /usr/src/project maven:alpine mvn -Dmaven.test.skip=true package
+docker run -it --rm -v ${PWD}:/usr/src/project -w /usr/src/project maven:alpine mvn -DskipTests package
 xcopy /Y target\back-0.0.1-SNAPSHOT.jar ..\docker\build\
 
 cd ../docker
