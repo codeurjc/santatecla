@@ -5,7 +5,7 @@ Remove-Item dist\front\* -Force -Recurse
 Remove-Item ..\back\src\main\resources\static\* -Force -Recurse
 
 # Build angular app
-docker run --rm --name angular-cli -v ${PWD}:/angular -w /angular node /bin/bash -c "npm install; npm run ng build --prod --baseHref=http://localhost:8080/"
+docker run --rm --name angular-cli -v ${PWD}:/angular -w /angular node /bin/bash -c "npm install; npm run build"
 
 cd ../back
 
