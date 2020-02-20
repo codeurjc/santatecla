@@ -21,7 +21,7 @@ export class UnitsQuestionsToolComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
               private bottomSheetRef: MatBottomSheetRef<UnitsQuestionsToolComponent>,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private clipboardService: ClipboardService,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
   }

@@ -166,7 +166,7 @@ export class CardComponent implements OnInit, AfterViewChecked {
     this.cardsView[index] = true;
   }
 
-  private addCard() {
+  addCard() {
     if ((this.cards.length === 0) || (this.cards[0].id !== 0) || (this.cards[0].name && this.cards[0].content)) {
       this.cards.unshift({
         id: 0,
@@ -179,11 +179,11 @@ export class CardComponent implements OnInit, AfterViewChecked {
     this.focusNewCard();
   }
 
-  private focusNewCard() {
+  focusNewCard() {
     window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
   }
 
-  private getCardIndex(id: number): number {
+  getCardIndex(id: number): number {
     let index = -1;
     this.cards.forEach((card, i) => {
       if (card.id === id) {
@@ -193,7 +193,7 @@ export class CardComponent implements OnInit, AfterViewChecked {
     return index;
   }
 
-  private deleteCard(id: number, index: number) {
+  deleteCard(id: number, index: number) {
     const dialogRef = this.dialog.open(ConfirmActionComponent, {
       data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
     });

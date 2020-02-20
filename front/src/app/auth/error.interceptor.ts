@@ -7,7 +7,7 @@ import { LoginService } from './login.service';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-  constructor(private loginService: LoginService) {}
+  constructor(public loginService: LoginService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {

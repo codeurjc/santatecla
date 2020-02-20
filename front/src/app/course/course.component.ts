@@ -24,7 +24,7 @@ export class CourseComponent implements OnInit {
   showMenu = true;
   activeTab = 0;
 
-  constructor(private loginService: LoginService,
+  constructor(public loginService: LoginService,
               private courseService: CourseService,
               private activatedRoute: ActivatedRoute,
               private router: Router,

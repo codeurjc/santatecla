@@ -46,7 +46,7 @@ export class AddQuestionDialogComponent implements OnInit {
   constructor(
     private router: Router,
     private questionService: QuestionService,
-    private loginService: LoginService,
+    public loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     public dialogRef: MatDialogRef<QuestionComponent>,
     private snackBar: MatSnackBar,

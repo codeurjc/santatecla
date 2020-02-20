@@ -25,7 +25,7 @@ export class NewCourseComponent implements OnInit {
   showSpinner = false;
 
   constructor(private courseService: CourseService,
-              private loginService: LoginService, private routing: Router,
+              public loginService: LoginService, private routing: Router,
               private activatedRoute: ActivatedRoute,
               private tabService: TabService,
               private unitService: UnitService,

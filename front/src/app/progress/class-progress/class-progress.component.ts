@@ -26,7 +26,7 @@ export class ClassProgressComponent implements OnInit {
   barChartResults = [];
 
   constructor(private courseService: CourseService,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private activatedRoute: ActivatedRoute,
               private progressService: ProgressService) {
   }

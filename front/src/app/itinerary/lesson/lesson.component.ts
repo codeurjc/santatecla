@@ -32,7 +32,7 @@ export class LessonComponent implements OnInit {
   button1 = 'Cancelar';
   button2 = 'Borrar';
 
-  constructor(private loginService: LoginService,
+  constructor(public loginService: LoginService,
               private lessonService: LessonService,
               private router: Router,
               private activatedRoute: ActivatedRoute,

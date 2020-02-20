@@ -18,7 +18,7 @@ export class MyCoursesComponent implements OnInit {
   searchField = '';
   showingCourses: Course[];
 
-  constructor(private loginService: LoginService,
+  constructor(public loginService: LoginService,
               private courseService: CourseService,
               private router: Router,
               private tabService: TabService,

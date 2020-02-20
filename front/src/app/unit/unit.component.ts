@@ -11,14 +11,11 @@ import {TabService} from "../tab/tab.service";
 
 export class UnitComponent implements OnInit {
 
-  private unit: Unit;
-  private activeTab = 0;
-  private showMenu = true;
+  unit: Unit;
+  activeTab = 0;
+  showMenu = true;
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private unitService: UnitService,
-              private tabService: TabService) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private unitService: UnitService, private tabService: TabService) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -30,11 +27,11 @@ export class UnitComponent implements OnInit {
     });
   }
 
-  private activateTab(tab: number) {
+  activateTab(tab: number) {
     this.activeTab = tab;
   }
 
-  private setShowMenu(showMenu: boolean) {
+  setShowMenu(showMenu: boolean) {
     this.showMenu = showMenu;
   }
 

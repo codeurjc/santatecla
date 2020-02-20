@@ -14,7 +14,7 @@ export class MenuComponent {
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private tabService: TabService) {}
 
   logout() {
