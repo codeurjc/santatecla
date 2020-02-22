@@ -4,7 +4,7 @@
 
     <div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
 
-      <div class="no-results" *ngIf="getFocusedUnits() <= 0">Ninguna unidad seleccionada</div>
+      <div class="no-results" *ngIf="getFocusedUnits().length <= 0">Ninguna unidad seleccionada</div>
       <mat-selection-list class="focused-unit-list">
         <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="confirmSelectUnit(unit)" [selected]="true">
           <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>
