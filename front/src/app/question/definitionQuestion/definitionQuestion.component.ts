@@ -25,7 +25,7 @@ export class DefinitionQuestionComponent implements OnInit {
   constructor(
     private router: Router,
     private questionService: DefinitionQuestionService,
-    private loginService: LoginService,
+    public loginService: LoginService,
     private activatedRoute: ActivatedRoute) {
     this.questionDone = false;
   }

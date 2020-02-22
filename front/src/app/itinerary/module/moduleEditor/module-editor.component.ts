@@ -56,7 +56,7 @@ export class ModuleEditorComponent implements OnInit {
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private unitService: UnitService,
               private bottomSheet: MatBottomSheet,
               private tabService: TabService,

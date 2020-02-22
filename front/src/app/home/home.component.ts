@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 export class HomeComponent implements OnInit {
 
   constructor(private tabService: TabService,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private router: Router) {}
 
   ngOnInit() {

@@ -26,7 +26,7 @@ export class ListQuestionComponent implements OnInit {
   constructor(
     private questionService: ListQuestionService,
     private activatedRoute: ActivatedRoute,
-    private loginService: LoginService,
+    public loginService: LoginService,
     private router: Router) {
     this.questionDone = false;
     this.choosenListAnswers = [];
