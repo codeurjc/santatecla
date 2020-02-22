@@ -9,8 +9,6 @@ public class Slide {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
-    private String type;
-
     private String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -30,7 +28,10 @@ public class Slide {
         this.content = content;
     }
 
-    public void update(Slide slide) { }
+    public void update(Slide slide) {
+        setName(slide.getName());
+        setContent(slide.getContent());
+    }
 
     public void addContent(String content) {
         this.content = this.content + content;
@@ -44,10 +45,6 @@ public class Slide {
         return id;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public String getName() { return name; }
 
     public String getContent() { return content; }
@@ -56,11 +53,8 @@ public class Slide {
         this.id = id;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public void setName(String name) { this.name = name; }
 
     public void setContent(String content) { this.content = content; }
+
 }
