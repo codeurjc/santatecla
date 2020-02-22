@@ -784,10 +784,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       }
     } else {
       if ((target.tagName === 'rect') || (target.tagName === 'text')) {
-        if ((this.creatingRelation.relationType === RelationType.COMPOSITION) || (this.creatingRelation.relationType === RelationType.AGGREGATION)) {
-          this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.creatingRelation.outgoing), this.getUnitById(this.getSelectedUnitId(target)));
-        } else {
+        if (this.creatingRelation.relationType === RelationType.INHERITANCE) {
           this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.getSelectedUnitId(target)), this.getUnitById(this.creatingRelation.outgoing));
+        } else {
+          this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.creatingRelation.outgoing), this.getUnitById(this.getSelectedUnitId(target)));
         }
       }
       this.creatingRelation = null;
