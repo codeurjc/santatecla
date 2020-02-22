@@ -3,6 +3,17 @@
   <body>
 
     <div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
+
+      <div class="no-results" *ngIf="getFocusedUnits() <= 0">Ninguna unidad seleccionada</div>
+      <mat-selection-list class="focused-unit-list">
+        <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="confirmSelectUnit(unit)" [selected]="true">
+          <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>
+          <span class="unit-name">{{getUnitName(unit.name)}}</span>
+        </mat-list-option>
+      </mat-selection-list>
+
+      <hr>
+
       <mat-form-field appearance="outline" id="search">
         <mat-label>
           <mat-icon id="search-icon">search</mat-icon>
@@ -16,17 +27,12 @@
       </button>
 
       <mat-selection-list class="result-list" *ngIf="results.length > 0">
-        <mat-list-option class="result" *ngFor="let result of results" (click)="confirmSelectUnit(result)" [selected]="focusedUnits.has(result.id.toString())">
-          <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
-          <span class="unit-name">{{getUnitName(result.name)}}</span>
-        </mat-list-option>
-      </mat-selection-list>
-
-      <mat-selection-list class="result-list" *ngIf="results.length <= 0">
-        <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="confirmSelectUnit(unit)" [selected]="true">
-          <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>
-          <span class="unit-name">{{getUnitName(unit.name)}}</span>
-        </mat-list-option>
+        <span *ngFor="let result of results">
+          <mat-list-option class="result" (click)="confirmSelectUnit(result)" *ngIf="!focusedUnits.has(result.id.toString())" [selected]="false">
+            <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
+            <span class="unit-name">{{getUnitName(result.name)}}</span>
+          </mat-list-option>
+        </span>
       </mat-selection-list>
     </div>
 
