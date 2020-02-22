@@ -30,7 +30,7 @@
 
 .result-list {
   padding: 0 0.2rem 0 0.2rem;
-  height: calc(100vh - 9rem);
+  margin-bottom: 1rem;
 }
 
 .no-results {
