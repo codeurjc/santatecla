@@ -23,6 +23,7 @@ public class Unit {
     private String name;
     
     @OneToMany
+    @OrderColumn
     private List<Card> cards;
 
     @OneToMany
