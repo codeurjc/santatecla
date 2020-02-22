@@ -54,7 +54,8 @@ export class UnitsQuestionsToolComponent implements OnInit {
 
   openLink(event: MouseEvent, text: string): void {
     this.clipboardService.copyFromContent(text);
-    this.bottomSheetRef.dismiss();
+    this.data = text;
+    this.bottomSheetRef.dismiss(this.data);
     event.preventDefault();
   }
 

@@ -1,7 +1,7 @@
 import { Unit } from '../../../unit/unit.model';
 import { SlideService } from '../../../slide/slide.service';
 import { Lesson } from '../lesson.model';
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { TdDialogService } from '@covalent/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
@@ -28,12 +28,11 @@ import {DefinitionQuestion} from '../../../question/definitionQuestion/definitio
 import {ListQuestion} from '../../../question/listQuestion/listQuestion.model';
 import {TestQuestion} from '../../../question/testQuestion/testQuestion.model';
 import {QuestionService} from '../../../question/question.service';
-import {AddQuestionDialogComponent} from '../../../question/addQuestionDialog/addQuestionDialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDialog/answerQuestionDialog.component';
 import {Question} from '../../../question/question.model';
-import {UnitsBlocksToolComponent} from '../../module/moduleEditor/units-blocks-tool.component';
 import {UnitsQuestionsToolComponent} from '../lessonTools/units-questions-tool.component';
+import {ClipboardService} from 'ngx-clipboard';
 
 
 function convertToHTML(text) {
@@ -83,6 +82,8 @@ export class LessonEditorComponent implements OnInit {
   questions: Question[];
   questionsCount: number;
 
+  cursorPosition: number;
+
   constructor(private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -99,7 +100,8 @@ export class LessonEditorComponent implements OnInit {
               private imageService: ImageService,
               private cardService: CardService,
               private questionService: QuestionService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private clipboardService: ClipboardService) {
     this.showSpinner = true;
   }
 
@@ -436,19 +438,47 @@ export class LessonEditorComponent implements OnInit {
   }
 
   openCardsBottomSheet(): void {
-    this.bottomSheet.open(UnitsCardsToolComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(UnitsCardsToolComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
   }
 
   openImageBottomSheet(): void {
-    this.bottomSheet.open(ImageComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(ImageComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
   }
 
   openSlidesBottomSheet(): void {
-    this.bottomSheet.open(LessonSlidesToolComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(LessonSlidesToolComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
   }
 
   openQuestionsBottomSheet(): void {
-    this.bottomSheet.open(UnitsQuestionsToolComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(UnitsQuestionsToolComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
+  }
+
+  getCursorPosition() {
+    const textArea = document.getElementById('text-area-editor');
+    // @ts-ignore
+    this.cursorPosition = textArea.selectionStart;
+  }
+
+  pasteFromClipboard(result) {
+    const newLessonContent = this.lessonContent.split('');
+    newLessonContent.splice(this.cursorPosition, 0, result);
+    this.lessonContent = '';
+    newLessonContent.forEach((letter) => {
+      this.lessonContent += letter;
+    });
+    this.updateHTMLView();
   }
 
   nextSlide() {
