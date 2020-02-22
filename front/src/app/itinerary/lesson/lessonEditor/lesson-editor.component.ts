@@ -316,15 +316,15 @@ export class LessonEditorComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.getEmbebedContent(parameters[1], null, parameters[2], content, contentCounter, 'card');
+          this.getEmbebedContent(parameters[2], null, parameters[1], content, contentCounter, 'card');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'slide') {
           this.position.push(counter);
-          this.getEmbebedContent(parameters[1], parameters[2], parameters[3], content, contentCounter, 'slide');
+          this.getEmbebedContent(parameters[3], parameters[2], parameters[1], content, contentCounter, 'slide');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), questionCounter, Number(parameters[2]), content, contentCounter, 'question');
+          this.getEmbebedContent(Number(parameters[2]), questionCounter, Number(parameters[1]), content, contentCounter, 'question');
           questionCounter = questionCounter + 1;
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'image') {
