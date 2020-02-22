@@ -27,7 +27,7 @@ export class ModuleProgressComponent implements OnInit {
   showingModuleResults: UserResult[];
 
   constructor(private courseService: CourseService,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private activatedRoute: ActivatedRoute,
               private progressService: ProgressService) {
   }

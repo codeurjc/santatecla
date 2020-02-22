@@ -10,9 +10,6 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private loginService: LoginService) {
-  }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, public loginService: LoginService) {}
 
 }

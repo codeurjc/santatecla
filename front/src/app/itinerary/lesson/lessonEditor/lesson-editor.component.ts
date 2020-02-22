@@ -87,7 +87,7 @@ export class LessonEditorComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private dialogService: TdDialogService,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private lessonService: LessonService,
               private definitionQuestionService: DefinitionQuestionService,
               private unitService: UnitService,

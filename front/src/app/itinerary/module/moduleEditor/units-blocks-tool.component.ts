@@ -26,7 +26,7 @@ export class UnitsBlocksToolComponent implements OnInit {
               private unitService: UnitService,
               private moduleService: ModuleService,
               private bottomSheetRef: MatBottomSheetRef<UnitsBlocksToolComponent>,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private clipboardService: ClipboardService,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
   }

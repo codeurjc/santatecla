@@ -26,7 +26,7 @@ export class TestQuestionComponent implements OnInit {
   constructor(
     private router: Router,
     private questionService: TestQuestionService,
-    private loginService: LoginService,
+    public loginService: LoginService,
     private activatedRoute: ActivatedRoute) {
     this.questionDone = false;
     this.alreadyDone = false;
