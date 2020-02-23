@@ -205,63 +205,63 @@ export class LessonEditorComponent implements OnInit {
     }
   }
 
-  async getEmbebedContent(content1: any, content2: any, unit: any, content: string, contentCounter: number, type: string) {
-    let contentEmbebed;
+  async getEmbeddedContent(content1: any, content2: any, unit: any, content: string, contentCounter: number, type: string) {
+    let contentEmbedded;
     if (+unit) {
       if (type === 'card') {
-        contentEmbebed = await this.unitService.getCard(+content1, +unit).toPromise().catch((error) => {});
-        if (typeof contentEmbebed !== 'undefined') {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
+        contentEmbedded = await this.unitService.getCard(+content1, +unit).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, contentEmbedded.content);
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       } else if (type === 'slide') {
         this.subSlide = true;
-        contentEmbebed = await this.unitLessonService.getSlideFormLesson(+content1, +content2, +unit).toPromise().catch((error) => {});
-        if (typeof contentEmbebed !== 'undefined') {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed.content.split('=== ')[1]);
+        contentEmbedded = await this.unitLessonService.getSlideFormLesson(+content1, +content2, +unit).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, contentEmbedded.content.split('=== ')[1]);
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       } else if (type === 'question') {
-        contentEmbebed = await this.questionService.getUnitQuestion(unit, content1).toPromise().catch((error) => {});
-        if (typeof contentEmbebed !== 'undefined') {
-          this.extractedData.splice(contentCounter, 1, '*Ejercicio ' + content2 + '* ' + contentEmbebed.questionText);
+        contentEmbedded = await this.questionService.getUnitQuestion(unit, content1).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, '*Ejercicio ' + content2 + '* ' + contentEmbedded.questionText);
           let exist = false;
           this.newQuestionsIds.forEach((question) => {
-            if (question === contentEmbebed.id) {
+            if (question === contentEmbedded.id) {
               exist = true;
               return;
             }
           });
-          if (!exist) { this.newQuestionsIds.splice(content2, 0, contentEmbebed.id); }
+          if (!exist) { this.newQuestionsIds.splice(content2, 0, contentEmbedded.id); }
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       }
     } else {
       if (type === 'card') {
-        contentEmbebed = await this.cardService.getCardByName(unit, content1).toPromise().catch((error) => {});
-        if ((typeof contentEmbebed === 'undefined') || (contentEmbebed.length > 1)) {
+        contentEmbedded = await this.cardService.getCardByName(unit, content1).toPromise().catch((error) => {});
+        if ((typeof contentEmbedded === 'undefined') || (contentEmbedded.length > 1)) {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         } else {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content);
+          this.extractedData.splice(contentCounter, 1, contentEmbedded[0].content);
         }
       } else if (type === 'slide') {
         this.subSlide = true;
-        contentEmbebed = await this.slideService.getSlideByName(unit, content2, content1).toPromise().catch((error) => {});
-        if ((typeof contentEmbebed === 'undefined') || (contentEmbebed.length > 1)) {
+        contentEmbedded = await this.slideService.getSlideByName(unit, content2, content1).toPromise().catch((error) => {});
+        if ((typeof contentEmbedded === 'undefined') || (contentEmbedded.length > 1)) {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         } else {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content.split('=== ')[1]);
+          this.extractedData.splice(contentCounter, 1, contentEmbedded[0].content.split('=== ')[1]);
         }
       }
     }
 
     if (type === 'image') {
-      contentEmbebed = await this.imageService.getImage(content1).toPromise().catch((error) => {});
-      if (typeof contentEmbebed !== 'undefined') {
-        const image = this.convertImage(contentEmbebed.image);
+      contentEmbedded = await this.imageService.getImage(content1).toPromise().catch((error) => {});
+      if (typeof contentEmbedded !== 'undefined') {
+        const image = this.convertImage(contentEmbedded.image);
         const img = '++++\n' +
           '<img class="img-lesson" src="' + image + '">\n' +
           '++++\n' +
@@ -322,20 +322,20 @@ export class LessonEditorComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.getEmbebedContent(parameters[2], null, parameters[1], content, contentCounter, 'card');
+          this.getEmbeddedContent(parameters[2], null, parameters[1], content, contentCounter, 'card');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'slide') {
           this.position.push(counter);
-          this.getEmbebedContent(parameters[3], parameters[2], parameters[1], content, contentCounter, 'slide');
+          this.getEmbeddedContent(parameters[3], parameters[2], parameters[1], content, contentCounter, 'slide');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[2]), questionCounter, Number(parameters[1]), content, contentCounter, 'question');
+          this.getEmbeddedContent(Number(parameters[2]), questionCounter, Number(parameters[1]), content, contentCounter, 'question');
           questionCounter = questionCounter + 1;
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'image') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), null, null, content, contentCounter, 'image');
+          this.getEmbeddedContent(Number(parameters[1]), null, null, content, contentCounter, 'image');
           contentCounter = contentCounter + 1;
         }
       }
