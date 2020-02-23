@@ -24,8 +24,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add questions to lesson
 - Back security included
 - Basic API Testing
+- Collapsible cards
+- Cards can be reordered
+- Auto-Paste when inserting in lesson editor
 
 ### Fixed
 
 - Dont show empty units adding a new course
 - The lesson view dosn´t crash when an insert error happens
+- The lesson view dosn´t crash when you insert a slide in the same slide
+- Lesson editor and Firefox compatibility
+- Changed insert parameters order
