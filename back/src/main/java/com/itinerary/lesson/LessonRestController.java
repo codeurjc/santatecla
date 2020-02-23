@@ -51,9 +51,12 @@ public class LessonRestController extends GeneralRestController {
         for (Slide slide: lesson.getSlides()) {
             this.slideService.save(slide);
         }
-        List<Long> diferences = lesson.compareId(lesson.getSlides());
-        for (long diferenceId: diferences) {
-            this.slideService.delete(diferenceId);
+        Optional<Lesson> l = this.lessonService.findOne(id);
+        if (l.isPresent()) {
+            List<Long> diferences = l.get().compareId(lesson.getSlides());
+            for (long diferenceId: diferences) {
+                this.slideService.delete(diferenceId);
+            }
         }
         this.lessonService.save(lesson);
         return new ResponseEntity<>(lesson, HttpStatus.OK);
