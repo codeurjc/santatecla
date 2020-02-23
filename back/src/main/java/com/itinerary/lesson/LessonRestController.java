@@ -47,24 +47,16 @@ public class LessonRestController extends GeneralRestController {
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<Lesson> updateLesson(@PathVariable long id, @RequestBody Lesson lesson){
+    public ResponseEntity<Lesson> updateLesson(@PathVariable long id, @RequestBody Lesson lesson) {
         for (Slide slide: lesson.getSlides()) {
-            Slide s = this.slideService.findOne(slide.getId()).get();
-            s.update(slide);
-            this.slideService.save(s);
+            this.slideService.save(slide);
         }
-        Optional<Lesson> l = this.lessonService.findOne(id);
-        if (l.isPresent()) {
-            List<Long> diferences = l.get().compareId(lesson.getSlides());
-            for (long diferenceId: diferences) {
-                this.slideService.delete(diferenceId);
-            }
-            lesson.setSlides(l.get().getSlides());
-            l.get().update(lesson);
-            this.lessonService.save(l.get());
-            return new ResponseEntity<>(l.get(), HttpStatus.OK);
+        List<Long> diferences = lesson.compareId(lesson.getSlides());
+        for (long diferenceId: diferences) {
+            this.slideService.delete(diferenceId);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        this.lessonService.save(lesson);
+        return new ResponseEntity<>(lesson, HttpStatus.OK);
     }
 
 }
