@@ -77,6 +77,7 @@ export class LessonEditorComponent implements OnInit {
   componentsChecker: number;
 
   subSlide: boolean;
+  subSlideCount: number;
 
   newQuestionsIds: number[];
   questions: Question[];
@@ -142,6 +143,7 @@ export class LessonEditorComponent implements OnInit {
 
   loadItinerary() {
     this.newQuestionsIds = [];
+    this.subSlideCount = 0;
 
     this.lessonService.getLesson(this.lessonId).subscribe((data: Lesson) => {
       this.lesson = {
@@ -172,21 +174,25 @@ export class LessonEditorComponent implements OnInit {
 
   viewHTMLVersion() {
     this.contentHTML = [];
-    this.slidesContentExtended = this.lessonContentExtended.split('===');
-    if (!this.loginService.isAdmin) {
-      this.index = '=== Índice\n\n';
-      this.lesson.slides.forEach( (slide: Slide) => {
-        this.index = this.index + '. ' + slide.name + '\n';
-      });
-      this.contentHTML.push(convertToHTML(this.index));
-    }
-    let counter = 0;
-    this.slidesContentExtended.forEach( (slide: string) => {
-      if (counter !== 0) {
-        this.contentHTML.push(convertToHTML('=== ' + slide + '\n'));
+    if (this.subSlideCount > 50) {
+      this.contentHTML.push('<h2>ERROR</h2><h3>Se ha intruducido una slide dentro de si misma (Recursividad infinita)</h3>');
+    } else {
+      this.slidesContentExtended = this.lessonContentExtended.split('===');
+      if (!this.loginService.isAdmin) {
+        this.index = '=== Índice\n\n';
+        this.lesson.slides.forEach( (slide: Slide) => {
+          this.index = this.index + '. ' + slide.name + '\n';
+        });
+        this.contentHTML.push(convertToHTML(this.index));
       }
-      counter = counter + 1;
-    });
+      let counter = 0;
+      this.slidesContentExtended.forEach( (slide: string) => {
+        if (counter !== 0) {
+          this.contentHTML.push(convertToHTML('=== ' + slide + '\n'));
+        }
+        counter = counter + 1;
+      });
+    }
   }
 
   slidesToContent(slides: Slide[]) {
@@ -355,7 +361,8 @@ export class LessonEditorComponent implements OnInit {
       }
     });
     if (this.componentsChecker === this.contentCount) {
-      if (this.subSlide) {
+      if (this.subSlide && (this.subSlideCount <= 50)) {
+        this.subSlideCount = this.subSlideCount + 1;
         this.extendContent(this.lessonContentExtended);
       } else {
         this.showSpinner = false;
@@ -494,7 +501,9 @@ export class LessonEditorComponent implements OnInit {
   scrollText() {
     const div = document.getElementById('slide-area-editor');
     const div2 = document.getElementById('text-area-editor');
-    div.scrollTop = div2.scrollTop;
+    if (div) {
+      div.scrollTop = div2.scrollTop;
+    }
   }
 
   openQuestion(questionID: number, subtype: string) {
