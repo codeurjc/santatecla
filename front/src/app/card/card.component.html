@@ -12,8 +12,8 @@
       <span id="spinner-text">Cargando...</span>
     </div>
 
-    <div #cardList class="cardList">
-      <mat-accordion *ngFor="let card of cards; let i = index">
+    <div cdkDropList #cardList class="cardList" (cdkDropListDropped)="drop($event)">
+      <mat-accordion class="card-container" *ngFor="let card of cards; let i = index" cdkDrag>
         <mat-icon id="delete-card-button" (click)="deleteCard(card.id, i)" matTooltip="Eliminar">delete</mat-icon>
         <mat-icon *ngIf="cardsView[i]" class="edit-card-button" (click)="editCard(i)" matTooltip="Editar">edit</mat-icon>
         <mat-icon *ngIf="!cardsView[i]" class="edit-card-button" (click)="viewCard(i)" matTooltip="Visualizar">remove_red_eye</mat-icon>

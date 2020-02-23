@@ -10,6 +10,7 @@ import Asciidoctor from 'asciidoctor';
 import {ImageComponent} from '../images/image.component';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {ImageService} from '../images/image.service';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -66,6 +67,40 @@ export class CardComponent implements OnInit, AfterViewChecked {
         this.showSpinner = false;
       });
     });
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousIndex !== event.currentIndex) {
+      let choosen;
+      if (!this.cardsView[event.previousIndex]) {
+        choosen = false;
+      } else {
+        choosen = true;
+      }
+      if (event.previousIndex > event.currentIndex) {
+        if ((event.previousIndex - event.currentIndex) > 1) {
+          for (let i = event.previousIndex; i > event.currentIndex; i--) {
+            this.cardsView[i] = this.cardsView[i - 1];
+          }
+        } else {
+          this.cardsView[event.previousIndex] = this.cardsView[event.currentIndex];
+        }
+      } else {
+        if ((event.currentIndex - event.previousIndex) > 1) {
+          for (let i = event.previousIndex; i < event.currentIndex; i++) {
+            this.cardsView[i] = this.cardsView[i + 1];
+          }
+        } else {
+          this.cardsView[event.previousIndex] = this.cardsView[event.currentIndex];
+        }
+      }
+      if (!choosen) {
+        this.cardsView[event.currentIndex] = false;
+      } else {
+        this.cardsView[event.currentIndex] = true;
+      }
+    }
+    moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
   }
 
   ngAfterViewChecked() {

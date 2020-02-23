@@ -2,8 +2,12 @@
   left: 0;
   right: 0;
   top: 2rem;
+  width: 100%;
   padding: 1rem;
-  margin: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 .saved-card {
@@ -32,7 +36,7 @@
   position: absolute;
   right: 3rem;
   cursor: pointer;
-  margin-top: 1.7rem;
+  margin-top: 2.7rem;
 }
 
 .edit-card-button {
@@ -40,7 +44,7 @@
   position: absolute;
   right: 5rem;
   cursor: pointer;
-  margin-top: 1.7rem;
+  margin-top: 2.7rem;
 }
 
 #empty-message {
@@ -101,6 +105,13 @@
 
 .cardList {
   margin-top: 4rem;
+  display: block;
+  overflow: hidden;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
 }
 
 .card-header {
@@ -109,4 +120,16 @@
 
 #card-title {
   margin-top: 2rem;
+}
+
+.cardList.cdk-drop-list-dragging .card-container:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
