@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
 import { TdDialogService } from '@covalent/core';
-import {TabService} from '../tab/tab.service';
+import { TabService } from '../tab/tab.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmActionComponent } from '../confirmAction/confirm-action.component';
 
@@ -61,6 +61,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
               private tabService: TabService, private dialog: MatDialog) {}
 
   ngOnInit() {
+    if (this.tabService.unitId) {
+      this.unitService.getUnit(this.tabService.unitId).subscribe((unit: Unit) => {
+        this.addFocusedUnit(this.tabService.unitId.toString(), unit);
+        this.init();
+      });
+    } else {
+      this.init();
+    }
+  }
+
+  init() {
     this.tabService.setUnits();
     window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
@@ -742,12 +753,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.createUnit(RelationType.ASSOCIATION).id;
       } else if ((target.id === 'use-incoming-button') || (target.parentElement.id === 'use-incoming-button')) {
         this.createUnit(RelationType.USE).id;
-      } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
-        this.initCreatingRelation();
-        this.creatingRelation.relationType = RelationType.COMPOSITION;
       } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement.id === 'inheritance-outgoing-button')) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.INHERITANCE;
+      } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
+        this.initCreatingRelation();
+        this.creatingRelation.relationType = RelationType.COMPOSITION;
       } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement.id === 'aggregation-outgoing-button')) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.AGGREGATION;
@@ -773,7 +784,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       }
     } else {
       if ((target.tagName === 'rect') || (target.tagName === 'text')) {
-        this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.getSelectedUnitId(target)), this.getUnitById(this.creatingRelation.outgoing));
+        if (this.creatingRelation.relationType === RelationType.INHERITANCE) {
+          this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.getSelectedUnitId(target)), this.getUnitById(this.creatingRelation.outgoing));
+        } else {
+          this.createRelation(this.creatingRelation.relationType, this.getUnitById(this.creatingRelation.outgoing), this.getUnitById(this.getSelectedUnitId(target)));
+        }
       }
       this.creatingRelation = null;
       this.umlNewPath.nativeElement.setAttribute('d','');
@@ -988,9 +1003,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     let connector = '';
     relations.forEach((relation: any) => {
       switch (relation.relationType) {
-        case RelationType.ASSOCIATION: { connector = '<--'; break; }
-        case RelationType.AGGREGATION: { connector = '"1"o--"many"'; break; }
-        case RelationType.COMPOSITION: { connector = '"0"*--"0..n"'; break; }
+        case RelationType.ASSOCIATION: { connector = '-->'; break; }
+        case RelationType.AGGREGATION: { connector = '"1"o-->"many"'; break; }
+        case RelationType.COMPOSITION: { connector = '"0"*-->"0..n"'; break; }
         case RelationType.INHERITANCE: { connector = '<|--'; break; }
         case RelationType.USE: { connector = '--'; break; }
         default: { throw new Error('Unrecognized uml relation type'); }

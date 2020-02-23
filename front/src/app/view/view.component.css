@@ -1,5 +1,6 @@
 #lateral-panel {
   z-index: 600;
+  overflow-y: auto;
 }
 
 #top-panel {
@@ -23,10 +24,24 @@
   right: 0;
 }
 
+.focused-unit-list {
+  padding: 0 0.2rem 0 0.2rem;
+}
+
 .result-list {
   padding: 0 0.2rem 0 0.2rem;
-  height: calc(100vh - 9rem);
-  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.no-results {
+  color: #cda3db;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+hr {
+  border: #965fa8 solid 1px;
+  margin: 1.5rem 0 1rem 0;
 }
 
 ::ng-deep .mat-list-text {
@@ -79,7 +94,7 @@ mat-label {
   border-radius: 0.2rem;
   top: 120%;
   z-index: 2;
-  width: 8rem;
+  width: 4rem;
 }
 
 #up-button {
@@ -202,7 +217,7 @@ mat-label {
   border-radius: 0.2rem;
   background-color: #fdf7ff;
   cursor: pointer;
-  width: 50%;
+  width: 100%;
   border: none;
 }
 
