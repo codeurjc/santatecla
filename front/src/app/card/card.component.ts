@@ -72,6 +72,7 @@ export class CardComponent implements OnInit, AfterViewChecked {
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousIndex !== event.currentIndex) {
       let choosen;
+      const prevPretty = this.prettyCards[event.previousIndex];
       if (!this.cardsView[event.previousIndex]) {
         choosen = false;
       } else {
@@ -81,17 +82,21 @@ export class CardComponent implements OnInit, AfterViewChecked {
         if ((event.previousIndex - event.currentIndex) > 1) {
           for (let i = event.previousIndex; i > event.currentIndex; i--) {
             this.cardsView[i] = this.cardsView[i - 1];
+            this.prettyCards[i] = this.prettyCards[i - 1];
           }
         } else {
           this.cardsView[event.previousIndex] = this.cardsView[event.currentIndex];
+          this.prettyCards[event.previousIndex] = this.prettyCards[event.currentIndex];
         }
       } else {
         if ((event.currentIndex - event.previousIndex) > 1) {
           for (let i = event.previousIndex; i < event.currentIndex; i++) {
             this.cardsView[i] = this.cardsView[i + 1];
+            this.prettyCards[i] = this.prettyCards[i + 1];
           }
         } else {
           this.cardsView[event.previousIndex] = this.cardsView[event.currentIndex];
+          this.prettyCards[event.previousIndex] = this.prettyCards[event.currentIndex];
         }
       }
       if (!choosen) {
@@ -99,8 +104,11 @@ export class CardComponent implements OnInit, AfterViewChecked {
       } else {
         this.cardsView[event.currentIndex] = true;
       }
+      this.prettyCards[event.currentIndex] = prevPretty;
     }
     moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
+    this.unit.cards = this.cards;
+    this.unitService.updateUnit(+this.unit.id, this.unit).subscribe();
   }
 
   ngAfterViewChecked() {

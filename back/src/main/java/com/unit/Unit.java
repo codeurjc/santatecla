@@ -86,6 +86,10 @@ public class Unit {
         return this.cards;
     }
 
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
     public Card getCard(long id) {
         for (Card card: this.cards){
             if (card.getId() == id){
