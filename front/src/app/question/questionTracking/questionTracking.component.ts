@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {QuestionService} from '../question.service';
 import {Question} from '../question.model';
-import {MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {TabService} from '../../tab/tab.service';
 import {UnitService} from '../../unit/unit.service';
 import {DefinitionAnswer} from '../definitionQuestion/definitionAnswer.model';
@@ -24,6 +24,8 @@ export class QuestionTrackingComponent implements OnInit {
 
   displayedColumnsNotCorrected: string[] = ['answer', 'correct', 'wrong'];
   dataSourceNotCorrected;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   displayedColumnsCorrected: string[] = ['result', 'answer'];
   dataSourceCorrected;
@@ -162,5 +164,13 @@ export class QuestionTrackingComponent implements OnInit {
         this.ngOnInit();
       }
     );
+  }
+
+  applyFilterCorrected(filterValue: string) {
+    this.dataSourceCorrected.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilterNotCorrected(filterValue: string) {
+    this.dataSourceNotCorrected.filter = filterValue.trim().toLowerCase();
   }
 }
