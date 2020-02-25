@@ -161,6 +161,17 @@ th.mat-sort-header-sorted {
   text-align: center;
 }
 
+.definition-chart-cards {
+  display: inline-block;
+  width: 30%;
+  text-align: center;
+}
+
+.corrected-card {
+  display: inline-block;
+  width: 180%;
+}
+
 .center-pie-chart {
   display: inline-block;
   margin-left: 10%;

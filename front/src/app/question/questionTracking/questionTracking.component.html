@@ -10,7 +10,7 @@
   <h3 class="center-title">Pregunta: {{this.question?.questionText}}</h3>
 
   <div *ngIf="this.resultsReady" class="display-flex">
-    <mat-card class="charts-cards">
+    <mat-card [ngClass]="this.questionType == 'DefinitionQuestion'?'definition-chart-cards':'charts-cards'">
       <mat-card-title class="center-title">Respuestas correctas e incorrectas</mat-card-title>
       <mat-card-content class="center-pie-chart">
         <ngx-charts-pie-chart
@@ -23,7 +23,7 @@
     </mat-card>
 
     <div *ngIf="this.questionType == 'DefinitionQuestion'">
-      <mat-card class="charts-card" *ngIf="this.resultsReady">
+      <mat-card class="corrected-card" *ngIf="this.resultsReady">
         <mat-card-title class="card-title">Respuestas corregidas</mat-card-title>
         <mat-card-content class="center-corrected-table">
 
