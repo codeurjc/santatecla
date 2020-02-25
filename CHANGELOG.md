@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cards can be reordered
 - Auto-Paste when inserting in lesson editor
 
+### Changed
+
+- Definition question tables moved
+
 ### Fixed
 
 - The lesson view dosn´t crash when you insert a slide in the same slide
