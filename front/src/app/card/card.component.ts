@@ -10,6 +10,8 @@ import Asciidoctor from 'asciidoctor';
 import {ImageComponent} from '../images/image.component';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {ImageService} from '../images/image.service';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {MatAccordion} from '@angular/material/expansion';
 
 function convertToHTML(text) {
   const asciidoctor = Asciidoctor();
@@ -23,7 +25,7 @@ function convertToHTML(text) {
   styleUrls: ['./card.component.css']
 })
 
-export class CardComponent implements OnInit, AfterViewChecked {
+export class CardComponent implements OnInit {
 
   @ViewChild('cardList') cardList: ElementRef;
 
@@ -32,14 +34,14 @@ export class CardComponent implements OnInit, AfterViewChecked {
   unit: Unit;
   showSpinner = false;
 
-  contentCount: number;
-
   cardsView: boolean[];
   prettyCards: any[];
 
   confirmText = 'Se eliminará la ficha permanentemente';
   button1 = 'Cancelar';
   button2 = 'Borrar';
+
+  cardsCounter: number;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -50,6 +52,7 @@ export class CardComponent implements OnInit, AfterViewChecked {
               private imageService: ImageService) { }
 
   ngOnInit() {
+    this.cardsCounter = 0;
     this.activatedRoute.params.subscribe(params => {
       this.unitId = params.unitId;
       this.showSpinner = true;
@@ -63,23 +66,56 @@ export class CardComponent implements OnInit, AfterViewChecked {
           this.prettyCards.push('');
           this.cardContentProcessor(card.content, index);
         });
-        this.showSpinner = false;
       });
     });
   }
 
-  ngAfterViewChecked() {
-    this.cardList.nativeElement.childNodes.forEach((card) => {
-      try {
-        this.fitContent(card.childNodes[2].firstChild.firstChild.childNodes[2].firstChild);
-      } catch (e) {}
-    });
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousIndex !== event.currentIndex) {
+      let choosen;
+      const prevPretty = this.prettyCards[event.previousIndex];
+      if (!this.cardsView[event.previousIndex]) {
+        choosen = false;
+      } else {
+        choosen = true;
+      }
+      if (event.previousIndex > event.currentIndex) {
+        if ((event.previousIndex - event.currentIndex) > 1) {
+          for (let i = event.previousIndex; i > event.currentIndex; i--) {
+            this.cardsView[i] = this.cardsView[i - 1];
+            this.prettyCards[i] = this.prettyCards[i - 1];
+          }
+        } else {
+          this.cardsView[event.previousIndex] = this.cardsView[event.currentIndex];
+          this.prettyCards[event.previousIndex] = this.prettyCards[event.currentIndex];
+        }
+      } else {
+        if ((event.currentIndex - event.previousIndex) > 1) {
+          for (let i = event.previousIndex; i < event.currentIndex; i++) {
+            this.cardsView[i] = this.cardsView[i + 1];
+            this.prettyCards[i] = this.prettyCards[i + 1];
+          }
+        } else {
+          this.cardsView[event.previousIndex] = this.cardsView[event.currentIndex];
+          this.prettyCards[event.previousIndex] = this.prettyCards[event.currentIndex];
+        }
+      }
+      if (!choosen) {
+        this.cardsView[event.currentIndex] = false;
+      } else {
+        this.cardsView[event.currentIndex] = true;
+      }
+      this.prettyCards[event.currentIndex] = prevPretty;
+    }
+    moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
+    this.unit.cards = this.cards;
+    this.unitService.updateUnit(+this.unit.id, this.unit).subscribe();
   }
 
   cardContentProcessor(content: string, index: number) {
-    this.contentCounterFunction(content);
-    let extractedData = [];
-    let position = [];
+    const contentCount = this.contentCounterFunction(content);
+    const extractedData = [];
+    const position = [];
     let counter = 0;
     let contentCounter = 0;
     const lineas = content.split('\n');
@@ -89,19 +125,19 @@ export class CardComponent implements OnInit, AfterViewChecked {
         const parameters = words[1].split('/');
         if (parameters[0] === 'image') {
           position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), content, contentCounter, 'image', extractedData, position, index);
+          this.getEmbebedContent(Number(parameters[1]), content, contentCounter, 'image', extractedData, position, index, contentCount);
           contentCounter = contentCounter + 1;
         }
       }
-      this.addExtractedData(content, extractedData, position, index);
+      this.addExtractedData(content, extractedData, position, index, contentCount);
       counter = counter + 1;
     });
   }
 
-  addExtractedData(content: string, extractedData: any, position: any, index: number) {
+  addExtractedData(content: string, extractedData: any, position: any, index: number, contentCount: number) {
     let componentsChecker = 0;
     let cardContentExtended = '';
-    let lines = content.split('\n');
+    const lines = content.split('\n');
     for (let i = 0; i < position.length; i ++) {
       lines[position[i]] = extractedData[i];
     }
@@ -113,17 +149,20 @@ export class CardComponent implements OnInit, AfterViewChecked {
         componentsChecker = componentsChecker + 1;
       }
     });
-    if (componentsChecker === this.contentCount) {
-      this.showSpinner = false;
+    if (componentsChecker === contentCount) {
       this.prettyCards[index] = convertToHTML(cardContentExtended);
+      this.cardsCounter = this.cardsCounter + 1;
+      if (this.cardsCounter === this.cards.length) {
+        this.showSpinner = false;
+      }
     }
   }
 
-  async getEmbebedContent(content1: any, content: string, contentCounter: number, type: string, extractedData: any, position: any, index: number) {
+  async getEmbebedContent(content1: any, content: string, contentCounter: number, type: string, extractedData: any, position: any, index: number, contentCount) {
     let contentEmbebed;
 
     if (type === 'image') {
-      contentEmbebed = await this.imageService.getImage(content1).toPromise().catch((error) => console.log(error));
+      contentEmbebed = await this.imageService.getImage(content1).toPromise();
       if (typeof contentEmbebed !== 'undefined') {
         const image = this.convertImage(contentEmbebed.image);
         const img = '++++\n' +
@@ -135,21 +174,21 @@ export class CardComponent implements OnInit, AfterViewChecked {
         extractedData.splice(contentCounter, 1, 'ERROR\n');
       }
     }
-
-    this.addExtractedData(content, extractedData, position, index);
+    this.addExtractedData(content, extractedData, position, index, contentCount);
   }
 
   contentCounterFunction(content: string) {
-    this.contentCount = 0;
+    let contentCount = 0;
     let lines: string[];
     lines = content.split('\n');
     lines.forEach((line: string) => {
       let words: string[];
       words = line.split('.');
       if (words[0] === 'insert') {
-        this.contentCount = this.contentCount + 1;
+        contentCount = contentCount + 1;
       }
     });
+    return contentCount;
   }
 
   convertImage(bytes: any) {

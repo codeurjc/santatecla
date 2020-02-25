@@ -23,6 +23,7 @@ public class Unit {
     private String name;
     
     @OneToMany
+    @OrderColumn
     private List<Card> cards;
 
     @OneToMany
@@ -83,6 +84,10 @@ public class Unit {
 
     public Iterable<Card> getCards() {
         return this.cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     public Card getCard(long id) {

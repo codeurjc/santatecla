@@ -72,6 +72,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   init() {
+    this.search();
     this.tabService.setUnits();
     window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
@@ -531,7 +532,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   deleteUnit(id: string) {
     this.unitService.deleteUnit(+id).subscribe(() => {
       this.changed = false;
-      this.emptyResults();
       this.focusedUnits.delete(id);
       this.units.delete(id);
       this.focusUnit();
@@ -877,19 +877,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Search
 
   search() {
-    if (this.searchField.length > 0) {
-      this.unitService.searchByNameContaining(this.searchField).subscribe((data: any) => {
-        this.results = data;
-      }, error => {
-        console.log(error);
-      });
-    } else {
-      this.emptyResults();
-    }
-  }
-
-  emptyResults() {
-    this.results = [];
+    this.unitService.searchByNameContaining(this.searchField).subscribe((data: any) => {
+      this.results = data;
+    }, error => {
+      console.log(error);
+    });
   }
 
   getUnitPrefix(completeName: string) {

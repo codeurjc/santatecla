@@ -1,7 +1,7 @@
 import { Unit } from '../../../unit/unit.model';
 import { SlideService } from '../../../slide/slide.service';
 import { Lesson } from '../lesson.model';
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { TdDialogService } from '@covalent/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
@@ -28,12 +28,11 @@ import {DefinitionQuestion} from '../../../question/definitionQuestion/definitio
 import {ListQuestion} from '../../../question/listQuestion/listQuestion.model';
 import {TestQuestion} from '../../../question/testQuestion/testQuestion.model';
 import {QuestionService} from '../../../question/question.service';
-import {AddQuestionDialogComponent} from '../../../question/addQuestionDialog/addQuestionDialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDialog/answerQuestionDialog.component';
 import {Question} from '../../../question/question.model';
-import {UnitsBlocksToolComponent} from '../../module/moduleEditor/units-blocks-tool.component';
 import {UnitsQuestionsToolComponent} from '../lessonTools/units-questions-tool.component';
+import {ClipboardService} from 'ngx-clipboard';
 
 
 function convertToHTML(text) {
@@ -78,10 +77,13 @@ export class LessonEditorComponent implements OnInit {
   componentsChecker: number;
 
   subSlide: boolean;
+  subSlideCount: number;
 
   newQuestionsIds: number[];
   questions: Question[];
   questionsCount: number;
+
+  cursorPosition: number;
 
   constructor(private slideService: SlideService,
               private router: Router,
@@ -99,7 +101,8 @@ export class LessonEditorComponent implements OnInit {
               private imageService: ImageService,
               private cardService: CardService,
               private questionService: QuestionService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private clipboardService: ClipboardService) {
     this.showSpinner = true;
   }
 
@@ -140,6 +143,7 @@ export class LessonEditorComponent implements OnInit {
 
   loadItinerary() {
     this.newQuestionsIds = [];
+    this.subSlideCount = 0;
 
     this.lessonService.getLesson(this.lessonId).subscribe((data: Lesson) => {
       this.lesson = {
@@ -170,21 +174,25 @@ export class LessonEditorComponent implements OnInit {
 
   viewHTMLVersion() {
     this.contentHTML = [];
-    this.slidesContentExtended = this.lessonContentExtended.split('===');
-    if (!this.loginService.isAdmin) {
-      this.index = '=== Índice\n\n';
-      this.lesson.slides.forEach( (slide: Slide) => {
-        this.index = this.index + '. ' + slide.name + '\n';
-      });
-      this.contentHTML.push(convertToHTML(this.index));
-    }
-    let counter = 0;
-    this.slidesContentExtended.forEach( (slide: string) => {
-      if (counter !== 0) {
-        this.contentHTML.push(convertToHTML('=== ' + slide + '\n'));
+    if (this.subSlideCount > 50) {
+      this.contentHTML.push('<h2>ERROR</h2><h3>Se ha intruducido una slide dentro de si misma (Recursividad infinita)</h3>');
+    } else {
+      this.slidesContentExtended = this.lessonContentExtended.split('===');
+      if (!this.loginService.isAdmin) {
+        this.index = '=== Índice\n\n';
+        this.lesson.slides.forEach( (slide: Slide) => {
+          this.index = this.index + '. ' + slide.name + '\n';
+        });
+        this.contentHTML.push(convertToHTML(this.index));
       }
-      counter = counter + 1;
-    });
+      let counter = 0;
+      this.slidesContentExtended.forEach( (slide: string) => {
+        if (counter !== 0) {
+          this.contentHTML.push(convertToHTML('=== ' + slide + '\n'));
+        }
+        counter = counter + 1;
+      });
+    }
   }
 
   slidesToContent(slides: Slide[]) {
@@ -197,63 +205,63 @@ export class LessonEditorComponent implements OnInit {
     }
   }
 
-  async getEmbebedContent(content1: any, content2: any, unit: any, content: string, contentCounter: number, type: string) {
-    let contentEmbebed;
+  async getEmbeddedContent(content1: any, content2: any, unit: any, content: string, contentCounter: number, type: string) {
+    let contentEmbedded;
     if (+unit) {
       if (type === 'card') {
-        contentEmbebed = await this.unitService.getCard(+content1, +unit).toPromise().catch((error) => console.log(error));
-        if (typeof contentEmbebed !== 'undefined') {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed.content);
+        contentEmbedded = await this.unitService.getCard(+content1, +unit).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, contentEmbedded.content);
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       } else if (type === 'slide') {
         this.subSlide = true;
-        contentEmbebed = await this.unitLessonService.getSlideFormLesson(+content1, +content2, +unit).toPromise().catch((error) => console.log(error));
-        if (typeof contentEmbebed !== 'undefined') {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed.content.split('=== ')[1]);
+        contentEmbedded = await this.unitLessonService.getSlideFormLesson(+content1, +content2, +unit).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, contentEmbedded.content.split('=== ')[1]);
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       } else if (type === 'question') {
-        contentEmbebed = await this.questionService.getUnitQuestion(unit, content1).toPromise().catch((error) => console.log(error));
-        if (typeof contentEmbebed !== 'undefined') {
-          this.extractedData.splice(contentCounter, 1, '*Ejercicio ' + content2 + '* ' + contentEmbebed.questionText);
+        contentEmbedded = await this.questionService.getUnitQuestion(unit, content1).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          this.extractedData.splice(contentCounter, 1, '*Ejercicio ' + content2 + '* ' + contentEmbedded.questionText);
           let exist = false;
           this.newQuestionsIds.forEach((question) => {
-            if (question === contentEmbebed.id) {
+            if (question === contentEmbedded.id) {
               exist = true;
               return;
             }
           });
-          if (!exist) { this.newQuestionsIds.splice(content2, 0, contentEmbebed.id); }
+          if (!exist) { this.newQuestionsIds.splice(content2, 0, contentEmbedded.id); }
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       }
     } else {
       if (type === 'card') {
-        contentEmbebed = await this.cardService.getCardByName(unit, content1).toPromise().catch((error) => console.log(error));
-        if ((typeof contentEmbebed === 'undefined') || (contentEmbebed.length > 1)) {
+        contentEmbedded = await this.cardService.getCardByName(unit, content1).toPromise().catch((error) => {});
+        if ((typeof contentEmbedded === 'undefined') || (contentEmbedded.length > 1)) {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         } else {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content);
+          this.extractedData.splice(contentCounter, 1, contentEmbedded[0].content);
         }
       } else if (type === 'slide') {
         this.subSlide = true;
-        contentEmbebed = await this.slideService.getSlideByName(unit, content2, content1).toPromise().catch((error) => console.log(error));
-        if ((typeof contentEmbebed === 'undefined') || (contentEmbebed.length > 1)) {
+        contentEmbedded = await this.slideService.getSlideByName(unit, content2, content1).toPromise().catch((error) => {});
+        if ((typeof contentEmbedded === 'undefined') || (contentEmbedded.length > 1)) {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         } else {
-          this.extractedData.splice(contentCounter, 1, contentEmbebed[0].content.split('=== ')[1]);
+          this.extractedData.splice(contentCounter, 1, contentEmbedded[0].content.split('=== ')[1]);
         }
       }
     }
 
     if (type === 'image') {
-      contentEmbebed = await this.imageService.getImage(content1).toPromise().catch((error) => console.log(error));
-      if (typeof contentEmbebed !== 'undefined') {
-        const image = this.convertImage(contentEmbebed.image);
+      contentEmbedded = await this.imageService.getImage(content1).toPromise().catch((error) => {});
+      if (typeof contentEmbedded !== 'undefined') {
+        const image = this.convertImage(contentEmbedded.image);
         const img = '++++\n' +
           '<img class="img-lesson" src="' + image + '">\n' +
           '++++\n' +
@@ -314,20 +322,20 @@ export class LessonEditorComponent implements OnInit {
         parameters = words[1].split('/');
         if (parameters[0] === 'card') {
           this.position.push(counter);
-          this.getEmbebedContent(parameters[1], null, parameters[2], content, contentCounter, 'card');
+          this.getEmbeddedContent(parameters[2], null, parameters[1], content, contentCounter, 'card');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'slide') {
           this.position.push(counter);
-          this.getEmbebedContent(parameters[1], parameters[2], parameters[3], content, contentCounter, 'slide');
+          this.getEmbeddedContent(parameters[3], parameters[2], parameters[1], content, contentCounter, 'slide');
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'question') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), questionCounter, Number(parameters[2]), content, contentCounter, 'question');
+          this.getEmbeddedContent(Number(parameters[2]), questionCounter, Number(parameters[1]), content, contentCounter, 'question');
           questionCounter = questionCounter + 1;
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'image') {
           this.position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), null, null, content, contentCounter, 'image');
+          this.getEmbeddedContent(Number(parameters[1]), null, null, content, contentCounter, 'image');
           contentCounter = contentCounter + 1;
         }
       }
@@ -353,7 +361,8 @@ export class LessonEditorComponent implements OnInit {
       }
     });
     if (this.componentsChecker === this.contentCount) {
-      if (this.subSlide) {
+      if (this.subSlide && (this.subSlideCount <= 50)) {
+        this.subSlideCount = this.subSlideCount + 1;
         this.extendContent(this.lessonContentExtended);
       } else {
         this.showSpinner = false;
@@ -436,19 +445,47 @@ export class LessonEditorComponent implements OnInit {
   }
 
   openCardsBottomSheet(): void {
-    this.bottomSheet.open(UnitsCardsToolComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(UnitsCardsToolComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
   }
 
   openImageBottomSheet(): void {
-    this.bottomSheet.open(ImageComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(ImageComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
   }
 
   openSlidesBottomSheet(): void {
-    this.bottomSheet.open(LessonSlidesToolComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(LessonSlidesToolComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
   }
 
   openQuestionsBottomSheet(): void {
-    this.bottomSheet.open(UnitsQuestionsToolComponent);
+    this.getCursorPosition();
+    this.bottomSheet.open(UnitsQuestionsToolComponent, {data: ''}).afterDismissed().subscribe(result => {
+      this.pasteFromClipboard(result);
+    });
+  }
+
+  getCursorPosition() {
+    const textArea = document.getElementById('text-area-editor');
+    // @ts-ignore
+    this.cursorPosition = textArea.selectionStart;
+  }
+
+  pasteFromClipboard(result) {
+    const newLessonContent = this.lessonContent.split('');
+    newLessonContent.splice(this.cursorPosition, 0, result);
+    this.lessonContent = '';
+    newLessonContent.forEach((letter) => {
+      this.lessonContent += letter;
+    });
+    this.updateHTMLView();
   }
 
   nextSlide() {
@@ -464,7 +501,9 @@ export class LessonEditorComponent implements OnInit {
   scrollText() {
     const div = document.getElementById('slide-area-editor');
     const div2 = document.getElementById('text-area-editor');
-    div.scrollTop = div2.scrollTop;
+    if (div) {
+      div.scrollTop = div2.scrollTop;
+    }
   }
 
   openQuestion(questionID: number, subtype: string) {

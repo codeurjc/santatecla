@@ -17,7 +17,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div *ngFor = "let card of unit.cards">
-          <mat-card class="sub-card" (click)="openLink($event, 'insert.card/' + card.name + '/' + unit.name)">
+          <mat-card class="sub-card" (click)="openLink($event, 'insert.card/' + unit.name + '/' + card.name)">
             {{card.name}}
           </mat-card>
         </div>

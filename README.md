@@ -54,7 +54,7 @@ Home. There are two areas: Units (you can manage the units and their content) an
 <br/>
 <br/>
 
-Diagram of units. you can see the units, search and focus a unit, edit them, and add both new units and new relationships.
+Diagram of units. You can search and focus one or more units, edit them, and add both new units and new relationships.
 
 ![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/2.profesor.PNG)
 
