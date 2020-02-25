@@ -98,7 +98,7 @@ public class SlideApiTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.toJson(slide1)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", is("Test Content")));
+                .andExpect(jsonPath("$.content", is("Test New Content")));
     }
 
     @Test

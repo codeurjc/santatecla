@@ -3,6 +3,7 @@ package com.unit;
 import java.util.*;
 
 import com.GeneralRestController;
+import com.card.Card;
 import com.relation.Relation;
 
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,18 @@ public class UnitRestController extends GeneralRestController {
         }
         this.unitService.save(savedUnit);
         return new ResponseEntity<>(savedUnit, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Unit> updateUnitCards(@PathVariable int id, @RequestBody Unit unit) {
+        Optional<Unit> u = this.unitService.findOne(id);
+        if (u.isPresent()) {
+            u.get().setCards((List<Card>) unit.getCards());
+            this.unitService.save(u.get());
+            return new ResponseEntity<>(u.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(value = "/")

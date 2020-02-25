@@ -154,12 +154,12 @@ public class DatabaseInitializer {
                         "imperativos y OO\n");
 
                 slide03.addContent("\n" +
-                        "insert.card/Definición/Array\n" +
+                        "insert.card/Array/Definición\n" +
                         "\n" +
-                        "insert.card/2/1\n");
+                        "insert.card/1/2\n");
 
                 slide04.addContent("\n" +
-                        "insert.slide/Paradigmas de la programación/Introducción a la programación funcional/Programación funcional\n");
+                        "insert.slide/Programación funcional/Introducción a la programación funcional/Paradigmas de la programación\n");
 
                 slideRepository.save(slide1);
                 slideRepository.save(slide01);

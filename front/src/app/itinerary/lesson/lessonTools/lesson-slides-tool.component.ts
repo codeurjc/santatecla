@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Unit} from '../../../unit/unit.model';
 import {UnitService} from '../../../unit/unit.service';
-import {MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import { ClipboardService } from 'ngx-clipboard';
 
 
@@ -20,7 +20,8 @@ export class LessonSlidesToolComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
               private bottomSheetRef: MatBottomSheetRef<LessonSlidesToolComponent>,
-              private clipboardService: ClipboardService) {
+              private clipboardService: ClipboardService,
+              @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
   }
 
   ngOnInit() {
@@ -50,7 +51,8 @@ export class LessonSlidesToolComponent implements OnInit {
 
   openLink(event: MouseEvent, text: string): void {
     this.clipboardService.copyFromContent(text);
-    this.bottomSheetRef.dismiss();
+    this.data = text;
+    this.bottomSheetRef.dismiss(this.data);
     event.preventDefault();
   }
 

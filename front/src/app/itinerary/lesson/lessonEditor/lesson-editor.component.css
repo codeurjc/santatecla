@@ -72,6 +72,7 @@
   padding: 0.5rem;
   font-size: 15px;
   outline: none;
+  height: calc(100vh - 10rem);
 }
 
 .html-lesson-representation-editor {
