@@ -33,15 +33,12 @@ import { SlideService } from './slide/slide.service';
 import { QuestionComponent } from './question/question.component';
 import { UnitService } from './unit/unit.service';
 import { UnitComponent } from './unit/unit.component';
-import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
 import { DefinitionQuestionService } from './question/definitionQuestion/definitionQuestion.service';
-import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
 import { ListQuestionService } from './question/listQuestion/listQuestion.service';
 import { ModuleProgressComponent } from './progress/module-progress/module-progress.component';
 import { ClassProgressComponent } from './progress/class-progress/class-progress.component';
 import { ProgressService } from './progress/progress.service';
 import {QuestionService} from './question/question.service';
-import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {TestQuestionService} from './question/testQuestion/testQuestion.service';
 import {MyCoursesComponent} from './course/myCourses.component';
 import {CourseComponent} from './course/course.component';
@@ -92,13 +89,10 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     UnitsCardsToolComponent,
     UnitsBlocksToolComponent,
     UnitsQuestionsToolComponent,
-    DefinitionQuestionComponent,
-    ListQuestionComponent,
     QuestionComponent,
     QuestionTrackingComponent,
     ModuleProgressComponent,
     ClassProgressComponent,
-    TestQuestionComponent,
     MyCoursesComponent,
     CourseComponent,
     NewCourseComponent,
