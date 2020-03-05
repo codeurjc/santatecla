@@ -98,7 +98,7 @@ When the student starts a course, a content index is shown.
 
 Here we can see the way to add a new course.
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/addCourse.PNG)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/teacherAddCourse.PNG)
 
 Here we see the course surface, with the content and the students in it.
 
@@ -108,9 +108,9 @@ Here we see the course surface, with the content and the students in it.
 
 Finally, we can see the progress.
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/seguimientoModulo.PNG)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/itineraryProgress.PNG)
 
-![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/seguimientoClase.PNG)
+![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/classProgress.PNG)
 
 ![Alt text](https://github.com/codeurjc/santatecla/blob/master/resources/questionsList.PNG)
 
