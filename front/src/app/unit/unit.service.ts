@@ -18,6 +18,13 @@ export class UnitService {
     return this.http.get(this.baseUrl + id);
   }
 
+  updateUnit(id: number, unit: Unit) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.put<Unit>(this.baseUrl + id, unit, { headers });
+  }
+
   searchByNameContaining(name: string) {
     const params = new HttpParams().set('name', name);
     return this.http.get(this.baseUrl + 'search/', { params: params });

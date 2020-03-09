@@ -21,7 +21,7 @@ export class UnitsQuestionsToolComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
               private bottomSheetRef: MatBottomSheetRef<UnitsQuestionsToolComponent>,
-              private loginService: LoginService,
+              public loginService: LoginService,
               private clipboardService: ClipboardService,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
   }
@@ -54,7 +54,8 @@ export class UnitsQuestionsToolComponent implements OnInit {
 
   openLink(event: MouseEvent, text: string): void {
     this.clipboardService.copyFromContent(text);
-    this.bottomSheetRef.dismiss();
+    this.data = text;
+    this.bottomSheetRef.dismiss(this.data);
     event.preventDefault();
   }
 

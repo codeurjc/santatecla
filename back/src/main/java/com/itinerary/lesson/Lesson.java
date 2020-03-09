@@ -39,10 +39,10 @@ public class Lesson extends Block {
         this.questionsIds = lesson.getQuestionsIds();
     }
 
-    public List compareId(List<Slide> slides) {
-        List diferences = new ArrayList();
-        List<Long> slidesId = new ArrayList();
-        List<Long> inSlidesId = new ArrayList();
+    public List<Long> compareId(List<Slide> slides) {
+        List<Long> diferences = new ArrayList<>();
+        List<Long> slidesId = new ArrayList<>();
+        List<Long> inSlidesId = new ArrayList<>();
         for (Slide slide: this.getSlides()) {
             slidesId.add(slide.getId());
         }

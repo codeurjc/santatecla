@@ -67,7 +67,7 @@ export class AnswerQuestionDialogComponent implements OnInit {
     private definitionQuestionService: DefinitionQuestionService,
     private listQuestionService: ListQuestionService,
     private testQuestionService: TestQuestionService,
-    private loginService: LoginService,
+    public loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     public dialogRef: MatDialogRef<LessonEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}

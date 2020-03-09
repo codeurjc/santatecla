@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0]
+
+### Added
+
+- Collapsible cards
+- Cards can be reordered
+- Auto-Paste when inserting in lesson editor
+
+### Changed
+
+- Definition question tables moved
+
+### Fixed
+
+- The lesson view dosn´t crash when you insert a slide in the same slide
+- Lesson editor and Firefox compatibility
+- Changed insert parameters order
+
 ## [0.1.0] - 19/02/2020
 
 ### Added

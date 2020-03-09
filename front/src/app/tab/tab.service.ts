@@ -23,7 +23,7 @@ export class TabService {
   questionId: number;
   question = '';
 
-  constructor(private loginService: LoginService) {}
+  constructor(public loginService: LoginService) {}
 
   emptyAll() {
     this.units = false;

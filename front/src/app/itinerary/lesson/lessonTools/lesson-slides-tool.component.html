@@ -20,7 +20,7 @@
           <mat-card class="lesson-card">
             {{lesson.name}}
             <div *ngFor = "let slide of lesson.slides">
-              <mat-card class="sub-card" (click)="openLink($event, 'insert.slide/' + slide.name + '/' + lesson.name + '/' + unit.name)">
+              <mat-card class="sub-card" (click)="openLink($event, 'insert.slide/' + unit.name + '/' + lesson.name + '/' + slide.name)">
                 {{slide.name}}
               </mat-card>
             </div>

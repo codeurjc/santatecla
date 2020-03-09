@@ -31,8 +31,7 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "./src/assets/js/mermaid.js",
-              "./src/asciidocSample.js"
+              "./src/assets/js/mermaid.js"
             ],
             "es5BrowserSupport": true
           },
@@ -56,8 +55,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 }
               ]
             }

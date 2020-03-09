@@ -100,7 +100,7 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/course/{id}").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/course/user/{id}").hasAnyRole("ADMIN", "USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/course/teacher/{id}").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/course/{id}/students/").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/course/{id}/students/").hasAnyRole("ADMIN", "USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/course/search/{name}").hasAnyRole("ADMIN", "USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/course/{courseId}/module/progress").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/course/{courseId}/student/progress").hasRole("ADMIN");

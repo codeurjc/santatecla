@@ -12,10 +12,10 @@ export class LoginComponent {
   @Input()
   url: string;
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private loginService: LoginService,) {
-  }
+  username = '';
+  password = '';
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, public loginService: LoginService,) {}
 
   login(event: any, user: string, pass: string) {
     event.preventDefault();

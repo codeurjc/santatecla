@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Image} from './image.model';
 import {ImageService} from './image.service';
 import { ClipboardService } from 'ngx-clipboard';
-import {MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-image',
@@ -22,7 +22,8 @@ export class ImageComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private imageService: ImageService,
               private bottomSheetRef: MatBottomSheetRef<ImageComponent>,
-              private clipboardService: ClipboardService) { }
+              private clipboardService: ClipboardService,
+              @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
   ngOnInit() {
     this.imageService.getImages().subscribe((data: Image[]) => {
@@ -72,7 +73,8 @@ export class ImageComponent implements OnInit {
   getUrl(id: any) {
     const text = 'insert.image/' + id;
     this.clipboardService.copyFromContent(text);
-    this.bottomSheetRef.dismiss();
+    this.data = text;
+    this.bottomSheetRef.dismiss(this.data);
     event.preventDefault();
   }
 
