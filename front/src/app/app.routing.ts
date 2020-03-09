@@ -2,11 +2,8 @@ import { LessonEditorComponent } from './itinerary/lesson/lessonEditor/lesson-ed
 import { CardComponent } from './card/card.component';
 import { RouterModule } from '@angular/router';
 import { ViewComponent } from './view/view.component';
-import { DefinitionQuestionComponent } from './question/definitionQuestion/definitionQuestion.component';
-import { ListQuestionComponent } from './question/listQuestion/listQuestion.component';
 import { QuestionComponent } from './question/question.component';
 import { ModuleProgressComponent } from './progress/module-progress/module-progress.component';
-import {TestQuestionComponent} from './question/testQuestion/testQuestion.component';
 import {MyCoursesComponent} from './course/myCourses.component';
 import {NewCourseComponent} from './course/newCourse.component';
 import {UnitsCardsToolComponent} from './itinerary/lesson/lessonTools/units-cards-tool.component';
@@ -48,9 +45,6 @@ const appRoutes = [
   { path: 'unit/:unitId/question/:questionType/:questionId', component: QuestionTrackingComponent },
   { path: 'answerQuestionDialog', component: AnswerQuestionDialogComponent},
   { path: 'addQuestionDialog', component: AddQuestionDialogComponent},
-  { path: 'units/:unitId/itineraries/:itineraryId/definitionQuestion/:questionId', component: DefinitionQuestionComponent},
-  { path: 'units/:unitId/itineraries/:itineraryId/listQuestion/:questionId', component: ListQuestionComponent},
-  { path: 'units/:unitId/itineraries/:itineraryId/testQuestion/:questionId', component: TestQuestionComponent},
   { path: 'question', component: QuestionComponent},
   { path: 'courses', component: MyCoursesComponent },
   { path: 'progress', component: ModuleProgressComponent },

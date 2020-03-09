@@ -9,8 +9,8 @@ services:
       MYSQL_DATABASE: santatecla
       MYSQL_USER: santaTecla
       MYSQL_PASSWORD: santaTecla1234
-  back:
-    image: sigma98/back
+  santatecla:
+    image: sigma98/santatecla
     restart: on-failure
     links:
       - db

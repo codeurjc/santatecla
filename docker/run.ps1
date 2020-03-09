@@ -18,7 +18,7 @@ xcopy /Y target\back-0.0.1-SNAPSHOT.jar ..\docker\build\
 
 cd ../docker
 
-# Build new back image
-docker build -t sigma98/back .
+# Build new santatecla image
+docker build -t sigma98/santatecla .
 
 docker-compose up
