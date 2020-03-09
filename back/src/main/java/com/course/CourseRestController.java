@@ -1,8 +1,7 @@
 package com.course;
 
 import com.GeneralRestController;
-import com.course.items.ProgressItem;
-import com.course.items.ModuleFormat;
+import com.course.items.ProgressNode;
 import com.course.items.StudentProgressItem;
 import com.itinerary.block.Block;
 import com.itinerary.lesson.Lesson;
@@ -100,44 +99,75 @@ public class CourseRestController extends GeneralRestController {
     }
 
     @GetMapping(value="/{courseId}/module/progress")
-    public ResponseEntity<List<ProgressItem>> getModuleProgress(@PathVariable long courseId){
+    public ResponseEntity<ProgressNode> getModuleProgress(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
-        ArrayList<Block> questionBlocks = new ArrayList<>();
-        ArrayList<ProgressItem> result = new ArrayList<>();
-        ArrayList<Double> values;
 
         if(optional.isPresent()){
-            findBlocksWithQuestionRecursive(optional.get().getModule(), questionBlocks);
-
-            for (Block b : questionBlocks){
-                values = new ArrayList<>();
-
-                int questionCount = this.questionService.findBlockQuestionCount(b.getId());
-                double moduleRealization = this.courseService.findBlockRealization(optional.get().getStudents(), questionCount, b.getId(), courseId);
-                double blockGrade = this.courseService.findBlockGrade(optional.get().getStudents(), b.getId(), courseId);
-                values.add(moduleRealization);
-                values.add(blockGrade);
-
-
-                result.add(new ProgressItem(b.getName(), values));
-            }
+            Course course = optional.get();
+            ProgressNode result = getModuleProgressRecursive(course.getModule(), course);
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    private void findBlocksWithQuestionRecursive(Block block, List<Block> result){
-        if(this.questionService.findQuestionsByBlockId(block.getId()).size() > 0){
-            result.add(block);
-        }
+    private Double getLessonRealization(Block b, Course course){
+        int questionCount = this.questionService.findBlockQuestionCount(b.getId());
+        return this.courseService.findBlockRealization(course.getStudents(), questionCount, b.getId(), course.getId());
+    }
 
-        if(block instanceof Module) {
-            Module module = (Module) block;
-            for (Block b : module.getBlocks()) {
-                findBlocksWithQuestionRecursive(b, result);
+    private ProgressNode getModuleProgressRecursive(Block b, Course course){
+        ProgressNode result = new ProgressNode(b.getName());
+        Module module = (Module) b;
+        double lessonGrade, lessonRealization, sumGrade = 0, sumRealization = 0, sumRealizationDiv = 0, sumGradeDiv = 0;
+        for(Block block : module.getBlocks()){
+            if (block instanceof Lesson){
+                if(this.questionService.findQuestionsByBlockId(block.getId()).size() > 0) {
+                    ProgressNode lessonResult = new ProgressNode(block.getName());
+                    lessonGrade = this.courseService.findBlockGrade(course.getStudents(), block.getId(), course.getId());
+                    sumGrade += lessonGrade;
+                    lessonResult.getValue().setGrade(lessonGrade);
+
+                    lessonRealization = this.getLessonRealization(block, course);
+                    lessonResult.getValue().setRealization(lessonRealization);
+                    sumRealization += lessonRealization;
+
+                    if(lessonRealization != 0.0){
+                        sumGradeDiv ++;
+                    }
+                    sumRealizationDiv ++;
+
+                    result.addChild(lessonResult);
+                }
+            }
+
+            else if(block instanceof Module){
+                ProgressNode moduleResult = getModuleProgressRecursive(block, course);
+
+                if(!Double.isNaN(moduleResult.getValue().getRealization())){
+                    double grade = moduleResult.getValue().getGrade();
+
+                    if(Double.isNaN(grade)){
+                        grade = 0;
+                    }
+
+                    sumGrade += grade;
+                    sumRealization += moduleResult.getValue().getRealization();
+
+                    if(moduleResult.getValue().getRealization() != 0.0){
+                        sumGradeDiv ++;
+                    }
+                    sumRealizationDiv ++;
+
+                    result.addChild(moduleResult);
+                }
             }
         }
+
+        result.getValue().setRealization(sumRealization / sumRealizationDiv);
+        result.getValue().setGrade(sumGrade / sumGradeDiv);
+
+        return result;
     }
 
     @GetMapping(value = "/{courseId}/students/progress")
@@ -206,6 +236,19 @@ public class CourseRestController extends GeneralRestController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    private void findBlocksWithQuestionRecursive(Block block, List<Block> result){
+        if(this.questionService.findQuestionsByBlockId(block.getId()).size() > 0){
+            result.add(block);
+        }
+
+        if(block instanceof Module) {
+            Module module = (Module) block;
+            for (Block b : module.getBlocks()) {
+                findBlocksWithQuestionRecursive(b, result);
+            }
+        }
     }
 
     @GetMapping(value = "/{courseId}/students/gradesGroup")
