@@ -88,4 +88,12 @@ export class CourseComponent implements OnInit {
       duration: 4000,
     });
   }
+
+  viewLesson(lessonId: number) {
+    this.courseService.findModuleUnit(lessonId).subscribe((data: number) => {
+      this.router.navigate(['/units/' + data + '/modules/' + this.course.module.id + '/lessons/' + lessonId]);
+    }, error => {
+      console.log(error);
+    });
+  }
 }

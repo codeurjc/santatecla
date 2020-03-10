@@ -15,4 +15,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     @Query(value = "select unit.id, unit.name from unit left join unit_relations on unit.id = unit_relations.unit_id left join relation on unit_relations.relations_id = relation.id where related_to_id = ?1", nativeQuery = true)
     public Unit getParent(Long id);
+
+    @Query(value = "SELECT unit_lessons.unit_id FROM unit_lessons WHERE unit_lessons.lessons_id = ?1", nativeQuery = true)
+    Long findModuleUnit(long lessonId);
 }

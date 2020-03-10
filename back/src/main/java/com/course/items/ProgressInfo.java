@@ -9,27 +9,27 @@ public class ProgressInfo {
         this.name = name;
     }
 
-    public String getName() {
+    public String getNombre() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setNombre(String name) {
         this.name = name;
     }
 
-    public Double getRealization() {
+    public Double getRealizacion() {
         return realization;
     }
 
-    public void setRealization(Double realization) {
+    public void setRealizacion(Double realization) {
         this.realization = realization;
     }
 
-    public Double getGrade() {
+    public Double getMedia() {
         return grade;
     }
 
-    public void setGrade(Double grade) {
+    public void setMedia(Double grade) {
         if(Double.isNaN(grade)){
             this.grade = 0.0;
         }

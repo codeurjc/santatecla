@@ -98,6 +98,15 @@ public class CourseRestController extends GeneralRestController {
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
+    @GetMapping(value="/module/{lessonId}/unit")
+    public ResponseEntity<Long> getModuleUnit(@PathVariable long lessonId){
+        Long id = this.unitService.findLessonUnit(lessonId);
+        if(id != null){
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping(value="/{courseId}/module/progress")
     public ResponseEntity<ProgressNode> getModuleProgress(@PathVariable long courseId){
         Optional<Course> optional = this.courseService.findOne(courseId);
@@ -126,10 +135,10 @@ public class CourseRestController extends GeneralRestController {
                     ProgressNode lessonResult = new ProgressNode(block.getName());
                     lessonGrade = this.courseService.findBlockGrade(course.getStudents(), block.getId(), course.getId());
                     sumGrade += lessonGrade;
-                    lessonResult.getValue().setGrade(lessonGrade);
+                    lessonResult.getValue().setMedia(Math.floor(lessonGrade * 100) / 100);
 
                     lessonRealization = this.getLessonRealization(block, course);
-                    lessonResult.getValue().setRealization(lessonRealization);
+                    lessonResult.getValue().setRealizacion(Math.floor(lessonRealization * 100) / 100);
                     sumRealization += lessonRealization;
 
                     if(lessonRealization != 0.0){
@@ -144,17 +153,17 @@ public class CourseRestController extends GeneralRestController {
             else if(block instanceof Module){
                 ProgressNode moduleResult = getModuleProgressRecursive(block, course);
 
-                if(!Double.isNaN(moduleResult.getValue().getRealization())){
-                    double grade = moduleResult.getValue().getGrade();
+                if(!Double.isNaN(moduleResult.getValue().getRealizacion())){
+                    double grade = moduleResult.getValue().getMedia();
 
                     if(Double.isNaN(grade)){
                         grade = 0;
                     }
 
                     sumGrade += grade;
-                    sumRealization += moduleResult.getValue().getRealization();
+                    sumRealization += moduleResult.getValue().getRealizacion();
 
-                    if(moduleResult.getValue().getRealization() != 0.0){
+                    if(moduleResult.getValue().getRealizacion() != 0.0){
                         sumGradeDiv ++;
                     }
                     sumRealizationDiv ++;
@@ -164,8 +173,8 @@ public class CourseRestController extends GeneralRestController {
             }
         }
 
-        result.getValue().setRealization(sumRealization / sumRealizationDiv);
-        result.getValue().setGrade(sumGrade / sumGradeDiv);
+        result.getValue().setRealizacion(Math.floor((sumRealization / sumRealizationDiv) * 100) / 100);
+        result.getValue().setMedia(Math.floor((sumGrade / sumGradeDiv) * 100) / 100);
 
         return result;
     }

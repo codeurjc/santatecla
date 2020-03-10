@@ -46,7 +46,7 @@
                   <span class="mat-tree-node" id="{{node1.name}}">
                     <button mat-icon-button disabled></button>
                     <mat-card class="lesson-button">
-                      {{node1?.name}}
+                      {{node1?.name}} <mat-icon class="lesson-view-button" (click)="viewLesson(node1.id)" matTooltip="Ver lección">subscriptions</mat-icon>
                     </mat-card>
                   </span>
             </mat-tree-node>
