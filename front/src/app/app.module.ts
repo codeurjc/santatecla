@@ -69,6 +69,7 @@ import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-s
 import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
 import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-questions-tool.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { TreetableModule } from 'ng-material-treetable';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
   ],
     imports: [
         ClipboardModule,
+        TreetableModule,
         BrowserAnimationsModule,
         BrowserModule,
         HttpClientModule,

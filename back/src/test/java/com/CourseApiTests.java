@@ -216,7 +216,7 @@ public class CourseApiTests {
         mvc.perform(MockMvcRequestBuilders.get("/api/course/1/module/progress")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", is("Test Module")));
+                .andExpect(jsonPath("$.value.nombre", is("Test Module")));
     }
 
     @Test
