@@ -101,7 +101,11 @@
   top: 0.3rem;
 }
 
-#tab-wrapper {
+#breadcrumb-wrapper {
   margin-right: 13rem;
   top: 0.5rem;
+}
+
+.active-tab {
+  opacity: 0.5;
 }

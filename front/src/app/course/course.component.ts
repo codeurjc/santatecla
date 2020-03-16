@@ -6,8 +6,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {Module} from '../itinerary/module/module.model';
 import {MatDialog, MatSnackBar, MatTreeNestedDataSource} from '@angular/material';
-import {TabService} from '../tab/tab.service';
+import {BreadcrumbService} from '../breadcrumb/breadcrumb.service';
 import {NewCourseComponent} from './newCourse.component';
+import {TabService} from '../tab/tab.service';
+import {Tab} from '../tab/tab.model';
 
 @Component({
   templateUrl: './course.component.html',
@@ -22,15 +24,16 @@ export class CourseComponent implements OnInit {
   dataSource = new MatTreeNestedDataSource<Module>();
 
   showMenu = true;
-  activeTab = 0;
+  activeBreadcrumb = 0;
 
   constructor(public loginService: LoginService,
               private courseService: CourseService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private tabService: TabService,
+              private breadcrumbService: BreadcrumbService,
               private snackBar: MatSnackBar,
-              public dialog: MatDialog) {}
+              public dialog: MatDialog,
+              private tabService: TabService) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -39,7 +42,8 @@ export class CourseComponent implements OnInit {
         this.courseService.getCourse(this.id).subscribe((data: Course) => {
           this.course = data;
           this.dataSource.data = this.course.module.blocks;
-          this.tabService.setCourse(this.course.name, this.course.id);
+          this.breadcrumbService.setCourse(this.course.name, this.course.id);
+          this.tabService.addTab(new Tab('Curso', this.course.id, this.course.name));
         }, error => {
           console.log(error);
         });
@@ -53,8 +57,8 @@ export class CourseComponent implements OnInit {
 
   hasChild = (_: number, node: Module) => !!node && !!node.blocks && node.blocks.length > 0;
 
-  private activateTab(tab: number) {
-    this.activeTab = tab;
+  private activateBreadcrumb(tab: number) {
+    this.activeBreadcrumb = tab;
   }
 
   private setShowMenu(showMenu: boolean) {

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../auth/login.service';
 import {Course} from './course.model';
 import {Router} from '@angular/router';
-import {TabService} from '../tab/tab.service';
+import {BreadcrumbService} from '../breadcrumb/breadcrumb.service';
 import {TdDialogService} from '@covalent/core';
 import {MatDialog} from '@angular/material';
 import {NewCourseComponent} from './newCourse.component';
@@ -21,7 +21,7 @@ export class MyCoursesComponent implements OnInit {
   constructor(public loginService: LoginService,
               private courseService: CourseService,
               private router: Router,
-              private tabService: TabService,
+              private breadcrumbService: BreadcrumbService,
               private dialogService: TdDialogService,
               public dialog: MatDialog) {
     this.courses = [];
@@ -29,7 +29,7 @@ export class MyCoursesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.tabService.setCourses();
+    this.breadcrumbService.setCourses();
     if (this.loginService.isAdmin) {
       this.courseService.getTeacherCourses(this.loginService.getCurrentUser().id).subscribe((data: Course[]) => {
         this.courses = data;

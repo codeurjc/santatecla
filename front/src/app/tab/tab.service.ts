@@ -1,123 +1,48 @@
-import { Injectable } from '@angular/core';
-import {LoginService} from '../auth/login.service';
+import {Injectable} from '@angular/core';
+import {Tab} from './tab.model';
 
 @Injectable()
 export class TabService {
+  tabs: Tab[];
 
-  units = false;
-  unit = '';
-  unitId: number;
-
-  courses = false;
-  course = '';
-  courseId: number;
-
-  lessons = false;
-  lesson = '';
-
-  modules = false;
-  module = '';
-  moduleId: number;
-
-  questions = false;
-  questionId: number;
-  question = '';
-
-  constructor(public loginService: LoginService) {}
-
-  emptyAll() {
-    this.units = false;
-    this.unit = '';
-    this.courses = false;
-    this.course = '';
-    this.lessons = false;
-    this.lesson = '';
-    this.modules = false;
-    this.module = '';
-    this.questions = false;
-    this.question = '';
+  constructor() {
+    this.tabs = [];
   }
 
-  setHome() {
-    this.emptyAll();
-  }
-
-  setUnits() {
-    this.emptyAll();
-    this.units = true;
-  }
-
-  setUnit(unitName: string, unitId) {
-    this.emptyAll();
-    this.units = true;
-    this.unit = unitName;
-    this.unitId = unitId;
-  }
-
-  setCourses() {
-    this.emptyAll();
-    this.courses = true;
-  }
-
-  setCourse(courseName: string, courseId: number) {
-    this.emptyAll();
-    this.courses = true;
-    this.course = courseName;
-    this.courseId = courseId;
-  }
-
-  setLesson(unitName: string, unitId: number, lessonName: string) {
-    this.emptyAll();
-    this.units = true;
-    this.unit = unitName;
-    this.unitId = unitId;
-    this.lessons = true;
-    this.lesson = lessonName;
-  }
-
-  setLessonInModule(name: string, id: number, moduleName: string, moduleId: number, lessonName: string) {
-    this.emptyAll();
-    if (this.loginService.isAdmin) {
-      this.units = true;
-      this.unit = name;
-      this.unitId = id;
-    } else {
-      this.courses = true;
-      this.course = name;
-      this.courseId = id;
+  addTab(t: Tab) {
+    for (let tab of this.tabs) {
+      if (tab.id === t.id && tab.type === t.type && tab.name === t.name) {
+        tab.isActive = true;
+        return;
+      } else {
+        tab.isActive = false;
+      }
     }
-    this.module = moduleName;
-    this.moduleId = moduleId;
-    this.lessons = true;
-    this.lesson = lessonName;
+
+    this.tabs.push(t);
   }
 
-  setUnitModule(name: string, unitId: number, moduleName: string, moduleId: number) {
-    this.emptyAll();
-    this.units = true;
-    this.unit = name;
-    this.unitId = unitId;
-    this.modules = true;
-    this.module = moduleName;
-    this.moduleId = moduleId;
+  removeTab(tab: Tab) {
+    const index: number = this.tabs.indexOf(tab);
+    if (index !== -1) {
+      this.tabs.splice(index, 1);
+    }
   }
 
-  setCourseModule(moduleId: number, courseId: number, name: string) {
-    this.emptyAll();
-    this.moduleId = moduleId;
-    this.courseId = courseId;
-    this.courses = true;
-    this.course = name;
+  activateTab(t: Tab) {
+    for (let tab of this.tabs) {
+      if (tab.id === t.id && tab.type === t.type && tab.name === t.name) {
+        tab.isActive = true;
+      } else {
+        tab.isActive = false;
+      }
+    }
   }
 
-  setQuestion(questionId: number, question: string, unit: string, unitId: number) {
-    this.emptyAll();
-    this.units = true;
-    this.unit = unit;
-    this.unitId = unitId;
-    this.questions = true;
-    this.questionId = questionId;
-    this.question = question;
+  deactivateTabs() {
+    for (let tab of this.tabs) {
+      tab.isActive = false;
+    }
   }
 
 }

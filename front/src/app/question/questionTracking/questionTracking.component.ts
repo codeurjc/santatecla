@@ -3,7 +3,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {QuestionService} from '../question.service';
 import {Question} from '../question.model';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {TabService} from '../../tab/tab.service';
+import {BreadcrumbService} from '../../breadcrumb/breadcrumb.service';
 import {UnitService} from '../../unit/unit.service';
 import {DefinitionAnswer} from '../definitionQuestion/definitionAnswer.model';
 
@@ -43,7 +43,7 @@ export class QuestionTrackingComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private questionService: QuestionService,
-    private tabService: TabService,
+    private breadcrumbService: BreadcrumbService,
     private unitService: UnitService) {
   }
 
@@ -114,7 +114,7 @@ export class QuestionTrackingComponent implements OnInit {
   getUnitNameAndSetTab() {
     this.unitService.getUnitName(this.unitId).subscribe((data: any) => {
       this.unitName = data.response;
-      this.tabService.setQuestion(this.questionId, this.question.questionText, this.unitName, this.unitId);
+      this.breadcrumbService.setQuestion(this.questionId, this.question.questionText, this.unitName, this.unitId);
     }, error => { console.log(error); });
   }
 

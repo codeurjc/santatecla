@@ -14,7 +14,7 @@ import Asciidoctor from 'asciidoctor';
 import {Slide} from '../../../slide/slide.model';
 import {DefinitionQuestionService} from '../../../question/definitionQuestion/definitionQuestion.service';
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
-import {TabService} from '../../../tab/tab.service';
+import {BreadcrumbService} from '../../../breadcrumb/breadcrumb.service';
 import {UnitLessonService} from '../unit-lesson.service';
 import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
@@ -97,7 +97,7 @@ export class LessonEditorComponent implements OnInit {
               private moduleService: ModuleService,
               private bottomSheet: MatBottomSheet,
               private unitLessonService: UnitLessonService,
-              private tabService: TabService,
+              private breadcrumbService: BreadcrumbService,
               private imageService: ImageService,
               private cardService: CardService,
               private questionService: QuestionService,
@@ -119,10 +119,10 @@ export class LessonEditorComponent implements OnInit {
           this.moduleId = params.moduleId;
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
             if (typeof this.moduleId === 'undefined') {
-              this.tabService.setLesson(unit.name, this.unitId, lesson.name);
+              this.breadcrumbService.setLesson(unit.name, this.unitId, lesson.name);
             } else {
               this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
-                this.tabService.setLessonInModule(unit.name, this.unitId, module.name, module.id, lesson.name);
+                this.breadcrumbService.setLessonInModule(unit.name, this.unitId, module.name, module.id, lesson.name);
               });
             }
           });
@@ -131,7 +131,7 @@ export class LessonEditorComponent implements OnInit {
           this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
             this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
               this.courseId = course.id;
-              this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
+              this.breadcrumbService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
             });
           });
         }

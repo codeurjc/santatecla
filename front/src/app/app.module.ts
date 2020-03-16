@@ -43,7 +43,7 @@ import {TestQuestionService} from './question/testQuestion/testQuestion.service'
 import {MyCoursesComponent} from './course/myCourses.component';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
-import {TabService} from './tab/tab.service';
+import {BreadcrumbService} from './breadcrumb/breadcrumb.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NewCourseComponent} from './course/newCourse.component';
 import {LoginComponent} from './login/login.component';
@@ -70,6 +70,7 @@ import {QuestionTrackingComponent} from './question/questionTracking/questionTra
 import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-questions-tool.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { TreetableModule } from 'ng-material-treetable';
+import {TabService} from './tab/tab.service';
 
 @NgModule({
   declarations: [
@@ -157,7 +158,7 @@ import { TreetableModule } from 'ng-material-treetable';
         CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule, DragDropModule
     ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
-    QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService,
+    QuestionService, ProgressService, TestQuestionService, CourseService, BreadcrumbService, TabService, UnitService,
     MenuComponent, UnitLessonService, UnitModuleService, ImageService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

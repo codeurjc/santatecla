@@ -173,7 +173,7 @@ body {
   background-color: #e5e9f0 !important;
 }
 
-.tab {
+.breadcrumb {
   background-color: #7d3c90;
   color: #ffffff;
   padding: 0.3rem 0 0.3rem 3.5rem !important;
@@ -183,25 +183,25 @@ body {
   height: 3rem;
 }
 
-.tab:hover {
+.breadcrumb:hover {
   background-color: #a769b8;
 }
 
-.activeTab {
+.activeBreadcrumb {
   background-color: #a769b8;
 }
 
-.tab-text {
+.breadcrumb-text {
   margin-left: 0.5rem;
 }
 
-.tab-icon {
+.breadcrumb-icon {
   position: absolute;
   left: 1.37rem;
   margin-top: 0.4rem;
 }
 
-.tab-icon-without-menu {
+.breadcrumb-icon-without-menu {
   position: absolute;
   left: 1.37rem;
   top: 0.78rem;

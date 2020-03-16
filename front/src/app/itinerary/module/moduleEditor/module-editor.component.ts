@@ -11,7 +11,7 @@ import {Module} from '../module.model';
 
 import { LoginService } from '../../../auth/login.service';
 import { UnitService } from '../../../unit/unit.service';
-import {TabService} from '../../../tab/tab.service';
+import {BreadcrumbService} from '../../../breadcrumb/breadcrumb.service';
 import {ModuleService} from '../module.service';
 import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
@@ -59,7 +59,7 @@ export class ModuleEditorComponent implements OnInit {
               public loginService: LoginService,
               private unitService: UnitService,
               private bottomSheet: MatBottomSheet,
-              private tabService: TabService,
+              private breadcrumbService: BreadcrumbService,
               private moduleService: ModuleService,
               private courseService: CourseService,
               @Inject(DOCUMENT) document,
@@ -89,11 +89,11 @@ export class ModuleEditorComponent implements OnInit {
 
         if (this.unitId !== undefined) {
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-            this.tabService.setUnitModule(unit.name, this.unitId, module.name, module.id);
+            this.breadcrumbService.setUnitModule(unit.name, this.unitId, module.name, module.id);
           });
         } else {
           this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
-            this.tabService.setCourseModule(course.module.id, course.id, course.name);
+            this.breadcrumbService.setCourseModule(course.module.id, course.id, course.name);
           });
         }
       });

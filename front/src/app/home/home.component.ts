@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TabService} from "../tab/tab.service";
+import {BreadcrumbService} from "../breadcrumb/breadcrumb.service";
 import {LoginService} from '../auth/login.service';
 import {Router} from '@angular/router';
 
@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 
 export class HomeComponent implements OnInit {
 
-  constructor(private tabService: TabService,
+  constructor(private breadcrumbService: BreadcrumbService,
               public loginService: LoginService,
               private router: Router) {}
 
@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
     if (!this.loginService.isAdmin) {
       this.router.navigate(['/courses']);
     }
-    this.tabService.setHome();
+    this.breadcrumbService.setHome();
   }
 
 }
