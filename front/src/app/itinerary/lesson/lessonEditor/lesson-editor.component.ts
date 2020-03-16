@@ -33,6 +33,8 @@ import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDia
 import {Question} from '../../../question/question.model';
 import {UnitsQuestionsToolComponent} from '../lessonTools/units-questions-tool.component';
 import {ClipboardService} from 'ngx-clipboard';
+import {TabService} from '../../../tab/tab.service';
+import {Tab} from '../../../tab/tab.model';
 
 
 function convertToHTML(text) {
@@ -98,6 +100,7 @@ export class LessonEditorComponent implements OnInit {
               private bottomSheet: MatBottomSheet,
               private unitLessonService: UnitLessonService,
               private breadcrumbService: BreadcrumbService,
+              private tabService: TabService,
               private imageService: ImageService,
               private cardService: CardService,
               private questionService: QuestionService,
@@ -119,9 +122,11 @@ export class LessonEditorComponent implements OnInit {
           this.moduleId = params.moduleId;
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
             if (typeof this.moduleId === 'undefined') {
+              this.tabService.addTab(new Tab('Lección', this.lessonId, lesson.name, unit.id, null, null));
               this.breadcrumbService.setLesson(unit.name, this.unitId, lesson.name);
             } else {
               this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
+                this.tabService.addTab(new Tab('Lección', this.lessonId, lesson.name, unit.id, null, module.id));
                 this.breadcrumbService.setLessonInModule(unit.name, this.unitId, module.name, module.id, lesson.name);
               });
             }

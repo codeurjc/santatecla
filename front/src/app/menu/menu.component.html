@@ -64,10 +64,10 @@
         </button>
       </div>
 
-      <div *ngIf="loginService.isAdmin">
+      <div *ngIf="loginService.isAdmin" style="height: 20px">
         <button mat-button [ngClass]="tab.isActive ? 'nav-button admin-nav-button active-tab' : 'nav-button admin-nav-button'" *ngFor="let tab of this.tabService.tabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
           <div class="nav-button-name">
-            <span class="nav-button-title admin-nav-button-title">{{tab.type}}</span>
+            <span class="nav-button-title admin-nav-button-title" *ngIf="tab.name !== 'Cursos' && tab.name !== 'Unidades'">{{tab.type}}</span>
             <span class="nav-button-content">{{tab.name}}</span>
             <mat-icon (click)="this.closeTab(tab)">
               close

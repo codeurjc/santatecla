@@ -7,6 +7,8 @@ import {TdDialogService} from '@covalent/core';
 import {MatDialog} from '@angular/material';
 import {NewCourseComponent} from './newCourse.component';
 import {CourseService} from './course.service';
+import {TabService} from '../tab/tab.service';
+import {Tab} from '../tab/tab.model';
 
 @Component({
   templateUrl: './myCourses.component.html',
@@ -23,13 +25,15 @@ export class MyCoursesComponent implements OnInit {
               private router: Router,
               private breadcrumbService: BreadcrumbService,
               private dialogService: TdDialogService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private tabService: TabService) {
     this.courses = [];
     this.showingCourses = [];
   }
 
   ngOnInit() {
     this.breadcrumbService.setCourses();
+    this.tabService.addTab(new Tab('Curso', 0, 'Cursos', null, null, null));
     if (this.loginService.isAdmin) {
       this.courseService.getTeacherCourses(this.loginService.getCurrentUser().id).subscribe((data: Course[]) => {
         this.courses = data;

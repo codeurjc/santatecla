@@ -43,7 +43,7 @@ export class CourseComponent implements OnInit {
           this.course = data;
           this.dataSource.data = this.course.module.blocks;
           this.breadcrumbService.setCourse(this.course.name, this.course.id);
-          this.tabService.addTab(new Tab('Curso', this.course.id, this.course.name));
+          this.tabService.addTab(new Tab('Curso', this.course.id, this.course.name, null, null, null));
         }, error => {
           console.log(error);
         });

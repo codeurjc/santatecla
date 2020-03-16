@@ -10,16 +10,19 @@ export class TabService {
   }
 
   addTab(t: Tab) {
+    let toAdd = true;
     for (let tab of this.tabs) {
       if (tab.id === t.id && tab.type === t.type && tab.name === t.name) {
+        toAdd = false;
         tab.isActive = true;
-        return;
       } else {
         tab.isActive = false;
       }
     }
 
-    this.tabs.push(t);
+    if (toAdd) {
+      this.tabs.push(t);
+    }
   }
 
   removeTab(tab: Tab) {

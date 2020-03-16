@@ -24,7 +24,7 @@ export class UnitComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       const unitId = params.unitId;
       this.unitService.getUnit(unitId).subscribe((data: Unit) => {
-        this.tabService.addTab(new Tab('Unidad', unitId, data.name));
+        this.tabService.addTab(new Tab('Unidad', unitId, data.name, null, null, null));
         this.breadcrumbService.setUnit(data.name, data.id);
 
         this.unit = data;

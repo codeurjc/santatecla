@@ -8,6 +8,8 @@ import { TdDialogService } from '@covalent/core';
 import { BreadcrumbService } from '../breadcrumb/breadcrumb.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmActionComponent } from '../confirmAction/confirm-action.component';
+import {TabService} from '../tab/tab.service';
+import {Tab} from '../tab/tab.model';
 
 declare var mermaid: any;
 
@@ -58,9 +60,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
   constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
-              private breadcrumbService: BreadcrumbService, private dialog: MatDialog) {}
+              private breadcrumbService: BreadcrumbService, private dialog: MatDialog, private tabService: TabService) {}
 
   ngOnInit() {
+    this.tabService.addTab(new Tab('Unidad', 0, 'Unidades', null, null, null));
     if (this.breadcrumbService.unitId) {
       this.unitService.getUnit(this.breadcrumbService.unitId).subscribe((unit: Unit) => {
         this.addFocusedUnit(this.breadcrumbService.unitId.toString(), unit);

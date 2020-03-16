@@ -19,6 +19,8 @@ import {UnitsBlocksToolComponent} from './units-blocks-tool.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Block} from '../../block.model';
 import {ConfirmActionComponent} from '../../../confirmAction/confirm-action.component';
+import {TabService} from '../../../tab/tab.service';
+import {Tab} from '../../../tab/tab.model';
 
 @Component({
   selector: 'app-module-editor',
@@ -60,6 +62,7 @@ export class ModuleEditorComponent implements OnInit {
               private unitService: UnitService,
               private bottomSheet: MatBottomSheet,
               private breadcrumbService: BreadcrumbService,
+              private tabService: TabService,
               private moduleService: ModuleService,
               private courseService: CourseService,
               @Inject(DOCUMENT) document,
@@ -89,10 +92,12 @@ export class ModuleEditorComponent implements OnInit {
 
         if (this.unitId !== undefined) {
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
+            this.tabService.addTab(new Tab('Itinerario', this.moduleId, module.name, unit.id, null, null));
             this.breadcrumbService.setUnitModule(unit.name, this.unitId, module.name, module.id);
           });
         } else {
           this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
+            this.tabService.addTab(new Tab('Itinerario', this.moduleId, module.name, null, course.id, null));
             this.breadcrumbService.setCourseModule(course.module.id, course.id, course.name);
           });
         }
