@@ -31,6 +31,12 @@ export class Tab {
       } else {
         this.link = '/units/' + unitId + '/lessons/' + id;
       }
+    } else if (type === 'DefinitionQuestion') {
+        this.link = '/unit/' + this.unitId + '/question/DefinitionQuestion/' + this.id;
+    } else if (type === 'TestQuestion') {
+      this.link = '/unit/' + this.unitId + '/question/TestQuestion/' + this.id;
+    } else if (type === 'ListQuestion') {
+      this.link = '/unit/' + this.unitId + '/question/ListQuestion/' + this.id;
     }
 
     this.isActive = true;

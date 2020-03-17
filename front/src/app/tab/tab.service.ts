@@ -17,7 +17,7 @@ export class TabService {
   addTab(t: Tab) {
     this.deactivateTabs();
     let toAdd = true;
-    if (t.type === "Unidad") {
+    if (t.type === 'Unidad') {
       for (let tab of this.unitTabs) {
         if (+tab.id === +t.id && tab.name === t.name) {
           toAdd = false;
@@ -30,7 +30,7 @@ export class TabService {
         this.activeTab = t;
       }
       this.updateActiveTabLink('Unidad', t.id, t.name, null, null, null);
-    } else if (t.type === "Curso") {
+    } else if (t.type === 'Curso') {
       for (let tab of this.courseTabs) {
         if (+tab.id === +t.id && tab.name === t.name) {
           toAdd = false;

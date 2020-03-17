@@ -279,3 +279,16 @@ th.mat-sort-header-sorted {
   color: grey;
   font-size: 15px;
 }
+
+.toolsBar {
+  height: 6.2rem;
+  padding-left: 0.5rem;
+  background-color: #5d306a;
+}
+
+.tools {
+  color: white;
+  position: absolute;
+  top: 3.7rem;
+}
+
