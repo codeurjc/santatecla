@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Course} from './course.model';
 import {LoginService} from '../auth/login.service';
 import {CourseService} from './course.service';
@@ -9,8 +9,6 @@ import {MatDialog, MatSnackBar, MatTreeNestedDataSource} from '@angular/material
 import {NewCourseComponent} from './newCourse.component';
 import {TabService} from '../tab/tab.service';
 import {Tab} from '../tab/tab.model';
-import {ModuleComponent} from "../itinerary/module/module.component";
-import {ClassProgressComponent} from "../progress/class-progress/class-progress.component";
 
 @Component({
   templateUrl: './course.component.html',
@@ -26,9 +24,6 @@ export class CourseComponent implements OnInit {
 
   showMenu = true;
   activeBreadcrumb = 0;
-
-  @ViewChild('modules') moduleComponent: ModuleComponent;
-  @ViewChild('class') classComponent: ClassProgressComponent;
 
   constructor(public loginService: LoginService,
               private courseService: CourseService,
@@ -46,8 +41,7 @@ export class CourseComponent implements OnInit {
           this.course = data;
           this.dataSource.data = this.course.module.blocks;
           this.tabService.addTab(new Tab('Curso', this.course.id, this.course.name, null, null, null));
-          if (this.moduleComponent) { this.moduleComponent.ngOnInit(); }
-          if (this.classComponent) { this.classComponent.ngOnInit(); }
+          this.activeBreadcrumb = 0;
         }, error => {
           console.log(error);
         });
