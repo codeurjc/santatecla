@@ -45,7 +45,7 @@ export class QuestionTrackingComponent implements OnInit {
     private router: Router,
     private questionService: QuestionService,
     private unitService: UnitService,
-    private tabService: TabService) {
+    public tabService: TabService) {
   }
 
   ngOnInit() {
