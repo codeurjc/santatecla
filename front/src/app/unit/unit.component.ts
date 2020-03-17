@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Unit} from '../unit/unit.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UnitService} from './unit.service';
 import {TabService} from '../tab/tab.service';
 import {Tab} from '../tab/tab.model';
+import {CardComponent} from "../card/card.component";
 
 @Component({
   templateUrl: './unit.component.html',
@@ -16,6 +17,8 @@ export class UnitComponent implements OnInit {
   activeBreadcrumb = 0;
   showMenu = true;
 
+  @ViewChild('cards') cardComponent: CardComponent;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private unitService: UnitService, private tabService: TabService) {}
 
   ngOnInit() {
@@ -24,6 +27,7 @@ export class UnitComponent implements OnInit {
       this.unitService.getUnit(unitId).subscribe((data: Unit) => {
         this.tabService.addTab(new Tab('Unidad', unitId, data.name, unitId, null, null));
         this.unit = data;
+        this.cardComponent.ngOnInit();
       }, error => { console.log(error); });
     });
   }

@@ -29,7 +29,7 @@
   <div id="top-panel" [ngClass]="showMenu ? 'with-menu' : 'without-menu'"></div>
 
   <div id="unit-course-content" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
-    <app-cards *ngIf="activeBreadcrumb==0"></app-cards>
+    <app-cards #cards *ngIf="activeBreadcrumb==0"></app-cards>
     <app-questions *ngIf="activeBreadcrumb==1"></app-questions>
     <app-lessons *ngIf="activeBreadcrumb==2"></app-lessons>
     <app-modules *ngIf="activeBreadcrumb==3"></app-modules>
