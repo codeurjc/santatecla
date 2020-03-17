@@ -9,10 +9,6 @@
   font-size: 0.8rem;
 }
 
-.home-button {
-  margin-left: -0.5rem !important;
-}
-
 .user-header {
   background-color: #05132f;
 }
@@ -42,32 +38,35 @@
 
 .nav-button {
   margin-left: 0;
-  padding: 0 2rem 0 2rem;
-  cursor: pointer;
-  display: inline;
+  padding: 0 0.5rem 0 0.5rem;
+  display: block ruby;
   height: 3rem;
   top: 0;
-  -webkit-transform: skewX(-20deg);
-  -moz-transform: skewX(-20deg);
-  -ms-transform: skewX(-20deg);
-  -o-transform: skewX(-20deg);
-  transform: skewX(-20deg);
+  border-radius: 0;
 }
 
-.user-nav-button {
-  background-image: linear-gradient(to right, #0d2865 0%, #05132f 100%);
+.nav-button-link {
+  cursor: pointer;
+  margin-top: 1rem;
+  text-align: center;
 }
 
-.admin-nav-button {
-  background-image: linear-gradient(to right, #571a69 0%, #1e042f 100%);
+.nav-button-image {
+  position: absolute;
+  margin: -0.5rem 0 0 1.5rem;
 }
 
 .nav-button-icon {
-  -webkit-transform: skewX(20deg);
-  -moz-transform: skewX(20deg);
-  -ms-transform: skewX(20deg);
-  -o-transform: skewX(20deg);
-  transform: skewX(20deg);
+  position: absolute;
+  margin: -0.8rem 0 0 0.7rem;
+}
+
+.user-nav-button {
+  background-image: linear-gradient(to right, #0d2865 0, #05132f 1rem);
+}
+
+.admin-nav-button {
+  background-image: linear-gradient(to right, #804391 0, #1e042f 1rem);
 }
 
 .nav-button-name {
@@ -75,16 +74,12 @@
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   min-width: 2rem;
-  -webkit-transform: skewX(20deg);
-  -moz-transform: skewX(20deg);
-  -ms-transform: skewX(20deg);
-  -o-transform: skewX(20deg);
-  transform: skewX(20deg);
+  margin-top: 0.8rem;
 }
 
 .nav-button-title {
   position: absolute;
-  top: -0.6rem;
+  top: -0.3rem;
   font-size: 0.7rem;
 }
 
@@ -104,8 +99,54 @@
 #breadcrumb-wrapper {
   margin-right: 13rem;
   top: 0.5rem;
+  display: inline-flex;
+}
+
+.tab-wrapper {
+  margin: 0 0 0 0.8rem;
 }
 
 .active-tab {
-  opacity: 0.5;
+  opacity: 1 !important;
+  background-color: #5d306a !important;
+}
+
+.tab-button {
+  opacity: 0.8;
+  margin-left: 0;
+  cursor: pointer;
+  display: inline;
+  background-color: #332e34;
+  border-radius: 1rem 1rem 0 0;
+  height: 2.6rem;
+  top: -0.55rem;
+}
+
+.tab-button-icon {
+}
+
+.tab-button-name {
+  display: inline-block;
+  min-width: 2rem;
+}
+
+.tab-button-title {
+  position: absolute;
+  top: -0.4rem;
+  font-size: 0.7rem;
+  color: #dcc3e3;
+}
+
+.tab-button-content {
+  position: relative;
+  top: 0.3rem;
+}
+
+.close-tab {
+  margin-right: -0.5rem;
+  margin-left: 0.3rem;
+}
+
+.close-tab:hover {
+  color: indianred;
 }

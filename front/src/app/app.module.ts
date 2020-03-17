@@ -43,7 +43,6 @@ import {TestQuestionService} from './question/testQuestion/testQuestion.service'
 import {MyCoursesComponent} from './course/myCourses.component';
 import {CourseComponent} from './course/course.component';
 import {CourseService} from './course/course.service';
-import {BreadcrumbService} from './breadcrumb/breadcrumb.service';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NewCourseComponent} from './course/newCourse.component';
 import {LoginComponent} from './login/login.component';
@@ -158,7 +157,7 @@ import {TabService} from './tab/tab.service';
         CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule, DragDropModule
     ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
-    QuestionService, ProgressService, TestQuestionService, CourseService, BreadcrumbService, TabService, UnitService,
+    QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService,
     MenuComponent, UnitLessonService, UnitModuleService, ImageService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

@@ -11,7 +11,6 @@ import {Module} from '../module.model';
 
 import { LoginService } from '../../../auth/login.service';
 import { UnitService } from '../../../unit/unit.service';
-import {BreadcrumbService} from '../../../breadcrumb/breadcrumb.service';
 import {ModuleService} from '../module.service';
 import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
@@ -61,7 +60,6 @@ export class ModuleEditorComponent implements OnInit {
               public loginService: LoginService,
               private unitService: UnitService,
               private bottomSheet: MatBottomSheet,
-              private breadcrumbService: BreadcrumbService,
               private tabService: TabService,
               private moduleService: ModuleService,
               private courseService: CourseService,
@@ -92,13 +90,15 @@ export class ModuleEditorComponent implements OnInit {
 
         if (this.unitId !== undefined) {
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-            this.tabService.addTab(new Tab('Itinerario', this.moduleId, module.name, unit.id, null, null));
-            this.breadcrumbService.setUnitModule(unit.name, this.unitId, module.name, module.id);
+            this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+            this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, unit.id, null, null);
           });
         } else {
-          this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
-            this.tabService.addTab(new Tab('Itinerario', this.moduleId, module.name, null, course.id, null));
-            this.breadcrumbService.setCourseModule(course.module.id, course.id, course.name);
+          this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
+            this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
+              this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+              this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, null, course.id, null);
+            });
           });
         }
       });

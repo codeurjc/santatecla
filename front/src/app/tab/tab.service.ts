@@ -3,48 +3,96 @@ import {Tab} from './tab.model';
 
 @Injectable()
 export class TabService {
-  tabs: Tab[];
+
+  unitTabs: Tab[];
+  courseTabs: Tab[];
+
+  activeTab: Tab;
 
   constructor() {
-    this.tabs = [];
+    this.unitTabs = [];
+    this.courseTabs = [];
   }
 
   addTab(t: Tab) {
+    this.deactivateTabs();
     let toAdd = true;
-    for (let tab of this.tabs) {
-      if (tab.id === t.id && tab.type === t.type && tab.name === t.name) {
-        toAdd = false;
-        tab.isActive = true;
-      } else {
-        tab.isActive = false;
+    if (t.type === "Unidad") {
+      for (let tab of this.unitTabs) {
+        if (+tab.id === +t.id && tab.name === t.name) {
+          toAdd = false;
+          tab.isActive = true;
+          this.activeTab = tab;
+        }
       }
-    }
-
-    if (toAdd) {
-      this.tabs.push(t);
+      if (toAdd) {
+        this.unitTabs.push(t);
+        this.activeTab = t;
+      }
+      this.updateActiveTabLink('Unidad', t.id, t.name, null, null, null);
+    } else if (t.type === "Curso") {
+      for (let tab of this.courseTabs) {
+        if (+tab.id === +t.id && tab.name === t.name) {
+          toAdd = false;
+          tab.isActive = true;
+          this.activeTab = tab;
+        }
+      }
+      if (toAdd) {
+        this.courseTabs.push(t);
+        this.activeTab = t;
+      }
     }
   }
 
   removeTab(tab: Tab) {
-    const index: number = this.tabs.indexOf(tab);
-    if (index !== -1) {
-      this.tabs.splice(index, 1);
+    const unitTabsIndex: number = this.unitTabs.indexOf(tab);
+    if (unitTabsIndex !== -1) {
+      this.unitTabs.splice(unitTabsIndex, 1);
+    }
+    const courseTabsIndex: number = this.courseTabs.indexOf(tab);
+    if (courseTabsIndex !== -1) {
+      this.courseTabs.splice(courseTabsIndex, 1);
     }
   }
 
   activateTab(t: Tab) {
-    for (let tab of this.tabs) {
-      if (tab.id === t.id && tab.type === t.type && tab.name === t.name) {
-        tab.isActive = true;
-      } else {
-        tab.isActive = false;
+    if (t.type === "Unidad") {
+      for (let tab of this.unitTabs) {
+        if (+tab.id === +t.id && tab.name === t.name) {
+          tab.isActive = true;
+          this.activeTab = tab;
+        } else {
+          tab.isActive = false;
+        }
+      }
+    } else if (t.type === "Curso") {
+      for (let tab of this.courseTabs) {
+        if (+tab.id === +t.id && tab.name === t.name) {
+          tab.isActive = true;
+          this.activeTab = tab;
+        } else {
+          tab.isActive = false;
+        }
       }
     }
   }
 
   deactivateTabs() {
-    for (let tab of this.tabs) {
+    this.activeTab = null;
+    for (let tab of this.unitTabs) {
       tab.isActive = false;
+    }
+    for (let tab of this.courseTabs) {
+      tab.isActive = false;
+    }
+  }
+
+  updateActiveTabLink(type: string, id: number, name: string, unitId: string, courseId: number, moduleId: number) {
+    for (let tab of this.unitTabs) {
+      if (tab.id === this.activeTab.id && tab.name === this.activeTab.name) {
+        tab.updateLink(type, id, name, unitId, courseId, moduleId);
+      }
     }
   }
 

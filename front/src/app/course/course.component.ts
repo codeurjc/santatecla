@@ -6,7 +6,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {Module} from '../itinerary/module/module.model';
 import {MatDialog, MatSnackBar, MatTreeNestedDataSource} from '@angular/material';
-import {BreadcrumbService} from '../breadcrumb/breadcrumb.service';
 import {NewCourseComponent} from './newCourse.component';
 import {TabService} from '../tab/tab.service';
 import {Tab} from '../tab/tab.model';
@@ -30,7 +29,6 @@ export class CourseComponent implements OnInit {
               private courseService: CourseService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private breadcrumbService: BreadcrumbService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog,
               private tabService: TabService) {}
@@ -42,7 +40,6 @@ export class CourseComponent implements OnInit {
         this.courseService.getCourse(this.id).subscribe((data: Course) => {
           this.course = data;
           this.dataSource.data = this.course.module.blocks;
-          this.breadcrumbService.setCourse(this.course.name, this.course.id);
           this.tabService.addTab(new Tab('Curso', this.course.id, this.course.name, null, null, null));
         }, error => {
           console.log(error);

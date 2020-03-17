@@ -2,13 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../auth/login.service';
 import {Course} from './course.model';
 import {Router} from '@angular/router';
-import {BreadcrumbService} from '../breadcrumb/breadcrumb.service';
 import {TdDialogService} from '@covalent/core';
 import {MatDialog} from '@angular/material';
 import {NewCourseComponent} from './newCourse.component';
 import {CourseService} from './course.service';
-import {TabService} from '../tab/tab.service';
-import {Tab} from '../tab/tab.model';
 
 @Component({
   templateUrl: './myCourses.component.html',
@@ -20,20 +17,13 @@ export class MyCoursesComponent implements OnInit {
   searchField = '';
   showingCourses: Course[];
 
-  constructor(public loginService: LoginService,
-              private courseService: CourseService,
-              private router: Router,
-              private breadcrumbService: BreadcrumbService,
-              private dialogService: TdDialogService,
-              public dialog: MatDialog,
-              private tabService: TabService) {
+  constructor(public loginService: LoginService, private courseService: CourseService, private router: Router,
+              private dialogService: TdDialogService, public dialog: MatDialog) {
     this.courses = [];
     this.showingCourses = [];
   }
 
   ngOnInit() {
-    this.breadcrumbService.setCourses();
-    this.tabService.addTab(new Tab('Curso', 0, 'Cursos', null, null, null));
     if (this.loginService.isAdmin) {
       this.courseService.getTeacherCourses(this.loginService.getCurrentUser().id).subscribe((data: Course[]) => {
         this.courses = data;

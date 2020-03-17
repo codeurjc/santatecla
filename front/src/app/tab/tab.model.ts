@@ -2,30 +2,34 @@ export class Tab {
   link: string;
   isActive: boolean;
 
-  constructor(private _type: string, private _id: number, private _name: string, private _unitId: string, private _courseId: number, private _moduleId: number) {
-    if (this.type === 'Unidad') {
+  constructor(private _type: string, private _id: number, private _name: string, public _unitId: string, private _courseId: number, private _moduleId: number) {
+    this.updateLink(_type, _id, _name, _unitId, _courseId, _moduleId);
+  }
+
+  updateLink(type: string, id: number, name: string, unitId: string, courseId: number, moduleId: number) {
+    if (type === 'Unidad') {
       if (this.id === 0) {
         this.link = '/unit';
       } else {
-        this.link = '/unit/' + this.id;
+        this.link = '/unit/' + id;
       }
-    } else if (this.type === 'Curso') {
+    } else if (type === 'Curso') {
       if (this.id === 0) {
         this.link = '/courses';
       } else {
-        this.link = '/course/' + this.id;
+        this.link = '/course/' + id;
       }
-    } else if (this.type === 'Itinerario') {
-      if (this.unitId !== null) {
-        this.link = '/units/' + this.unitId + '/modules/' + this.id;
+    } else if (type === 'Itinerario') {
+      if (unitId !== null) {
+        this.link = '/units/' + unitId + '/modules/' + id;
       } else {
-        this.link = '/course/' + this.courseId + '/modules/' + this.id;
+        this.link = '/course/' + courseId + '/modules/' + id;
       }
-    } else if (this.type === 'Lección') {
-      if (this.moduleId !== null) {
-        this.link = '/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + this.id;
+    } else if (type === 'Lección') {
+      if (moduleId !== null) {
+        this.link = '/units/' + unitId + '/modules/' + moduleId + '/lessons/' + id;
       } else {
-        this.link = '/units/' + this.unitId + '/lessons/' + this.id;
+        this.link = '/units/' + unitId + '/lessons/' + id;
       }
     }
 

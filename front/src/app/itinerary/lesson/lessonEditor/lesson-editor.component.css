@@ -22,6 +22,10 @@
   background-color: #7d3c90;
 }
 
+.return {
+  margin-right: 2rem;
+}
+
 .std-tool {
   margin-left: 0.5rem;
   background-color: #05132f;
