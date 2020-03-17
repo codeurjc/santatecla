@@ -4,14 +4,14 @@
 
     <div *ngIf="loginService.isLogged" [ngClass]="loginService.isAdmin ? 'header admin-header' : 'header user-header'">
 
-      <div id="breadcrumb-wrapper">
-
-        <div mat-button *ngIf="loginService.isAdmin" class="nav-button admin-nav-button">
-          <div class="nav-button-link" [routerLink]="['/']" (click)="this.tabService.deactivateTabs()">
-            <mat-icon class="nav-button-icon">home</mat-icon>
-            <div class="nav-button-name">Inicio</div>
-          </div>
+      <div mat-button *ngIf="loginService.isAdmin" class="home-button admin-nav-button">
+        <div class="nav-button-link" [routerLink]="['/']" (click)="this.tabService.deactivateTabs()">
+          <mat-icon class="nav-home-button">home</mat-icon>
+          <div class="nav-home-name">Inicio</div>
         </div>
+      </div>
+
+      <div id="tab-wrapper">
 
         <div mat-button *ngIf="loginService.isAdmin" class="nav-button admin-nav-button">
           <div class="nav-button-link" [routerLink]="['/unit']" (click)="this.tabService.deactivateTabs()">

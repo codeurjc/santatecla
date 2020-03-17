@@ -45,20 +45,36 @@
   border-radius: 0;
 }
 
+.home-button {
+  margin-left: 0;
+  display: flex;
+  height: 3rem;
+  top: 0;
+  border-radius: 0;
+}
+
 .nav-button-link {
   cursor: pointer;
   margin-top: 1rem;
   text-align: center;
 }
 
+.nav-button-link:focus {outline:0;}
+
 .nav-button-image {
-  position: absolute;
-  margin: -0.5rem 0 0 1.5rem;
+  display: flex;
+  margin: -0.5rem 0 -0.5rem 1.5rem;
 }
 
 .nav-button-icon {
+  font-size: 20px;
+  display: flex;
+  margin: -0.5rem 0 -1rem 1rem;
+}
+
+.nav-home-button {
   position: absolute;
-  margin: -0.8rem 0 0 0.7rem;
+  margin: -0.5rem 0 0 1.5rem;
 }
 
 .user-nav-button {
@@ -67,6 +83,14 @@
 
 .admin-nav-button {
   background-image: linear-gradient(to right, #804391 0, #1e042f 1rem);
+}
+
+.nav-home-name{
+  display: inline-block;
+  margin-left: 1.4rem;
+  margin-right: 0.5rem;
+  min-width: 2rem;
+  margin-top: 0.8rem;
 }
 
 .nav-button-name {
@@ -96,14 +120,20 @@
   top: 0.3rem;
 }
 
-#breadcrumb-wrapper {
-  margin-right: 13rem;
-  top: 0.5rem;
-  display: inline-flex;
+#tab-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
-.tab-wrapper {
-  margin: 0 0 0 0.8rem;
+#tab-wrapper {
+  margin-right: 13rem;
+  top: 0;
+  display: inline-flex;
+  overflow: auto;
+  white-space: nowrap;
+  width: 85%;
+  margin-left: 4.5%;
+  position: absolute;
+  -ms-overflow-style: none;
 }
 
 .active-tab {
