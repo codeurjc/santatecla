@@ -61,7 +61,7 @@
       </span>
     </div>
 
-    <button *ngIf="showDiagram" mat-button [ngClass]="ableToSave ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null)">
+    <button *ngIf="showDiagram" mat-button [ngClass]="ableToSave ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null, null, null)">
       <mat-icon>save</mat-icon>
       Guardar
     </button>

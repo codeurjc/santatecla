@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 Tree-table added in the module progress
+Tab feature, divided into unit tabs and course tabs
 
 ### Fixed
 Navigation to lessons from the course

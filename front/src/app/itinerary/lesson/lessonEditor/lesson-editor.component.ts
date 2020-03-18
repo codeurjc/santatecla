@@ -14,7 +14,6 @@ import Asciidoctor from 'asciidoctor';
 import {Slide} from '../../../slide/slide.model';
 import {DefinitionQuestionService} from '../../../question/definitionQuestion/definitionQuestion.service';
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
-import {TabService} from '../../../tab/tab.service';
 import {UnitLessonService} from '../unit-lesson.service';
 import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
@@ -33,6 +32,8 @@ import {AnswerQuestionDialogComponent} from '../../../question/answerQuestionDia
 import {Question} from '../../../question/question.model';
 import {UnitsQuestionsToolComponent} from '../lessonTools/units-questions-tool.component';
 import {ClipboardService} from 'ngx-clipboard';
+import {TabService} from '../../../tab/tab.service';
+import {Tab} from '../../../tab/tab.model';
 
 
 function convertToHTML(text) {
@@ -119,10 +120,12 @@ export class LessonEditorComponent implements OnInit {
           this.moduleId = params.moduleId;
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
             if (typeof this.moduleId === 'undefined') {
-              this.tabService.setLesson(unit.name, this.unitId, lesson.name);
+              this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+              this.tabService.updateActiveTabLink('Lección', this.lessonId, lesson.name, unit.id, null, null);
             } else {
               this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
-                this.tabService.setLessonInModule(unit.name, this.unitId, module.name, module.id, lesson.name);
+                this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+                this.tabService.updateActiveTabLink('Lección', this.lessonId, lesson.name, unit.id, null, module.id);
               });
             }
           });
@@ -131,7 +134,6 @@ export class LessonEditorComponent implements OnInit {
           this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
             this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
               this.courseId = course.id;
-              this.tabService.setLessonInModule(course.name, course.id, module.name, module.id, lesson.name);
             });
           });
         }

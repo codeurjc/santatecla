@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
 import { TdDialogService } from '@covalent/core';
-import { TabService } from '../tab/tab.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmActionComponent } from '../confirmAction/confirm-action.component';
 
@@ -58,22 +57,14 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
 
   constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
-              private tabService: TabService, private dialog: MatDialog) {}
+              private dialog: MatDialog) {}
 
   ngOnInit() {
-    if (this.tabService.unitId) {
-      this.unitService.getUnit(this.tabService.unitId).subscribe((unit: Unit) => {
-        this.addFocusedUnit(this.tabService.unitId.toString(), unit);
-        this.init();
-      });
-    } else {
-      this.init();
-    }
+    this.init();
   }
 
   init() {
     this.search();
-    this.tabService.setUnits();
     window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
     this.focusUnit();

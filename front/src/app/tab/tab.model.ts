@@ -1,6 +1,46 @@
 export class Tab {
+  link: string;
+  isActive: boolean;
 
-  constructor(private _type: string, private _id: number, private _name: string, private _course: number) {}
+  constructor(private _type: string, private _id: number, private _name: string, public _unitId: string, private _courseId: number, private _moduleId: number) {
+    this.updateLink(_type, _id, _name, _unitId, _courseId, _moduleId);
+  }
+
+  updateLink(type: string, id: number, name: string, unitId: string, courseId: number, moduleId: number) {
+    if (type === 'Unidad') {
+      if (this.id === 0) {
+        this.link = '/unit';
+      } else {
+        this.link = '/unit/' + id;
+      }
+    } else if (type === 'Curso') {
+      if (this.id === 0) {
+        this.link = '/courses';
+      } else {
+        this.link = '/course/' + id;
+      }
+    } else if (type === 'Itinerario') {
+      if (unitId !== null) {
+        this.link = '/units/' + unitId + '/modules/' + id;
+      } else {
+        this.link = '/course/' + courseId + '/modules/' + id;
+      }
+    } else if (type === 'Lección') {
+      if (moduleId !== null) {
+        this.link = '/units/' + unitId + '/modules/' + moduleId + '/lessons/' + id;
+      } else {
+        this.link = '/units/' + unitId + '/lessons/' + id;
+      }
+    } else if (type === 'DefinitionQuestion') {
+        this.link = '/unit/' + this.unitId + '/question/DefinitionQuestion/' + this.id;
+    } else if (type === 'TestQuestion') {
+      this.link = '/unit/' + this.unitId + '/question/TestQuestion/' + this.id;
+    } else if (type === 'ListQuestion') {
+      this.link = '/unit/' + this.unitId + '/question/ListQuestion/' + this.id;
+    }
+
+    this.isActive = true;
+  }
 
   get type(): string {
     return this._type;
@@ -14,12 +54,16 @@ export class Tab {
     return this._name;
   }
 
-  get course(): number {
-    return this._course;
+  get courseId(): number {
+    return this._courseId;
   }
 
-  get active(): boolean {
-    return (window.location.href.includes(this.type + '/' + String(this.id)));
+  get unitId(): string {
+    return this._unitId;
+  }
+
+  get moduleId(): number {
+    return this._moduleId;
   }
 
 }

@@ -11,7 +11,6 @@ import {Module} from '../module.model';
 
 import { LoginService } from '../../../auth/login.service';
 import { UnitService } from '../../../unit/unit.service';
-import {TabService} from '../../../tab/tab.service';
 import {ModuleService} from '../module.service';
 import {CourseService} from '../../../course/course.service';
 import {Course} from '../../../course/course.model';
@@ -19,6 +18,8 @@ import {UnitsBlocksToolComponent} from './units-blocks-tool.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Block} from '../../block.model';
 import {ConfirmActionComponent} from '../../../confirmAction/confirm-action.component';
+import {TabService} from '../../../tab/tab.service';
+import {Tab} from '../../../tab/tab.model';
 
 @Component({
   selector: 'app-module-editor',
@@ -89,11 +90,15 @@ export class ModuleEditorComponent implements OnInit {
 
         if (this.unitId !== undefined) {
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-            this.tabService.setUnitModule(unit.name, this.unitId, module.name, module.id);
+            this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+            this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, unit.id, null, null);
           });
         } else {
-          this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
-            this.tabService.setCourseModule(course.module.id, course.id, course.name);
+          this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
+            this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
+              this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+              this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, null, course.id, null);
+            });
           });
         }
       });

@@ -114,6 +114,9 @@ public class CourseRestController extends GeneralRestController {
         if(optional.isPresent()){
             Course course = optional.get();
             ProgressNode result = getModuleProgressRecursive(course.getModule(), course);
+            if(Double.isNaN(result.getValue().getRealizacion())){
+                result.getValue().setRealizacion(0.0);
+            }
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
 
