@@ -19,6 +19,8 @@ declare var mermaid: any;
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   UNIT_NAME_SEPARATOR = '/';
+  NOTIFICATION_DELAY = 5; // on seconds
+  CLICK_TUTORIAL_FREQUENCY = 5;
 
   searchField = '';
   results: Unit[] = [];
@@ -54,6 +56,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   selectedRelationType = '';
   @ViewChild('umlNewPath') umlNewPath: ElementRef;
   creatingRelation = null;
+
+  clickTutorialNotification = false;
+  clickTutorialCount = this.CLICK_TUTORIAL_FREQUENCY;
+  newUnitNotification = false;
 
 
   constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
@@ -769,6 +775,12 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.ASSOCIATION);
       } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
+      } else if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
+        if (this.clickTutorialCount === this.CLICK_TUTORIAL_FREQUENCY) {
+          this.showClickTutorialNotification();
+        } else {
+          this.clickTutorialCount++;
+        }
       }
       if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
         this.closeUmlNodeOptions();
@@ -788,6 +800,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @HostListener('document:dblclick', ['$event'])
   documentDoubleClick(event: Event): void {
+    this.closeClickTutorialNotification();
     this.creatingRelation = null;
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
@@ -806,6 +819,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         } else if (!this.changed) {
           this.goToUnit(id);
         }
+      } else {
+        this.showNewUnitNotification();
       }
     }
   }
@@ -967,6 +982,39 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         button1: 'Cancelar',
         button2: 'Eliminar'}
     });
+  }
+
+
+
+  // Notifications
+
+  showClickTutorialNotification() {
+    this.clickTutorialNotification = true;
+    this.clickTutorialCount = 0;
+    (async () => {
+      await this.delay(this.NOTIFICATION_DELAY * 1000);
+      this.closeClickTutorialNotification();
+    })();
+  }
+
+  closeClickTutorialNotification() {
+    this.clickTutorialNotification = false;
+  }
+
+  showNewUnitNotification() {
+    this.newUnitNotification = true;
+    (async () => {
+      await this.delay(this.NOTIFICATION_DELAY * 1000);
+      this.closeNewUnitNotification();
+    })();
+  }
+
+  closeNewUnitNotification() {
+    this.newUnitNotification = false;
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
 

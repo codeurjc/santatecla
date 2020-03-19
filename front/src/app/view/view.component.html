@@ -141,5 +141,20 @@
       <path #umlNewPath id="path"></path>
     </svg>
 
+    <div id="notification-container">
+      <mat-card class="notification" *ngIf="clickTutorialNotification">
+        <mat-icon>live_help</mat-icon><br>
+        <b>Doble click</b> para entrar<br>
+        <b>Click derecho</b> para editar
+        <mat-icon class="close-notification" (click)="closeClickTutorialNotification()">close</mat-icon><br>
+      </mat-card>
+      <mat-card class="notification" *ngIf="newUnitNotification">
+        <mat-icon>live_help</mat-icon><br>
+        Esa es una unidad nueva<br>
+        <b>Guarda</b> para poder entrar
+        <mat-icon class="close-notification" (click)="closeNewUnitNotification()">close</mat-icon><br>
+      </mat-card>
+    </div>
+
   </body>
 </html>
