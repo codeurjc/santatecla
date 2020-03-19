@@ -305,6 +305,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
+      this.closeNewUnitNotification();
       if (goToUnit) {
         this.goToUnit(goToUnit);
       } else if (deleteUnit) {
