@@ -993,6 +993,33 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
+  canDeactivate(): boolean {
+    if (this.changed) {
+      if (this.changed && this.ableToSave) {
+        const dialogRef = this.changedDialog();
+        dialogRef.afterClosed().subscribe(result => {
+          window.scroll(0, 0);
+          if (result === 1) {
+            this.loadUnits();
+          } else if (result === 2) {
+            this.save(null, null, null);
+          }
+        });
+      } else if (this.changed) {
+        const dialogRef = this.reloadDialog();
+        dialogRef.afterClosed().subscribe(result => {
+          window.scroll(0, 0);
+          if (result === 1) {
+            this.loadUnits();
+          }
+        });
+      }
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 
 
   // Notifications

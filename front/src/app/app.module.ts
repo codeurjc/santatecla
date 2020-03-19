@@ -71,6 +71,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { TreetableModule } from 'ng-material-treetable';
 import {TabService} from './tab/tab.service';
 import {FocusedUnitsService} from "./view/focused-units.service";
+import {ConfirmDeactivateGuard} from "./view/confirm-deactivate-guard";
 
 @NgModule({
   declarations: [
@@ -158,7 +159,7 @@ import {FocusedUnitsService} from "./view/focused-units.service";
         CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule, DragDropModule
     ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
-    QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService, FocusedUnitsService,
+    QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService, FocusedUnitsService, ConfirmDeactivateGuard,
     MenuComponent, UnitLessonService, UnitModuleService, ImageService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
