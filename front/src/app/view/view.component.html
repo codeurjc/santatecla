@@ -28,7 +28,7 @@
 
       <mat-selection-list class="result-list" *ngIf="results.length > 0">
         <span *ngFor="let result of results">
-          <mat-list-option class="result" (click)="confirmSelectUnit(result)" *ngIf="!focusedUnits.has(result.id.toString())" [selected]="false">
+          <mat-list-option class="result" (click)="confirmSelectUnit(result)" *ngIf="!focusedUnitsService.focusedUnits.has(result.id.toString())" [selected]="false">
             <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
             <span class="unit-name">{{getUnitName(result.name)}}</span>
           </mat-list-option>

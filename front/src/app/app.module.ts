@@ -70,6 +70,7 @@ import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { TreetableModule } from 'ng-material-treetable';
 import {TabService} from './tab/tab.service';
+import {FocusedUnitsService} from "./view/focused-units.service";
 
 @NgModule({
   declarations: [
@@ -157,7 +158,7 @@ import {TabService} from './tab/tab.service';
         CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, NgxChartsModule, DragDropModule
     ],
   providers: [LoginService, LessonService, ModuleService, CardService, SlideService, DefinitionQuestionService, ListQuestionService,
-    QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService,
+    QuestionService, ProgressService, TestQuestionService, CourseService, TabService, UnitService, FocusedUnitsService,
     MenuComponent, UnitLessonService, UnitModuleService, ImageService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
