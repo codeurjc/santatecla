@@ -20,7 +20,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   UNIT_NAME_SEPARATOR = '/';
   NOTIFICATION_DELAY = 5; // on seconds
-  CLICK_TUTORIAL_FREQUENCY = 5;
+  CLICK_TUTORIAL_FREQUENCY = 6;
 
   searchField = '';
   results: Unit[] = [];
@@ -58,7 +58,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   creatingRelation = null;
 
   clickTutorialNotification = false;
-  clickTutorialCount = this.CLICK_TUTORIAL_FREQUENCY;
+  clickTutorialCount = this.CLICK_TUTORIAL_FREQUENCY - 1;
   newUnitNotification = false;
 
 
