@@ -817,7 +817,15 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
               this.save(id, null, null);
             }
           });
-        } else if (!this.changed) {
+        } else if (this.changed) {
+          const dialogRef = this.reloadDialog();
+          dialogRef.afterClosed().subscribe(result => {
+            window.scroll(0, 0);
+            if (result === 1) {
+              this.goToUnit(id);
+            }
+          });
+        } else {
           this.goToUnit(id);
         }
       } else {
