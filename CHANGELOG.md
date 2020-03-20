@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0]
 
 ### Added
-Tree-table added in the module progress
-Tab feature, divided into unit tabs and course tabs
+ - Tree-table added in the module progress
+ - Tab feature, divided into unit tabs and course tabs
+
+### Changed
+ - Images are now into a determined unit, so the import includes unitId
 
 ### Fixed
-Navigation to lessons from the course
+ - Navigation to lessons from the course
+ - Adding lesson with cards and images now shows image, not include text
+ - Scroll independently in lesson editor
+ - When editing cards its not allowed to drag elements
+ - When editing card tittle, the item wont toggle
 
 ## [1.0.0]
 
