@@ -915,7 +915,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         window.scroll(0, 0);
         if (result === 1) {
           this.changed = false;
-          this.selectUnit(unit);
+          if (unit) {
+            this.selectUnit(unit);
+          } else {
+            this.deselectAll();
+          }
         }
       });
     } else if (this.changed) {
@@ -924,12 +928,25 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         window.scroll(0, 0);
         if (result === 1) {
           this.deleteNewUnits();
+          if (unit) {
+            this.focusUnit();
+          } else {
+            this.deselectAll();
+          }
+        } else if (result === 2) {
+          this.focusUnit();
         }
-        this.focusUnit();
       });
-    } else {
+    } else if (unit) {
       this.selectUnit(unit);
+    } else {
+      this.deselectAll();
     }
+  }
+
+  deselectAll() {
+    this.focusedUnitsService.focusedUnits.clear();
+    this.focusUnit();
   }
 
   selectUnit(unit: Unit) {

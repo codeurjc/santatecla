@@ -5,6 +5,12 @@
     <div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
 
       <div class="no-results" *ngIf="getFocusedUnits().length <= 0">Ninguna unidad seleccionada</div>
+      <div class="deselect-all-container" *ngIf="getFocusedUnits().length > 1">
+        <span class="deselect-all" (click)="confirmSelectUnit(null)">
+          Desmarcar todas&nbsp;
+          <mat-icon id="deselect-all-icon">close</mat-icon>
+        </span>
+      </div>
       <mat-selection-list class="focused-unit-list">
         <mat-list-option class="result" *ngFor="let unit of getFocusedUnits()" (click)="confirmSelectUnit(unit)" [selected]="true">
           <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>

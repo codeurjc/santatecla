@@ -349,3 +349,19 @@ mat-label {
 .close-notification:hover {
   color: indianred !important;
 }
+
+.deselect-all-container {
+  color: #cabecc;
+  text-align: right;
+  margin-right: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.deselect-all {
+  cursor: pointer;
+}
+
+#deselect-all-icon {
+  position: absolute;
+  top: 0.9rem;
+}
