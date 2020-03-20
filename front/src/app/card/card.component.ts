@@ -125,7 +125,7 @@ export class CardComponent implements OnInit {
         const parameters = words[1].split('/');
         if (parameters[0] === 'image') {
           position.push(counter);
-          this.getEmbebedContent(Number(parameters[1]), content, contentCounter, 'image', extractedData, position, index, contentCount);
+          this.getEmbebedContent(Number(parameters[2]), content, contentCounter, 'image', extractedData, position, index, contentCount);
           contentCounter = contentCounter + 1;
         }
       }
@@ -162,7 +162,7 @@ export class CardComponent implements OnInit {
     let contentEmbebed;
 
     if (type === 'image') {
-      contentEmbebed = await this.imageService.getImage(content1).toPromise();
+      contentEmbebed = await this.imageService.getImage(this.unitId, content1).toPromise();
       if (typeof contentEmbebed !== 'undefined') {
         const image = this.convertImage(contentEmbebed.image);
         const img = '++++\n' +
@@ -288,7 +288,9 @@ export class CardComponent implements OnInit {
   }
 
   openImageBottomSheet(): void {
-    this.bottomSheet.open(ImageComponent);
+    this.bottomSheet.open(ImageComponent, {
+      data: {unitId: this.unitId}
+    });
   }
 
 }

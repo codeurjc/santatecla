@@ -4,6 +4,7 @@ import {Image} from './image.model';
 import {ImageService} from './image.service';
 import { ClipboardService } from 'ngx-clipboard';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-image',
@@ -18,15 +19,19 @@ export class ImageComponent implements OnInit {
 
   newImage: Image;
 
+  unitId: number;
+
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private imageService: ImageService,
               private bottomSheetRef: MatBottomSheetRef<ImageComponent>,
               private clipboardService: ClipboardService,
+              private snackBar: MatSnackBar,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
   ngOnInit() {
-    this.imageService.getImages().subscribe((data: Image[]) => {
+    this.unitId = this.data.unitId;
+    this.imageService.getImages(this.unitId).subscribe((data: Image[]) => {
       this.images = [];
       this.imagesResult = [];
       data.forEach((image: Image) => {
@@ -50,7 +55,7 @@ export class ImageComponent implements OnInit {
     const imageFile: File = fileInput.files[0];
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
-      this.imageService.addImage(imageFile).subscribe(
+      this.imageService.addImage(imageFile, this.unitId).subscribe(
         _ => {
           this.ngOnInit();
         }, (error: Error) => {
@@ -71,10 +76,13 @@ export class ImageComponent implements OnInit {
   }
 
   getUrl(id: any) {
-    const text = 'insert.image/' + id;
+    const text = 'insert.image/' + this.unitId + '/' + id;
     this.clipboardService.copyFromContent(text);
     this.data = text;
     this.bottomSheetRef.dismiss(this.data);
+    this.snackBar.open('La imagen ha sido copiada al portapapeles', 'Entendido', {
+      duration: 2000,
+    });
     event.preventDefault();
   }
 

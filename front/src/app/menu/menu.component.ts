@@ -25,7 +25,7 @@ export class MenuComponent {
 
   closeTab(tab: Tab) {
     if (tab.isActive) {
-      this.router.navigate(['/']);
+      this.router.navigate([tab.closeLink]);
     }
     this.tabService.removeTab(tab);
   }

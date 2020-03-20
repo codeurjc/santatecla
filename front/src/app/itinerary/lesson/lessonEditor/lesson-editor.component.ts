@@ -241,6 +241,19 @@ export class LessonEditorComponent implements OnInit {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
       }
+      if (type === 'image') {
+        contentEmbedded = await this.imageService.getImage(unit, content1).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          const image = this.convertImage(contentEmbedded.image);
+          const img = '++++\n' +
+            '<img class="img-lesson" src="' + image + '">\n' +
+            '++++\n' +
+            '\n';
+          this.extractedData.splice(contentCounter, 1, img);
+        } else {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        }
+      }
     } else {
       if (type === 'card') {
         contentEmbedded = await this.cardService.getCardByName(unit, content1).toPromise().catch((error) => {});
@@ -257,20 +270,6 @@ export class LessonEditorComponent implements OnInit {
         } else {
           this.extractedData.splice(contentCounter, 1, contentEmbedded[0].content.split('=== ')[1]);
         }
-      }
-    }
-
-    if (type === 'image') {
-      contentEmbedded = await this.imageService.getImage(content1).toPromise().catch((error) => {});
-      if (typeof contentEmbedded !== 'undefined') {
-        const image = this.convertImage(contentEmbedded.image);
-        const img = '++++\n' +
-          '<img class="img-lesson" src="' + image + '">\n' +
-          '++++\n' +
-          '\n';
-        this.extractedData.splice(contentCounter, 1, img);
-      } else {
-        this.extractedData.splice(contentCounter, 1, 'ERROR\n');
       }
     }
 
@@ -337,7 +336,7 @@ export class LessonEditorComponent implements OnInit {
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'image') {
           this.position.push(counter);
-          this.getEmbeddedContent(Number(parameters[1]), null, null, content, contentCounter, 'image');
+          this.getEmbeddedContent(Number(parameters[2]), null, Number(parameters[1]), content, contentCounter, 'image');
           contentCounter = contentCounter + 1;
         }
       }
@@ -455,8 +454,10 @@ export class LessonEditorComponent implements OnInit {
 
   openImageBottomSheet(): void {
     this.getCursorPosition();
-    this.bottomSheet.open(ImageComponent, {data: ''}).afterDismissed().subscribe(result => {
-      this.pasteFromClipboard(result);
+    this.bottomSheet.open(ImageComponent, {data: {unitId: this.unitId}}).afterDismissed().subscribe(result => {
+      if (result !== undefined) {
+        this.pasteFromClipboard(result);
+      }
     });
   }
 
