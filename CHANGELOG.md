@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0]
 
 ### Added
-Tree-table added in the module progress
-Tab feature, divided into unit tabs and course tabs
+
+- Tree-table added in the module progress
+- Tab feature, divided into unit tabs and course tabs
+- Tutorials and help notifications in unit diagram
+- Confirm dialogs in all acctions that require saving or reloading data
+- Save the state of the unit diagram even if you navigate elsewhere
 
 ### Fixed
-Navigation to lessons from the course
+
+- Navigation to lessons from the course
 
 ## [1.0.0]
 
