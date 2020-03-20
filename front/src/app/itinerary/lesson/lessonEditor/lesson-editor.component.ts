@@ -86,6 +86,8 @@ export class LessonEditorComponent implements OnInit {
 
   cursorPosition: number;
 
+  extraExtend = true;
+
   constructor(private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -240,8 +242,7 @@ export class LessonEditorComponent implements OnInit {
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
-      }
-      if (type === 'image') {
+      } else if (type === 'image') {
         contentEmbedded = await this.imageService.getImage(unit, content1).toPromise().catch((error) => {});
         if (typeof contentEmbedded !== 'undefined') {
           const image = this.convertImage(contentEmbedded.image);
@@ -366,6 +367,10 @@ export class LessonEditorComponent implements OnInit {
         this.subSlideCount = this.subSlideCount + 1;
         this.extendContent(this.lessonContentExtended);
       } else {
+        if (this.extraExtend) {
+          this.extendContent(this.lessonContentExtended);
+          this.extraExtend = false;
+        }
         this.showSpinner = false;
         this.viewHTMLVersion();
         this.updateQuestionsBlocks(this.lesson.questionsIds, this.newQuestionsIds);
@@ -499,14 +504,6 @@ export class LessonEditorComponent implements OnInit {
   prevSlide() {
     this.contentSlide--;
     this.progress = this.progress - ((1 / (this.contentHTML.length)) * 100);
-  }
-
-  scrollText() {
-    const div = document.getElementById('slide-area-editor');
-    const div2 = document.getElementById('text-area-editor');
-    if (div) {
-      div.scrollTop = div2.scrollTop;
-    }
   }
 
   openQuestion(questionID: number, subtype: string) {

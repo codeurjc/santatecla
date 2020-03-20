@@ -21,6 +21,7 @@ export class MenuComponent {
       },
       (error) => console.log('Error when trying to logout: ' + error),
     );
+    this.tabService.emptyTabs();
   }
 
   closeTab(tab: Tab) {

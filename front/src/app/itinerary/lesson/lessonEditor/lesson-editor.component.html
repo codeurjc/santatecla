@@ -48,7 +48,7 @@
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <mat-card id="editor-container">
-        <textarea id="text-area-editor" class="text-area" [(ngModel)]="lessonContent" (change)="updateHTMLView()" (scroll)="scrollText()"></textarea>
+        <textarea id="text-area-editor" class="text-area" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
       </mat-card>
     </div>
 
