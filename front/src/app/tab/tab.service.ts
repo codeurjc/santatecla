@@ -96,4 +96,9 @@ export class TabService {
     }
   }
 
+  emptyTabs() {
+    this.courseTabs = [];
+    this.unitTabs = [];
+  }
+
 }
