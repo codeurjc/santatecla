@@ -86,6 +86,8 @@ export class LessonEditorComponent implements OnInit {
 
   cursorPosition: number;
 
+  extraExtend = true;
+
   constructor(private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -240,6 +242,18 @@ export class LessonEditorComponent implements OnInit {
         } else {
           this.extractedData.splice(contentCounter, 1, 'ERROR\n');
         }
+      } else if (type === 'image') {
+        contentEmbedded = await this.imageService.getImage(unit, content1).toPromise().catch((error) => {});
+        if (typeof contentEmbedded !== 'undefined') {
+          const image = this.convertImage(contentEmbedded.image);
+          const img = '++++\n' +
+            '<img class="img-lesson" src="' + image + '">\n' +
+            '++++\n' +
+            '\n';
+          this.extractedData.splice(contentCounter, 1, img);
+        } else {
+          this.extractedData.splice(contentCounter, 1, 'ERROR\n');
+        }
       }
     } else {
       if (type === 'card') {
@@ -257,20 +271,6 @@ export class LessonEditorComponent implements OnInit {
         } else {
           this.extractedData.splice(contentCounter, 1, contentEmbedded[0].content.split('=== ')[1]);
         }
-      }
-    }
-
-    if (type === 'image') {
-      contentEmbedded = await this.imageService.getImage(content1).toPromise().catch((error) => {});
-      if (typeof contentEmbedded !== 'undefined') {
-        const image = this.convertImage(contentEmbedded.image);
-        const img = '++++\n' +
-          '<img class="img-lesson" src="' + image + '">\n' +
-          '++++\n' +
-          '\n';
-        this.extractedData.splice(contentCounter, 1, img);
-      } else {
-        this.extractedData.splice(contentCounter, 1, 'ERROR\n');
       }
     }
 
@@ -337,7 +337,7 @@ export class LessonEditorComponent implements OnInit {
           contentCounter = contentCounter + 1;
         } else if (parameters[0] === 'image') {
           this.position.push(counter);
-          this.getEmbeddedContent(Number(parameters[1]), null, null, content, contentCounter, 'image');
+          this.getEmbeddedContent(Number(parameters[2]), null, Number(parameters[1]), content, contentCounter, 'image');
           contentCounter = contentCounter + 1;
         }
       }
@@ -367,6 +367,10 @@ export class LessonEditorComponent implements OnInit {
         this.subSlideCount = this.subSlideCount + 1;
         this.extendContent(this.lessonContentExtended);
       } else {
+        if (this.extraExtend) {
+          this.extendContent(this.lessonContentExtended);
+          this.extraExtend = false;
+        }
         this.showSpinner = false;
         this.viewHTMLVersion();
         this.updateQuestionsBlocks(this.lesson.questionsIds, this.newQuestionsIds);
@@ -455,8 +459,10 @@ export class LessonEditorComponent implements OnInit {
 
   openImageBottomSheet(): void {
     this.getCursorPosition();
-    this.bottomSheet.open(ImageComponent, {data: ''}).afterDismissed().subscribe(result => {
-      this.pasteFromClipboard(result);
+    this.bottomSheet.open(ImageComponent, {data: {unitId: this.unitId}}).afterDismissed().subscribe(result => {
+      if (result !== undefined) {
+        this.pasteFromClipboard(result);
+      }
     });
   }
 
@@ -498,14 +504,6 @@ export class LessonEditorComponent implements OnInit {
   prevSlide() {
     this.contentSlide--;
     this.progress = this.progress - ((1 / (this.contentHTML.length)) * 100);
-  }
-
-  scrollText() {
-    const div = document.getElementById('slide-area-editor');
-    const div2 = document.getElementById('text-area-editor');
-    if (div) {
-      div.scrollTop = div2.scrollTop;
-    }
   }
 
   openQuestion(questionID: number, subtype: string) {

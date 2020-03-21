@@ -21,11 +21,12 @@ export class MenuComponent {
       },
       (error) => console.log('Error when trying to logout: ' + error),
     );
+    this.tabService.emptyTabs();
   }
 
   closeTab(tab: Tab) {
     if (tab.isActive) {
-      this.router.navigate(['/']);
+      this.router.navigate([tab.closeLink]);
     }
     this.tabService.removeTab(tab);
   }

@@ -69,7 +69,6 @@ export class MyCoursesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result === 1) {
         this.ngOnInit();
       }
