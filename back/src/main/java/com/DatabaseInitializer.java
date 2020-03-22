@@ -95,6 +95,7 @@ public class DatabaseInitializer {
                 Slide slide10 = new Slide("Introducción");
                 Slide slide11 = new Slide("Compiladores e interpretes");
                 Slide slide12 = new Slide("Funciones");
+                Slide slide13 = new Slide("Ejemplo ejercicios");
 
                 slide1.addContent("\nLos programas de computador constituyen una\n" +
                         "representación de uno o más algoritmos diseñados para\n" +
@@ -161,6 +162,9 @@ public class DatabaseInitializer {
                 slide04.addContent("\n" +
                         "insert.slide/Programación funcional/Introducción a la programación funcional/Paradigmas de la programación\n");
 
+                slide13.addContent("\n" +
+                        "insert.question/1/1\n");
+
                 slideRepository.save(slide1);
                 slideRepository.save(slide01);
                 slideRepository.save(slide02);
@@ -177,6 +181,7 @@ public class DatabaseInitializer {
                 slideRepository.save(slide10);
                 slideRepository.save(slide11);
                 slideRepository.save(slide12);
+                slideRepository.save(slide13);
 
                 //Lesson
                 Lesson lesson1 = new Lesson("Introducción a la programación funcional");
@@ -208,6 +213,7 @@ public class DatabaseInitializer {
                 lesson10.getSlides().add(slide10);
                 lesson11.getSlides().add(slide11);
                 lesson12.getSlides().add(slide12);
+                lesson1.getSlides().add(slide13);
 
                 lessonRepository.save(lesson1);
                 lessonRepository.save(lesson2);

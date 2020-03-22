@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
+import com.question.definition.definition_answer.DefinitionAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class DefinitionQuestionService {
 
     @Autowired
     private DefinitionQuestionRepository definitionRepository;
+
+    @Autowired
+    private DefinitionAnswerRepository answerRepository;
 
     public DefinitionQuestion save(DefinitionQuestion q) {
         return this.definitionRepository.save(q);
@@ -42,6 +46,7 @@ public class DefinitionQuestionService {
     }
 
     public List<Object> findUserAnswers(long userId, long questionId) {
+        //return this.answerRepository.findUserAnswers(userId, questionId);
         return this.definitionRepository.findUserAnswers(userId, questionId);
     }
 
