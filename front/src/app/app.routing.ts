@@ -22,11 +22,12 @@ import {ImageComponent} from './images/image.component';
 import {LessonSlidesToolComponent} from './itinerary/lesson/lessonTools/lesson-slides-tool.component';
 import {QuestionTrackingComponent} from './question/questionTracking/questionTracking.component';
 import {UnitsQuestionsToolComponent} from './itinerary/lesson/lessonTools/units-questions-tool.component';
+import {ConfirmDeactivateGuard} from "./view/confirm-deactivate-guard";
 
 
 const appRoutes = [
   { path: '' , component: HomeComponent },
-  { path: 'unit' , component: ViewComponent },
+  { path: 'unit' , component: ViewComponent, canDeactivate: [ConfirmDeactivateGuard] },
   { path: 'unit/:unitId', component: UnitComponent },
   { path: 'unitsCardsTool', component: UnitsCardsToolComponent },
   { path: 'lessonSlidesTool', component: LessonSlidesToolComponent },

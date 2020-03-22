@@ -86,7 +86,7 @@ export class LessonEditorComponent implements OnInit {
 
   cursorPosition: number;
 
-  extraExtend = true;
+  extraExtend= true;
 
   constructor(private slideService: SlideService,
               private router: Router,
@@ -368,8 +368,8 @@ export class LessonEditorComponent implements OnInit {
         this.extendContent(this.lessonContentExtended);
       } else {
         if (this.extraExtend) {
-          this.extendContent(this.lessonContentExtended);
           this.extraExtend = false;
+          this.extendContent(this.lessonContentExtended);
         }
         this.showSpinner = false;
         this.viewHTMLVersion();
