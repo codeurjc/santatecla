@@ -28,7 +28,11 @@ export class Tab {
       } else {
         this.link = '/course/' + courseId + '/modules/' + id;
       }
-      this.closeLink = '/unit';
+      if (courseId !== null) {
+        this.closeLink = '/courses';
+      } else {
+        this.closeLink = '/unit';
+      }
     } else if (type === 'Lección') {
       if (moduleId !== null) {
         this.link = '/units/' + unitId + '/modules/' + moduleId + '/lessons/' + id;

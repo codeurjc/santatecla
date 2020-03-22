@@ -5,6 +5,7 @@ import java.util.*;
 import com.GeneralRestController;
 import com.card.Card;
 import com.image.Image;
+import com.itinerary.module.Module;
 import com.relation.Relation;
 
 import org.springframework.http.HttpStatus;
@@ -213,6 +214,19 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 
+    }
+
+    @GetMapping(value="/module/{id}")
+    public ResponseEntity<Unit> getModuleUnit(@PathVariable long id){
+        Optional<Module> module = this.moduleService.findOne(id);
+        if (module.isPresent()) {
+            Optional<Unit> result = this.unitService.findOne(this.unitService.findModuleUnit(id));
+            if(result.isPresent()){
+                return new ResponseEntity<>(result.get(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }

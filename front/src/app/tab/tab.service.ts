@@ -96,6 +96,14 @@ export class TabService {
     }
   }
 
+  updateCourseActiveTabLink(type: string, id: number, name: string, unitId: string, courseId: number, moduleId: number) {
+    for (let tab of this.courseTabs) {
+      if (tab.id === this.activeTab.id && tab.name === this.activeTab.name) {
+        tab.updateLink(type, id, name, unitId, courseId, moduleId);
+      }
+    }
+  }
+
   emptyTabs() {
     this.courseTabs = [];
     this.unitTabs = [];

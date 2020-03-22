@@ -4,7 +4,7 @@
 
     <div *ngIf="loginService.isLogged" [ngClass]="loginService.isAdmin ? 'header admin-header' : 'header user-header'">
 
-      <div mat-button *ngIf="loginService.isAdmin" class="home-button admin-nav-button">
+      <div mat-button [ngClass]="loginService.isAdmin ? 'home-button admin-nav-button' : 'home-button user-nav-button'">
         <div class="nav-button-link" [routerLink]="['/']" (click)="this.tabService.deactivateTabs()">
           <mat-icon class="nav-home-button">home</mat-icon>
           <div class="nav-home-name">Inicio</div>
@@ -30,14 +30,15 @@
           </div>
         </div>
 
-        <div mat-button [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'nav-button user-nav-button'">
+        <div mat-button [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'home-button user-nav-button'">
           <div class="nav-button-link" [routerLink]="['/courses']" (click)="this.tabService.deactivateTabs()">
             <mat-icon class="nav-button-icon">class</mat-icon>
             <div class="nav-button-name">Cursos</div>
           </div>
 
-          <div class="tab-wrapper" *ngIf="loginService.isAdmin && (this.tabService.courseTabs.length > 0)">
-            <button mat-button [ngClass]="tab.isActive ? 'tab-button active-tab' : 'tab-button'" *ngFor="let tab of this.tabService.courseTabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
+          <div class="tab-wrapper" *ngIf="(this.tabService.courseTabs.length > 0)">
+            <button mat-button [ngClass]="[tab.isActive ? 'tab-button active-tab' : 'tab-button', this.loginService.isAdmin ? 'admin-nav-button' : 'user-nav-button']"
+                    *ngFor="let tab of this.tabService.courseTabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
               <div class="tab-button-name">
                 <span class="tab-button-title admin-nav-button-title">{{tab.type}}</span>
                 <span class="tab-button-content">{{tab.name}}</span>
