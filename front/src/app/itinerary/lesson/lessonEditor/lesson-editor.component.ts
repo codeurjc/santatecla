@@ -86,7 +86,7 @@ export class LessonEditorComponent implements OnInit {
 
   cursorPosition: number;
 
-  extraExtend= true;
+  extraExtend = true;
 
   constructor(private slideService: SlideService,
               private router: Router,
@@ -121,23 +121,22 @@ export class LessonEditorComponent implements OnInit {
         if (this.loginService.isAdmin) {
           this.moduleId = params.moduleId;
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-            if (typeof this.moduleId === 'undefined') {
-              this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
-              this.tabService.updateActiveTabLink('Lección', this.lessonId, lesson.name, unit.id, null, null);
-            } else {
-              this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
+              if (typeof this.moduleId === 'undefined') {
                 this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
-                this.tabService.updateActiveTabLink('Lección', this.lessonId, lesson.name, unit.id, null, module.id);
-              });
+                this.tabService.updateActiveTabLink('Lección', this.lessonId, lesson.name, unit.id, null, null);
+              } else {
+                this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
+                  this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+                  this.tabService.updateActiveTabLink('Lección', this.lessonId, lesson.name, unit.id, null, module.id);
+                });
             }
           });
         } else {
           this.moduleId = params.moduleId;
-          this.moduleService.getModule(this.moduleId).subscribe((module: Module) => {
-            this.courseService.getCourse(this.unitId).subscribe((course: Course) => {
-              this.courseId = course.id;
-            });
-          });
+          this.courseId = params.courseId;
+          const tab = new Tab('Lección', this.lessonId, lesson.name, '' + this.unitId, this.courseId, this.moduleId);
+          tab.setIsNotAdmin();
+          this.tabService.addTab(tab);
         }
         this.loadItinerary();
       });
@@ -375,7 +374,9 @@ export class LessonEditorComponent implements OnInit {
         this.viewHTMLVersion();
         this.updateQuestionsBlocks(this.lesson.questionsIds, this.newQuestionsIds);
         this.contentToItinerary(this.lessonContent);
-        this.lessonService.updateLesson(this.lesson).subscribe();
+        if (this.loginService.isAdmin) {
+          this.lessonService.updateLesson(this.lesson).subscribe();
+        }
         this.progress = (1 / (this.contentHTML.length)) * 100;
       }
     }
@@ -443,11 +444,13 @@ export class LessonEditorComponent implements OnInit {
   updateHTMLView() {
     this.contentToItinerary(this.lessonContent);
     this.showSpinner = true;
-    this.lessonService.updateLesson(this.lesson).subscribe((_) => {
-      this.loadItinerary();
-    }, (error) => {
-      console.error(error);
-    });
+    if (this.loginService.isAdmin) {
+      this.lessonService.updateLesson(this.lesson).subscribe((_) => {
+        this.loadItinerary();
+      }, (error) => {
+        console.error(error);
+      });
+    }
   }
 
   openCardsBottomSheet(): void {

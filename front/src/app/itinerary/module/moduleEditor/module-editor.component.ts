@@ -96,6 +96,7 @@ export class ModuleEditorComponent implements OnInit {
         } else {
           this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
             this.unitService.getModuleUnit(course.module.id).subscribe((unit: Unit) => {
+              this.unitId = +unit.id;
               if (this.loginService.isAdmin) {
                 this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
                 this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, null, course.id, null);
@@ -152,7 +153,7 @@ export class ModuleEditorComponent implements OnInit {
     if (this.loginService.isAdmin) {
       this.router.navigate(['/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId]);
     } else {
-      this.router.navigate(['/units/' + this.courseId + '/modules/' + this.moduleId + '/lessons/' + lessonId]);
+      this.router.navigate(['/course/' + this.courseId + '/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId]);
     }
   }
 

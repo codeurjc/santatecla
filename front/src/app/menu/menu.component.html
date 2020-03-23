@@ -31,7 +31,7 @@
         </div>
 
         <div mat-button [ngClass]="loginService.isAdmin ? 'nav-button admin-nav-button' : 'home-button user-nav-button'">
-          <div class="nav-button-link" [routerLink]="['/courses']" (click)="this.tabService.deactivateTabs()">
+          <div *ngIf="loginService.isAdmin" class="nav-button-link" [routerLink]="['/courses']" (click)="this.tabService.deactivateTabs()">
             <mat-icon class="nav-button-icon">class</mat-icon>
             <div class="nav-button-name">Cursos</div>
           </div>
@@ -46,6 +46,16 @@
               </div>
             </button>
           </div>
+        </div>
+
+        <div class="tab-wrapper" *ngIf="(this.tabService.lessonTabs.length > 0)">
+          <button mat-button [ngClass]="tab.isActive ? 'tab-button active-tab user-nav-button' : 'tab-button user-nav-button'" *ngFor="let tab of this.tabService.lessonTabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
+            <div class="tab-button-name">
+              <span class="tab-button-title admin-nav-button-title">{{tab.type}}</span>
+              <span class="tab-button-content">{{tab.name}}</span>
+              <mat-icon class="close-tab" (click)="this.closeTab(tab)">close</mat-icon>
+            </div>
+          </button>
         </div>
 
       </div>
