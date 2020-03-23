@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Load content of new units
+- Edit and remove association relations
 
 ## [1.0.0]
 
