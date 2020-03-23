@@ -705,7 +705,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   getRelationTypeEquivalent(relationType: string): string {
-    let equivalent = RelationType.USE;
+    let equivalent = RelationType.ASSOCIATION;
     if (relationType) {
       if (relationType.includes('composition')) {
         equivalent = RelationType.COMPOSITION;
@@ -713,8 +713,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         equivalent = RelationType.INHERITANCE;
       } else if (relationType.includes('aggregation')) {
         equivalent = RelationType.AGGREGATION;
-      } else if (relationType.includes('dependency')) {
-        equivalent = RelationType.ASSOCIATION;
       }
     }
     return equivalent;
