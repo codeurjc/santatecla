@@ -7,8 +7,13 @@ export class Tab {
 
   isAdmin = true;
 
+  studentLessonSlideNumber: number;
+  studentLessonSlideProgress: number;
+
   constructor(private _type: string, private _id: number, private _name: string, public _unitId: string, private _courseId: number, private _moduleId: number) {
     this.updateLink(_type, _id, _name, _unitId, _courseId, _moduleId);
+    this.studentLessonSlideNumber = 0;
+    this.studentLessonSlideProgress = 0;
   }
 
   updateLink(type: string, id: number, name: string, unitId: string, courseId: number, moduleId: number) {

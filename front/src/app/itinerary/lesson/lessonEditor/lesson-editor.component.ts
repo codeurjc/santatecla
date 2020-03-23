@@ -1,7 +1,7 @@
 import { Unit } from '../../../unit/unit.model';
 import { SlideService } from '../../../slide/slide.service';
 import { Lesson } from '../lesson.model';
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { TdDialogService } from '@covalent/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
@@ -16,7 +16,6 @@ import {DefinitionQuestionService} from '../../../question/definitionQuestion/de
 import {UnitsCardsToolComponent} from '../lessonTools/units-cards-tool.component';
 import {UnitLessonService} from '../unit-lesson.service';
 import {CourseService} from '../../../course/course.service';
-import {Course} from '../../../course/course.model';
 import {ModuleService} from '../../module/module.service';
 import {Module} from '../../module/module.model';
 import {ImageService} from '../../../images/image.service';
@@ -88,6 +87,8 @@ export class LessonEditorComponent implements OnInit {
 
   extraExtend = true;
 
+  actualTab: Tab;
+
   constructor(private slideService: SlideService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -110,7 +111,6 @@ export class LessonEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.contentSlide = 0;
 
     this.activatedRoute.params.subscribe(params => {
@@ -137,6 +137,9 @@ export class LessonEditorComponent implements OnInit {
           const tab = new Tab('Lección', this.lessonId, lesson.name, '' + this.unitId, this.courseId, this.moduleId);
           tab.setIsNotAdmin();
           this.tabService.addTab(tab);
+          this.actualTab = this.tabService.activeTab;
+          this.contentSlide = this.actualTab.studentLessonSlideNumber;
+          this.progress = this.actualTab.studentLessonSlideProgress;
         }
         this.loadItinerary();
       });
@@ -377,7 +380,10 @@ export class LessonEditorComponent implements OnInit {
         if (this.loginService.isAdmin) {
           this.lessonService.updateLesson(this.lesson).subscribe();
         }
-        this.progress = (1 / (this.contentHTML.length)) * 100;
+        if (this.progress === 0) {
+          this.progress = (1 / (this.contentHTML.length)) * 100;
+          this.actualTab.studentLessonSlideProgress = this.progress;
+        }
       }
     }
   }
@@ -501,12 +507,16 @@ export class LessonEditorComponent implements OnInit {
 
   nextSlide() {
     this.contentSlide++;
+    this.actualTab.studentLessonSlideNumber ++;
     this.progress = this.progress + ((1 / (this.contentHTML.length)) * 100);
+    this.actualTab.studentLessonSlideProgress += ((1 / (this.contentHTML.length)) * 100);
   }
 
   prevSlide() {
     this.contentSlide--;
+    this.actualTab.studentLessonSlideNumber --;
     this.progress = this.progress - ((1 / (this.contentHTML.length)) * 100);
+    this.actualTab.studentLessonSlideProgress -= ((1 / (this.contentHTML.length)) * 100);
   }
 
   openQuestion(questionID: number, subtype: string) {
