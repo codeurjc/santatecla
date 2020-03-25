@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scroll independently in lesson editor
 - When editing cards its not allowed to drag elements
 - When editing card tittle, the item wont toggle
+- Deleting lesson doesnt return error.
 
 ## [1.0.0]
 

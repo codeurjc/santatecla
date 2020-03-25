@@ -19,7 +19,7 @@ public class Lesson extends Block {
     @OrderColumn
     private List<Slide> slides;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @OrderColumn
     private List<Long> questionsIds;
 
