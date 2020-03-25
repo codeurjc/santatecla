@@ -58,13 +58,16 @@ public class ModuleRestController extends GeneralRestController {
             Optional<Module> module = this.moduleService.findOne(moduleId);
             Optional<Block> b = this.blockService.findOne(block.getId());
             if(module.isPresent() && b.isPresent()) {
+                if(!this.moduleService.containsRecursiveParent(module.get(), block.getId())) {
+                    module.get().getBlocks().add(block);
+                    this.moduleService.save(module.get());
 
-                module.get().getBlocks().add(block);
-                this.moduleService.save(module.get());
-
-                b.get().getParentsId().add(moduleId);
-                this.blockService.save(b.get());
-                return new ResponseEntity<>(block, HttpStatus.OK);
+                    b.get().getParentsId().add(moduleId);
+                    this.blockService.save(b.get());
+                    return new ResponseEntity<>(block, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
