@@ -67,4 +67,8 @@ export class UnitService {
     return this.http.get(this.baseUrl + id + '/name');
   }
 
+  getModuleUnit(moduleId: number) {
+    return this.http.get(this.baseUrl + 'module/' + moduleId);
+  }
+
 }

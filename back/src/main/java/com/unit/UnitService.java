@@ -138,7 +138,11 @@ public class UnitService {
 	}
 
 	public Long findLessonUnit(long lessonId){
-		return this.unitRepository.findModuleUnit(lessonId);
+		return this.unitRepository.findLessonUnit(lessonId);
+	}
+
+	public Long findModuleUnit(long moduleId){
+		return this.unitRepository.findModuleUnit(moduleId);
 	}
 
 }
