@@ -52,19 +52,27 @@ public class ModuleRestController extends GeneralRestController {
     }
 
     @PostMapping(value = "/{moduleId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Block addBlock(@RequestBody Block block, @PathVariable long moduleId) {
+    public ResponseEntity<Block> addBlock(@RequestBody Block block, @PathVariable long moduleId) {
+        if(block.getId() != moduleId) {
 
-        Optional<Module> module = this.moduleService.findOne(moduleId);
-        Optional<Block> b = this.blockService.findOne(block.getId());
+            Optional<Module> module = this.moduleService.findOne(moduleId);
+            Optional<Block> b = this.blockService.findOne(block.getId());
+            if(module.isPresent() && b.isPresent()) {
+                if(!this.moduleService.containsRecursiveParent(module.get(), block.getId())) {
+                    module.get().getBlocks().add(block);
+                    this.moduleService.save(module.get());
 
-        module.get().getBlocks().add(block);
-        this.moduleService.save(module.get());
-
-        b.get().getParentsId().add(moduleId);
-        this.blockService.save(b.get());
-
-        return block;
+                    b.get().getParentsId().add(moduleId);
+                    this.blockService.save(b.get());
+                    return new ResponseEntity<>(block, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @DeleteMapping(value = "/{moduleId}/blocks/{blockId}")
