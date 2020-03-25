@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Load content of new units
 - Edit and remove association relations
+- Infinite recursion when you add an itinerary that contains itself
 
 ## [1.0.0]
 

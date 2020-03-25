@@ -63,9 +63,9 @@ export class UnitsBlocksToolComponent implements OnInit {
       this.bottomSheetRef.dismiss();
       event.preventDefault();
     }, error => {
-      this.snackBar.open('No ha sido posible introducir el itinerario debido a que ha sido añadido como hijo del mismo con anterioridad.',
+      this.snackBar.open('No es posible introducir este itinerario porque contiene el mismo en el que se está intentando insertar o alguno de sus padres.',
         'Entendido', {
-      duration: 4000,
+      duration: 5000,
     }); });
   }
 
