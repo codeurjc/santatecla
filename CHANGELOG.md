@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Edit and remove association relations
 - Infinite recursion when you add an itinerary that contains itself
 - Student role is allowed now to see question info.
+- Student lesson view doesnt show Question button if there are no questions in the lesson.
 
 ## [1.0.0]
 
