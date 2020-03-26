@@ -28,6 +28,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - When editing card tittle, the item wont toggle
 - Deleting lesson doesnt return error.
 
+## [1.0.1]
+
+### Fixed
+
+- Load content of new units
+- Edit and remove association relations
+- Infinite recursion when you add an itinerary that contains itself
+
 ## [1.0.0]
 
 ### Added

@@ -66,6 +66,7 @@ export class CardComponent implements OnInit {
           this.prettyCards.push('');
           this.cardContentProcessor(card.content, index);
         });
+        this.showSpinner = false;
       });
     });
   }
