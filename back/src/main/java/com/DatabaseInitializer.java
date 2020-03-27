@@ -841,10 +841,6 @@ public class DatabaseInitializer {
                 relationRepository.save(relation10);
                 unit5.addIncomingRelation(relation10);
                 unit8.addOutgoingRelation(relation10);
-                Relation relation11 = new Relation(Relation.RelationType.AGGREGATION, unit5.getId(), unit8.getId());
-                relationRepository.save(relation11);
-                unit5.addIncomingRelation(relation11);
-                unit8.addOutgoingRelation(relation11);
                 Relation relation12 = new Relation(Relation.RelationType.INHERITANCE, unit8.getId(), unit9.getId());
                 relationRepository.save(relation12);
                 unit8.addIncomingRelation(relation12);
