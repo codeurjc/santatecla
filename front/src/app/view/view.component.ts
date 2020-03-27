@@ -407,6 +407,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (this.units.size > 0) {
       this.showSpinner = true;
       const element: any = this.umlDiv.nativeElement;
+      element.className = ((this.units.size === 1) ? (this.showMenu ? 'uml-content uml-size-1 uml-content-with-menu' : 'uml-content uml-size-1 uml-content-without-menu') :
+                           (this.units.size === 2) ? (this.showMenu ? 'uml-content uml-size-2 uml-content-with-menu' : 'uml-content uml-size-2 uml-content-without-menu') :
+                           (this.units.size === 3) ? (this.showMenu ? 'uml-content uml-size-3 uml-content-with-menu' : 'uml-content uml-size-3 uml-content-without-menu') :
+                                                     (this.showMenu ? 'uml-content uml-size-default uml-content-with-menu' : 'uml-content uml-size-default uml-size-more uml-content-without-menu'));
       element.innerHTML = '';
       try {
         const uml = this.parseUml(this.relations);

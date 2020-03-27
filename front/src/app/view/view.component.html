@@ -88,8 +88,7 @@
       Crea nuevas unidades o busca una para ver su diagrama
     </div>
 
-    <div #uml [hidden]="!showDiagram" [ngClass]="(showMenu ? 'uml-content uml-size-default uml-content-with-menu' : 'uml-content uml-size-default uml-size-more uml-content-without-menu')"></div>
-
+    <div #uml [hidden]="!showDiagram"></div>
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">
       <div id="uml-node-options">
