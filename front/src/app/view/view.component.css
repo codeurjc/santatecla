@@ -80,6 +80,7 @@ mat-label {
 
 .unit-name {
   font-weight: bold;
+  padding-right: 2rem;
 }
 
 #uml-edit-input {
@@ -251,8 +252,6 @@ mat-label {
   position: absolute;
   margin-left: 1rem;
   padding-bottom: 2rem;
-  width: calc(100% - 24rem);
-  height: 100vh;
 }
 
 .uml-content-with-menu {

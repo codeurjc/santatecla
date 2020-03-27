@@ -193,15 +193,17 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   updateFocusedUnits() {
     this.focusedUnitsService.focusedUnits = this.focusedUnitsService.focusedUnits.filter((unit: Unit) => this.focusedUnitsService.focusedUnitIds.has(unit.id.toString()));
     this.focusedUnitsService.focusedUnitIds.forEach((unitId) => {
-      if (!this.focusedUnitsContains(unitId.toString())) {
-        const u = this.units.get(unitId.toString());
-        if (u) {
+      const u = this.units.get(unitId.toString());
+      if (u) {
+        if (!this.focusedUnitsContains(unitId.toString())) {
           this.focusedUnitsService.focusedUnits.push(u);
-        } else {
-          this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
-            this.focusedUnitsService.focusedUnits.push(unit);
-          });
         }
+      } else {
+        this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
+          if (!this.focusedUnitsContains(unitId.toString())) {
+            this.focusedUnitsService.focusedUnits.push(unit);
+          }
+        });
       }
     });
   }
@@ -391,10 +393,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
       if (this.isNewId(focusedUnitId)) {
         this.focusedUnitsService.focusedUnitIds.delete(focusedUnitId);
-        this.updateFocusedUnits();
         this.units.delete(focusedUnitId);
       }
     });
+    this.updateFocusedUnits();
   }
 
 
@@ -402,18 +404,23 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Uml
 
   updateUml() {
-    this.showSpinner = true;
-    const element: any = this.umlDiv.nativeElement;
-    element.innerHTML = '';
-    try {
-      const uml = this.parseUml(this.relations);
-      mermaid.render('uml', uml, (svgCode, bindFunctions) => {
-        element.innerHTML = svgCode;
-        this.checkUnitNames();
-        this.updateUmlNodeOptions();
-      });
-    } catch (error) {
-      console.log(error);
+    if (this.units.size > 0) {
+      this.showSpinner = true;
+      const element: any = this.umlDiv.nativeElement;
+      element.innerHTML = '';
+      try {
+        const uml = this.parseUml(this.relations);
+        mermaid.render('uml', uml, (svgCode, bindFunctions) => {
+          element.innerHTML = svgCode;
+          this.checkUnitNames();
+          this.updateUmlNodeOptions();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      this.showDiagram = false;
+      this.changed = false;
     }
   }
 
@@ -691,12 +698,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   drawUmlPathOptions() {
-    let relationType;
-    if (this.selectedTarget.attributes[3]) { relationType = this.selectedTarget.attributes[3].nodeValue; }
-    this.selectedRelationType = this.getRelationTypeEquivalent(relationType);
-    const optionsStyle = this.umlPathOptions.nativeElement.firstChild.style;
-    optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
-    optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    if (this.selectedTarget) {
+      let relationType;
+      if (this.selectedTarget.attributes[3]) {
+        relationType = this.selectedTarget.attributes[3].nodeValue;
+      }
+      this.selectedRelationType = this.getRelationTypeEquivalent(relationType);
+      const optionsStyle = this.umlPathOptions.nativeElement.firstChild.style;
+      optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
+      optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    }
   }
 
   setShowUmlPathOptions(showUmlNodeOptions: boolean) {
