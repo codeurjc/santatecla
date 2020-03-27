@@ -69,9 +69,8 @@
       </span>
     </div>
 
-    <button *ngIf="showDiagram" mat-button [ngClass]="ableToSave ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null, null, null)">
+    <button *ngIf="showDiagram" mat-button [ngClass]="ableToSave ? 'save-button save-button-enabled' : 'save-button'" (click)="save(null, null, null)" matTooltip="Guardar (Ctrl + S)">
       <mat-icon>save</mat-icon>
-      Guardar
     </button>
 
     <div id="spinner-container" *ngIf="showSpinner">
@@ -96,22 +95,22 @@
       <div id="uml-node-options">
 
         <!--<button id="inheritance-incoming-button" class="uml-options-button"><img src="../../assets/img/add-inheritance-incoming.png" height="15"></button>-->
-        <button id="inheritance-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-inheritance-outgoing.png" height="15"></button>
+        <button id="inheritance-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-inheritance-outgoing.png" height="15" matTooltip="Crear relación de herencia"></button>
         <br>
         <!--<button id="composition-incoming-button" class="uml-options-button"><img src="../../assets/img/add-composition-incoming.png" height="15"></button>-->
-        <button id="composition-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-composition-outgoing.png" height="15"></button>
+        <button id="composition-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-composition-outgoing.png" height="15" matTooltip="Crear relación de composición"></button>
         <br>
         <!--<button id="aggregation-incoming-button" class="uml-options-button"><img src="../../assets/img/add-aggregation-incoming.png" height="15"></button>-->
-        <button id="aggregation-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-aggregation-outgoing.png" height="15"></button>
+        <button id="aggregation-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-aggregation-outgoing.png" height="15" matTooltip="Crear relación de agregación"></button>
         <br>
         <!--<button id="association-incoming-button" class="uml-options-button"><img src="../../assets/img/add-association-incoming.png" height="15"></button>-->
-        <button id="association-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-association-outgoing.png" height="15"></button>
+        <button id="association-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-association-outgoing.png" height="15" matTooltip="Crear relación de asociación"></button>
         <br>
         <!--<button id="use-incoming-button" class="uml-options-button"><img src="../../assets/img/add-use-incoming.png" height="15"></button>-->
         <!--<button id="use-outgoing-button" class="uml-options-button"><img src="../../assets/img/add-use-outgoing.png" height="15"></button>-->
         <!--<br>-->
 
-        <button title="Eliminar unidad" class="delete-button uml-options-button" (click)="confirmDeleteUnit()">
+        <button class="delete-button uml-options-button" (click)="confirmDeleteUnit()" matTooltip="Eliminar unidad">
           <mat-icon class="button-icon">delete</mat-icon>
         </button>
 
@@ -121,26 +120,26 @@
     <div #umlPathOptions (window:resize)="drawUmlPathOptions()" [hidden]="!showUmlPathOptions">
       <div id="uml-path-options">
         <div *ngIf="selectedRelationType!=='INHERITANCE'">
-          <button id="inheritance-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-inheritance-outgoing.png" height="15"></button>
+          <button id="inheritance-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-inheritance-outgoing.png" height="15" matTooltip="Cambiar tipo de relación a herencia"></button>
           <br>
         </div>
         <div *ngIf="selectedRelationType!=='COMPOSITION'">
-          <button id="composition-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-composition-outgoing.png" height="15"></button>
+          <button id="composition-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-composition-outgoing.png" height="15" matTooltip="Cambiar tipo de relación a composición"></button>
           <br>
         </div>
         <div *ngIf="selectedRelationType!=='AGGREGATION'">
-          <button id="aggregation-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-aggregation-outgoing.png" height="15"></button>
+          <button id="aggregation-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-aggregation-outgoing.png" height="15" matTooltip="Cambiar tipo de relación a agregación"></button>
           <br>
         </div>
         <div *ngIf="selectedRelationType!=='ASSOCIATION'">
-          <button id="association-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-association-outgoing.png" height="15"></button>
+          <button id="association-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-association-outgoing.png" height="15" matTooltip="Cambiar tipo de relación a asociación"></button>
           <br>
         </div>
         <!--<div *ngIf="selectedRelationType!=='USE'">
           <button id="use-relation-button" class="uml-options-button uml-relation-button"><img src="../../assets/img/add-use-outgoing.png" height="15"></button>
         </div>-->
 
-        <button title="Eliminar relación" class="delete-button uml-options-button" (click)="confirmDeleteRelation()">
+        <button class="delete-button uml-options-button" (click)="confirmDeleteRelation()" matTooltip="Eliminar relación">
           <mat-icon class="button-icon">delete</mat-icon>
         </button>
 

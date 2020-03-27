@@ -118,11 +118,11 @@ mat-label {
 
 .delete-button {
   width: 100% !important;
-  background-color: #ffdae8 !important;
+  background-color: #e98585 !important;
 }
 
 .delete-button:hover {
-  background-color: #ebcad7 !important;
+  background-color: #e7adad !important;
 }
 
 .button-icon {
@@ -233,7 +233,7 @@ mat-label {
 
 .uml-options-button {
   border-radius: 0.2rem;
-  background-color: #fdf7ff;
+  background-color: #d5b9de;
   cursor: pointer;
   width: 100%;
   border: none;
@@ -244,7 +244,7 @@ mat-label {
 }
 
 .uml-options-button:hover {
-  background-color: #ebe5ed;
+  background-color: #e4d3e9;
 }
 
 .uml-content {
