@@ -80,7 +80,7 @@
       <div id="prevent-click"></div>
     </div>
 
-    <span *ngIf="unitNameErrors" id="name-errors">
+    <span *ngIf="showDiagram && unitNameErrors" id="name-errors">
       Hay unidades con nombres repetidos
     </span>
 
@@ -88,7 +88,10 @@
       Busca una unidad para ver su diagrama
     </div>
 
-    <div [hidden]="!showDiagram" [ngClass]="showMenu ? 'uml-content uml-content-with-menu' : 'uml-content uml-content-without-menu'" #uml></div>
+    <div #uml [hidden]="!showDiagram" [ngClass]="(units.size === 1) ? (showMenu ? 'uml-content uml-size-1 uml-content-with-menu' : 'uml-content uml-size-1 uml-content-without-menu') :
+                                                 (units.size === 2) ? (showMenu ? 'uml-content uml-size-2 uml-content-with-menu' : 'uml-content uml-size-2 uml-content-without-menu') :
+                                                 (units.size === 3) ? (showMenu ? 'uml-content uml-size-3 uml-content-with-menu' : 'uml-content uml-size-3 uml-content-without-menu') :
+                                                 (showMenu ? 'uml-content uml-size-default uml-content-with-menu' : 'uml-content uml-size-default uml-size-more uml-content-without-menu')"></div>
 
     <div #umlNodeOptions (window:resize)="updateUmlNodeOptions()">
       <input id="uml-edit-input" (change)="updateUnitName()">

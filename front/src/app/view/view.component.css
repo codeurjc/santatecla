@@ -249,9 +249,9 @@ mat-label {
 .uml-content {
   margin-top: 8rem;
   position: absolute;
-  right: 0;
+  margin-left: 1rem;
   padding-bottom: 2rem;
-  width: 100%;
+  width: calc(100% - 24rem);
   height: 100vh;
 }
 
