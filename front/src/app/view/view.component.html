@@ -4,15 +4,15 @@
 
     <div id="lateral-panel" [ngClass]="showMenu ? 'left-zero' : 'hidden-menu'">
 
-      <div class="no-results" *ngIf="getFocusedUnits().length <= 0">Ninguna unidad seleccionada</div>
-      <div class="deselect-all-container" *ngIf="getFocusedUnits().length > 1">
+      <div class="no-results" *ngIf="focusedUnitsService.focusedUnits.length <= 0">Ninguna unidad seleccionada</div>
+      <div class="deselect-all-container" *ngIf="focusedUnitsService.focusedUnits.length > 1">
         <span class="deselect-all" (click)="confirmSelectUnit(null)">
           Desmarcar todas&nbsp;
           <mat-icon id="deselect-all-icon">close</mat-icon>
         </span>
       </div>
       <div class="focused-unit-list">
-        <div class="result" *ngFor="let unit of getFocusedUnits()" (click)="confirmSelectUnit(unit)">
+        <div class="result" *ngFor="let unit of focusedUnitsService.focusedUnits" (click)="confirmSelectUnit(unit)">
           <span class="unit-prefix">{{getUnitPrefix(unit.name)}}</span>
           <span class="unit-name">{{getUnitName(unit.name)}}</span>
           <mat-icon class="check-box">check_box</mat-icon>
@@ -35,7 +35,7 @@
 
       <div class="result-list" *ngIf="results.length > 0">
         <span *ngFor="let result of results">
-          <div class="result" (click)="confirmSelectUnit(result)" *ngIf="!focusedUnitsService.focusedUnits.has(result.id.toString())">
+          <div class="result" (click)="confirmSelectUnit(result)" *ngIf="!focusedUnitsService.focusedUnitIds.has(result.id.toString())">
             <span class="unit-prefix">{{getUnitPrefix(result.name)}}</span>
             <span class="unit-name">{{getUnitName(result.name)}}</span>
             <mat-icon class="check-box">check_box_outline_blank</mat-icon>

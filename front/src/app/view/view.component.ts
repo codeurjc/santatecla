@@ -114,13 +114,13 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.relations.clear();
     this.deleteNewUnits();
     this.changed = false;
-    if (this.focusedUnitsService.focusedUnits.size === 0) {
+    if (this.focusedUnitsService.focusedUnitIds.size === 0) {
       this.showSpinner = false;
       this.showDiagram = false;
     } else {
       this.showSpinner = true;
-      this.remainingUnits = this.focusedUnitsService.focusedUnits.size;
-      this.focusedUnitsService.focusedUnits.forEach((id) => {
+      this.remainingUnits = this.focusedUnitsService.focusedUnitIds.size;
+      this.focusedUnitsService.focusedUnitIds.forEach((id) => {
         this.getUnitAndUpdateUml(+id, new Set<number>(), this.parentLevel, this.childrenLevel);
       });
     }
@@ -167,10 +167,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
-  getFocusedUnits(): Unit[] {
-    return Array.from(this.units.values()).filter((unit: Unit) => this.focusedUnitsService.focusedUnits.has(unit.id.toString()));
-  }
-
   reloadLevels(newParentLevel, newChildrenLevel) {
     if ((newParentLevel != null) && (newParentLevel !== this.parentLevel)) {
       this.parentLevel = newParentLevel;
@@ -183,7 +179,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   addFocusedUnit(id, unit) {
-    this.focusedUnitsService.focusedUnits.add(id.toString());
+    this.focusedUnitsService.focusedUnitIds.add(id.toString());
+    this.updateFocusedUnits();
     if (unit) {
       this.addUnit(unit);
     }
@@ -191,6 +188,27 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   addUnit(unit: Unit) {
     this.units.set(unit.id.toString(), unit);
+  }
+
+  updateFocusedUnits() {
+    this.focusedUnitsService.focusedUnits = this.focusedUnitsService.focusedUnits.filter((unit: Unit) => this.focusedUnitsService.focusedUnitIds.has(unit.id.toString()));
+    this.focusedUnitsService.focusedUnitIds.forEach((unitId) => {
+      if (!this.focusedUnitsContains(unitId.toString())) {
+        this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
+          this.focusedUnitsService.focusedUnits.push(unit);
+        });
+      }
+    });
+  }
+
+  focusedUnitsContains(unitId: string): boolean {
+    let cont = false;
+    this.focusedUnitsService.focusedUnits.forEach(unit => {
+      if (unit.id.toString() === unitId.toString()) {
+        cont = true;
+      }
+    });
+    return cont;
   }
 
   getUnitById(id: string): Unit {
@@ -224,7 +242,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.showSpinner = true;
 
       const unitsToCreate: Unit[] = [];
-      this.focusedUnitsService.focusedUnits.forEach((focusedUnitId) => {
+      this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
         if (this.isNewId(focusedUnitId.toString())) {
           unitsToCreate.push(this.getUnitById(focusedUnitId.toString()));
         }
@@ -252,8 +270,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           unit.outgoingRelations.forEach((relation: Relation) => {
             relation.outgoing = data.id.toString();
           });
-          if (this.focusedUnitsService.focusedUnits.has(oldId)) {
-            this.focusedUnitsService.focusedUnits.delete(oldId);
+          if (this.focusedUnitsService.focusedUnitIds.has(oldId)) {
+            this.focusedUnitsService.focusedUnitIds.delete(oldId);
+            this.updateFocusedUnits();
             this.units.delete(oldId);
             this.addFocusedUnit(unit.id.toString(), unit);
           }
@@ -355,7 +374,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   isNewRepeated(unit: Unit) {
     let repeated = false;
-    this.focusedUnitsService.focusedUnits.forEach((focusedUnitId) => {
+    this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
       if ((!repeated) && (this.isNewId(focusedUnitId.toString())) && (focusedUnitId.toString() !== unit.id) && (this.getUnitById(focusedUnitId.toString()).name === unit.name)) {
         repeated = true;
       }
@@ -364,9 +383,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   deleteNewUnits() {
-    this.focusedUnitsService.focusedUnits.forEach((focusedUnitId) => {
+    this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
       if (this.isNewId(focusedUnitId)) {
-        this.focusedUnitsService.focusedUnits.delete(focusedUnitId);
+        this.focusedUnitsService.focusedUnitIds.delete(focusedUnitId);
+        this.updateFocusedUnits();
         this.units.delete(focusedUnitId);
       }
     });
@@ -523,7 +543,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   deleteUnit(id: string) {
     this.unitService.deleteUnit(+id).subscribe(() => {
       this.changed = false;
-      this.focusedUnitsService.focusedUnits.delete(id);
+      this.focusedUnitsService.focusedUnitIds.delete(id);
+      this.updateFocusedUnits();
       this.units.delete(id);
       this.focusUnit();
       this.search();
@@ -538,7 +559,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     unit.outgoingRelations.forEach((relation) => {
       this.deleteNewOutgoingRelation(relation);
     });
-    this.focusedUnitsService.focusedUnits.delete(id);
+    this.focusedUnitsService.focusedUnitIds.delete(id);
+    this.updateFocusedUnits();
     this.units.delete(id);
   }
 
@@ -937,14 +959,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   deselectAll() {
-    this.focusedUnitsService.focusedUnits.clear();
+    this.focusedUnitsService.focusedUnitIds.clear();
+    this.updateFocusedUnits();
     this.focusUnit();
   }
 
   selectUnit(unit: Unit) {
     const id = unit.id.toString();
-    if (this.focusedUnitsService.focusedUnits.has(id)) {
-      this.focusedUnitsService.focusedUnits.delete(id);
+    if (this.focusedUnitsService.focusedUnitIds.has(id)) {
+      this.focusedUnitsService.focusedUnitIds.delete(id);
+      this.updateFocusedUnits();
     } else {
       this.addFocusedUnit(id.toString(), this.getUnitById(id));
     }
@@ -1097,7 +1121,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       }
       uml += this.parseUnitName(relation.incoming.toString()) + connector + this.parseUnitName(relation.outgoing.toString()) + '\n';
     });
-    this.focusedUnitsService.focusedUnits.forEach((focusedUnitId) => {
+    this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
       const unit = this.getUnitById(focusedUnitId);
       if (((unit.outgoingRelations.length === 0) && (unit.incomingRelations.length === 0)) ||
         ((this.parentLevel === 0) && (this.childrenLevel === 0)) ||
@@ -1111,7 +1135,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   parseUnitName(id: string): string {
     let name = "";
-    if (this.focusedUnitsService.focusedUnits.has(id.toString())) {
+    if (this.focusedUnitsService.focusedUnitIds.has(id.toString())) {
       name = 'F';
     } else {
       name = 'N';
