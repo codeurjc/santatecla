@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_answer.DefinitionAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
