@@ -179,11 +179,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   addFocusedUnit(id, unit) {
-    this.focusedUnitsService.focusedUnitIds.add(id.toString());
-    this.updateFocusedUnits();
     if (unit) {
       this.addUnit(unit);
     }
+    this.focusedUnitsService.focusedUnitIds.add(id.toString());
+    this.updateFocusedUnits();
   }
 
   addUnit(unit: Unit) {
@@ -194,9 +194,14 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.focusedUnitsService.focusedUnits = this.focusedUnitsService.focusedUnits.filter((unit: Unit) => this.focusedUnitsService.focusedUnitIds.has(unit.id.toString()));
     this.focusedUnitsService.focusedUnitIds.forEach((unitId) => {
       if (!this.focusedUnitsContains(unitId.toString())) {
-        this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
-          this.focusedUnitsService.focusedUnits.push(unit);
-        });
+        const u = this.units.get(unitId.toString());
+        if (u) {
+          this.focusedUnitsService.focusedUnits.push(u);
+        } else {
+          this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
+            this.focusedUnitsService.focusedUnits.push(unit);
+          });
+        }
       }
     });
   }
