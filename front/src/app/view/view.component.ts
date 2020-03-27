@@ -33,7 +33,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   units: Map<string, Unit> = new Map<string, Unit>();
   relations = new Map<string, Relation>();
   remainingUnits = 0;
-  remainingFocusedUnits = 0;
 
   showMenu = true;
 
@@ -120,31 +119,25 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.showDiagram = false;
     } else {
       this.showSpinner = true;
-      this.remainingUnits = 0;
-      this.remainingFocusedUnits = this.focusedUnitsService.focusedUnits.size;
+      this.remainingUnits = this.focusedUnitsService.focusedUnits.size;
       this.focusedUnitsService.focusedUnits.forEach((id) => {
-        this.remainingFocusedUnits--;
         this.getUnitAndUpdateUml(+id, new Set<number>(), this.parentLevel, this.childrenLevel);
-        if ((this.remainingUnits === 0) && (this.remainingFocusedUnits === 0)) {
-          this.updateUml();
-        }
       });
     }
   }
 
   getUnitAndUpdateUml(id: number, visited: Set<number>, remainingParentLevel: number, remainingChildrenLevel: number) {
-    this.remainingUnits--;
     visited.add(id);
     this.unitService.getUnit(id).subscribe((data: Unit) => {
       this.addUnit(data);
-      this.remainingUnits += data.incomingRelations.length + data.outgoingRelations.length + 1;
+      this.remainingUnits--;
 
       data.incomingRelations.forEach((relation: Relation) => {
-        this.remainingUnits--;
         if (!this.getRelationById(relation.id.toString())) {
           const outgoing = +relation.outgoing;
           if (remainingChildrenLevel !== 0) {
             if (!visited.has(outgoing)) {
+              this.remainingUnits++;
               this.getUnitAndUpdateUml(outgoing, visited, 0, remainingChildrenLevel - 1);
             }
             this.addRelation(relation);
@@ -153,11 +146,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       });
 
       data.outgoingRelations.forEach((relation: Relation) => {
-        this.remainingUnits--;
         if (!this.getRelationById(relation.id.toString())) {
           const incoming = +relation.incoming;
           if (remainingParentLevel !== 0) {
             if (!visited.has(incoming)) {
+              this.remainingUnits++;
               this.getUnitAndUpdateUml(incoming, visited, remainingParentLevel - 1, 0);
             }
             this.addRelation(relation);
@@ -165,7 +158,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         }
       });
 
-      if ((this.remainingUnits === 0) && (this.remainingFocusedUnits === 0)) {
+      if ((this.remainingUnits === 0)) {
         this.updateUml();
       }
 
@@ -533,6 +526,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.focusedUnitsService.focusedUnits.delete(id);
       this.units.delete(id);
       this.focusUnit();
+      this.search();
     });
   }
 
