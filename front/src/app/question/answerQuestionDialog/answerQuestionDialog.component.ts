@@ -44,9 +44,9 @@ export class AnswerQuestionDialogComponent implements OnInit {
   listAnswer: ListAnswer;
   testAnswer: TestAnswer;
 
-  definitionAnswers;
-  listAnswers;
-  testAnswers;
+  definitionAnswers: DefinitionAnswer[];
+  listAnswers: ListAnswer[];
+  testAnswers: TestAnswer[];
 
   subtype: string;
   spinner: boolean;
