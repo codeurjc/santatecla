@@ -13,7 +13,6 @@ import com.itinerary.lesson.Lesson;
 import com.itinerary.lesson.LessonRepository;
 import com.itinerary.module.Module;
 import com.itinerary.module.ModuleRepository;
-import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
 import com.question.definition.definition_question.DefinitionQuestionRepository;
@@ -31,10 +30,6 @@ import com.unit.Unit;
 import com.unit.UnitRepository;
 import com.user.User;
 import com.user.UserRepository;
-
-import com.image.Image;
-import com.image.ImageRepository;
-import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

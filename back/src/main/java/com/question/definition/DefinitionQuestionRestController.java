@@ -157,7 +157,7 @@ public class DefinitionQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping("/{questionID}/answer/user/{userID}")
-    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long questionID, @PathVariable long userID) {
+    public ResponseEntity<List<DefinitionAnswer>> getUserAnswers(@PathVariable long questionID, @PathVariable long userID) {
         return new ResponseEntity<>(this.definitionQuestionService.findUserAnswers(userID, questionID), HttpStatus.OK);
     }
 }

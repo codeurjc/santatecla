@@ -45,9 +45,8 @@ public class DefinitionQuestionService {
         return Optional.empty();
     }
 
-    public List<Object> findUserAnswers(long userId, long questionId) {
-        //return this.answerRepository.findUserAnswers(userId, questionId);
-        return this.definitionRepository.findUserAnswers(userId, questionId);
+    public List<DefinitionAnswer> findUserAnswers(long userId, long questionId) {
+        return this.answerRepository.findUserAnswers(questionId, userId);
     }
 
     public Optional<List<DefinitionAnswer>> findCorrectedAnswers(long questionId) {

@@ -9,12 +9,11 @@ import java.util.List;
 @Repository
 public interface DefinitionAnswerRepository extends JpaRepository<DefinitionAnswer, Long> {
 
-    String findUserAnswersQuery =
-            "SELECT definitionAnswer FROM DefinitionAnswer definitionAnswer, DefinitionQuestion definitionQuuestion " +
-                    "WHERE definitionAnswer MEMBER OF definitionQuuestion.definitionAnswers" +
-                    "AND definitionQuestion.id = ?1 AND definitionAnswer.user.id = ?2";
-
-    @Query(value = findUserAnswersQuery, nativeQuery = true)
-    List<Object> findUserAnswers(long QuestionId, long userId);
+    @Query(value = "SELECT * FROM question JOIN question_definition_answers ON " +
+            "question.id = question_definition_answers.definition_question_id JOIN definition_answer ON " +
+            "question_definition_answers.definition_answers_id = definition_answer.id JOIN user ON " +
+            "definition_answer.user_id = user.id " +
+            "WHERE question.id = ?1 AND user.id = ?2", nativeQuery = true)
+    List<DefinitionAnswer> findUserAnswers(long questionId, long userId);
 
 }
