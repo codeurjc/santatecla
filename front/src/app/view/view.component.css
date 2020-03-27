@@ -170,6 +170,15 @@ mat-label {
   text-align: center;
 }
 
+#prevent-click {
+  position: absolute;
+  width: 300vw;
+  height: 300vh;
+  margin: -100vh -100vw -100vh -100vw;
+  z-index: 10000;
+  background-color: #0000001a;
+}
+
 #spinner {
   display: inline;
   z-index: 10000;
