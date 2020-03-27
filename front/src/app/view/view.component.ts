@@ -733,40 +733,40 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (!this.creatingRelation) {
 
       // Uml
-      if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
+      if ((target.id === 'composition-incoming-button') || (target.parentElement && (target.parentElement.id === 'composition-incoming-button'))) {
         this.createUnit(RelationType.COMPOSITION).id;
-      } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement.id === 'inheritance-incoming-button')) {
+      } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement && (target.parentElement.id === 'inheritance-incoming-button'))) {
         this.createUnit(RelationType.INHERITANCE).id;
-      } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement.id === 'aggregation-incoming-button')) {
+      } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement && (target.parentElement.id === 'aggregation-incoming-button'))) {
         this.createUnit(RelationType.AGGREGATION).id;
-      } else if ((target.id === 'association-incoming-button') || (target.parentElement.id === 'association-incoming-button')) {
+      } else if ((target.id === 'association-incoming-button') || (target.parentElement && (target.parentElement.id === 'association-incoming-button'))) {
         this.createUnit(RelationType.ASSOCIATION).id;
-      } else if ((target.id === 'use-incoming-button') || (target.parentElement.id === 'use-incoming-button')) {
+      } else if ((target.id === 'use-incoming-button') || (target.parentElement && target.parentElement.id === 'use-incoming-button')) {
         this.createUnit(RelationType.USE).id;
-      } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement.id === 'inheritance-outgoing-button')) {
+      } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement && (target.parentElement.id === 'inheritance-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.INHERITANCE;
-      } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
+      } else if ((target.id === 'composition-outgoing-button') || (target.parentElement && (target.parentElement.id === 'composition-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.COMPOSITION;
-      } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement.id === 'aggregation-outgoing-button')) {
+      } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement && (target.parentElement.id === 'aggregation-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.AGGREGATION;
-      } else if ((target.id === 'association-outgoing-button') || (target.parentElement.id === 'association-outgoing-button')) {
+      } else if ((target.id === 'association-outgoing-button') || (target.parentElement && (target.parentElement.id === 'association-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.ASSOCIATION;
-      } else if ((target.id === 'use-outgoing-button') || (target.parentElement.id === 'use-outgoing-button')) {
+      } else if ((target.id === 'use-outgoing-button') || (target.parentElement && (target.parentElement.id === 'use-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.USE;
-      } else if ((target.id === 'composition-relation-button') || (target.parentElement.id === 'composition-relation-button')) {
+      } else if ((target.id === 'composition-relation-button') || (target.parentElement && (target.parentElement.id === 'composition-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.COMPOSITION);
-      } else if ((target.id === 'inheritance-relation-button') || (target.parentElement.id === 'inheritance-relation-button')) {
+      } else if ((target.id === 'inheritance-relation-button') || (target.parentElement && (target.parentElement.id === 'inheritance-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.INHERITANCE);
-      } else if ((target.id === 'aggregation-relation-button') || (target.parentElement.id === 'aggregation-relation-button')) {
+      } else if ((target.id === 'aggregation-relation-button') || (target.parentElement && (target.parentElement.id === 'aggregation-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.AGGREGATION);
-      } else if ((target.id === 'association-relation-button') || (target.parentElement.id === 'association-relation-button')) {
+      } else if ((target.id === 'association-relation-button') || (target.parentElement && (target.parentElement.id === 'association-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.ASSOCIATION);
-      } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
+      } else if ((target.id === 'use-relation-button') || (target.parentElement && (target.parentElement.id === 'use-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
       } else if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
         if (this.clickTutorialCount === this.CLICK_TUTORIAL_FREQUENCY) {
