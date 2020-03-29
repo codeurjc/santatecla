@@ -13,7 +13,8 @@ public interface TestAnswerRepository extends JpaRepository<TestAnswer, Long> {
             "question.id = question_test_answers.test_question_id JOIN test_answer ON " +
             "question_test_answers.test_answers_id = test_answer.id JOIN user ON " +
             "test_answer.user_id = user.id " +
-            "WHERE question.id = ?1 AND user.id = ?2", nativeQuery = true)
-    List<TestAnswer> findUserAnswers(long userId, long questionId);
+            "WHERE question.id = ?1 AND user.id = ?2 AND test_answer.block_id = ?3 " +
+            "AND test_answer.course_id = ?4", nativeQuery = true)
+    List<TestAnswer> findUserAnswers(long questionId, long userId, long blockId, long courseId);
 
 }

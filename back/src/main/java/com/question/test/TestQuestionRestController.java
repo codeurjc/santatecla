@@ -104,9 +104,13 @@ public class TestQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{id}/answer/user/{userId}")
-    public ResponseEntity<List<TestAnswer>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
-        return new ResponseEntity<>(this.testQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
+    @GetMapping("/{questionID}/answer/user/{userID}")
+    public ResponseEntity<List<TestAnswer>> getUserAnswers(@RequestParam long blockId,
+                                                           @RequestParam long courseId,
+                                                           @PathVariable long questionID,
+                                                           @PathVariable long userID) {
+        return new ResponseEntity<>(
+                this.testQuestionService.findUserAnswers(questionID, userID, blockId, courseId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{questionID}/chosenWrongAnswersCount")

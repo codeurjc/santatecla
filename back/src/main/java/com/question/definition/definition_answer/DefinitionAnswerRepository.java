@@ -13,7 +13,8 @@ public interface DefinitionAnswerRepository extends JpaRepository<DefinitionAnsw
             "question.id = question_definition_answers.definition_question_id JOIN definition_answer ON " +
             "question_definition_answers.definition_answers_id = definition_answer.id JOIN user ON " +
             "definition_answer.user_id = user.id " +
-            "WHERE question.id = ?1 AND user.id = ?2", nativeQuery = true)
-    List<DefinitionAnswer> findUserAnswers(long questionId, long userId);
+            "WHERE question.id = ?1 AND user.id = ?2 AND definition_answer.block_id = ?3 " +
+            "AND definition_answer.course_id = ?4", nativeQuery = true)
+    List<DefinitionAnswer> findUserAnswers(long questionId, long userId, long blockId, long courseId);
 
 }

@@ -33,8 +33,8 @@ public class TestQuestionService {
         return this.testRepository.findById(id);
     }
 
-    public List<TestAnswer> findUserAnswers(long userId, long questionId){
-        return this.answerRepository.findUserAnswers(questionId, userId);
+    public List<TestAnswer> findUserAnswers(long questionId, long userId, long blockId, long courseId){
+        return this.answerRepository.findUserAnswers(questionId, userId, blockId, courseId);
     }
 
     public List<Object> findChosenWrongAnswersCount(long id){
