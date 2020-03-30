@@ -39,6 +39,10 @@
         <div class="answer-info" *ngFor="let answer of data.question.correctAnswers">
           {{answer}}
         </div><br>
+        Tus respuestas: <br>
+        <div class="answer-info" *ngFor="let answer of listAnswers[0].answer">
+          {{answer}}
+        </div><br>
         <!-- TODO Tus respuestas seleccionadas: <br>
         <span [ngClass]="listAnswer.correct ? 'correct-icon':'wrong-icon'"><i></i></span><br> -->
       </div>
