@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Confirm dialogs in all acctions that require saving or reloading data
 - Save the state of the unit diagram even if you navigate elsewhere
 - Student tabs feature, saving the lesson state
+- Improved units diagram usability: added tooltips, responsive diagram size and clicks prevention while loading
 
 ### Changed
 
