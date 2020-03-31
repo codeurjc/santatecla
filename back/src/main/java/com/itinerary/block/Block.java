@@ -6,7 +6,9 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Block {
@@ -19,10 +21,10 @@ public class Block {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
-    protected List<Long> parentsId;
+    protected Set<Long> parentsId;
 
     public Block() {
-        this.parentsId = new ArrayList<>();
+        this.parentsId = new HashSet<>();
     }
 
     public Block(String name){
@@ -42,7 +44,7 @@ public class Block {
         return name;
     }
 
-    public List<Long> getParentsId() {
+    public Set<Long> getParentsId() {
         return parentsId;
     }
 
@@ -54,7 +56,7 @@ public class Block {
         this.name = name;
     }
 
-    public void setParentsId(List<Long> parentsId) {
+    public void setParentsId(Set<Long> parentsId) {
         this.parentsId = parentsId;
     }
 

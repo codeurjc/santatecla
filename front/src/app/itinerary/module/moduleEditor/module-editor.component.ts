@@ -94,11 +94,17 @@ export class ModuleEditorComponent implements OnInit {
             this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, unit.id, null, null);
           });
         } else {
-          this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
-            this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
-              this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
-              this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, null, course.id, null);
-            });
+          this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
+            this.unitService.getModuleUnit(course.module.id).subscribe((unit: Unit) => {
+              this.unitId = +unit.id;
+              if (this.loginService.isAdmin) {
+                this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
+                this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, null, course.id, null);
+              } else {
+                this.tabService.addTab(new Tab('Curso', +this.courseId, course.name, null, this.courseId, null));
+                this.tabService.updateCourseActiveTabLink('Itinerario', course.module.id, course.module.name, null, course.id, null);
+              }
+            }, error => {console.log(error); });
           });
         }
       });
@@ -147,7 +153,7 @@ export class ModuleEditorComponent implements OnInit {
     if (this.loginService.isAdmin) {
       this.router.navigate(['/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId]);
     } else {
-      this.router.navigate(['/units/' + this.courseId + '/modules/' + this.moduleId + '/lessons/' + lessonId]);
+      this.router.navigate(['/course/' + this.courseId + '/units/' + this.unitId + '/modules/' + this.moduleId + '/lessons/' + lessonId]);
     }
   }
 

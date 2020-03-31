@@ -40,6 +40,7 @@ const appRoutes = [
   { path: 'units/:unitId/modules', component: ModuleComponent },
   { path: 'units/:unitId/lessons/:lessonId', component: LessonEditorComponent },
   { path: 'units/:unitId/modules/:moduleId/lessons/:lessonId', component: LessonEditorComponent },
+  { path: 'course/:courseId/units/:unitId/modules/:moduleId/lessons/:lessonId', component: LessonEditorComponent },
   { path: 'units/:unitId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'course/:courseId/modules/:moduleId', component: ModuleEditorComponent },
   { path: 'units/:unitId/question', component: QuestionComponent },

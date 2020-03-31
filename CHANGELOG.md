@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tutorials and help notifications in unit diagram
 - Confirm dialogs in all acctions that require saving or reloading data
 - Save the state of the unit diagram even if you navigate elsewhere
+- Student tabs feature, saving the lesson state
+- Improved units diagram usability: added tooltips, responsive diagram size and clicks prevention while loading
 
 ### Changed
 
@@ -25,6 +27,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scroll independently in lesson editor
 - When editing cards its not allowed to drag elements
 - When editing card tittle, the item wont toggle
+- Deleting lesson doesnt return error.
+
+## [1.0.1]
+
+### Fixed
+
+- Load content of new units
+- Edit and remove association relations
+- Infinite recursion when you add an itinerary that contains itself
+- Student role is allowed now to see question info.
+- Student lesson view doesnt show Question button if there are no questions in the lesson.
 
 ## [1.0.0]
 

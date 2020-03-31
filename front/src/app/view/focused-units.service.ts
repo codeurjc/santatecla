@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Unit } from "../unit/unit.model";
 
 @Injectable()
 export class FocusedUnitsService {
 
-  focusedUnits: Set<string> = new Set<string>();
+  focusedUnitIds: Set<string> = new Set<string>();
+  focusedUnits: Unit[] = [];
 
 }

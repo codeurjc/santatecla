@@ -11,7 +11,7 @@
         </div>
       </div>
 
-      <div id="super-tab-wrapper">
+      <div [ngClass]="loginService.isAdmin ? 'super-tab-wrapper admin-super-tab-wrapper' : 'super-tab-wrapper'">
 
         <div mat-button *ngIf="loginService.isAdmin" class="nav-button admin-nav-button">
           <div class="nav-button-link" [routerLink]="['/unit']" (click)="this.tabService.deactivateTabs()">
@@ -36,15 +36,26 @@
             <div class="nav-button-name">Cursos</div>
           </div>
 
-          <div class="tab-wrapper" *ngIf="loginService.isAdmin && (this.tabService.courseTabs.length > 0)">
-            <button mat-button [ngClass]="tab.isActive ? 'tab-button active-tab' : 'tab-button'" *ngFor="let tab of this.tabService.courseTabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
+          <div class="tab-wrapper" *ngIf="(this.tabService.courseTabs.length > 0)">
+            <button mat-button [ngClass]="(tab.isActive && loginService.isAdmin) ? 'tab-button active-tab' : (loginService.isAdmin ? 'tab-button' : (tab.isActive ? 'tab-button user-tab-button user-active-tab' : 'tab-button user-tab-button'))"
+                    *ngFor="let tab of this.tabService.courseTabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
               <div class="tab-button-name">
-                <span class="tab-button-title admin-nav-button-title">{{tab.type}}</span>
+                <span [ngClass]="loginService.isAdmin ? 'tab-button-title admin-nav-button-title' : 'tab-button-title user-tab-button-title'">{{tab.type}}</span>
                 <span class="tab-button-content">{{tab.name}}</span>
                 <mat-icon class="close-tab" (click)="this.closeTab(tab)">close</mat-icon>
               </div>
             </button>
           </div>
+        </div>
+
+        <div class="tab-wrapper" *ngIf="(this.tabService.lessonTabs.length > 0)">
+          <button mat-button [ngClass]="tab.isActive ? 'tab-button user-tab-button user-active-tab' : 'tab-button user-tab-button'" *ngFor="let tab of this.tabService.lessonTabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
+            <div class="tab-button-name">
+              <span [ngClass]="loginService.isAdmin ? 'tab-button-title admin-nav-button-title' : 'tab-button-title user-tab-button-title'">{{tab.type}}</span>
+              <span class="tab-button-content">{{tab.name}}</span>
+              <mat-icon class="close-tab" (click)="this.closeTab(tab)">close</mat-icon>
+            </div>
+          </button>
         </div>
 
       </div>

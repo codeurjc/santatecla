@@ -5,6 +5,7 @@ import java.util.*;
 import com.GeneralRestController;
 import com.card.Card;
 import com.image.Image;
+import com.itinerary.module.Module;
 import com.relation.Relation;
 
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,7 @@ public class UnitRestController extends GeneralRestController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Unit> getUnit(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
-        if (unit.isPresent()) {
-            return new ResponseEntity<>(unit.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return unit.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping(value = "/")
@@ -115,9 +112,11 @@ public class UnitRestController extends GeneralRestController {
         Optional<Unit> unit = unitService.findOne(id);
         if (unit.isPresent()) {
             for (Relation relation : unit.get().getOutgoingRelations()) {
+                unitService.findOne(relation.getIncoming()).map(value -> value.getIncomingRelations().remove(relation));
                 relationService.delete(relation.getId());
             }
             for (Relation relation : unit.get().getIncomingRelations()) {
+                unitService.findOne(relation.getOutgoing()).map(value -> value.getOutgoingRelations().remove(relation));
                 relationService.delete(relation.getId());
             }
             unitService.delete(id);
@@ -213,6 +212,19 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 
+    }
+
+    @GetMapping(value="/module/{id}")
+    public ResponseEntity<Unit> getModuleUnit(@PathVariable long id){
+        Optional<Module> module = this.moduleService.findOne(id);
+        if (module.isPresent()) {
+            Optional<Unit> result = this.unitService.findOne(this.unitService.findModuleUnit(id));
+            if(result.isPresent()){
+                return new ResponseEntity<>(result.get(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }

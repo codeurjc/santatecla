@@ -69,6 +69,7 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/definition/{questionID}/answer").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/units/{unitId}/question/definition/{questionID}/answer").hasAnyRole("ADMIN", "USER");
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/units/{unitId}/question/definition/{questionID}/answer/{answerID}").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/definition/{id}/answer/user/{userId}").hasAnyRole("ADMIN", "USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/definition/{questionID}/uncorrectedCount").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/definition/{questionID}/answer/user/{userId}").hasAnyRole("USER", "ADMIN");
 
@@ -80,6 +81,7 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/units/{unitId}/question/list/{questionID}").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/list/{questionID}/answer").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/units/{unitId}/question/list/{questionID}/answer").hasAnyRole("ADMIN", "USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/list/{id}/answer/user/{userId}").hasAnyRole("ADMIN", "USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/list/{questionID}/chosenWrongAnswersCount").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/list/{questionID}/answer/user/{userId}").hasAnyRole("USER", "ADMIN");
 
@@ -91,7 +93,7 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/units/{unitId}/question/test/{questionID}").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/test/{questionID}/answer").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/units/{unitId}/question/test/{questionID}/answer").hasAnyRole("ADMIN", "USER");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/test/{questionID}/answer/user/{userId}").hasAnyRole("USER", "ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/test/{id}/answer/user/{userId}").hasAnyRole("ADMIN", "USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/units/{unitId}/question/test/{questionID}/chosenWrongAnswersCount").hasRole("ADMIN");
 
         //Course

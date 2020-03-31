@@ -17,7 +17,7 @@
           <mat-icon>book</mat-icon>
           <span class="btn-span">Slides</span>
         </button>
-        <button mat-button class="tool" (click)="openQuestionsBottomSheet()">
+        <button mat-button class="tool" (click)="openQuestionsBottomSheet()" >
           <mat-icon>assignment</mat-icon>
           <span class="btn-span">Ejercicios</span>
         </button>
@@ -28,7 +28,7 @@
       </mat-chip-list>
 
       <mat-chip-list *ngIf="!loginService.isAdmin" class="tools">
-        <button mat-button class="std-tool" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <button mat-button class="std-tool" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" *ngIf="questions.length > 0">
           <mat-icon>edit</mat-icon>
           <span class="btn-span">Ejercicios</span>
         </button>

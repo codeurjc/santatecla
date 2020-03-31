@@ -124,16 +124,20 @@
   display: none;
 }
 
-#super-tab-wrapper {
+.super-tab-wrapper {
   margin-right: 13rem;
   top: 0;
   display: inline-flex;
   overflow: auto;
   white-space: nowrap;
-  width: 85%;
-  margin-left: 4.5%;
+  width: 90%;
   position: absolute;
   -ms-overflow-style: none;
+}
+
+.admin-super-tab-wrapper {
+  margin-left: 4.5%;
+  width: 85% !important;
 }
 
 .tab-wrapper {
@@ -145,8 +149,13 @@
   background-color: #5d306a !important;
 }
 
+.user-active-tab {
+  opacity: 1 !important;
+  background-color: #30376a !important;
+}
+
 .tab-button {
-  opacity: 0.8;
+  opacity: 0.6;
   margin-left: 0;
   padding-right: 2.2rem;
   cursor: pointer;
@@ -155,6 +164,10 @@
   border-radius: 1rem 1rem 0 0;
   height: 2.6rem;
   top: 0.4rem;
+}
+
+.user-tab-button {
+  background-color: #242846;
 }
 
 .tab-button-icon {
@@ -171,6 +184,10 @@
   top: -0.4rem;
   font-size: 0.7rem;
   color: #dcc3e3;
+}
+
+.user-tab-button-title {
+  color: #b8c9e3 !important;
 }
 
 .tab-button-content {
