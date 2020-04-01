@@ -118,7 +118,10 @@ public class ListQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping("/{questionID}/answer/user/{userID}")
-    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long questionID, @PathVariable long userID) {
-        return new ResponseEntity<>(this.listQuestionService.findUserAnswers(userID, questionID), HttpStatus.OK);
+    public ResponseEntity<List<ListAnswer>> getUserAnswers(@RequestParam long blockId,
+                                                           @RequestParam long courseId,
+                                                           @PathVariable long questionID,
+                                                           @PathVariable long userID) {
+        return new ResponseEntity<>(this.listQuestionService.findUserAnswers(questionID, userID, blockId, courseId), HttpStatus.OK);
     }
 }
