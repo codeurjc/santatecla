@@ -137,4 +137,12 @@ public class UnitService {
 		return true;
 	}
 
+	public Long findLessonUnit(long lessonId){
+		return this.unitRepository.findLessonUnit(lessonId);
+	}
+
+	public Long findModuleUnit(long moduleId){
+		return this.unitRepository.findModuleUnit(moduleId);
+	}
+
 }

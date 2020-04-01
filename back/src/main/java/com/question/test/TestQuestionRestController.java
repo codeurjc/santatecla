@@ -4,7 +4,6 @@ import com.GeneralRestController;
 import com.question.test.test_answer.TestAnswer;
 import com.question.test.test_question.TestQuestion;
 import com.unit.Unit;
-import org.aspectj.weaver.ast.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -105,9 +104,13 @@ public class TestQuestionRestController extends GeneralRestController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{id}/answer/user/{userId}")
-    public ResponseEntity<List<Object>> getUserAnswers(@PathVariable long id, @PathVariable long userId) {
-        return new ResponseEntity<>(this.testQuestionService.findUserAnswers(userId, id), HttpStatus.OK);
+    @GetMapping("/{questionID}/answer/user/{userID}")
+    public ResponseEntity<List<TestAnswer>> getUserAnswers(@RequestParam long blockId,
+                                                           @RequestParam long courseId,
+                                                           @PathVariable long questionID,
+                                                           @PathVariable long userID) {
+        return new ResponseEntity<>(
+                this.testQuestionService.findUserAnswers(questionID, userID, blockId, courseId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{questionID}/chosenWrongAnswersCount")

@@ -5,6 +5,10 @@
     <!-- TOOLS BAR -->
     <div [ngClass]="loginService.isAdmin ? 'toolsBar admin' : 'toolsBar student'">
       <mat-chip-list *ngIf="loginService.isAdmin" class="tools">
+        <button mat-button class="return" [routerLink]="['/unit/' + tabService.activeTab?.unitId]">
+          <mat-icon>navigate_before</mat-icon>
+          <span class="btn-span">Volver</span>
+        </button>
         <button mat-button class="tool" (click)="openCardsBottomSheet()">
           <mat-icon>description</mat-icon>
           <span class="btn-span">Fichas</span>
@@ -44,7 +48,7 @@
     <!-- EDITOR -->
     <div *ngIf="loginService.isAdmin">
       <mat-card id="editor-container">
-        <textarea id="text-area-editor" class="text-area" [(ngModel)]="lessonContent" (change)="updateHTMLView()" (scroll)="scrollText()"></textarea>
+        <textarea id="text-area-editor" class="text-area" [(ngModel)]="lessonContent" (change)="updateHTMLView()"></textarea>
       </mat-card>
     </div>
 

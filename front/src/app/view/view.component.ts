@@ -5,9 +5,9 @@ import { Router } from '@angular/router';
 import { Relation } from '../relation/relation.model';
 import { RelationType } from '../relation/relation.type';
 import { TdDialogService } from '@covalent/core';
-import { TabService } from '../tab/tab.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmActionComponent } from '../confirmAction/confirm-action.component';
+import {FocusedUnitsService} from "./focused-units.service";
 
 declare var mermaid: any;
 
@@ -20,6 +20,8 @@ declare var mermaid: any;
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   UNIT_NAME_SEPARATOR = '/';
+  NOTIFICATION_DELAY = 5; // on seconds
+  CLICK_TUTORIAL_FREQUENCY = 6;
 
   searchField = '';
   results: Unit[] = [];
@@ -28,11 +30,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   childrenLevel = 3;
   selectLevelOptions = [0, 1, 2, 3, -1];
 
-  focusedUnits: Set<string> = new Set<string>();
   units: Map<string, Unit> = new Map<string, Unit>();
   relations = new Map<string, Relation>();
   remainingUnits = 0;
-  remainingFocusedUnits = 0;
 
   showMenu = true;
 
@@ -56,24 +56,20 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   @ViewChild('umlNewPath') umlNewPath: ElementRef;
   creatingRelation = null;
 
+  clickTutorialNotification = false;
+  clickTutorialCount = this.CLICK_TUTORIAL_FREQUENCY - 1;
+  newUnitNotification = false;
+
 
   constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
-              private tabService: TabService, private dialog: MatDialog) {}
+              private dialog: MatDialog, public focusedUnitsService: FocusedUnitsService) {}
 
   ngOnInit() {
-    if (this.tabService.unitId) {
-      this.unitService.getUnit(this.tabService.unitId).subscribe((unit: Unit) => {
-        this.addFocusedUnit(this.tabService.unitId.toString(), unit);
-        this.init();
-      });
-    } else {
-      this.init();
-    }
+    this.init();
   }
 
   init() {
     this.search();
-    this.tabService.setUnits();
     window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
     this.focusUnit();
@@ -118,36 +114,30 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.relations.clear();
     this.deleteNewUnits();
     this.changed = false;
-    if (this.focusedUnits.size === 0) {
+    if (this.focusedUnitsService.focusedUnitIds.size === 0) {
       this.showSpinner = false;
       this.showDiagram = false;
     } else {
       this.showSpinner = true;
-      this.remainingUnits = 0;
-      this.remainingFocusedUnits = this.focusedUnits.size;
-      this.focusedUnits.forEach((id) => {
-        this.remainingFocusedUnits--;
+      this.remainingUnits = this.focusedUnitsService.focusedUnitIds.size;
+      this.focusedUnitsService.focusedUnitIds.forEach((id) => {
         this.getUnitAndUpdateUml(+id, new Set<number>(), this.parentLevel, this.childrenLevel);
-        if ((this.remainingUnits === 0) && (this.remainingFocusedUnits === 0)) {
-          this.updateUml();
-        }
       });
     }
   }
 
   getUnitAndUpdateUml(id: number, visited: Set<number>, remainingParentLevel: number, remainingChildrenLevel: number) {
-    this.remainingUnits--;
     visited.add(id);
     this.unitService.getUnit(id).subscribe((data: Unit) => {
       this.addUnit(data);
-      this.remainingUnits += data.incomingRelations.length + data.outgoingRelations.length + 1;
+      this.remainingUnits--;
 
       data.incomingRelations.forEach((relation: Relation) => {
-        this.remainingUnits--;
         if (!this.getRelationById(relation.id.toString())) {
           const outgoing = +relation.outgoing;
           if (remainingChildrenLevel !== 0) {
             if (!visited.has(outgoing)) {
+              this.remainingUnits++;
               this.getUnitAndUpdateUml(outgoing, visited, 0, remainingChildrenLevel - 1);
             }
             this.addRelation(relation);
@@ -156,11 +146,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       });
 
       data.outgoingRelations.forEach((relation: Relation) => {
-        this.remainingUnits--;
         if (!this.getRelationById(relation.id.toString())) {
           const incoming = +relation.incoming;
           if (remainingParentLevel !== 0) {
             if (!visited.has(incoming)) {
+              this.remainingUnits++;
               this.getUnitAndUpdateUml(incoming, visited, remainingParentLevel - 1, 0);
             }
             this.addRelation(relation);
@@ -168,17 +158,13 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         }
       });
 
-      if ((this.remainingUnits === 0) && (this.remainingFocusedUnits === 0)) {
+      if ((this.remainingUnits === 0)) {
         this.updateUml();
       }
 
     }, error => {
       console.log(error);
     });
-  }
-
-  getFocusedUnits(): Unit[] {
-    return Array.from(this.units.values()).filter((unit: Unit) => this.focusedUnits.has(unit.id.toString()));
   }
 
   reloadLevels(newParentLevel, newChildrenLevel) {
@@ -193,14 +179,43 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   addFocusedUnit(id, unit) {
-    this.focusedUnits.add(id.toString());
     if (unit) {
       this.addUnit(unit);
     }
+    this.focusedUnitsService.focusedUnitIds.add(id.toString());
+    this.updateFocusedUnits();
   }
 
   addUnit(unit: Unit) {
     this.units.set(unit.id.toString(), unit);
+  }
+
+  updateFocusedUnits() {
+    this.focusedUnitsService.focusedUnits = this.focusedUnitsService.focusedUnits.filter((unit: Unit) => this.focusedUnitsService.focusedUnitIds.has(unit.id.toString()));
+    this.focusedUnitsService.focusedUnitIds.forEach((unitId) => {
+      const u = this.units.get(unitId.toString());
+      if (u) {
+        if (!this.focusedUnitsContains(unitId.toString())) {
+          this.focusedUnitsService.focusedUnits.push(u);
+        }
+      } else {
+        this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
+          if (!this.focusedUnitsContains(unitId.toString())) {
+            this.focusedUnitsService.focusedUnits.push(unit);
+          }
+        });
+      }
+    });
+  }
+
+  focusedUnitsContains(unitId: string): boolean {
+    let cont = false;
+    this.focusedUnitsService.focusedUnits.forEach(unit => {
+      if (unit.id.toString() === unitId.toString()) {
+        cont = true;
+      }
+    });
+    return cont;
   }
 
   getUnitById(id: string): Unit {
@@ -234,7 +249,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.showSpinner = true;
 
       const unitsToCreate: Unit[] = [];
-      this.focusedUnits.forEach((focusedUnitId) => {
+      this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
         if (this.isNewId(focusedUnitId.toString())) {
           unitsToCreate.push(this.getUnitById(focusedUnitId.toString()));
         }
@@ -262,8 +277,9 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
           unit.outgoingRelations.forEach((relation: Relation) => {
             relation.outgoing = data.id.toString();
           });
-          if (this.focusedUnits.has(oldId)) {
-            this.focusedUnits.delete(oldId);
+          if (this.focusedUnitsService.focusedUnitIds.has(oldId)) {
+            this.focusedUnitsService.focusedUnitIds.delete(oldId);
+            this.updateFocusedUnits();
             this.units.delete(oldId);
             this.addFocusedUnit(unit.id.toString(), unit);
           }
@@ -308,6 +324,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       unitsToSave.push(unitToSave);
     });
     this.unitService.saveUnits(unitsToSave).subscribe(() => {
+      this.closeNewUnitNotification();
       if (goToUnit) {
         this.goToUnit(goToUnit);
       } else if (deleteUnit) {
@@ -364,7 +381,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   isNewRepeated(unit: Unit) {
     let repeated = false;
-    this.focusedUnits.forEach((focusedUnitId) => {
+    this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
       if ((!repeated) && (this.isNewId(focusedUnitId.toString())) && (focusedUnitId.toString() !== unit.id) && (this.getUnitById(focusedUnitId.toString()).name === unit.name)) {
         repeated = true;
       }
@@ -373,12 +390,13 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   deleteNewUnits() {
-    this.focusedUnits.forEach((focusedUnitId) => {
+    this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
       if (this.isNewId(focusedUnitId)) {
-        this.focusedUnits.delete(focusedUnitId);
+        this.focusedUnitsService.focusedUnitIds.delete(focusedUnitId);
         this.units.delete(focusedUnitId);
       }
     });
+    this.updateFocusedUnits();
   }
 
 
@@ -386,18 +404,27 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   // Uml
 
   updateUml() {
-    this.showSpinner = true;
-    const element: any = this.umlDiv.nativeElement;
-    element.innerHTML = '';
-    try {
-      const uml = this.parseUml(this.relations);
-      mermaid.render('uml', uml, (svgCode, bindFunctions) => {
-        element.innerHTML = svgCode;
-        this.checkUnitNames();
-        this.updateUmlNodeOptions();
-      });
-    } catch (error) {
-      console.log(error);
+    if (this.units.size > 0) {
+      this.showSpinner = true;
+      const element: any = this.umlDiv.nativeElement;
+      element.className = ((this.units.size === 1) ? (this.showMenu ? 'uml-content uml-size-1 uml-content-with-menu' : 'uml-content uml-size-1 uml-content-without-menu') :
+                           (this.units.size === 2) ? (this.showMenu ? 'uml-content uml-size-2 uml-content-with-menu' : 'uml-content uml-size-2 uml-content-without-menu') :
+                           (this.units.size === 3) ? (this.showMenu ? 'uml-content uml-size-3 uml-content-with-menu' : 'uml-content uml-size-3 uml-content-without-menu') :
+                                                     (this.showMenu ? 'uml-content uml-size-default uml-content-with-menu' : 'uml-content uml-size-default uml-size-more uml-content-without-menu'));
+      element.innerHTML = '';
+      try {
+        const uml = this.parseUml(this.relations);
+        mermaid.render('uml', uml, (svgCode, bindFunctions) => {
+          element.innerHTML = svgCode;
+          this.checkUnitNames();
+          this.updateUmlNodeOptions();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      this.showDiagram = false;
+      this.changed = false;
     }
   }
 
@@ -532,9 +559,11 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   deleteUnit(id: string) {
     this.unitService.deleteUnit(+id).subscribe(() => {
       this.changed = false;
-      this.focusedUnits.delete(id);
+      this.focusedUnitsService.focusedUnitIds.delete(id);
+      this.updateFocusedUnits();
       this.units.delete(id);
       this.focusUnit();
+      this.search();
     });
   }
 
@@ -546,7 +575,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     unit.outgoingRelations.forEach((relation) => {
       this.deleteNewOutgoingRelation(relation);
     });
-    this.focusedUnits.delete(id);
+    this.focusedUnitsService.focusedUnitIds.delete(id);
+    this.updateFocusedUnits();
     this.units.delete(id);
   }
 
@@ -672,12 +702,16 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   drawUmlPathOptions() {
-    let relationType;
-    if (this.selectedTarget.attributes[3]) { relationType = this.selectedTarget.attributes[3].nodeValue; }
-    this.selectedRelationType = this.getRelationTypeEquivalent(relationType);
-    const optionsStyle = this.umlPathOptions.nativeElement.firstChild.style;
-    optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
-    optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    if (this.selectedTarget) {
+      let relationType;
+      if (this.selectedTarget.attributes[3]) {
+        relationType = this.selectedTarget.attributes[3].nodeValue;
+      }
+      this.selectedRelationType = this.getRelationTypeEquivalent(relationType);
+      const optionsStyle = this.umlPathOptions.nativeElement.firstChild.style;
+      optionsStyle.left = (this.selectedTarget.getBoundingClientRect().right + window.pageXOffset) + 'px';
+      optionsStyle.top = (this.selectedTarget.getBoundingClientRect().top + window.pageYOffset) + 'px';
+    }
   }
 
   setShowUmlPathOptions(showUmlNodeOptions: boolean) {
@@ -741,41 +775,47 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (!this.creatingRelation) {
 
       // Uml
-      if ((target.id === 'composition-incoming-button') || (target.parentElement.id === 'composition-incoming-button')) {
+      if ((target.id === 'composition-incoming-button') || (target.parentElement && (target.parentElement.id === 'composition-incoming-button'))) {
         this.createUnit(RelationType.COMPOSITION).id;
-      } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement.id === 'inheritance-incoming-button')) {
+      } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement && (target.parentElement.id === 'inheritance-incoming-button'))) {
         this.createUnit(RelationType.INHERITANCE).id;
-      } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement.id === 'aggregation-incoming-button')) {
+      } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement && (target.parentElement.id === 'aggregation-incoming-button'))) {
         this.createUnit(RelationType.AGGREGATION).id;
-      } else if ((target.id === 'association-incoming-button') || (target.parentElement.id === 'association-incoming-button')) {
+      } else if ((target.id === 'association-incoming-button') || (target.parentElement && (target.parentElement.id === 'association-incoming-button'))) {
         this.createUnit(RelationType.ASSOCIATION).id;
-      } else if ((target.id === 'use-incoming-button') || (target.parentElement.id === 'use-incoming-button')) {
+      } else if ((target.id === 'use-incoming-button') || (target.parentElement && target.parentElement.id === 'use-incoming-button')) {
         this.createUnit(RelationType.USE).id;
-      } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement.id === 'inheritance-outgoing-button')) {
+      } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement && (target.parentElement.id === 'inheritance-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.INHERITANCE;
-      } else if ((target.id === 'composition-outgoing-button') || (target.parentElement.id === 'composition-outgoing-button')) {
+      } else if ((target.id === 'composition-outgoing-button') || (target.parentElement && (target.parentElement.id === 'composition-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.COMPOSITION;
-      } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement.id === 'aggregation-outgoing-button')) {
+      } else if ((target.id === 'aggregation-outgoing-button') || (target.parentElement && (target.parentElement.id === 'aggregation-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.AGGREGATION;
-      } else if ((target.id === 'association-outgoing-button') || (target.parentElement.id === 'association-outgoing-button')) {
+      } else if ((target.id === 'association-outgoing-button') || (target.parentElement && (target.parentElement.id === 'association-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.ASSOCIATION;
-      } else if ((target.id === 'use-outgoing-button') || (target.parentElement.id === 'use-outgoing-button')) {
+      } else if ((target.id === 'use-outgoing-button') || (target.parentElement && (target.parentElement.id === 'use-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.USE;
-      } else if ((target.id === 'composition-relation-button') || (target.parentElement.id === 'composition-relation-button')) {
+      } else if ((target.id === 'composition-relation-button') || (target.parentElement && (target.parentElement.id === 'composition-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.COMPOSITION);
-      } else if ((target.id === 'inheritance-relation-button') || (target.parentElement.id === 'inheritance-relation-button')) {
+      } else if ((target.id === 'inheritance-relation-button') || (target.parentElement && (target.parentElement.id === 'inheritance-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.INHERITANCE);
-      } else if ((target.id === 'aggregation-relation-button') || (target.parentElement.id === 'aggregation-relation-button')) {
+      } else if ((target.id === 'aggregation-relation-button') || (target.parentElement && (target.parentElement.id === 'aggregation-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.AGGREGATION);
-      } else if ((target.id === 'association-relation-button') || (target.parentElement.id === 'association-relation-button')) {
+      } else if ((target.id === 'association-relation-button') || (target.parentElement && (target.parentElement.id === 'association-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.ASSOCIATION);
-      } else if ((target.id === 'use-relation-button') || (target.parentElement.id === 'use-relation-button')) {
+      } else if ((target.id === 'use-relation-button') || (target.parentElement && (target.parentElement.id === 'use-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
+      } else if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
+        if (this.clickTutorialCount === this.CLICK_TUTORIAL_FREQUENCY) {
+          this.showClickTutorialNotification();
+        } else {
+          this.clickTutorialCount++;
+        }
       }
       if ((target.id !== 'uml-edit-input') && (target.id !== 'uml-node-options')) {
         this.closeUmlNodeOptions();
@@ -795,6 +835,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   @HostListener('document:dblclick', ['$event'])
   documentDoubleClick(event: Event): void {
+    this.closeClickTutorialNotification();
     this.creatingRelation = null;
     const target = event.target as HTMLInputElement;
     if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
@@ -810,9 +851,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
               this.save(id, null, null);
             }
           });
-        } else if (!this.changed) {
+        } else if (this.changed) {
+          const dialogRef = this.reloadDialog();
+          dialogRef.afterClosed().subscribe(result => {
+            window.scroll(0, 0);
+            if (result === 1) {
+              this.goToUnit(id);
+            }
+          });
+        } else {
           this.goToUnit(id);
         }
+      } else {
+        this.showNewUnitNotification();
       }
     }
   }
@@ -898,18 +949,46 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         window.scroll(0, 0);
         if (result === 1) {
           this.changed = false;
-          this.selectUnit(unit);
+          if (unit) {
+            this.selectUnit(unit);
+          } else {
+            this.deselectAll();
+          }
         }
       });
-    } else {
+    } else if (this.changed) {
+      const dialogRef = this.changedDialog();
+      dialogRef.afterClosed().subscribe(result => {
+        window.scroll(0, 0);
+        if (result === 1) {
+          this.deleteNewUnits();
+          if (unit) {
+            this.focusUnit();
+          } else {
+            this.deselectAll();
+          }
+        } else if (result === 2) {
+          this.focusUnit();
+        }
+      });
+    } else if (unit) {
       this.selectUnit(unit);
+    } else {
+      this.deselectAll();
     }
+  }
+
+  deselectAll() {
+    this.focusedUnitsService.focusedUnitIds.clear();
+    this.updateFocusedUnits();
+    this.focusUnit();
   }
 
   selectUnit(unit: Unit) {
     const id = unit.id.toString();
-    if (this.focusedUnits.has(id)) {
-      this.focusedUnits.delete(id);
+    if (this.focusedUnitsService.focusedUnitIds.has(id)) {
+      this.focusedUnitsService.focusedUnitIds.delete(id);
+      this.updateFocusedUnits();
     } else {
       this.addFocusedUnit(id.toString(), this.getUnitById(id));
     }
@@ -967,6 +1046,66 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
+  canDeactivate(): boolean {
+    if (this.changed) {
+      if (this.changed && this.ableToSave) {
+        const dialogRef = this.changedDialog();
+        dialogRef.afterClosed().subscribe(result => {
+          window.scroll(0, 0);
+          if (result === 1) {
+            this.loadUnits();
+          } else if (result === 2) {
+            this.save(null, null, null);
+          }
+        });
+      } else if (this.changed) {
+        const dialogRef = this.reloadDialog();
+        dialogRef.afterClosed().subscribe(result => {
+          window.scroll(0, 0);
+          if (result === 1) {
+            this.loadUnits();
+          }
+        });
+      }
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+
+  // Notifications
+
+  showClickTutorialNotification() {
+    this.clickTutorialNotification = true;
+    this.clickTutorialCount = 0;
+    (async () => {
+      await this.delay(this.NOTIFICATION_DELAY * 1000);
+      this.closeClickTutorialNotification();
+    })();
+  }
+
+  closeClickTutorialNotification() {
+    this.clickTutorialNotification = false;
+  }
+
+  showNewUnitNotification() {
+    this.newUnitNotification = true;
+    (async () => {
+      await this.delay(this.NOTIFICATION_DELAY * 1000);
+      this.closeNewUnitNotification();
+    })();
+  }
+
+  closeNewUnitNotification() {
+    this.newUnitNotification = false;
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 
 
   // Routing
@@ -1002,7 +1141,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       }
       uml += this.parseUnitName(relation.incoming.toString()) + connector + this.parseUnitName(relation.outgoing.toString()) + '\n';
     });
-    this.focusedUnits.forEach((focusedUnitId) => {
+    this.focusedUnitsService.focusedUnitIds.forEach((focusedUnitId) => {
       const unit = this.getUnitById(focusedUnitId);
       if (((unit.outgoingRelations.length === 0) && (unit.incomingRelations.length === 0)) ||
         ((this.parentLevel === 0) && (this.childrenLevel === 0)) ||
@@ -1016,7 +1155,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
   parseUnitName(id: string): string {
     let name = "";
-    if (this.focusedUnits.has(id.toString())) {
+    if (this.focusedUnitsService.focusedUnitIds.has(id.toString())) {
       name = 'F';
     } else {
       name = 'N';

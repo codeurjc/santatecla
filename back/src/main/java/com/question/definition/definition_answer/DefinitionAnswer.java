@@ -50,6 +50,9 @@ public class DefinitionAnswer{
 
         this.correct = a.isCorrect();
         this.corrected = a.isCorrected();
+        this.unitId = a.unitId;
+        this.blockId = a.blockId;
+        this.courseId = a.courseId;
     }
 
     public long getId() {

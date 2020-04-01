@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0]
+
+### Added
+
+- Tree-table added in the module progress
+- Tab feature, divided into unit tabs and course tabs
+- Tutorials and help notifications in unit diagram
+- Confirm dialogs in all acctions that require saving or reloading data
+- Save the state of the unit diagram even if you navigate elsewhere
+- Student tabs feature, saving the lesson state
+- Improved units diagram usability: added tooltips, responsive diagram size and clicks prevention while loading
+- Student answers also depends on course and block
+
+### Changed
+
+- Images are now into a determined unit, so the import includes unitId
+
+### Fixed
+
+- Navigation to lessons from the course
+- Adding lesson with cards and images now shows image, not include text
+- Scroll independently in lesson editor
+- When editing cards its not allowed to drag elements
+- When editing card tittle, the item wont toggle
+- Deleting lesson doesnt return error.
+
 ## [1.0.1]
 
 ### Fixed
