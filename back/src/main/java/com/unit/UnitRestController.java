@@ -1,6 +1,7 @@
 package com.unit;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.GeneralRestController;
 import com.card.Card;
@@ -65,7 +66,6 @@ public class UnitRestController extends GeneralRestController {
                 } catch (Exception e) {
                      return new ResponseEntity<>(HttpStatus.CONFLICT);
                 }
-                this.unitService.save(savedUnit.get());
                 savedUnits.add(savedUnit.get());
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -79,9 +79,12 @@ public class UnitRestController extends GeneralRestController {
             throw new Exception("Invalid name");
         }
         savedUnit.setName(unit.getName());
+        savedUnit.getIncomingRelations().removeAll(savedUnit.getIncomingRelations().stream().filter(relation -> !unit.getIncomingRelations().contains(relation)).collect(Collectors.toList()));
+        savedUnit.getOutgoingRelations().removeAll(savedUnit.getOutgoingRelations().stream().filter(relation -> !unit.getOutgoingRelations().contains(relation)).collect(Collectors.toList()));
         for (Relation relation : unit.getIncomingRelations()) {
             if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
                 if (relation.getId() > 0) {
+                    relationService.save(relation);
                     savedUnit.addIncomingRelation(relation);
                 } else {
                     Relation r;
@@ -95,6 +98,7 @@ public class UnitRestController extends GeneralRestController {
         for (Relation relation : unit.getOutgoingRelations()) {
             if ((relation.getIncoming() != 0) && (relation.getOutgoing() != 0)) {
                 if (relation.getId() > 0) {
+                    relationService.save(relation);
                     savedUnit.addOutgoingRelation(relation);
                 } else {
                     Relation r;
@@ -105,6 +109,7 @@ public class UnitRestController extends GeneralRestController {
                 }
             }
         }
+        this.unitService.save(savedUnit);
     }
 
     @DeleteMapping(value = "/{id}")
