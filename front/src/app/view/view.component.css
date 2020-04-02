@@ -237,6 +237,7 @@ mat-label {
   cursor: pointer;
   width: 100%;
   border: none;
+  margin-top: 0.1rem;
 }
 
 .uml-relation-button {
