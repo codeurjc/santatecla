@@ -54,7 +54,8 @@
 
     <!-- HTML REPRESENTATION -->
     <div [ngClass]="loginService.isAdmin ? 'html-lesson-representation-editor' : 'html-lesson-view'">
-      <img [ngClass]="loginService.isAdmin ? 'spinner' : 'center'" src="../../../../assets/img/spinner.gif" *ngIf="showSpinner">
+      <img class="spinner" src="../../../../assets/img/spinner.gif" *ngIf="loginService.isAdmin && showSpinner">
+      <img class="spinner center" src="../../../../assets/img/spinner.gif" *ngIf="(!loginService.isAdmin) && showSpinner">
       <h1 [ngClass]="!loginService.isAdmin ? 'html-lesson-title' : ''">{{lesson?.name}}</h1>
       <mat-card *ngIf="(loginService.isAdmin && !showSpinner)" id="slide-area-editor" class="slides-container">
         <div *ngIf="loginService.isAdmin">
