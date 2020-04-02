@@ -45,7 +45,7 @@
 }
 
 .tool:hover {
-  background-color: #a769b8;
+  opacity: 70%;
 }
 
 table {
@@ -98,8 +98,15 @@ th.mat-sort-header-sorted {
 }
 
 .question-button {
-  background-color: #7d3c90;
   color: #ffffff;
+}
+
+.admin-button {
+  background-color: #7d3c90;
+}
+
+.user-button {
+  background-color: #5b70c1;
 }
 
 .active-type {
