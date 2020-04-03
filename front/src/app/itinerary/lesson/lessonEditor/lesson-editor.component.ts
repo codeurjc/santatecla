@@ -83,6 +83,8 @@ export class LessonEditorComponent implements OnInit {
   questions: Question[];
   questionsCount: number;
 
+  mapQuestions: Map<Question, boolean>;
+
   cursorPosition: number;
 
   extraExtend = true;
@@ -167,13 +169,36 @@ export class LessonEditorComponent implements OnInit {
   }
 
   loadQuestions() {
-    this.questions = [];
+    this.mapQuestions = new Map<Question, boolean>();
     this.lesson.questionsIds.forEach((questionId) => {
-      this.questions.push();
-    });
-    this.lesson.questionsIds.forEach((questionId, index) => {
       this.questionService.getQuestion(questionId).subscribe((data: Question) => {
-        this.questions.splice(index, 0, data);
+        if (!this.loginService.isAdmin) {
+          if (data.subtype === 'TestQuestion') {
+            this.questionService.getTestUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
+              this.lessonId, this.courseId).subscribe((response: any[]) => {
+              this.mapQuestions.set(data, response.length > 0);
+              this.questions = Array.from(this.mapQuestions.keys());
+            }, error => {
+              console.log(error);
+            });
+          } else if (data.subtype === 'ListQuestion') {
+            this.questionService.getListUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
+              this.lessonId, this.courseId).subscribe((response: any[]) => {
+              this.mapQuestions.set(data, response.length > 0);
+              this.questions = Array.from(this.mapQuestions.keys());
+            }, error => {
+              console.log(error);
+            });
+          } else {
+            this.questionService.getDefinitionUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
+              this.lessonId, this.courseId).subscribe((response: any[]) => {
+              this.mapQuestions.set(data, response.length > 0);
+              this.questions = Array.from(this.mapQuestions.keys());
+            }, error => {
+              console.log(error);
+            });
+          }
+        }
       });
     });
   }

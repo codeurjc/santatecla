@@ -28,7 +28,7 @@
       </mat-chip-list>
 
       <mat-chip-list *ngIf="!loginService.isAdmin" class="tools">
-        <button mat-button class="std-tool" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" *ngIf="questions.length > 0">
+        <button mat-button class="std-tool" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" *ngIf="questions?.length > 0">
           <mat-icon>edit</mat-icon>
           <span class="btn-span">Ejercicios</span>
         </button>
@@ -37,6 +37,7 @@
           <div  *ngFor="let question of questions; let i = index">
             <button mat-menu-item (click)="openQuestion(question.id, question.subtype)">
               <span><b>Ejercicio {{i}}</b> {{question.questionText}}</span>
+              <mat-icon *ngIf="mapQuestions.get(question)" class="done-icon">done</mat-icon>
             </button>
           </div>
         </mat-menu>
