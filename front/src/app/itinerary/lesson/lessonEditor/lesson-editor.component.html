@@ -34,10 +34,10 @@
         </button>
         <!-- TODO openQuestion -->
         <mat-menu #menu="matMenu">
-          <div  *ngFor="let question of questions; let i = index">
-            <button mat-menu-item (click)="openQuestion(question.id, question.subtype)">
-              <span><b>Ejercicio {{i}}</b> {{question.questionText}}</span>
-              <mat-icon *ngIf="mapQuestions.get(question)" class="done-icon">done</mat-icon>
+          <div *ngFor="let id of lesson?.questionsIds; let i = index">
+            <button mat-menu-item (click)="openQuestion(mapQuestions.get(id)?.id, mapQuestions.get(id)?.subtype)">
+              <span><b>Ejercicio {{i}}</b> {{mapQuestions.get(id)?.questionText}}</span>
+              <mat-icon *ngIf="mapQuestionsDone?.get(mapQuestions?.get(id))" class="done-icon">done</mat-icon>
             </button>
           </div>
         </mat-menu>
