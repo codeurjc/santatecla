@@ -106,18 +106,14 @@
 
 .spinner {
   position: absolute;
-  width: 10%;
+  width: 5rem;
   margin-right: 45%;
   margin-left: 45%;
   margin-top: 30%;
 }
 
 .center {
-  position: absolute;
-  width: 10%;
-  margin-top: 20%;
-  margin-right: 45%;
-  margin-left: 45%;
+  margin-top: 15% !important;
   z-index: 1000;
 }
 

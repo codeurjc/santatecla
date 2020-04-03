@@ -196,20 +196,6 @@ public class UnitApiTests {
     }
 
     @Test
-    public void testDeleteRelation() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.delete("/api/units/relations/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testNotFoundDeleteRelation() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.delete("/api/units/relations/2")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(404));
-    }
-
-    @Test
     public void testSearchUnits() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/api/units/search?name=Te")
                 .contentType(MediaType.APPLICATION_JSON))
