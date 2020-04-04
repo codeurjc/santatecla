@@ -141,3 +141,8 @@
 .btn-span {
   margin-left: 0.5rem;
 }
+
+.done-icon {
+  margin-left: 2rem;
+  color: green
+}
