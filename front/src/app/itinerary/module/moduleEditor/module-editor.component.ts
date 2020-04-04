@@ -44,7 +44,6 @@ export class ModuleEditorComponent implements OnInit {
   table: Map<Block, number>;
 
   showMenu: boolean;
-  activeTab = 0;
 
   viewLessonPosition = 'after';
   optionInfoPosition = 'after';
@@ -53,6 +52,8 @@ export class ModuleEditorComponent implements OnInit {
   confirmText2 = 'Se eliminará permanentemente';
   button1 = 'Cancelar';
   button2 = 'Borrar';
+
+  actualTab: Tab;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -92,6 +93,10 @@ export class ModuleEditorComponent implements OnInit {
           this.unitService.getUnit(this.unitId).subscribe((unit: Unit) => {
             this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
             this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, unit.id, null, null);
+            this.actualTab = this.tabService.activeTab;
+            if (this.actualTab.openedModuleNodes.length !== 0) {
+              this.expandNodesById();
+            }
           });
         } else {
           this.courseService.getCourse(this.courseId).subscribe((course: Course) => {
@@ -100,9 +105,17 @@ export class ModuleEditorComponent implements OnInit {
               if (this.loginService.isAdmin) {
                 this.tabService.addTab(new Tab('Unidad', +unit.id, unit.name, unit.id, null, null));
                 this.tabService.updateActiveTabLink('Itinerario', this.moduleId, module.name, null, course.id, null);
+                this.actualTab = this.tabService.activeTab;
+                if (this.actualTab.openedModuleNodes.length !== 0) {
+                  this.expandNodesById();
+                }
               } else {
                 this.tabService.addTab(new Tab('Curso', +this.courseId, course.name, null, this.courseId, null));
                 this.tabService.updateCourseActiveTabLink('Itinerario', course.module.id, course.module.name, null, course.id, null);
+                this.actualTab = this.tabService.activeTab;
+                if (this.actualTab.openedModuleNodes.length !== 0) {
+                  this.expandNodesById();
+                }
               }
             }, error => {console.log(error); });
           });
@@ -125,6 +138,14 @@ export class ModuleEditorComponent implements OnInit {
   }
 
   expandNode(node: Module) {
+    if (node.blocks) {
+      this.actualTab.studentAddOpenedNode(node, this.moduleId);
+      console.log(this.actualTab.openedModuleNodes);
+    } else {
+      this.actualTab.studentAddOpenedLesson(this.module, node.id);
+      console.log(this.actualTab.openedModuleNodes);
+    }
+
     this.expandParents(this.module, node.id);
     this.treeControl.expand(node);
     window.scrollTo(document.getElementById(node.name).offsetLeft, document.getElementById(node.name).offsetTop);
@@ -178,6 +199,28 @@ export class ModuleEditorComponent implements OnInit {
         });
       }
     });
+  }
+
+  addOpenedBlock(id: number, module: Module) {
+    if (!this.actualTab.addOpenedNode(id, module)) {
+      this.closeModuleChilds(module);
+    }
+    console.log(this.actualTab.openedModuleNodes);
+  }
+
+  expandNodesById() {
+    for (let id of this.actualTab.openedModuleNodes) {
+      this.expandParents(this.module, id);
+    }
+  }
+
+  closeModuleChilds(module: Module) {
+    if (module.blocks) {
+      for (let block of module.blocks) {
+        this.treeControl.collapse(block);
+        this.closeModuleChilds(block);
+      }
+    }
   }
 
 }
