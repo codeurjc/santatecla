@@ -4,6 +4,7 @@ import {Unit} from '../../../unit/unit.model';
 import {UnitService} from '../../../unit/unit.service';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import { ClipboardService } from 'ngx-clipboard';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -21,6 +22,7 @@ export class LessonSlidesToolComponent implements OnInit {
               private unitService: UnitService,
               private bottomSheetRef: MatBottomSheetRef<LessonSlidesToolComponent>,
               private clipboardService: ClipboardService,
+              private snackBar: MatSnackBar,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) {
   }
 
@@ -51,6 +53,9 @@ export class LessonSlidesToolComponent implements OnInit {
 
   openLink(event: MouseEvent, text: string): void {
     this.clipboardService.copyFromContent(text);
+    this.snackBar.open('El insert ha sido copiado al portapapeles', 'Entendido', {
+      duration: 3000,
+    });
     this.data = text;
     this.bottomSheetRef.dismiss(this.data);
     event.preventDefault();

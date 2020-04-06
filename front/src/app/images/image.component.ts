@@ -80,8 +80,8 @@ export class ImageComponent implements OnInit {
     this.clipboardService.copyFromContent(text);
     this.data = text;
     this.bottomSheetRef.dismiss(this.data);
-    this.snackBar.open('La imagen ha sido copiada al portapapeles', 'Entendido', {
-      duration: 2000,
+    this.snackBar.open('El insert ha sido copiada al portapapeles', 'Entendido', {
+      duration: 3000,
     });
     event.preventDefault();
   }
