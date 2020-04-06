@@ -9,8 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Button to flip relations on the unit diagram
+- Icon shows when student has answered a question
+- Itinerary tree keeps opened changing the tab or adding new blocks
 
-## [1.1.0]
+### Fixed
+
+- Questions do not disorder in student lessons
+
+## [1.1.0] - 01/04/2020
 
 ### Added
 
@@ -22,7 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Student tabs feature, saving the lesson state
 - Improved units diagram usability: added tooltips, responsive diagram size and clicks prevention while loading
 - Student answers also depends on course and block
-- Icon shows when student has answered a question
 
 ### Changed
 
@@ -36,9 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - When editing cards its not allowed to drag elements
 - When editing card tittle, the item wont toggle
 - Deleting lesson doesnt return error.
-- Questions do not disorder in student lessons
 
-## [1.0.1]
+## [1.0.1] - 26/03/2020
 
 ### Fixed
 
@@ -48,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Student role is allowed now to see question info.
 - Student lesson view doesnt show Question button if there are no questions in the lesson.
 
-## [1.0.0]
+## [1.0.0] - 09/03/2020
 
 ### Added
 
