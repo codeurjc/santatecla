@@ -4,7 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0]
+## [1.2.0]
+
+### Added
+
+- Button to flip relations on the unit diagram
+- Icon shows when student has answered a question
+- Itinerary tree keeps opened changing the tab or adding new blocks
+
+### Fixed
+
+- Questions do not disorder in student lessons
+
+## [1.1.0] - 01/04/2020
 
 ### Added
 
@@ -30,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - When editing card tittle, the item wont toggle
 - Deleting lesson doesnt return error.
 
-## [1.0.1]
+## [1.0.1] - 26/03/2020
 
 ### Fixed
 
@@ -40,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Student role is allowed now to see question info.
 - Student lesson view doesnt show Question button if there are no questions in the lesson.
 
-## [1.0.0]
+## [1.0.0] - 09/03/2020
 
 ### Added
 

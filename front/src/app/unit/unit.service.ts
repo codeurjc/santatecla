@@ -55,10 +55,6 @@ export class UnitService {
     return this.http.delete<Unit>(this.baseUrl + id);
   }
 
-  deleteRelation(id: number) {
-    return this.http.delete<Relation>(this.baseUrl + 'relations/' + id);
-  }
-
   getCard(cardId: number, unitId: number) {
     return this.http.get(this.baseUrl + unitId + '/cards/' + cardId);
   }

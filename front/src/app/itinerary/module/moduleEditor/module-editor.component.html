@@ -61,7 +61,7 @@
           <li id="{{node2.name}}">
             <div class="mat-tree-node">
               <button mat-icon-button matTreeNodeToggle
-                      [attr.aria-label]="'toggle ' + node2?.name">
+                      [attr.aria-label]="'toggle ' + node2?.name" (click)="addOpenedBlock(node2.id, node2)">
                 <mat-icon class="mat-icon-rtl-mirror">
                   {{treeControl.isExpanded(node2) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>

@@ -286,19 +286,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
           i++;
           if (i === unitsToCreate.length) {
-            this.saveUnitsAndRelations(goToUnit, deleteUnit, deleteRelation);
+            this.saveUnitsAndRelations(goToUnit, deleteUnit);
           }
         }, error => {
           this.saveError(error);
         });
       });
       if (unitsToCreate.length === 0) {
-        this.saveUnitsAndRelations(goToUnit, deleteUnit, deleteRelation);
+        this.saveUnitsAndRelations(goToUnit, deleteUnit);
       }
     }
   }
 
-  saveUnitsAndRelations(goToUnit, deleteUnit, deleteRelation) {
+  saveUnitsAndRelations(goToUnit, deleteUnit) {
     const unitsToSave: Unit[] = [];
     this.units.forEach((unit: Unit) => {
       const unitToSave = {
@@ -329,8 +329,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.goToUnit(goToUnit);
       } else if (deleteUnit) {
         this.deleteUnit(deleteUnit);
-      } else if (deleteRelation) {
-        this.deleteRelation(deleteRelation);
       } else {
         this.focusUnit();
       }
@@ -570,17 +568,39 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   deleteNewUnit(id: string) {
     const unit = this.getUnitById(id);
     unit.incomingRelations.forEach((relation) => {
-      this.deleteNewIncomingRelation(relation);
+      this.deleteIncomingRelation(relation);
     });
     unit.outgoingRelations.forEach((relation) => {
-      this.deleteNewOutgoingRelation(relation);
+      this.deleteOutgoingRelation(relation);
     });
     this.focusedUnitsService.focusedUnitIds.delete(id);
     this.updateFocusedUnits();
     this.units.delete(id);
   }
 
-  deleteNewIncomingRelation(relation: Relation) {
+  deleteRelation() {
+    const splittedRelation: string[] = this.selectedTarget.id.split('-');
+    const incoming = splittedRelation[0];
+    const outgoing = splittedRelation[1];
+    const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
+    this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
+      if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
+        this.deleteIncomingRelation(relation);
+        this.deleteOutgoingRelation(relation);
+      }
+    });
+    this.units.get(outgoing).outgoingRelations.forEach((relation: Relation) => {
+      if ((relation.incoming.toString() === incoming) && (relation.relationType === relationType)) {
+        this.deleteIncomingRelation(relation);
+        this.deleteOutgoingRelation(relation);
+      }
+    });
+    this.setShowUmlPathOptions(false);
+    this.updateUml();
+    this.changed = true;
+  }
+
+  deleteIncomingRelation(relation: Relation) {
     this.relations.delete(relation.id.toString());
     const outgoingRelations = this.getUnitById(relation.outgoing.toString()).outgoingRelations;
     const index = outgoingRelations.indexOf(relation, 0);
@@ -589,57 +609,13 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  deleteNewOutgoingRelation(relation: Relation) {
+  deleteOutgoingRelation(relation: Relation) {
     this.relations.delete(relation.id.toString());
     const outgoingRelations = this.getUnitById(relation.incoming.toString()).incomingRelations;
     const index = outgoingRelations.indexOf(relation, 0);
     if (index > -1) {
       outgoingRelations.splice(index, 1);
     }
-  }
-
-  confirmDeleteRelation() {
-    const splittedRelation: string[] = this.selectedTarget.id.split('-');
-    const incoming = splittedRelation[0];
-    const outgoing = splittedRelation[1];
-    const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
-    this.units.get(incoming).incomingRelations.forEach((relation: Relation) => {
-      if ((relation.outgoing.toString() === outgoing) && (relation.relationType === relationType)) {
-        if (this.isNewId(relation.id)) {
-          this.deleteNewIncomingRelation(relation);
-          this.deleteNewOutgoingRelation(relation);
-          this.setShowUmlPathOptions(false);
-          this.updateUml();
-        } else if (this.changed && (!this.ableToSave)) {
-          const dialogRef = this.reloadDialog();
-          dialogRef.afterClosed().subscribe(result => {
-            window.scroll(0, 0);
-            if (result === 1) {
-              this.deleteRelation(relation);
-            }
-          });
-        } else {
-          const dialogRef = this.confirmDeleteRelationDialog();
-          dialogRef.afterClosed().subscribe(result => {
-            window.scroll(0, 0);
-            if (result === 1) {
-              if (this.changed) {
-                this.save(null, null, relation);
-              } else {
-                this.deleteRelation(relation);
-              }
-            }
-          });
-        }
-      }
-    });
-  }
-
-  deleteRelation(relation: Relation) {
-    this.unitService.deleteRelation(+relation.id).subscribe(() => {
-      this.changed = false;
-      this.focusUnit();
-    });
   }
 
   findUnitTarget(id: string): HTMLInputElement {
@@ -738,6 +714,18 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.changed = true;
   }
 
+  flipRelation(id: string) {
+    const splittedRelation: string[] = id.split('-');
+    const incoming = splittedRelation[0];
+    const outgoing = splittedRelation[1];
+    const relationType = this.getRelationTypeEquivalent(splittedRelation[2]);
+    this.deleteRelation();
+    this.createRelation(relationType, this.getUnitById(outgoing), this.getUnitById(incoming));
+    this.setShowUmlPathOptions(false);
+    this.updateUml();
+    this.changed = true;
+  }
+
   getRelationTypeEquivalent(relationType: string): string {
     let equivalent = RelationType.ASSOCIATION;
     if (relationType) {
@@ -775,17 +763,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     if (!this.creatingRelation) {
 
       // Uml
-      if ((target.id === 'composition-incoming-button') || (target.parentElement && (target.parentElement.id === 'composition-incoming-button'))) {
-        this.createUnit(RelationType.COMPOSITION).id;
-      } else if ((target.id === 'inheritance-incoming-button') || (target.parentElement && (target.parentElement.id === 'inheritance-incoming-button'))) {
-        this.createUnit(RelationType.INHERITANCE).id;
-      } else if ((target.id === 'aggregation-incoming-button') || (target.parentElement && (target.parentElement.id === 'aggregation-incoming-button'))) {
-        this.createUnit(RelationType.AGGREGATION).id;
-      } else if ((target.id === 'association-incoming-button') || (target.parentElement && (target.parentElement.id === 'association-incoming-button'))) {
-        this.createUnit(RelationType.ASSOCIATION).id;
-      } else if ((target.id === 'use-incoming-button') || (target.parentElement && target.parentElement.id === 'use-incoming-button')) {
-        this.createUnit(RelationType.USE).id;
-      } else if ((target.id === 'inheritance-outgoing-button') || (target.parentElement && (target.parentElement.id === 'inheritance-outgoing-button'))) {
+      if ((target.id === 'inheritance-outgoing-button') || (target.parentElement && (target.parentElement.id === 'inheritance-outgoing-button'))) {
         this.initCreatingRelation();
         this.creatingRelation.relationType = RelationType.INHERITANCE;
       } else if ((target.id === 'composition-outgoing-button') || (target.parentElement && (target.parentElement.id === 'composition-outgoing-button'))) {
@@ -810,6 +788,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.ASSOCIATION);
       } else if ((target.id === 'use-relation-button') || (target.parentElement && (target.parentElement.id === 'use-relation-button'))) {
         this.changeRelationType(this.selectedTarget.id.toString(), RelationType.USE);
+      } else if ((target.id === 'flip-button') || (target.parentElement && (target.parentElement.id === 'flip-button'))) {
+        this.flipRelation(this.selectedTarget.id.toString());
       } else if ((!this.showUmlNodeOptions) && ((target.tagName === 'rect') || (target.tagName === 'text'))) {
         if (this.clickTutorialCount === this.CLICK_TUTORIAL_FREQUENCY) {
           this.showClickTutorialNotification();
@@ -1034,15 +1014,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
         button1: 'Cancelar',
         button2: 'Eliminar'
       }
-    });
-  }
-
-  confirmDeleteRelationDialog() {
-    return this.dialog.open(ConfirmActionComponent, {
-      data: {
-        confirmText: 'Se eliminará la relación',
-        button1: 'Cancelar',
-        button2: 'Eliminar'}
     });
   }
 

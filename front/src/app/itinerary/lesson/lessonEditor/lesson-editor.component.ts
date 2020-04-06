@@ -83,6 +83,11 @@ export class LessonEditorComponent implements OnInit {
   questions: Question[];
   questionsCount: number;
 
+  // Map questionId - Question
+  mapQuestions: Map<number, Question>;
+  // Map Question - Boolean question done
+  mapQuestionsDone: Map<Question, boolean>;
+
   cursorPosition: number;
 
   extraExtend = true;
@@ -167,13 +172,46 @@ export class LessonEditorComponent implements OnInit {
   }
 
   loadQuestions() {
-    this.questions = [];
+    this.mapQuestionsDone = new Map<Question, boolean>();
+    this.mapQuestions = new Map<number, Question>();
     this.lesson.questionsIds.forEach((questionId) => {
-      this.questions.push();
-    });
-    this.lesson.questionsIds.forEach((questionId, index) => {
       this.questionService.getQuestion(questionId).subscribe((data: Question) => {
-        this.questions.splice(index, 0, data);
+        if (!this.loginService.isAdmin) {
+          if (data.subtype === 'TestQuestion') {
+            this.questionService.getTestUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
+              this.lessonId, this.courseId).subscribe((response: any[]) => {
+              this.mapQuestionsDone.set(data, response.length > 0);
+              this.questions = Array.from(this.mapQuestionsDone.keys());
+              for (const q of this.questions) {
+                this.mapQuestions.set(q.id, q);
+              }
+            }, error => {
+              console.log(error);
+            });
+          } else if (data.subtype === 'ListQuestion') {
+            this.questionService.getListUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
+              this.lessonId, this.courseId).subscribe((response: any[]) => {
+              this.mapQuestionsDone.set(data, response.length > 0);
+              this.questions = Array.from(this.mapQuestionsDone.keys());
+              for (const q of this.questions) {
+                this.mapQuestions.set(q.id, q);
+              }
+            }, error => {
+              console.log(error);
+            });
+          } else {
+            this.questionService.getDefinitionUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
+              this.lessonId, this.courseId).subscribe((response: any[]) => {
+              this.mapQuestionsDone.set(data, response.length > 0);
+              this.questions = Array.from(this.mapQuestionsDone.keys());
+              for (const q of this.questions) {
+                this.mapQuestions.set(q.id, q);
+              }
+            }, error => {
+              console.log(error);
+            });
+          }
+        }
       });
     });
   }
