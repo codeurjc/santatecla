@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, Optional, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Image} from './image.model';
 import {ImageService} from './image.service';
@@ -13,6 +13,9 @@ import {MatSnackBar} from '@angular/material';
 })
 
 export class ImageComponent implements OnInit {
+
+  @ViewChild('input') input: ElementRef;
+  showSpinner = false;
 
   images: Image[];
   imagesResult: Image[];
@@ -30,6 +33,7 @@ export class ImageComponent implements OnInit {
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
   ngOnInit() {
+    this.showSpinner = true;
     this.unitId = this.data.unitId;
     this.imageService.getImages(this.unitId).subscribe((data: Image[]) => {
       this.images = [];
@@ -42,6 +46,8 @@ export class ImageComponent implements OnInit {
         });
       });
       this.imagesResult = this.images;
+      this.showSpinner = false;
+      this.input.nativeElement.focus();
     });
   }
 
@@ -67,12 +73,14 @@ export class ImageComponent implements OnInit {
   }
 
   applyFilterImages(value: string) {
+    this.showSpinner = true;
     this.imagesResult = [];
     for (let result of this.images) {
       if (result.name.toLowerCase().includes(value.toLowerCase())) {
         this.imagesResult.push(result);
       }
     }
+    this.showSpinner = false;
   }
 
   getUrl(id: any) {

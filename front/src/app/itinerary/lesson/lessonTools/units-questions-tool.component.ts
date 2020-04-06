@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, Optional, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Unit} from '../../../unit/unit.model';
 import {UnitService} from '../../../unit/unit.service';
@@ -15,6 +15,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 
 export class UnitsQuestionsToolComponent implements OnInit {
 
+  @ViewChild('input') input: ElementRef;
+  showSpinner = false;
+
   units: Unit[];
   unitsResult: Unit[];
 
@@ -29,6 +32,7 @@ export class UnitsQuestionsToolComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showSpinner = true;
     this.unitService.getUnits().subscribe((data: Unit[]) => {
       this.units = [];
       this.unitsResult = [];
@@ -41,17 +45,21 @@ export class UnitsQuestionsToolComponent implements OnInit {
           testQuestions: unit.testQuestions
         });
         this.unitsResult = this.units;
+        this.showSpinner = false;
+        this.input.nativeElement.focus();
       });
     });
   }
 
   applyFilterUnits(value: string) {
+    this.showSpinner = true;
     this.unitsResult = [];
     for (let result of this.units) {
       if (result.name.toLowerCase().includes(value.toLowerCase())) {
         this.unitsResult.push(result);
       }
     }
+    this.showSpinner = false;
   }
 
   openLink(event: MouseEvent, text: string): void {

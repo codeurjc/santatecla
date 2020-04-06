@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, Optional, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Unit} from '../../../unit/unit.model';
 import {UnitService} from '../../../unit/unit.service';
@@ -14,8 +14,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 
 export class LessonSlidesToolComponent implements OnInit {
 
-  units: Unit[];
-  unitsResult: Unit[];
+  @ViewChild('input') input: ElementRef;
+  showSpinner = false;
+
+  units: Unit[] = [];
+  unitsResult: Unit[] = [];
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -27,9 +30,8 @@ export class LessonSlidesToolComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showSpinner = true;
     this.unitService.getUnits().subscribe((data: Unit[]) => {
-      this.units = [];
-      this.unitsResult = [];
       data.forEach((unit: Unit) => {
         this.units.push({
           id: unit.id,
@@ -38,17 +40,21 @@ export class LessonSlidesToolComponent implements OnInit {
           lessons: unit.lessons
         });
         this.unitsResult = this.units;
+        this.showSpinner = false;
+        this.input.nativeElement.focus();
       });
     });
   }
 
   applyFilterUnits(value: string) {
+    this.showSpinner = true;
     this.unitsResult = [];
     for (let result of this.units) {
       if (result.name.toLowerCase().includes(value.toLowerCase())) {
         this.unitsResult.push(result);
       }
     }
+    this.showSpinner = false;
   }
 
   openLink(event: MouseEvent, text: string): void {
