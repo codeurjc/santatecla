@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved units diagram usability: added tooltips, responsive diagram size and clicks prevention while loading
 - Student answers also depends on course and block
 - Icon shows when student has answered a question
+- Itinerary tree keeps opened changing the tab or adding new blocks
 
 ### Changed
 

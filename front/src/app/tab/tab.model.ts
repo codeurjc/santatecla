@@ -113,15 +113,11 @@ export class Tab {
     }
   }
 
-  studentAddOpenedNode(module: Module, rootId: number) {
+  studentAddOpenedNode(module: Module, moduleId: number) {
     if (this.openedModuleNodes.indexOf(module.id) === -1) {
       this.openedModuleNodes.push(module.id);
     }
-    for (let parent of module.parentsId) {
-      if (parent - rootId !== 0 && this.openedModuleNodes.indexOf(parent) === -1) {
-        this.openedModuleNodes.push(parent);
-      }
-    }
+    this.studentAddOpenedNodeRecursive(module, moduleId, module.id);
   }
 
   studentAddOpenedLesson(module: Module, lessonId: number) {
@@ -137,6 +133,26 @@ export class Tab {
         }
       }
       return false;
+    } else {
+      return false;
+    }
+  }
+
+  studentAddOpenedNodeRecursive(module: Module, moduleId: number, rootId: number) {
+    if (module.blocks) {
+      if (module.id === moduleId) {
+        return true;
+      } else if (module.blocks) {
+        for (let block of module.blocks) {
+          if (this.studentAddOpenedNodeRecursive(block, moduleId, rootId)) {
+            if (this.openedModuleNodes.indexOf(block.id) === -1 && block.id - rootId !== 0) {
+              this.openedModuleNodes.push(block.id);
+            }
+            return true;
+          }
+        }
+        return false;
+      }
     } else {
       return false;
     }
