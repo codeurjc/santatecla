@@ -62,6 +62,9 @@ public class CardRestController extends GeneralRestController {
         if (updatedCard == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if(!card.getName().equals(updatedCard.getName())){
+            this.slideService.updateAllSlidesCardName(unit.get().getName(), updatedCard.getName(), card.getName());
+        }
         updatedCard.update(card);
         cardService.save(updatedCard);
         unitService.save(unit.get());
