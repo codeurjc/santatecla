@@ -140,10 +140,8 @@ export class ModuleEditorComponent implements OnInit {
   expandNode(node: Module) {
     if (node.blocks) {
       this.actualTab.studentAddOpenedNode(this.module, node.id);
-      console.log(this.actualTab.openedModuleNodes);
     } else {
       this.actualTab.studentAddOpenedLesson(this.module, node.id);
-      console.log(this.actualTab.openedModuleNodes);
     }
 
     this.expandParents(this.module, node.id);
@@ -205,7 +203,6 @@ export class ModuleEditorComponent implements OnInit {
     if (!this.actualTab.addOpenedNode(id, module)) {
       this.closeModuleChilds(module);
     }
-    console.log(this.actualTab.openedModuleNodes);
   }
 
   expandNodesById() {

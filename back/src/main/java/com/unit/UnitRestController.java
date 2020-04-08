@@ -78,6 +78,9 @@ public class UnitRestController extends GeneralRestController {
         if (!unitService.isValidName(unit)) {
             throw new Exception("Invalid name");
         }
+        if(!unit.getName().equals(savedUnit.getName())){
+            this.slideService.updateAllSlidesUnitName(savedUnit.getName(), unit.getName());
+        }
         savedUnit.setName(unit.getName());
         savedUnit.getIncomingRelations().removeAll(savedUnit.getIncomingRelations().stream().filter(relation -> !unit.getIncomingRelations().contains(relation)).collect(Collectors.toList()));
         savedUnit.getOutgoingRelations().removeAll(savedUnit.getOutgoingRelations().stream().filter(relation -> !unit.getOutgoingRelations().contains(relation)).collect(Collectors.toList()));

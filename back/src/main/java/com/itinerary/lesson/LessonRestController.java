@@ -51,6 +51,11 @@ public class LessonRestController extends GeneralRestController {
         Optional<Lesson> l = this.lessonService.findOne(id);
         Slide oldSlide;
         if (l.isPresent()) {
+            if(!lesson.getName().equals(l.get().getName())){
+                long unitId = this.unitService.findLessonUnit(l.get().getId());
+                this.slideService.updateAllSlidesLessonName(l.get().getName(), lesson.getName(),
+                        this.unitService.findOne(unitId).get().getName(), lesson);
+            }
             for (Slide slide: lesson.getSlides()) {
                 oldSlide = this.slideService.findOne(slide.getId()).get();
                 if(!oldSlide.getName().equals(slide.getName())){

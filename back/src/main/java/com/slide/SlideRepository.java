@@ -12,5 +12,5 @@ public interface SlideRepository extends JpaRepository<Slide, Long> {
 
     public List<Slide> findByContentContaining(String oldName);
     public List<Slide> findByContentContainingAndContentContaining(String insert, String oldName);
-    
+    public List<Slide> findByContentContainingOrContentContaining(String insertCard, String insertSlide);
 }
