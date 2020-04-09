@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Icon shows when student has answered a question
 - Itinerary tree keeps opened changing the tab or adding new blocks
 - Tooltips in lesson editor tools
+- All slides are updated when changing a lesson, card, unit or slide name
 
 ### Fixed
 
