@@ -68,7 +68,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   init() {
-    this.search();
     window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
     this.focusUnit();
@@ -106,6 +105,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.loadUnits();
     }
+    this.search();
+    this.updateFocusedUnits();
   }
 
   loadUnits() {
@@ -211,21 +212,24 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.unitService.getUnambiguousName(+unit.id).subscribe((unambiguousNameUnit: Unit) => {
         unit.name = unambiguousNameUnit.name;
-        if (!this.focusedUnitsContains(unit.id.toString())) {
+        const unitContaining = this.focusedUnitsContains(unit.id.toString());
+        if (!unitContaining) {
           this.focusedUnitsService.focusedUnits.push(unit);
+        } else {
+          unitContaining.name = unit.name;
         }
       });
     }
   }
 
-  focusedUnitsContains(unitId: string): boolean {
-    let cont = false;
+  focusedUnitsContains(unitId: string): Unit {
+    let unitContaining: Unit = null;
     this.focusedUnitsService.focusedUnits.forEach(unit => {
       if (unit.id.toString() === unitId.toString()) {
-        cont = true;
+        unitContaining = unit;
       }
     });
-    return cont;
+    return unitContaining;
   }
 
   getUnitById(id: string): Unit {
@@ -571,7 +575,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.updateFocusedUnits();
       this.units.delete(id);
       this.focusUnit();
-      this.search();
     });
   }
 
