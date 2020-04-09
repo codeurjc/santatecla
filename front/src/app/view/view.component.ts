@@ -19,7 +19,6 @@ declare var mermaid: any;
 
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  UNIT_NAME_SEPARATOR = '/';
   NOTIFICATION_DELAY = 5; // on seconds
   CLICK_TUTORIAL_FREQUENCY = 6;
 
@@ -61,7 +60,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   newUnitNotification = false;
 
 
-  constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
+  constructor(private router: Router, public unitService: UnitService, private dialogService: TdDialogService,
               private dialog: MatDialog, public focusedUnitsService: FocusedUnitsService) {}
 
   ngOnInit() {
@@ -195,17 +194,28 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.focusedUnitsService.focusedUnitIds.forEach((unitId) => {
       const u = this.units.get(unitId.toString());
       if (u) {
-        if (!this.focusedUnitsContains(unitId.toString())) {
-          this.focusedUnitsService.focusedUnits.push(u);
-        }
+        this.pushFocusedUnit(u);
       } else {
         this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
-          if (!this.focusedUnitsContains(unitId.toString())) {
-            this.focusedUnitsService.focusedUnits.push(unit);
-          }
+          this.pushFocusedUnit(unit);
         });
       }
     });
+  }
+
+  pushFocusedUnit(unit: Unit) {
+    if (this.isNewId(unit.id)) {
+      if (!this.focusedUnitsContains(unit.id.toString())) {
+        this.focusedUnitsService.focusedUnits.push(unit);
+      }
+    } else {
+      this.unitService.getUnambiguousName(+unit.id).subscribe((unambiguousNameUnit: Unit) => {
+        unit.name = unambiguousNameUnit.name;
+        if (!this.focusedUnitsContains(unit.id.toString())) {
+          this.focusedUnitsService.focusedUnits.push(unit);
+        }
+      });
+    }
   }
 
   focusedUnitsContains(unitId: string): boolean {
@@ -913,15 +923,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
-  getUnitPrefix(completeName: string) {
-    const nameLength = completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1].length;
-    return completeName.substring(0, completeName.length - nameLength);
-  }
-
-  getUnitName(completeName: string) {
-    return completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1];
-  }
-
   confirmSelectUnit(unit: Unit) {
     if (this.changed && (!this.ableToSave)) {
       const dialogRef = this.reloadDialog();
@@ -1134,7 +1135,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     name += id;
     const unit = this.getUnitById(id);
     if (unit) {
-      name += unit.name;
+      name += this.unitService.getUnitRealName(unit.name);
     }
     return name;
   }

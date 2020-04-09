@@ -23,7 +23,10 @@
             <button mat-button [ngClass]="tab.isActive ? 'tab-button active-tab' : 'tab-button'" *ngFor="let tab of this.tabService.unitTabs" [routerLink]="[tab.link]" (click)="tabService.activateTab(tab)">
               <div class="tab-button-name">
                 <span class="tab-button-title admin-nav-button-title">{{tab.type}}</span>
-                <span class="tab-button-content">{{tab.name}}</span>
+                <span class="tab-button-content">
+                  <span class="unit-prefix">{{unitService.getUnitPrefixName(tab.name)}}</span>
+                  {{unitService.getUnitRealName(tab.name)}}
+                </span>
                 <mat-icon class="close-tab" (click)="this.closeTab(tab)">close</mat-icon>
               </div>
             </button>

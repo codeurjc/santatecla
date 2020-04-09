@@ -3,6 +3,7 @@ import {Component} from '@angular/core';
 import {LoginService} from '../auth/login.service';
 import {TabService} from '../tab/tab.service';
 import {Tab} from '../tab/tab.model';
+import {UnitService} from "../unit/unit.service";
 
 @Component({
   selector: 'app-menu',
@@ -12,7 +13,7 @@ import {Tab} from '../tab/tab.model';
 
 export class MenuComponent {
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, public loginService: LoginService, private tabService: TabService) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, public loginService: LoginService, private tabService: TabService, public unitService: UnitService) {}
 
   logout() {
     this.loginService.logout().subscribe(
