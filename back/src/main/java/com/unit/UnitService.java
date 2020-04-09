@@ -115,6 +115,10 @@ public class UnitService {
 		return null;
 	}
 
+	public String getUnambiguousName(Unit unit) {
+		return findByNameContaining(unit.getName()).stream().filter(u -> (unit.getId() == u.getId())).findAny().orElse(unit).getName();
+	}
+
 	public String getAbsoluteName(Unit unit) {
 		Unit parent = unit;
 		String absoluteName = "";

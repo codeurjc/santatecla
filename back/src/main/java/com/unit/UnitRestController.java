@@ -140,6 +140,12 @@ public class UnitRestController extends GeneralRestController {
         return new ResponseEntity<>(units, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{id}/unambiguousName")
+    public ResponseEntity<Unit> getUnitUnambiguousName(@PathVariable int id) {
+        Optional<Unit> unit = this.unitService.findOne(id);
+        return unit.map(value -> new ResponseEntity<>(new Unit(unitService.getUnambiguousName(value)), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @GetMapping(value = "/{id}/absoluteName")
     public ResponseEntity<Unit> getUnitAbsoluteName(@PathVariable int id) {
         Optional<Unit> unit = this.unitService.findOne(id);
