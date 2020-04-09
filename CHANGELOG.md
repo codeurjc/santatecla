@@ -11,11 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Button to flip relations on the unit diagram
 - Icon shows when student has answered a question
 - Itinerary tree keeps opened changing the tab or adding new blocks
+- Tooltips in lesson editor tools
 - All slides are updated when changing a lesson, card, unit or slide name
 
 ### Fixed
 
 - Questions do not disorder in student lessons
+- Load content of lesson editor tools on init
 
 ## [1.1.0] - 01/04/2020
 
