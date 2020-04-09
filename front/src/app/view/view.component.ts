@@ -444,8 +444,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const selectedUnit: Unit = this.getUnitById(this.getSelectedUnitId(this.selectedTarget));
     const newName = this.umlNodeOptions.nativeElement.firstChild.value;
     this.changed = ((this.changed) || ((newName) && (selectedUnit.name !== newName)));
-    selectedUnit.name = (newName ? newName : selectedUnit.name);
-    this.units.get(this.getSelectedUnitId(this.selectedTarget)).name =  (newName ? newName : selectedUnit.name);
+    selectedUnit.name = ((newName && (!newName.includes(this.unitService.UNIT_NAME_SEPARATOR))) ? newName : selectedUnit.name);
+    this.units.get(this.getSelectedUnitId(this.selectedTarget)).name =  selectedUnit.name;
     this.setShowUmlNodeOptions(false);
     this.setShowUmlPathOptions(false);
     this.updateUml();
