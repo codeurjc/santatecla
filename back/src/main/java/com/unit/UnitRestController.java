@@ -119,16 +119,20 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<Unit> deleteUnit(@PathVariable long id) {
         Optional<Unit> unit = unitService.findOne(id);
         if (unit.isPresent()) {
-            for (Relation relation : unit.get().getOutgoingRelations()) {
-                unitService.findOne(relation.getIncoming()).map(value -> value.getIncomingRelations().remove(relation));
-                relationService.delete(relation.getId());
+            if (unitService.ableToDeleteUnit(unit.get())) {
+                for (Relation relation : unit.get().getOutgoingRelations()) {
+                    unitService.findOne(relation.getIncoming()).map(value -> value.getIncomingRelations().remove(relation));
+                    relationService.delete(relation.getId());
+                }
+                for (Relation relation : unit.get().getIncomingRelations()) {
+                    unitService.findOne(relation.getOutgoing()).map(value -> value.getOutgoingRelations().remove(relation));
+                    relationService.delete(relation.getId());
+                }
+                unitService.delete(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-            for (Relation relation : unit.get().getIncomingRelations()) {
-                unitService.findOne(relation.getOutgoing()).map(value -> value.getOutgoingRelations().remove(relation));
-                relationService.delete(relation.getId());
-            }
-            unitService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

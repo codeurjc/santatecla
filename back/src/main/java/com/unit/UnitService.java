@@ -2,6 +2,7 @@ package com.unit;
 
 import java.util.*;
 
+import com.relation.Relation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -135,6 +136,16 @@ public class UnitService {
 		for(Unit nameContaining : unitRepository.findByNameContaining(unit.getName())) {
 			if ((nameContaining.getId() != unit.getId()) && (nameContaining.getName().equals(unit.getName())) &&
 				((getAbsoluteName(nameContaining).contains(getAbsoluteName(unit))) || (getAbsoluteName(unit).contains(getAbsoluteName(nameContaining))))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean ableToDeleteUnit(Unit unit) {
+		for (Relation relation : unit.getIncomingRelations()) {
+			Unit outgoing = findOne(relation.getOutgoing()).get();
+			if ((outgoing.getOutgoingRelations().size() <= 1) && (findByNameContaining(outgoing.getName()).size() > 1)) {
 				return false;
 			}
 		}

@@ -364,6 +364,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
+  deleteError(error) {
+    this.showSpinner = false;
+    if (error.status === 409) {
+      const dialogRef = this.deleteErrorDialog();
+      dialogRef.afterClosed().subscribe(() => {
+        window.scroll(0, 0);
+        this.updateUml();
+      });
+    } else {
+      console.log(error);
+    }
+  }
+
   checkUnitNames() {
     this.unitNameErrors = false;
     let i = 0;
@@ -575,6 +588,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.updateFocusedUnits();
       this.units.delete(id);
       this.focusUnit();
+    }, error => {
+      this.deleteError(error);
     });
   }
 
@@ -1006,6 +1021,15 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.dialog.open(ConfirmActionComponent, {
       data: {
         confirmText: 'Se ha producido un error al guardar. Hay unidades con nombres repetidos en el contexto actual',
+        button1: 'Volver'
+      }
+    });
+  }
+
+  deleteErrorDialog() {
+    return this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'No se puede eliminar esta unidad. Se producirían conflictos con el nombre de alguna de sus unidades hijas',
         button1: 'Volver'
       }
     });
