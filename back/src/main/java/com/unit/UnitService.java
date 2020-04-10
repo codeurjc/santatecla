@@ -30,6 +30,10 @@ public class UnitService {
 		unitRepository.deleteById(id);
 	}
 
+	public List<Unit> findByName(String name) {
+		return resolveDuplicateNames(unitRepository.findByName(name));
+	}
+
 	public List<Unit> findByNameContaining(String name) {
 		return resolveDuplicateNames(unitRepository.findByNameContaining(name));
 	}
@@ -133,10 +137,21 @@ public class UnitService {
 	}
 
 	public boolean isValidName(Unit unit) {
-		for(Unit nameContaining : unitRepository.findByNameContaining(unit.getName())) {
-			if ((nameContaining.getId() != unit.getId()) && (nameContaining.getName().equals(unit.getName())) &&
-				((getAbsoluteName(nameContaining).contains(getAbsoluteName(unit))) || (getAbsoluteName(unit).contains(getAbsoluteName(nameContaining))))) {
+		for(Unit unitWithNameContaining : unitRepository.findByNameContaining(unit.getName())) {
+			if ((unitWithNameContaining.getId() != unit.getId()) && (unitWithNameContaining.getName().equals(unit.getName())) &&
+				((getAbsoluteName(unitWithNameContaining).contains(getAbsoluteName(unit))) || (getAbsoluteName(unit).contains(getAbsoluteName(unitWithNameContaining))))) {
 				return false;
+			}
+		}
+		for (Unit unitWithName : unitRepository.findByName(unit.getName())) {
+			if (unit.getId() != unitWithName.getId()) {
+				for (Relation unitOutgoingRelation : unit.getOutgoingRelations()) {
+					for (Relation unitWithNameOutgoingRelation : unitWithName.getOutgoingRelations()) {
+						if (unitOutgoingRelation.getIncoming().equals(unitWithNameOutgoingRelation.getIncoming())) {
+							return false;
+						}
+					}
+				}
 			}
 		}
 		return true;
@@ -145,7 +160,7 @@ public class UnitService {
 	public boolean ableToDeleteUnit(Unit unit) {
 		for (Relation relation : unit.getIncomingRelations()) {
 			Unit outgoing = findOne(relation.getOutgoing()).get();
-			if ((outgoing.getOutgoingRelations().size() <= 1) && (findByNameContaining(outgoing.getName()).size() > 1)) {
+			if ((outgoing.getOutgoingRelations().size() <= 1) && (findByName(outgoing.getName()).size() > 1)) {
 				return false;
 			}
 		}
