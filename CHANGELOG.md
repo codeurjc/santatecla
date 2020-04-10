@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Load content of lesson editor tools on init
 - Update name of a unit tab when it changes
 - Disallowed saving a unit with name containing the character "/"
+- Disallowed saving units with the same name and a mutual parent
+- Disallowed delete a unit if its name will cause conflicts
 
 ## [1.1.0] - 01/04/2020
 
