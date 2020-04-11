@@ -195,6 +195,10 @@
   top: 0.3rem;
 }
 
+.unit-prefix {
+  color: #ad9ab2;
+}
+
 .close-tab {
   position: absolute;
   right: 0.4rem;

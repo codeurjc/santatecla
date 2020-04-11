@@ -19,7 +19,6 @@ declare var mermaid: any;
 
 export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  UNIT_NAME_SEPARATOR = '/';
   NOTIFICATION_DELAY = 5; // on seconds
   CLICK_TUTORIAL_FREQUENCY = 6;
 
@@ -61,7 +60,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   newUnitNotification = false;
 
 
-  constructor(private router: Router, private unitService: UnitService, private dialogService: TdDialogService,
+  constructor(private router: Router, public unitService: UnitService, private dialogService: TdDialogService,
               private dialog: MatDialog, public focusedUnitsService: FocusedUnitsService) {}
 
   ngOnInit() {
@@ -69,7 +68,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   init() {
-    this.search();
     window.scroll(0, 0);
     window.document.body.style.overflow = 'hidden';
     this.focusUnit();
@@ -107,6 +105,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.loadUnits();
     }
+    this.search();
+    this.updateFocusedUnits();
   }
 
   loadUnits() {
@@ -195,27 +195,41 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.focusedUnitsService.focusedUnitIds.forEach((unitId) => {
       const u = this.units.get(unitId.toString());
       if (u) {
-        if (!this.focusedUnitsContains(unitId.toString())) {
-          this.focusedUnitsService.focusedUnits.push(u);
-        }
+        this.pushFocusedUnit(u);
       } else {
         this.unitService.getUnit(+unitId).subscribe((unit: Unit) => {
-          if (!this.focusedUnitsContains(unitId.toString())) {
-            this.focusedUnitsService.focusedUnits.push(unit);
-          }
+          this.pushFocusedUnit(unit);
         });
       }
     });
   }
 
-  focusedUnitsContains(unitId: string): boolean {
-    let cont = false;
+  pushFocusedUnit(unit: Unit) {
+    if (this.isNewId(unit.id)) {
+      if (!this.focusedUnitsContains(unit.id.toString())) {
+        this.focusedUnitsService.focusedUnits.push(unit);
+      }
+    } else {
+      this.unitService.getUnambiguousName(+unit.id).subscribe((unambiguousNameUnit: Unit) => {
+        unit.name = unambiguousNameUnit.name;
+        const unitContaining = this.focusedUnitsContains(unit.id.toString());
+        if (!unitContaining) {
+          this.focusedUnitsService.focusedUnits.push(unit);
+        } else {
+          unitContaining.name = unit.name;
+        }
+      });
+    }
+  }
+
+  focusedUnitsContains(unitId: string): Unit {
+    let unitContaining: Unit = null;
     this.focusedUnitsService.focusedUnits.forEach(unit => {
       if (unit.id.toString() === unitId.toString()) {
-        cont = true;
+        unitContaining = unit;
       }
     });
-    return cont;
+    return unitContaining;
   }
 
   getUnitById(id: string): Unit {
@@ -350,6 +364,19 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
+  deleteError(error) {
+    this.showSpinner = false;
+    if (error.status === 409) {
+      const dialogRef = this.deleteErrorDialog();
+      dialogRef.afterClosed().subscribe(() => {
+        window.scroll(0, 0);
+        this.updateUml();
+      });
+    } else {
+      console.log(error);
+    }
+  }
+
   checkUnitNames() {
     this.unitNameErrors = false;
     let i = 0;
@@ -434,8 +461,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     const selectedUnit: Unit = this.getUnitById(this.getSelectedUnitId(this.selectedTarget));
     const newName = this.umlNodeOptions.nativeElement.firstChild.value;
     this.changed = ((this.changed) || ((newName) && (selectedUnit.name !== newName)));
-    selectedUnit.name = (newName ? newName : selectedUnit.name);
-    this.units.get(this.getSelectedUnitId(this.selectedTarget)).name =  (newName ? newName : selectedUnit.name);
+    selectedUnit.name = ((newName && (!newName.includes(this.unitService.UNIT_NAME_SEPARATOR))) ? newName : selectedUnit.name);
+    this.units.get(this.getSelectedUnitId(this.selectedTarget)).name =  selectedUnit.name;
     this.setShowUmlNodeOptions(false);
     this.setShowUmlPathOptions(false);
     this.updateUml();
@@ -561,7 +588,8 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
       this.updateFocusedUnits();
       this.units.delete(id);
       this.focusUnit();
-      this.search();
+    }, error => {
+      this.deleteError(error);
     });
   }
 
@@ -913,15 +941,6 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
-  getUnitPrefix(completeName: string) {
-    const nameLength = completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1].length;
-    return completeName.substring(0, completeName.length - nameLength);
-  }
-
-  getUnitName(completeName: string) {
-    return completeName.split(this.UNIT_NAME_SEPARATOR)[completeName.split(this.UNIT_NAME_SEPARATOR).length - 1];
-  }
-
   confirmSelectUnit(unit: Unit) {
     if (this.changed && (!this.ableToSave)) {
       const dialogRef = this.reloadDialog();
@@ -1002,6 +1021,15 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.dialog.open(ConfirmActionComponent, {
       data: {
         confirmText: 'Se ha producido un error al guardar. Hay unidades con nombres repetidos en el contexto actual',
+        button1: 'Volver'
+      }
+    });
+  }
+
+  deleteErrorDialog() {
+    return this.dialog.open(ConfirmActionComponent, {
+      data: {
+        confirmText: 'No se puede eliminar esta unidad. Se producirían conflictos con el nombre de alguna de sus unidades hijas',
         button1: 'Volver'
       }
     });
@@ -1134,7 +1162,7 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     name += id;
     const unit = this.getUnitById(id);
     if (unit) {
-      name += unit.name;
+      name += this.unitService.getUnitRealName(unit.name);
     }
     return name;
   }

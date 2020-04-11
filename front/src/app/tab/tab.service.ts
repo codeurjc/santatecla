@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Tab} from './tab.model';
+import {UnitService} from "../unit/unit.service";
+import {Unit} from "../unit/unit.model";
 
 @Injectable()
 export class TabService {
@@ -10,7 +12,7 @@ export class TabService {
 
   activeTab: Tab;
 
-  constructor() {
+  constructor(public unitService: UnitService) {
     this.unitTabs = [];
     this.courseTabs = [];
     this.lessonTabs = [];
@@ -21,7 +23,7 @@ export class TabService {
     let toAdd = true;
     if (t.type === 'Unidad') {
       for (let tab of this.unitTabs) {
-        if (+tab.id === +t.id && tab.name === t.name) {
+        if (+tab.unitId === +t.unitId) {
           toAdd = false;
           tab.isActive = true;
           this.activeTab = tab;
@@ -32,6 +34,14 @@ export class TabService {
         this.activeTab = t;
       }
       this.updateActiveTabLink('Unidad', t.id, t.name, null, null, null);
+      this.unitService.getUnambiguousName(t.id).subscribe((unambiguousNameUnit: Unit) => {
+        t._name = unambiguousNameUnit.name;
+        for (let tab of this.unitTabs) {
+          if (+tab.unitId === +t.unitId) {
+            tab._name = t.name;
+          }
+        }
+      });
     } else if (t.type === 'Curso') {
       for (let tab of this.courseTabs) {
         if (+tab.id === +t.id && tab.name === t.name) {

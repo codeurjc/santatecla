@@ -119,16 +119,20 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<Unit> deleteUnit(@PathVariable long id) {
         Optional<Unit> unit = unitService.findOne(id);
         if (unit.isPresent()) {
-            for (Relation relation : unit.get().getOutgoingRelations()) {
-                unitService.findOne(relation.getIncoming()).map(value -> value.getIncomingRelations().remove(relation));
-                relationService.delete(relation.getId());
+            if (unitService.ableToDeleteUnit(unit.get())) {
+                for (Relation relation : unit.get().getOutgoingRelations()) {
+                    unitService.findOne(relation.getIncoming()).map(value -> value.getIncomingRelations().remove(relation));
+                    relationService.delete(relation.getId());
+                }
+                for (Relation relation : unit.get().getIncomingRelations()) {
+                    unitService.findOne(relation.getOutgoing()).map(value -> value.getOutgoingRelations().remove(relation));
+                    relationService.delete(relation.getId());
+                }
+                unitService.delete(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-            for (Relation relation : unit.get().getIncomingRelations()) {
-                unitService.findOne(relation.getOutgoing()).map(value -> value.getOutgoingRelations().remove(relation));
-                relationService.delete(relation.getId());
-            }
-            unitService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -138,6 +142,12 @@ public class UnitRestController extends GeneralRestController {
     public ResponseEntity<List<Unit>> searchUnits(@RequestParam String name) {
         List<Unit> units = this.unitService.findByNameContaining(name);
         return new ResponseEntity<>(units, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/unambiguousName")
+    public ResponseEntity<Unit> getUnitUnambiguousName(@PathVariable int id) {
+        Optional<Unit> unit = this.unitService.findOne(id);
+        return unit.map(value -> new ResponseEntity<>(new Unit(unitService.getUnambiguousName(value)), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(value = "/{id}/absoluteName")
