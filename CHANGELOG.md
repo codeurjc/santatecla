@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0]
+## [1.3.0]
+
+
+
+## [1.2.0] - 11/04/2020
 
 ### Added
 
@@ -13,16 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Itinerary tree keeps opened changing the tab or adding new blocks
 - Tooltips in lesson editor tools
 - All slides are updated when changing a lesson, card, unit or slide name
-- Update name of the results of units search and focused units on save
 
 ### Fixed
 
 - Questions do not disorder in student lessons
 - Load content of lesson editor tools on init
-- Update name of a unit tab when it changes
-- Disallowed saving a unit with name containing the character "/"
-- Disallowed saving units with the same name and a mutual parent
-- Disallowed delete a unit if its name will cause conflicts
 
 ## [1.1.0] - 01/04/2020
 
