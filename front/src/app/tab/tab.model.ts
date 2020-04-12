@@ -1,7 +1,7 @@
-import {LoginService} from '../auth/login.service';
 import {Module} from '../itinerary/module/module.model';
 
 export class Tab {
+
   link: string;
   isActive: boolean;
   closeLink: string;
@@ -13,7 +13,7 @@ export class Tab {
 
   openedModuleNodes: number[];
 
-  constructor(private _type: string, private _id: number, private _name: string, public _unitId: string, private _courseId: number, private _moduleId: number) {
+  constructor(private _type: string, private _id: number, public _name: string, public _unitId: string, private _courseId: number, private _moduleId: number) {
     this.updateLink(_type, _id, _name, _unitId, _courseId, _moduleId);
     this.studentLessonSlideNumber = 0;
     this.studentLessonSlideProgress = 0;
