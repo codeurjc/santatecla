@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.0]
 
+### Added
+
+- Button to delete images
+
 
 
 ## [1.2.0] - 11/04/2020
