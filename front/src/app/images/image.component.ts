@@ -4,7 +4,8 @@ import {Image} from './image.model';
 import {ImageService} from './image.service';
 import { ClipboardService } from 'ngx-clipboard';
 import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material/bottom-sheet';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
 
 @Component({
   selector: 'app-image',
@@ -24,12 +25,17 @@ export class ImageComponent implements OnInit {
 
   unitId: number;
 
+  confirmText = 'Se eliminará la imagen permanentemente';
+  button1 = 'Cancelar';
+  button2 = 'Borrar';
+
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private imageService: ImageService,
               private bottomSheetRef: MatBottomSheetRef<ImageComponent>,
               private clipboardService: ClipboardService,
               private snackBar: MatSnackBar,
+              private dialog: MatDialog,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
   ngOnInit() {
@@ -92,6 +98,23 @@ export class ImageComponent implements OnInit {
       duration: 3000,
     });
     event.preventDefault();
+  }
+
+  deleteImage(imageId: number) {
+    const dialogRef = this.dialog.open(ConfirmActionComponent, {
+      data: {confirmText: this.confirmText, button1: this.button1, button2: this.button2}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        this.showSpinner = true;
+        this.imageService.deleteImage(this.unitId, imageId).subscribe((data: any) => {
+          this.ngOnInit();
+        }, error => {
+          console.log(error);
+        });
+      }
+    });
   }
 
 }

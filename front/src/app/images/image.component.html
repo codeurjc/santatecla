@@ -20,11 +20,15 @@
     </div>
 
     <div *ngFor="let image of imagesResult">
-      <mat-card class="image-card" (click)="getUrl(image.id)">
-        <img mat-card-image class="image" src="{{image.image}}" alt="{{image.name}}">
+      <mat-card class="image-card">
+        <img mat-card-image class="image" src="{{image.image}}" alt="{{image.name}}" (click)="getUrl(image.id)">
         <mat-card-content>
-          <div class="image-name">{{image.name}}</div>
+          <div>
+            <span class="image-name" (click)="getUrl(image.id)">{{image.name}}</span>
+            <mat-icon class="delete-image-icon" (click)="deleteImage(image.id)">delete</mat-icon>
+          </div>
         </mat-card-content>
+
       </mat-card>
     </div>
 

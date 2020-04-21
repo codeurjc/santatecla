@@ -217,7 +217,21 @@ public class UnitRestController extends GeneralRestController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
+    @DeleteMapping(value="/{unitId}/images/{imageId}")
+    public ResponseEntity<Image> deleteImage(@PathVariable int unitId, @PathVariable int imageId) {
+        Optional<Unit> optionalUnit = this.unitService.findOne(unitId);
+        if (optionalUnit.isPresent()) {
+            Optional<Image> image = this.imageService.findOne(imageId);
+            if(image.isPresent()) {
+                this.imageService.delete(imageId);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 

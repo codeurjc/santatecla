@@ -21,4 +21,8 @@ export class ImageService {
 
     return this.http.post('/api/units/' + unitId + '/images', formData);
   }
+
+  deleteImage(unitId: number, imageId: number) {
+    return this.http.delete('/api/units/' + unitId + '/images/' + imageId);
+  }
 }
