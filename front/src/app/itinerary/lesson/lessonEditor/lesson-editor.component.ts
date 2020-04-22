@@ -33,6 +33,9 @@ import {UnitsQuestionsToolComponent} from '../lessonTools/units-questions-tool.c
 import {ClipboardService} from 'ngx-clipboard';
 import {TabService} from '../../../tab/tab.service';
 import {Tab} from '../../../tab/tab.model';
+import {TestAnswer} from '../../../question/testQuestion/testAnswer.model';
+import {ListAnswer} from '../../../question/listQuestion/listAnswer.model';
+import {DefinitionAnswer} from '../../../question/definitionQuestion/definitionAnswer.model';
 
 
 function convertToHTML(text) {
@@ -179,19 +182,27 @@ export class LessonEditorComponent implements OnInit {
         if (!this.loginService.isAdmin) {
           if (data.subtype === 'TestQuestion') {
             this.questionService.getTestUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
-              this.lessonId, this.courseId).subscribe((response: any[]) => {
-              this.mapQuestionsDone.set(data, response.length > 0);
-              this.questions = Array.from(this.mapQuestionsDone.keys());
-              for (const q of this.questions) {
-                this.mapQuestions.set(q.id, q);
-              }
+              this.lessonId, this.courseId).subscribe((response: TestAnswer[]) => {
+                if (response.length === 0) {
+                  this.mapQuestionsDone.set(data, null);
+                } else {
+                  this.mapQuestionsDone.set(data, response[0].correct);
+                }
+                this.questions = Array.from(this.mapQuestionsDone.keys());
+                for (const q of this.questions) {
+                  this.mapQuestions.set(q.id, q);
+                }
             }, error => {
               console.log(error);
             });
           } else if (data.subtype === 'ListQuestion') {
             this.questionService.getListUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
-              this.lessonId, this.courseId).subscribe((response: any[]) => {
-              this.mapQuestionsDone.set(data, response.length > 0);
+              this.lessonId, this.courseId).subscribe((response: ListAnswer[]) => {
+              if (response.length === 0) {
+                this.mapQuestionsDone.set(data, null);
+              } else {
+                this.mapQuestionsDone.set(data, response[0].correct);
+              }
               this.questions = Array.from(this.mapQuestionsDone.keys());
               for (const q of this.questions) {
                 this.mapQuestions.set(q.id, q);
@@ -201,8 +212,11 @@ export class LessonEditorComponent implements OnInit {
             });
           } else {
             this.questionService.getDefinitionUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
-              this.lessonId, this.courseId).subscribe((response: any[]) => {
-              this.mapQuestionsDone.set(data, response.length > 0);
+              this.lessonId, this.courseId).subscribe((response: DefinitionAnswer[]) => {
+              this.mapQuestionsDone.set(data, null);
+              if (response.length !== 0 && response[0].corrected) {
+                this.mapQuestionsDone.set(data, response[0].correct);
+              }
               this.questions = Array.from(this.mapQuestionsDone.keys());
               for (const q of this.questions) {
                 this.mapQuestions.set(q.id, q);

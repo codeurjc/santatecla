@@ -37,7 +37,8 @@
           <div *ngFor="let id of lesson?.questionsIds; let i = index">
             <button mat-menu-item (click)="openQuestion(mapQuestions.get(id)?.id, mapQuestions.get(id)?.subtype)">
               <span><b>Ejercicio {{i}}</b> {{mapQuestions.get(id)?.questionText}}</span>
-              <mat-icon *ngIf="mapQuestionsDone?.get(mapQuestions?.get(id))" class="done-icon">done</mat-icon>
+              <mat-icon *ngIf="mapQuestionsDone?.get(mapQuestions?.get(id)) != null && mapQuestionsDone?.get(mapQuestions?.get(id))" class="done-icon">done</mat-icon>
+              <mat-icon *ngIf="mapQuestionsDone?.get(mapQuestions?.get(id)) != null && !mapQuestionsDone?.get(mapQuestions?.get(id))" class="wrong-icon">close</mat-icon>
             </button>
           </div>
         </mat-menu>
