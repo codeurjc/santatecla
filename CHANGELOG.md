@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Button to delete images
 
+### Changed
+
+- Icon when student answers changes between correct, wrong or uncorrected.
+
 
 
 ## [1.2.0] - 11/04/2020
