@@ -89,7 +89,7 @@ export class LessonEditorComponent implements OnInit {
   // Map questionId - Question
   mapQuestions: Map<number, Question>;
   // Map Question - Boolean question done
-  mapQuestionsDone: Map<Question, boolean>;
+  mapQuestionsDone: Map<Question, number>;
 
   cursorPosition: number;
 
@@ -175,7 +175,7 @@ export class LessonEditorComponent implements OnInit {
   }
 
   loadQuestions() {
-    this.mapQuestionsDone = new Map<Question, boolean>();
+    this.mapQuestionsDone = new Map<Question, number>();
     this.mapQuestions = new Map<number, Question>();
     this.lesson.questionsIds.forEach((questionId) => {
       this.questionService.getQuestion(questionId).subscribe((data: Question) => {
@@ -186,7 +186,11 @@ export class LessonEditorComponent implements OnInit {
                 if (response.length === 0) {
                   this.mapQuestionsDone.set(data, null);
                 } else {
-                  this.mapQuestionsDone.set(data, response[0].correct);
+                  if (response[0].correct) {
+                    this.mapQuestionsDone.set(data, 0);
+                  } else {
+                    this.mapQuestionsDone.set(data, 1);
+                  }
                 }
                 this.questions = Array.from(this.mapQuestionsDone.keys());
                 for (const q of this.questions) {
@@ -201,7 +205,11 @@ export class LessonEditorComponent implements OnInit {
               if (response.length === 0) {
                 this.mapQuestionsDone.set(data, null);
               } else {
-                this.mapQuestionsDone.set(data, response[0].correct);
+                if (response[0].correct) {
+                  this.mapQuestionsDone.set(data, 0);
+                } else {
+                  this.mapQuestionsDone.set(data, 1);
+                }
               }
               this.questions = Array.from(this.mapQuestionsDone.keys());
               for (const q of this.questions) {
@@ -213,9 +221,18 @@ export class LessonEditorComponent implements OnInit {
           } else {
             this.questionService.getDefinitionUserAnswers(this.unitId, questionId, this.loginService.getCurrentUser().id,
               this.lessonId, this.courseId).subscribe((response: DefinitionAnswer[]) => {
-              this.mapQuestionsDone.set(data, null);
-              if (response.length !== 0 && response[0].corrected) {
-                this.mapQuestionsDone.set(data, response[0].correct);
+              if (response.length === 0) {
+                this.mapQuestionsDone.set(data, null);
+              } else {
+                if (response[0].corrected) {
+                  if (response[0].correct) {
+                    this.mapQuestionsDone.set(data, 0);
+                  } else {
+                    this.mapQuestionsDone.set(data, 1);
+                  }
+                } else {
+                  this.mapQuestionsDone.set(data, 2);
+                }
               }
               this.questions = Array.from(this.mapQuestionsDone.keys());
               for (const q of this.questions) {
