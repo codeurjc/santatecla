@@ -44,12 +44,17 @@ function convertToHTML(text) {
   return(html);
 }
 
+enum State {
+  Correct = 0,
+  Wrong,
+  Uncorrected,
+}
+
 @Component({
   selector: 'app-lesson-editor',
   templateUrl: './lesson-editor.component.html',
   styleUrls: ['./lesson-editor.component.css']
 })
-
 export class LessonEditorComponent implements OnInit {
 
   contentHTML: any[];
@@ -89,7 +94,7 @@ export class LessonEditorComponent implements OnInit {
   // Map questionId - Question
   mapQuestions: Map<number, Question>;
   // Map Question - Boolean question done
-  mapQuestionsDone: Map<Question, number>;
+  mapQuestionsDone: Map<Question, State>;
 
   cursorPosition: number;
 
@@ -187,9 +192,9 @@ export class LessonEditorComponent implements OnInit {
                   this.mapQuestionsDone.set(data, null);
                 } else {
                   if (response[0].correct) {
-                    this.mapQuestionsDone.set(data, 0);
+                    this.mapQuestionsDone.set(data, State.Correct);
                   } else {
-                    this.mapQuestionsDone.set(data, 1);
+                    this.mapQuestionsDone.set(data, State.Wrong);
                   }
                 }
                 this.questions = Array.from(this.mapQuestionsDone.keys());
@@ -206,9 +211,9 @@ export class LessonEditorComponent implements OnInit {
                 this.mapQuestionsDone.set(data, null);
               } else {
                 if (response[0].correct) {
-                  this.mapQuestionsDone.set(data, 0);
+                  this.mapQuestionsDone.set(data, State.Correct);
                 } else {
-                  this.mapQuestionsDone.set(data, 1);
+                  this.mapQuestionsDone.set(data, State.Wrong);
                 }
               }
               this.questions = Array.from(this.mapQuestionsDone.keys());
@@ -226,12 +231,12 @@ export class LessonEditorComponent implements OnInit {
               } else {
                 if (response[0].corrected) {
                   if (response[0].correct) {
-                    this.mapQuestionsDone.set(data, 0);
+                    this.mapQuestionsDone.set(data, State.Correct);
                   } else {
-                    this.mapQuestionsDone.set(data, 1);
+                    this.mapQuestionsDone.set(data, State.Wrong);
                   }
                 } else {
-                  this.mapQuestionsDone.set(data, 2);
+                  this.mapQuestionsDone.set(data, State.Uncorrected);
                 }
               }
               this.questions = Array.from(this.mapQuestionsDone.keys());
