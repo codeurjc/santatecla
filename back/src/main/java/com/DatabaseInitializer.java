@@ -192,6 +192,12 @@ public class DatabaseInitializer {
                 Lesson lesson11 = new Lesson("Introducción, Tipos de datos, Operadores y Estructura de control");
                 Lesson lesson12 = new Lesson("Funciones y Objetos");
 
+                List<Long> questionIds = new ArrayList<>();
+                questionIds.add((long)1);
+                questionIds.add((long)5);
+                questionIds.add((long)6);
+                lesson1.setQuestionsIds(questionIds);
+
                 lesson1.getSlides().add(slide1);
                 lesson1.getSlides().add(slide01);
                 lesson1.getSlides().add(slide02);
