@@ -5,16 +5,17 @@ import javax.servlet.http.HttpSession;
 import com.GeneralRestController;
 
 import com.course.Course;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
-public class UserRestController extends GeneralRestController {
+public class UserRestController extends GeneralRestController implements UserController {
     
+	@ApiOperation("Return a list of blog entries")
 	@GetMapping(value="/login")
 	public ResponseEntity<User> logIn() {
         if (!userComponent.isLoggedUser()) {
