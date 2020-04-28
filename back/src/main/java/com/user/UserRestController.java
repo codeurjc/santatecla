@@ -14,8 +14,7 @@ import java.util.List;
 
 @RestController
 public class UserRestController extends GeneralRestController implements UserController {
-    
-	@ApiOperation("Return a list of blog entries")
+
 	@GetMapping(value="/login")
 	public ResponseEntity<User> logIn() {
         if (!userComponent.isLoggedUser()) {

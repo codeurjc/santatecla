@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/lessons")
-public class LessonRestController extends GeneralRestController {
+public class LessonRestController extends GeneralRestController implements LessonController{
 
     @GetMapping(value="/")
     public MappingJacksonValue lessons(){
