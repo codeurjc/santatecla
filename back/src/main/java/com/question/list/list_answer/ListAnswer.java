@@ -2,13 +2,14 @@ package com.question.list.list_answer;
 
 import javax.persistence.*;
 
+import com.question.Answer;
 import com.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class ListAnswer {
+public class ListAnswer implements Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
