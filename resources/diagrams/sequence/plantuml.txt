@@ -139,7 +139,38 @@ API --> Browser: HTTP Response Saved Question
 Create lesson
 
 
+@startuml
+participant Browser
+participant API
+control UnitLessonRestController
+participant LessonService
+participant UnitService
+participant UnitRepository
+database Database
 
+Browser -> API: HTTP Request POST new Lesson
+API -> UnitLessonRestController: addLesson(unitID, Lesson)
+UnitLessonRestController -> UnitService: findById(unitID)
+UnitService -> UnitRepository: findById(unitID)
+UnitRepository -> Database: MySQL query
+
+Database --> UnitRepository: Unit
+UnitRepository --> UnitService: Unit
+UnitService --> UnitLessonRestController: Unit
+
+UnitLessonRestController -> UnitLessonRestController: Add Lesson to Unit
+UnitLessonRestController -> LessonService: save(Updated Unit)
+LessonService -> UnitService: save(Updated Unit)
+UnitService -> UnitRepository: save(Updated Unit)
+UnitRepository -> Database: Update Unit
+
+Database --> UnitRepository: Updated Unit
+UnitRepository --> UnitService: Updated Unit
+UnitService --> LessoneService: Updated Unit
+LessonService --> UnitLessoneRestController: Saved Lesson
+UnitLessonRestController --> API: Saved Lesson
+API --> Browser: HTTP Response Saved Lesson
+@enduml
 
 
 Insert elements in a lesson
@@ -148,7 +179,7 @@ Insert elements in a lesson
 
 
 
-Create itinerary
+Create itinerary (module)
 
 
 @startuml
