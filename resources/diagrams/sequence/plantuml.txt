@@ -4,7 +4,15 @@ http://www.plantuml.com
 
 Create unit
 
+
 @startuml
+participant Browser
+participant API
+control UnitRestController
+participant UnitService
+participant UnitRepository
+database Database
+
 Browser -> API: HTTP Request POST new Unit
 API -> UnitRestController: createUnit
 UnitRestController -> UnitService: isValidName
@@ -27,7 +35,17 @@ API --> Browser: created Unit
 
 Create relation
 
+
 @startuml
+participant Browser
+participant API
+control UnitRestController
+participant UnitService
+participant UnitRepository
+participant RelationService
+participant RelationRepository
+database Database
+
 Browser -> API: HTTP Request PUT update Units
 API -> UnitRestController: updateUnits
 UnitRestController -> UnitService: isValidName
@@ -49,6 +67,7 @@ API --> Browser: list of updated Units
 
 
 Create card
+
 
 @startuml
 participant Browser
