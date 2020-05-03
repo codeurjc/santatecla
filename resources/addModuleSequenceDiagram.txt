@@ -1,0 +1,32 @@
+@startuml
+participant Browser
+participant API
+control UnitModuleRestController
+participant ModuleService
+participant UnitService
+participant UnitRepository
+database Database
+
+Browser -> API: HTTP Request POST new Module
+API -> UnitModuleRestController: addModule(unitID, Module)
+UnitModuleRestController -> UnitService: findById(unitID)
+UnitService -> UnitRepository: findById(unitID)
+UnitRepository -> Database: MySQL query
+
+Database --> UnitRepository: Unit
+UnitRepository --> UnitService: Unit
+UnitService --> UnitModuleRestController: Unit
+
+UnitModuleRestController -> UnitModuleRestController: Add Module to Unit
+UnitModuleRestController -> ModuleService: save(Updated Unit)
+ModuleService -> UnitService: save(Updated Unit)
+UnitService -> UnitRepository: save(Updated Unit)
+UnitRepository -> Database: Update Unit
+
+Database --> UnitRepository: Updated Unit
+UnitRepository --> UnitService: Updated Unit
+UnitService --> ModuleService: Updated Unit
+ModuleService --> UnitModuleRestController: Saved Module
+UnitModuleRestController --> API: Saved Module
+API --> Browser: HTTP Response Saved Module
+@enduml
