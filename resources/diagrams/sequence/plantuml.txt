@@ -1,0 +1,101 @@
+
+http://www.plantuml.com
+
+
+Create unit
+
+@startuml
+Browser -> API: HTTP Request POST new Unit
+API -> UnitRestController: createUnit
+UnitRestController -> UnitService: isValidName
+UnitService -> UnitRepository: findByNameContaining
+UnitRepository -> Database: MySQL query
+Database --> UnitRepository: Result
+UnitRepository --> UnitService: list of Unit
+UnitService --> UnitRestController: is valid
+UnitRestController -> UnitService: save
+UnitService -> UnitRepository: save
+UnitRepository -> Database: MySQL query
+Database --> UnitRepository: Result
+UnitRepository --> UnitService: Unit
+UnitService --> UnitRestController: created Unit
+UnitRestController --> API: created Unit
+API --> Browser: created Unit
+@enduml
+
+
+
+Create relation
+
+@startuml
+Browser -> API: HTTP Request PUT update Units
+API -> UnitRestController: updateUnits
+UnitRestController -> UnitService: isValidName
+UnitService -> UnitRepository: findByNameContaining
+UnitRepository -> Database: MySQL query
+Database --> UnitRepository: Result list
+UnitRepository --> UnitService: list of Unit
+UnitService --> UnitRestController: is valid
+UnitRestController -> RelationService: save all relations
+RelationService -> RelationRepository: save
+RelationRepository -> Database: MySQL query
+Database --> RelationRepository: Result
+RelationRepository --> RelationService: Relation
+RelationService --> UnitRestController: list of Relation
+UnitRestController --> API: list of updated Units
+API --> Browser: list of updated Units
+@enduml
+
+
+
+Create card
+
+@startuml
+Browser -> API: HTTP Request POST new Card
+API -> CardRestController: createCard
+CardRestController -> CardService: save
+CardService -> CardRepository: save
+CardRepository -> Database: MySQL query
+Database --> CardRepository: Result
+CardRepository --> CardService: created Card
+CardService --> CardRestController: created Card
+CardRestController --> API: created Card
+API --> Browser: created Card
+@enduml
+
+
+
+Create exercise
+
+
+
+
+
+Create lesson
+
+
+
+
+
+Insert elements in a lesson
+
+
+
+
+
+Create itinerary
+
+
+
+
+
+Create course
+
+
+
+
+
+Resolve exercise
+
+
+
