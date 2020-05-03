@@ -219,7 +219,26 @@ API --> Browser: HTTP Response Saved Module
 Create course
 
 
+@startuml
+participant Browser
+participant API
+control CourseRestController
+participant CourseService
+participant CourseRepository
+database Database
 
+Browser -> API: HTTP Request POST new Course
+API -> CourseRestController: createCourse
+CourseRestController -> CourseService: save(Course)
+CourseService -> CourseRepository: save(Course)
+CourseRepository -> Database: Save Course
+
+Database --> CourseRepository: Saved Course
+CourseRepository --> CourseService: Saved Course
+CourseService --> CourseRestController: Saved Course
+CourseRestController --> API: Saved Course
+API --> Browser:  HTTP Response Saved Course
+@enduml
 
 
 Answer question
