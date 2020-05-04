@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/units")
-public class UnitRestController extends GeneralRestController {
+public class UnitRestController extends GeneralRestController implements UnitController {
 
     @GetMapping(value = "/")
     public ResponseEntity<List<Unit>> getUnits() {

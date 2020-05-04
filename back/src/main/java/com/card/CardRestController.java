@@ -16,13 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/units")
-public class CardRestController extends GeneralRestController {
-
-    @Autowired
-    protected UnitService unitService;
-
-    @Autowired
-    protected CardService cardService;
+public class CardRestController extends GeneralRestController implements CardController{
 
     @GetMapping(value = "/{unitId}/cards")
     public ResponseEntity<Iterable<Card>> getCards(@PathVariable int unitId) {

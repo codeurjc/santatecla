@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Button to delete images
+- Swagger documentation
+
+### Changed
+
+- Icon when student answers changes between correct, wrong or uncorrected.
 
 
 

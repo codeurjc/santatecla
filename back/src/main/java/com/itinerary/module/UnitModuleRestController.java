@@ -20,10 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/units")
-public class UnitModuleRestController extends GeneralRestController {
-
-    @Autowired
-    protected UnitService unitService;
+public class UnitModuleRestController extends GeneralRestController implements UnitModuleController{
 
     @PostMapping(value = "/{unitId}/modules")
     @ResponseStatus(HttpStatus.CREATED)

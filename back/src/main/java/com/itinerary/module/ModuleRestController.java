@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/modules")
-public class ModuleRestController extends GeneralRestController {
+public class ModuleRestController extends GeneralRestController implements ModuleController{
 
     @Autowired
     protected UnitService unitService;
@@ -38,7 +38,7 @@ public class ModuleRestController extends GeneralRestController {
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<Module> updateLesson(@PathVariable long id, @RequestBody Module module){
+    public ResponseEntity<Module> updateModule(@PathVariable long id, @RequestBody Module module){
 
         Optional<Module> m = this.moduleService.findOne(id);
 
@@ -77,7 +77,7 @@ public class ModuleRestController extends GeneralRestController {
 
     @DeleteMapping(value = "/{moduleId}/blocks/{blockId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Module> deleteModule(@PathVariable long moduleId, @PathVariable long blockId) {
+    public ResponseEntity<Module> deleteBlockFromModule(@PathVariable long moduleId, @PathVariable long blockId) {
 
         Optional<Module> module = this.moduleService.findOne(moduleId);
         Optional<Block> block = this.blockService.findOne(blockId);

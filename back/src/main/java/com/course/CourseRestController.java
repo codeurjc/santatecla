@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/course")
-public class CourseRestController extends GeneralRestController {
+public class CourseRestController extends GeneralRestController implements CourseController{
 
     @GetMapping(value="/")
     public ResponseEntity<List<Course>> getCourses(){
