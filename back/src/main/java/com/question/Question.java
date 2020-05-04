@@ -19,25 +19,25 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("questionId")
     @NotNull
-    @ApiModelProperty(notes = "The question ID. It is unique.",  required = true)
+    @ApiModelProperty(notes = "The question ID. It is unique",  required = true)
     protected long id;
 
     @NotNull
-    @ApiModelProperty(value = "The question subtype", required = true)
+    @ApiModelProperty(notes = "The question subtype", required = true)
     protected String subtype;
 
     @NotNull
-    @ApiModelProperty(value = "The question itself", required = true)
+    @ApiModelProperty(notes = "The question itself", required = true)
     protected String questionText;
 
-    @ApiModelProperty(value = "Total answers to a question")
+    @ApiModelProperty(notes = "Total answers to a question")
     protected int totalAnswers;
-    @ApiModelProperty(value = "Total correct answers to a question")
+    @ApiModelProperty(notes = "Total correct answers to a question")
     protected int totalCorrectAnswers;
-    @ApiModelProperty(value = "Total wrong answers to a question")
+    @ApiModelProperty(notes = "Total wrong answers to a question")
     protected int totalWrongAnswers;
 
-    @ApiModelProperty(value = "List of blocks in which the question is found", required = true)
+    @ApiModelProperty(notes = "List of blocks in which the question is found", required = true)
     @ManyToMany(fetch = FetchType.EAGER)
     protected Set<Block> blocks;
 
