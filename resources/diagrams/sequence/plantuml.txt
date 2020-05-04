@@ -166,8 +166,8 @@ UnitRepository -> Database: Update Unit
 
 Database --> UnitRepository: Updated Unit
 UnitRepository --> UnitService: Updated Unit
-UnitService --> LessoneService: Updated Unit
-LessonService --> UnitLessoneRestController: Saved Lesson
+UnitService --> LessonService: Updated Unit
+LessonService --> UnitLessonRestController: Saved Lesson
 UnitLessonRestController --> API: Saved Lesson
 API --> Browser: HTTP Response Saved Lesson
 @enduml
@@ -175,9 +175,50 @@ API --> Browser: HTTP Response Saved Lesson
 
 Insert elements in a lesson
 
+@startuml
+participant Browser
+participant API
+control LessonRestController
+participant LessonService
+participant LessonRepository
+participant SlideService
+participant SlideRepository
+database Database
 
+Browser -> API: HTTP Request PUT Lesson
+API -> LessonRestController: updateLesson(lessonID, newLesson)
+LessonRestController -> LessonService: findById(lessonID)
+LessonService-> LessonRepository: findById(lessonID)
+LessonRepository-> Database: MySQL query
 
+Database --> LessonRepository: previousLesson
+LessonRepository--> LessonService: previousLesson
+LessonService--> LessonRestController : previousLesson
 
+LessonRestController -> SlideService: updateSlides(previousLesson, newLesson)
+SlideService-> SlideRepository: findByContent(previousLesson)
+SlideRepository -> Database: MySQL query
+
+Database --> SlideRepository : Slides
+SlideRepository --> SlideService: Slides
+
+SlideService -> SlideRepository : save(updatedSlide)
+SlideRepository -> Database: MySQL query
+
+Database --> SlideRepository : Updated slide
+SlideRepository --> SlideService: Updated slide
+SlideService --> LessonRestController: Updated slide
+
+LessonRestController -> LessonService: save(newLesson)
+LessonService -> LessonRepository: save(newLesson)
+LessonRepository -> Database : MySQL query
+
+Database --> LessonRepository : Updated Lesson
+LessonRepository --> LessonService : Updated Lesson
+LessonService --> LessonRestController : Updated Lesson
+LessonRestController --> API: Updated Lesson
+API --> Browser: HTTP Response Updated Lesson
+@enduml
 
 Create itinerary (module)
 
