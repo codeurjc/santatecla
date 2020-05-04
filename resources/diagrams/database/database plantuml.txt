@@ -11,13 +11,19 @@ class Relation {
   relationType: Enum
 }
 
-class Itinerary {
+class Block{
   name: String
+}
+
+class Module{
+}
+
+class Lesson{
 }
 
 class Slide {
   name: String
-  content: String 
+  content: String
 }
 
 class Course {
@@ -75,13 +81,19 @@ Answer<|.up. TestAnswer
 
 Relation "1" --> "1" Unit
 
+Block<|-down- Module
+Block<|-down- Lesson
+
+Module "*"-up-> "*" Block
+
 Unit "1" *-down-> "*" Relation
 Unit "1" *-down-> "*" Card
-Unit "*" *-up-> "*" Itinerary
+Unit "1" *-up-> "*" Module
+Unit "1" *-up-> "*" Lesson
 Unit "1" *-up-> "*" Question
 
-Itinerary "1" *-down-> "*" Slide
+Lesson "1" *-down-> "*" Slide
 
-Course "1" *-down-> "*" Unit
+Course "1" *-down-> "1" Module
 Course "1" *-right-> "*" User
 @enduml
