@@ -1,6 +1,7 @@
 package com.question.test;
 
 import com.GeneralRestController;
+import com.question.QuestionController;
 import com.question.test.test_answer.TestAnswer;
 import com.question.test.test_question.TestQuestion;
 import com.unit.Unit;
@@ -13,10 +14,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/units/{unitID}/question/test")
-public class TestQuestionRestController extends GeneralRestController {
+public class TestQuestionRestController
+        extends GeneralRestController
+        implements QuestionController<TestQuestion, TestAnswer> {
 
     @GetMapping("")
-    public ResponseEntity<List<TestQuestion>> getTestQuestions(@PathVariable long unitID) {
+    public ResponseEntity<List<TestQuestion>> getQuestions(@PathVariable long unitID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
 
         if (unit.isPresent())
@@ -26,7 +29,7 @@ public class TestQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping("/{questionID}")
-    public ResponseEntity<TestQuestion> getTestQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<TestQuestion> getQuestion(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<TestQuestion> question = this.testQuestionService.findOne(questionID);
 
@@ -37,7 +40,7 @@ public class TestQuestionRestController extends GeneralRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<TestQuestion> addTestQuestion(@PathVariable long unitID, @RequestBody TestQuestion question) {
+    public ResponseEntity<TestQuestion> addQuestion(@PathVariable long unitID, @RequestBody TestQuestion question) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
 
         if (unit.isPresent()) {
@@ -51,7 +54,7 @@ public class TestQuestionRestController extends GeneralRestController {
     }
 
     @DeleteMapping("/{questionID}")
-    public ResponseEntity<TestQuestion> deleteTestQuestion(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<TestQuestion> deleteQuestion(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<TestQuestion> question = this.testQuestionService.findOne(questionID);
 
@@ -79,7 +82,7 @@ public class TestQuestionRestController extends GeneralRestController {
     }
 
     @GetMapping(value = "/{questionID}/answer")
-    public ResponseEntity<List<TestAnswer>> getTestAnswers(@PathVariable long unitID, @PathVariable long questionID) {
+    public ResponseEntity<List<TestAnswer>> getAnswers(@PathVariable long unitID, @PathVariable long questionID) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<TestQuestion> question = this.testQuestionService.findOne(questionID);
 
@@ -91,7 +94,7 @@ public class TestQuestionRestController extends GeneralRestController {
     }
 
     @PostMapping("/{questionID}/answer")
-    public ResponseEntity<TestAnswer> addTestAnswer(@PathVariable long unitID, @PathVariable long questionID, @RequestBody TestAnswer answer) {
+    public ResponseEntity<TestAnswer> addAnswer(@PathVariable long unitID, @PathVariable long questionID, @RequestBody TestAnswer answer) {
         Optional<Unit> unit = this.unitService.findOne(unitID);
         Optional<TestQuestion> question = this.testQuestionService.findOne(questionID);
 

@@ -6,10 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.question.Answer;
 import com.user.User;
 
 @Entity
-public class DefinitionAnswer{
+public class DefinitionAnswer implements Answer {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

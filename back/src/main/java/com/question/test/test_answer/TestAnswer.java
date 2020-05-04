@@ -1,11 +1,12 @@
 package com.question.test.test_answer;
 
+import com.question.Answer;
 import com.user.User;
 
 import javax.persistence.*;
 
 @Entity
-public class TestAnswer {
+public class TestAnswer implements Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
