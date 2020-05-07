@@ -19,7 +19,6 @@ public class ListQuestion extends Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("listQuestionId")
-    @NotNull
     @ApiModelProperty(notes = "The list question ID. It is unique",  required = true)
     private long id;
 

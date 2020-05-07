@@ -12,7 +12,6 @@ public class TestAnswer implements Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @ApiModelProperty(notes = "The answer ID. It is unique.",  required = true)
     protected long id;
 

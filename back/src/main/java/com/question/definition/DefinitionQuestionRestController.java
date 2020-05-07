@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
+import com.question.Answer;
 import com.question.QuestionController;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;
@@ -94,9 +95,15 @@ public class DefinitionQuestionRestController
             if(corrected == null) {
                 return new ResponseEntity<>(question.get().getAnswers(), HttpStatus.OK);
             } else if (corrected.equals("true")) {
-                return new ResponseEntity<>(this.definitionQuestionService.findCorrectedAnswers(questionID).get(), HttpStatus.OK);
+                Optional<List<DefinitionAnswer>> optional = this.definitionQuestionService.findCorrectedAnswers(questionID);
+                if(optional.isPresent()) {
+                    return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+                }
             } else {
-                return new ResponseEntity<>(this.definitionQuestionService.findNotCorrectedAnswers(questionID).get(), HttpStatus.OK);
+                Optional<List<DefinitionAnswer>> optional = this.definitionQuestionService.findNotCorrectedAnswers(questionID);
+                if(optional.isPresent()){
+                    return new ResponseEntity<>(optional.get(), HttpStatus.OK);
+                }
             }
         }
 

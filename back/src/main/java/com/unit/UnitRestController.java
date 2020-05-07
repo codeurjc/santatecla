@@ -120,13 +120,20 @@ public class UnitRestController extends GeneralRestController implements UnitCon
         Optional<Unit> unit = unitService.findOne(id);
         if (unit.isPresent()) {
             if (unitService.ableToDeleteUnit(unit.get())) {
+                Optional<Unit> optional;
                 for (Relation relation : unit.get().getOutgoingRelations()) {
-                    unitService.findOne(relation.getIncoming()).map(value -> value.getIncomingRelations().remove(relation));
-                    relationService.delete(relation.getId());
+                    optional = unitService.findOne(relation.getIncoming());
+                    if(optional.isPresent()){
+                        optional.get().getIncomingRelations().remove(relation);
+                        relationService.delete(relation.getId());
+                    }
                 }
                 for (Relation relation : unit.get().getIncomingRelations()) {
-                    unitService.findOne(relation.getOutgoing()).map(value -> value.getOutgoingRelations().remove(relation));
-                    relationService.delete(relation.getId());
+                    optional = unitService.findOne(relation.getOutgoing());
+                    if(optional.isPresent()) {
+                        optional.get().getOutgoingRelations().remove(relation);
+                        relationService.delete(relation.getId());
+                    }
                 }
                 unitService.delete(id);
                 return new ResponseEntity<>(HttpStatus.OK);

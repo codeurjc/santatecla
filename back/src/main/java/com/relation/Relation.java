@@ -99,7 +99,16 @@ public class Relation {
 
     @Override
     public boolean equals(Object object) {
-        return (((Relation)object).getId() == this.id);
+        if(object instanceof Relation) {
+            return (((Relation) object).getId() == this.id);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }

@@ -21,7 +21,6 @@ public class DefinitionQuestion extends Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("definitionQuestionId")
-    @NotNull
     @ApiModelProperty(notes = "The definition question ID. It is unique",  required = true)
     private long id;
 

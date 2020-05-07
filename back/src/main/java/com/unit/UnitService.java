@@ -110,11 +110,15 @@ public class UnitService {
 		Unit parent;
 		int position = 0;
 		visited.add(unit);
+		Optional<Unit> optional;
 		while (unit.getOutgoingRelations().size() > position) {
-			parent = findOne(unit.getOutgoingRelations().get(position).getIncoming()).get();
-			position++;
-			if (!visited.contains(parent)) {
-				return parent;
+			optional = findOne(unit.getOutgoingRelations().get(position).getIncoming());
+			if(optional.isPresent()) {
+				parent = optional.get();
+				position++;
+				if (!visited.contains(parent)) {
+					return parent;
+				}
 			}
 		}
 		return null;
@@ -158,10 +162,14 @@ public class UnitService {
 	}
 
 	public boolean ableToDeleteUnit(Unit unit) {
+		Optional<Unit> optional;
 		for (Relation relation : unit.getIncomingRelations()) {
-			Unit outgoing = findOne(relation.getOutgoing()).get();
-			if ((outgoing.getOutgoingRelations().size() <= 1) && (findByName(outgoing.getName()).size() > 1)) {
-				return false;
+			optional = findOne(relation.getOutgoing());
+			if(optional.isPresent()) {
+				Unit outgoing = optional.get();
+				if ((outgoing.getOutgoingRelations().size() <= 1) && (findByName(outgoing.getName()).size() > 1)) {
+					return false;
+				}
 			}
 		}
 		return true;

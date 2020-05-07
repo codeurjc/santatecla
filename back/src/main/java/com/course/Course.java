@@ -18,7 +18,6 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("courseId")
-    @NotNull
     @ApiModelProperty(notes = "The course ID. It is unique",  required = true)
     private long id;
 

@@ -18,7 +18,6 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("questionId")
-    @NotNull
     @ApiModelProperty(notes = "The question ID. It is unique",  required = true)
     protected long id;
 

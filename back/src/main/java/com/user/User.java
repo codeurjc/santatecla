@@ -17,11 +17,9 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
 	private String name;
 
 	@JsonIgnore
-	@NotNull
 	private String passwordHash;
 
 	@ElementCollection(fetch = FetchType.EAGER)
