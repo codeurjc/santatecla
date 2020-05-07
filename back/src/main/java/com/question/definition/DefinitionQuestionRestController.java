@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.GeneralRestController;
-import com.question.Answer;
 import com.question.QuestionController;
 import com.question.definition.definition_answer.DefinitionAnswer;
 import com.question.definition.definition_question.DefinitionQuestion;

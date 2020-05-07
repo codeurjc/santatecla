@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import com.google.gson.annotations.SerializedName;
 import com.question.Question;

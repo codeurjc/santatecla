@@ -5,7 +5,6 @@ import com.user.User;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class TestAnswer implements Answer {

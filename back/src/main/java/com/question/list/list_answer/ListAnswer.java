@@ -1,7 +1,6 @@
 package com.question.list.list_answer;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import com.question.Answer;
 import com.user.User;
