@@ -2,7 +2,6 @@ package com.course;
 
 import com.google.gson.annotations.SerializedName;
 import com.itinerary.module.Module;
-import com.unit.Unit;
 import com.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Fetch;

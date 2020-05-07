@@ -29,7 +29,7 @@ public class ModuleService {
 
     public boolean containsRecursiveParent(Module module, long moduleId){
         Module parent;
-        if(module.getParentsId().size() == 0) {
+        if(module.getParentsId().isEmpty()) {
             return false;
         } else {
             for (long id : module.getParentsId()) {

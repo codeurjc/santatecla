@@ -24,8 +24,7 @@ public class LessonRestController extends GeneralRestController implements Lesso
 
     @GetMapping(value="/")
     public MappingJacksonValue lessons(){
-        MappingJacksonValue result = new MappingJacksonValue(this.lessonService.findAll());
-        return result;
+        return new MappingJacksonValue(this.lessonService.findAll());
     }
 
     @GetMapping(value="/{id}")

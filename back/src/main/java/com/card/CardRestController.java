@@ -5,11 +5,7 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.unit.Unit;
-import com.unit.UnitService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +23,7 @@ public class CardRestController extends GeneralRestController implements CardCon
     @GetMapping(value = "/search/card")
     public ResponseEntity<List<Card>> getCardByName(@RequestParam String unitName, @RequestParam String cardName) {
         List<Card> cards = this.cardService.findByName(unitName, cardName);
-        if (cards.size() == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (cards.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(cards, HttpStatus.OK);
     }

@@ -53,9 +53,9 @@ public class Lesson extends Block {
         for (Slide slide: slides) {
             inSlidesId.add(slide.getId());
         }
-        for (long id: slidesId) {
-            if (!(inSlidesId.contains(id))) {
-                diferences.add(id);
+        for (long slideId: slidesId) {
+            if (!(inSlidesId.contains(slideId))) {
+                diferences.add(slideId);
             }
         }
         return diferences;

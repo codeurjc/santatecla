@@ -139,7 +139,7 @@ public class CourseRestController extends GeneralRestController implements Cours
         double sumGradeDiv = 0;
         for(Block block : module.getBlocks()){
             if (block instanceof Lesson){
-                if(this.questionService.findQuestionsByBlockId(block.getId()).size() > 0) {
+                if(!this.questionService.findQuestionsByBlockId(block.getId()).isEmpty()) {
                     ProgressNode lessonResult = new ProgressNode(block.getName());
                     lessonGrade = this.courseService.findBlockGrade(course.getStudents(), block.getId(), course.getId());
                     sumGrade += lessonGrade;
@@ -265,7 +265,7 @@ public class CourseRestController extends GeneralRestController implements Cours
     }
 
     private void findBlocksWithQuestionRecursive(Block block, List<Block> result){
-        if(this.questionService.findQuestionsByBlockId(block.getId()).size() > 0){
+        if(!this.questionService.findQuestionsByBlockId(block.getId()).isEmpty()){
             result.add(block);
         }
 

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/units")
 public class UnitLessonRestController extends GeneralRestController implements UnitLessonController{
 
-    @RequestMapping(value = "/{unitId}/lessons/{lessonId}/slides/{slideId}", method = RequestMethod.GET)
+    @GetMapping(value = "/{unitId}/lessons/{lessonId}/slides/{slideId}")
     public ResponseEntity<Slide> getSlideFromLesson(@PathVariable long unitId, @PathVariable long lessonId, @PathVariable long slideId, HttpServletResponse response) {
         Optional<Unit> unit = unitService.findOne(unitId);
 
@@ -25,7 +25,7 @@ public class UnitLessonRestController extends GeneralRestController implements U
             if (lesson.isPresent()) {
                 Optional<Slide> slide = slideService.findOne(slideId);
                 if (slide.isPresent()) {
-                    return new ResponseEntity<Slide>(slide.get(), HttpStatus.OK);
+                    return new ResponseEntity<>(slide.get(), HttpStatus.OK);
                 }
             }
         }
