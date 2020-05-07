@@ -3,7 +3,6 @@ package com.itinerary.module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,9 +36,12 @@ public class ModuleService {
                 if (id == moduleId) {
                     return true;
                 } else {
-                    parent = findOne(id).get();
-                    if (containsRecursiveParent(parent, moduleId)){
-                        return true;
+                    Optional<Module> optional = findOne(id);
+                    if(optional.isPresent()) {
+                        parent = optional.get();
+                        if (containsRecursiveParent(parent, moduleId)) {
+                            return true;
+                        }
                     }
                 }
             }

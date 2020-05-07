@@ -23,17 +23,18 @@ import javax.servlet.http.HttpServletResponse;
 public class UnitModuleRestController extends GeneralRestController implements UnitModuleController{
 
     @PostMapping(value = "/{unitId}/modules")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Module addModule(@RequestBody Module module, @PathVariable long unitId) {
-
+    public ResponseEntity<Module> addModule(@RequestBody Module module, @PathVariable long unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
-        this.moduleService.save(module);
+        if(unit.isPresent()){
+            this.moduleService.save(module);
+            unit.get().getModules().add(module);
+            this.unitService.save(unit.get());
 
-        unit.get().getModules().add(module);
-        this.unitService.save(unit.get());
+            return new ResponseEntity<>(module, HttpStatus.CREATED);
+        }
 
-        return module;
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/{unitId}/modules/{moduleId}")

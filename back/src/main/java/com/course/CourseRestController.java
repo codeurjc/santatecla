@@ -131,7 +131,12 @@ public class CourseRestController extends GeneralRestController implements Cours
     private ProgressNode getModuleProgressRecursive(Block b, Course course){
         ProgressNode result = new ProgressNode(b.getName());
         Module module = (Module) b;
-        double lessonGrade, lessonRealization, sumGrade = 0, sumRealization = 0, sumRealizationDiv = 0, sumGradeDiv = 0;
+        double lessonGrade;
+        double lessonRealization;
+        double sumGrade = 0;
+        double sumRealization = 0;
+        double sumRealizationDiv = 0;
+        double sumGradeDiv = 0;
         for(Block block : module.getBlocks()){
             if (block instanceof Lesson){
                 if(this.questionService.findQuestionsByBlockId(block.getId()).size() > 0) {
@@ -176,9 +181,17 @@ public class CourseRestController extends GeneralRestController implements Cours
             }
         }
 
-        result.getValue().setRealizacion(Math.floor((sumRealization / sumRealizationDiv) * 100) / 100);
-        result.getValue().setMedia(Math.floor((sumGrade / sumGradeDiv) * 100) / 100);
+        if(sumRealizationDiv == 0){
+            result.getValue().setRealizacion(Double.NaN);
+        } else {
+            result.getValue().setRealizacion(Math.floor((sumRealization / sumRealizationDiv) * 100) / 100);
+        }
 
+        if(sumGradeDiv == 0){
+            result.getValue().setMedia(0.0);
+        } else{
+            result.getValue().setMedia(Math.floor((sumGrade / sumGradeDiv) * 100) / 100);
+        }
         return result;
     }
 
@@ -230,10 +243,11 @@ public class CourseRestController extends GeneralRestController implements Cours
                     }
                     sumRealization += this.courseService.findUserRealization(b.getId(), u.getId(), courseId);
                 }
-                average = sumModuleAux / answeredCount;
 
-                if (Double.isNaN(average)){
+                if(answeredCount == 0){
                     average = 0;
+                } else {
+                    average = sumModuleAux / answeredCount;
                 }
 
                 item.setAverage(average);

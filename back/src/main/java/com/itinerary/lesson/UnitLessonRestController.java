@@ -34,17 +34,16 @@ public class UnitLessonRestController extends GeneralRestController implements U
     }
 
     @PostMapping(value = "/{unitId}/lessons")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Lesson addLesson(@RequestBody Lesson lesson, @PathVariable long unitId) {
-
+    public ResponseEntity<Lesson> addLesson(@RequestBody Lesson lesson, @PathVariable long unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
+        if(unit.isPresent()){
+            this.lessonService.save(lesson);
+            unit.get().getLessons().add(lesson);
+            this.unitService.save(unit.get());
 
-        this.lessonService.save(lesson);
-
-        unit.get().getLessons().add(lesson);
-        this.unitService.save(unit.get());
-
-        return lesson;
+            return new ResponseEntity<>(lesson, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/{unitId}/lessons/{lessonId}")

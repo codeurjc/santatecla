@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.GeneralRestController;
 import com.slide.Slide;
 
+import com.unit.Unit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -53,15 +54,20 @@ public class LessonRestController extends GeneralRestController implements Lesso
         if (l.isPresent()) {
             if(!lesson.getName().equals(l.get().getName())){
                 long unitId = this.unitService.findLessonUnit(l.get().getId());
-                this.slideService.updateAllSlidesLessonName(l.get().getName(), lesson.getName(),
-                        this.unitService.findOne(unitId).get().getName(), lesson);
+                Optional<Unit> optional = this.unitService.findOne(unitId);
+                if(optional.isPresent()) {
+                    this.slideService.updateAllSlidesLessonName(l.get().getName(), lesson.getName(), optional.get().getName(), lesson);
+                }
             }
             for (Slide slide: lesson.getSlides()) {
-                oldSlide = this.slideService.findOne(slide.getId()).get();
-                if(!oldSlide.getName().equals(slide.getName())){
-                    this.slideService.updateAllSlidesSlideName(l.get().getName(), oldSlide.getName(), slide.getName(), lesson);
+                Optional<Slide> optional = this.slideService.findOne(slide.getId());
+                if(optional.isPresent()) {
+                    oldSlide = optional.get();
+                    if (!oldSlide.getName().equals(slide.getName())) {
+                        this.slideService.updateAllSlidesSlideName(l.get().getName(), oldSlide.getName(), slide.getName(), lesson);
+                    }
+                    this.slideService.save(slide);
                 }
-                this.slideService.save(slide);
             }
 
             List<Long> diferences = l.get().compareId(lesson.getSlides());
