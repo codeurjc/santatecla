@@ -74,9 +74,9 @@ public class UnitRestController extends GeneralRestController implements UnitCon
         return new ResponseEntity<>(savedUnits, HttpStatus.OK);
     }
 
-    private void updateUnit(Unit savedUnit, Unit unit) throws Exception {
+    private void updateUnit(Unit savedUnit, Unit unit) throws IllegalArgumentException {
         if (!unitService.isValidName(unit)) {
-            throw new Exception("Invalid name");
+            throw new IllegalArgumentException("Invalid name");
         }
         if(!unit.getName().equals(savedUnit.getName())){
             this.slideService.updateAllSlidesUnitName(savedUnit.getName(), unit.getName());

@@ -15,11 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class SlideRestController extends GeneralRestController implements SlideController {
 
     @GetMapping(value="/")
-    public MappingJacksonValue slides(){
-
-        MappingJacksonValue result = new MappingJacksonValue(this.slideService.findAll());
-        return result;
-
+    public MappingJacksonValue slides() {
+        return new MappingJacksonValue(this.slideService.findAll());
     }
 
     @GetMapping(value="/{id}")
