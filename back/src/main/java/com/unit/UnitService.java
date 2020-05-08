@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UnitService {
 
-	private String UNIT_NAME_SEPARATOR = "/";
+	private String unitNameSeparator = "/";
 
 	@Autowired
 	private UnitRepository unitRepository;
@@ -90,11 +90,11 @@ public class UnitService {
 	}
 
 	private void setParentOnName(Unit unit) {
-		unit.setName(getAncestor(unit, getLevel(unit.getName())).getName() + UNIT_NAME_SEPARATOR + unit.getName());
+		unit.setName(getAncestor(unit, getLevel(unit.getName())).getName() + unitNameSeparator + unit.getName());
 	}
 
 	private int getLevel(String name) {
-		return name.split(UNIT_NAME_SEPARATOR).length - 1;
+		return name.split(unitNameSeparator).length - 1;
 	}
 
 	private Unit getAncestor(Unit unit, int level) {
@@ -134,7 +134,7 @@ public class UnitService {
 		Set<Unit> visited = new HashSet<>();
 		while (parent != null) {
 			visited.add(parent);
-			absoluteName = this.UNIT_NAME_SEPARATOR + parent.getName()  + absoluteName;
+			absoluteName = this.unitNameSeparator + parent.getName()  + absoluteName;
 			parent = getParent(parent, visited);
 		}
 		return absoluteName;

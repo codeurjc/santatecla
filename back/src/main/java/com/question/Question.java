@@ -21,11 +21,9 @@ public class Question {
     @ApiModelProperty(notes = "The question ID. It is unique",  required = true)
     protected long id;
 
-    @NotNull
     @ApiModelProperty(notes = "The question subtype", required = true)
     protected String subtype;
 
-    @NotNull
     @ApiModelProperty(notes = "The question itself", required = true)
     protected String questionText;
 

@@ -48,11 +48,9 @@ public class UnitModuleRestController extends GeneralRestController implements U
                     List<Long> idUsed = new ArrayList<>();
                     for (Long pId : parents) {
                         Optional<Module> m = this.moduleService.findOne(pId);
-                        if(m.isPresent()) {
-                            if (m.get().getBlocks().contains(module.get())) {
-                                m.get().getBlocks().remove(module.get());
-                                idUsed.add(pId);
-                            }
+                        if(m.isPresent() && m.get().getBlocks().contains(module.get())) {
+                            m.get().getBlocks().remove(module.get());
+                            idUsed.add(pId);
                         }
                     }
                     parents.removeAll(idUsed);

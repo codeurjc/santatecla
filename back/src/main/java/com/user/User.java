@@ -85,4 +85,9 @@ public class User {
 		User user = (User) o;
 		return this.id.equals(user.id);
 	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

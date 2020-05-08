@@ -18,7 +18,6 @@ public class Block {
     @ApiModelProperty(notes = "The block ID. It is unique",  required = true)
     protected long id;
 
-    @NotNull
     @ApiModelProperty(notes = "The block name", required = true)
     protected String name;
 

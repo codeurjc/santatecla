@@ -251,7 +251,7 @@ public class CourseRestController extends GeneralRestController implements Cours
                 }
 
                 item.setAverage(average);
-                if(Double.isNaN(sumRealization/questionCount)){
+                if(questionCount == 0){
                     item.addGrade(0.0);
                 } else {
                     item.addGrade((sumRealization/questionCount) * 100);

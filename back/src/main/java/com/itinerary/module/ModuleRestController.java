@@ -2,8 +2,6 @@ package com.itinerary.module;
 
 import com.GeneralRestController;
 import com.itinerary.block.Block;
-import com.unit.UnitService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -14,10 +12,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/modules")
 public class ModuleRestController extends GeneralRestController implements ModuleController{
-
-    @Autowired
-    protected UnitService unitService;
-
     @GetMapping(value="/")
     public MappingJacksonValue modules(){
         return new MappingJacksonValue(this.moduleService.findAll());

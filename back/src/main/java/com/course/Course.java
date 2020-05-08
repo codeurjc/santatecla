@@ -20,15 +20,12 @@ public class Course {
     @ApiModelProperty(notes = "The course ID. It is unique",  required = true)
     private long id;
 
-    @NotNull
     @ApiModelProperty(notes = "The course name", required = true)
     private String name;
 
-    @NotNull
     @ApiModelProperty(notes = "A short description of the course", required = true)
     private String description;
 
-    @NotNull
     @ApiModelProperty(notes = "The module that will be taught in the course", required = true)
     @ManyToOne
     private Module module;

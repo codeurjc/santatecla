@@ -17,7 +17,7 @@ public class Relation {
 
     public enum RelationType {
         ASSOCIATION, AGGREGATION, COMPOSITION, INHERITANCE, USE;
-    };
+    }
 
     @ApiModelProperty(notes = "The type of the relation.",  required = true)
     private RelationType relationType;
