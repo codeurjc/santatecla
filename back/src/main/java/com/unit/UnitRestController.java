@@ -1,5 +1,6 @@
 package com.unit;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,9 +75,9 @@ public class UnitRestController extends GeneralRestController implements UnitCon
         return new ResponseEntity<>(savedUnits, HttpStatus.OK);
     }
 
-    private void updateUnit(Unit savedUnit, Unit unit) throws IllegalArgumentException {
+    private void updateUnit(Unit savedUnit, Unit unit) throws IOException {
         if (!unitService.isValidName(unit)) {
-            throw new IllegalArgumentException("Invalid name");
+            throw new IOException("Invalid name");
         }
         if(!unit.getName().equals(savedUnit.getName())){
             this.slideService.updateAllSlidesUnitName(savedUnit.getName(), unit.getName());
