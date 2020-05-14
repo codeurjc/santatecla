@@ -65,6 +65,10 @@ public class TestQuestion extends Question {
      * Getters and Setters
      */
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
@@ -81,4 +85,15 @@ public class TestQuestion extends Question {
         return testAnswers;
     }
 
+    public void setPossibleAnswers(List<String> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    public void setTestAnswers(List<TestAnswer> testAnswers) {
+        this.testAnswers = testAnswers;
+    }
 }
