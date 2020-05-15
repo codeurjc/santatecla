@@ -248,4 +248,17 @@ public class Unit {
     public void addImage(Image image){
         this.images.add(image);
     }
+
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    public void setIncomingRelations(List<Relation> incomingRelations) {
+        this.incomingRelations = incomingRelations;
+    }
+
+    public void setOutgoingRelations(List<Relation> outgoingRelations) {
+        this.outgoingRelations = outgoingRelations;
+    }
+
 }

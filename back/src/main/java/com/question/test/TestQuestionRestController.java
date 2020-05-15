@@ -2,8 +2,8 @@ package com.question.test;
 
 import com.GeneralRestController;
 import com.question.QuestionController;
-import com.question.dtos.TestAnswerDto;
-import com.question.dtos.TestQuestionDto;
+import com.question.test.test_answer.TestAnswerDto;
+import com.question.test.test_question.TestQuestionDto;
 import com.question.test.test_answer.TestAnswer;
 import com.question.test.test_question.TestQuestion;
 import com.unit.Unit;

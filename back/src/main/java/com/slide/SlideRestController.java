@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.GeneralRestController;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/slides")
 public class SlideRestController extends GeneralRestController implements SlideController {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping(value="/")
     public MappingJacksonValue slides() {
@@ -46,9 +51,10 @@ public class SlideRestController extends GeneralRestController implements SlideC
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<Slide> updateSlide(@PathVariable long id, @RequestBody Slide slide){
-
+    public ResponseEntity<Slide> updateSlide(@PathVariable long id, @RequestBody SlideDto slideDto){
         Optional<Slide> s = this.slideService.findOne(id);
+
+        Slide slide = convertToSlideEntity(slideDto);
         
         if(s.isPresent()){
             s.get().update(slide);
@@ -65,6 +71,10 @@ public class SlideRestController extends GeneralRestController implements SlideC
         if (slides.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(slides, HttpStatus.OK);
+    }
+
+    private Slide convertToSlideEntity(SlideDto dto) {
+        return modelMapper.map(dto, Slide.class);
     }
 
 }

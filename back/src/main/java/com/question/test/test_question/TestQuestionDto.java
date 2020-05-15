@@ -1,6 +1,7 @@
-package com.question.dtos;
+package com.question.test.test_question;
 
 import com.question.QuestionDto;
+import com.question.test.test_answer.TestAnswerDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,12 @@ public class TestQuestionDto extends QuestionDto {
      * Getters and Setters
      */
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }
 
+    @Override
     public long getId() {
         return id;
     }

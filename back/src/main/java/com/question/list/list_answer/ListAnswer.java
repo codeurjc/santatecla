@@ -38,7 +38,7 @@ public class ListAnswer implements Answer {
         this.answer = new ArrayList<>();
     }
 
-    public ListAnswer(ArrayList<String> answer, boolean correct) {
+    public ListAnswer(List<String> answer, boolean correct) {
         this.answer = answer;
         this.correct = correct;
     }

@@ -20,7 +20,7 @@ public class ListAnswerDto implements AnswerDto {
         this.answer = new ArrayList<>();
     }
 
-    public ListAnswerDto(ArrayList<String> answer, boolean correct) {
+    public ListAnswerDto(List<String> answer, boolean correct) {
         this.answer = answer;
         this.correct = correct;
     }

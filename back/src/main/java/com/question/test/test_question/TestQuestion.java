@@ -65,10 +65,12 @@ public class TestQuestion extends Question {
      * Getters and Setters
      */
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }
 
+    @Override
     public long getId() {
         return id;
     }

@@ -4,6 +4,8 @@ import javax.servlet.http.HttpSession;
 
 import com.GeneralRestController;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserRestController extends GeneralRestController implements UserController {
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@GetMapping(value="/login")
 	public ResponseEntity<User> logIn() {
@@ -37,7 +42,8 @@ public class UserRestController extends GeneralRestController implements UserCon
 		user.setPasswordHash(password);
 		userService.save(user);
 
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
+		User userToReturn = modelMapper.map(user, User.class);
+		return new ResponseEntity<>(userToReturn, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value="/logout")

@@ -26,10 +26,12 @@ public class DefinitionQuestionDto extends QuestionDto {
      * Getters and Setters
      */
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }

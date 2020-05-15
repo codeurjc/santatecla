@@ -1,6 +1,6 @@
 package com.question;
 
-import com.itinerary.block.Block;
+import com.itinerary.block.BlockDto;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +14,7 @@ public class QuestionDto {
     protected int totalAnswers;
     protected int totalCorrectAnswers;
     protected int totalWrongAnswers;
-    protected Set<Block> blocks;
+    protected Set<BlockDto> blocks;
 
     public QuestionDto() {
         this.subtype = this.getClass().getSimpleName();
@@ -62,15 +62,15 @@ public class QuestionDto {
         return totalWrongAnswers;
     }
 
-    public Set<Block> getBlocks() {
+    public Set<BlockDto> getBlocks() {
         return blocks;
     }
 
-    public void addBlock(Block block){
+    public void addBlock(BlockDto block){
         this.blocks.add(block);
     }
 
-    public void deleteBlock(Block block){
+    public void deleteBlock(BlockDto block){
         this.blocks.remove(block);
     }
 
@@ -94,25 +94,15 @@ public class QuestionDto {
         this.totalWrongAnswers = totalWrongAnswers;
     }
 
-    public void setBlocks(Set<Block> blocks) {
+    public void setBlocks(Set<BlockDto> blocks) {
         this.blocks = blocks;
     }
 
-    public void addBlocks(List<Block> blocks) {
+    public void addBlocks(List<BlockDto> blocks) {
         this.blocks.addAll(blocks);
     }
 
-    public void deleteBlocks(List<Block> blocks) {
+    public void deleteBlocks(List<BlockDto> blocks) {
         this.blocks.removeAll(blocks);
-    }
-
-    public void increaseTotalCorrectAnswers() {
-        this.totalCorrectAnswers += 1;
-        this.totalAnswers += 1;
-    }
-
-    public void increaseTotalWrongAnswers() {
-        this.totalWrongAnswers += 1;
-        this.totalAnswers += 1;
     }
 }

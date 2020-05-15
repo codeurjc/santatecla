@@ -63,7 +63,8 @@ public class DefinitionQuestionRestController
             this.definitionQuestionService.save(question);
             unit.get().addDefinitionQuestion(question);
             this.unitService.save(unit.get());
-            return new ResponseEntity<>(questionDto, HttpStatus.CREATED);
+            DefinitionQuestionDto dtoReturned = modelMapper.map(questionDto, DefinitionQuestionDto.class);
+            return new ResponseEntity<>(dtoReturned, HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -161,7 +162,6 @@ public class DefinitionQuestionRestController
         DefinitionAnswer newAnswer = convertToAnswerEntity(newAnswerDto);
 
         if (unit.isPresent() && question.isPresent()) {
-            //TODO query
             Optional<DefinitionAnswer> oldAnswer = this.definitionQuestionService.findOneAnswer(question.get(), answerID);
             if (oldAnswer.isPresent()) {
                 if(newAnswer.isCorrected()) {
@@ -210,7 +210,7 @@ public class DefinitionQuestionRestController
                 .stream()
                 .map(this::convertToAnswerDto)
                 .collect(Collectors.toList()));
-        return  dto;
+        return dto;
     }
 
     private DefinitionQuestion convertToQuestionEntity(DefinitionQuestionDto dto) {
