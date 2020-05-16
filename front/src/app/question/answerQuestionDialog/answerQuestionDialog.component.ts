@@ -1,14 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {DefinitionQuestion} from '../definitionQuestion/definitionQuestion.model';
 import {DefinitionAnswer} from '../definitionQuestion/definitionAnswer.model';
 import {ActivatedRoute, Router} from '@angular/router';
-import {LoginService, User} from '../../auth/login.service';
+import {LoginService} from '../../auth/login.service';
 import {UnitService} from '../../unit/unit.service';
 import {DefinitionQuestionService} from '../definitionQuestion/definitionQuestion.service';
 import {Question} from '../question.model';
-import {ListQuestion} from '../listQuestion/listQuestion.model';
-import {TestQuestion} from '../testQuestion/testQuestion.model';
 import {ListAnswer} from '../listQuestion/listAnswer.model';
 import {TestAnswer} from '../testQuestion/testAnswer.model';
 import {QuestionService} from '../question.service';
@@ -16,7 +13,6 @@ import {ListQuestionService} from '../listQuestion/listQuestion.service';
 import {TestQuestionService} from '../testQuestion/testQuestion.service';
 import {LessonEditorComponent} from '../../itinerary/lesson/lessonEditor/lesson-editor.component';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {forEach} from '@angular/router/src/utils/collection';
 
 const QUESTION_TYPES = [
   {id: 'DefinitionQuestion', name: 'Definición'},
@@ -199,7 +195,9 @@ export class AnswerQuestionDialogComponent implements OnInit {
 
     const answersToCompare1 = this.chosenListAnswers;
     const answersToCompare2 = this.data.question.correctAnswers;
-    const isCorrect = JSON.stringify(answersToCompare1.sort()) === JSON.stringify(answersToCompare2.sort());
+    answersToCompare1.sort();
+    answersToCompare2.sort();
+    const isCorrect = JSON.stringify(answersToCompare1) === JSON.stringify(answersToCompare2);
 
     this.listAnswer = {
       answer: this.chosenListAnswers,

@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Icon when student answers changes between correct, wrong or uncorrected.
 
+### Fixed
+
+- Code refactor to get better sonar measures.
 
 
 ## [1.2.0] - 11/04/2020
