@@ -44,13 +44,13 @@ describe('Login component', () => {
   });
 
   it('should login successfully', () => {
-    let teacherInput = fixture.debugElement.query(By.css('username')).nativeElement;
+    let teacherInput = fixture.debugElement.query(By.css('#username')).nativeElement;
     teacherInput.value = 'profesor';
 
-    let passwordInput = fixture.debugElement.query(By.css('password')).nativeElement;
+    let passwordInput = fixture.debugElement.query(By.css('#password')).nativeElement;
     passwordInput.value = 'profesor';
 
-    let submitButton = fixture.debugElement.query(By.css('login-button')).nativeElement;
+    let submitButton = fixture.debugElement.query(By.css('#login-button')).nativeElement;
     submitButton.click();
 
     fixture.whenStable().then(() => {
