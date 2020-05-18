@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Code refactor to get better sonar measures.
+- Code refactor to get better sonar measures (frontend and backend).
 
 
 ## [1.2.0] - 11/04/2020

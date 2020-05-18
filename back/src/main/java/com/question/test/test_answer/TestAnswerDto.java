@@ -1,39 +1,22 @@
 package com.question.test.test_answer;
 
-import com.question.Answer;
-import com.user.User;
-import io.swagger.annotations.ApiModelProperty;
+import com.question.AnswerDto;
+import com.user.UserDto;
 
-import javax.persistence.*;
+public class TestAnswerDto implements AnswerDto {
 
-@Entity
-public class TestAnswer implements Answer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(notes = "The answer ID. It is unique.",  required = true)
     protected long id;
-
-    @ApiModelProperty(notes = "The answer itself. It's the select answer from possible answers",  required = true)
     private String answerText;
-
-    @ApiModelProperty(notes = "It indicates if the answer is right or wrong")
     private boolean correct;
-
-    @ApiModelProperty(notes = "Unit to which the question belongs")
     private long unitId;
-    @ApiModelProperty(notes = "Block to which the question belongs")
     private long blockId;
-    @ApiModelProperty(notes = "Course to which the question belongs")
     private long courseId;
+    private UserDto user;
 
-    @OneToOne
-    private User user;
-
-    public TestAnswer() {
+    public TestAnswerDto() {
     }
 
-    public TestAnswer(String answerText, boolean correct) {
+    public TestAnswerDto(String answerText, boolean correct) {
         this.answerText = answerText;
         this.correct = correct;
     }
@@ -62,11 +45,11 @@ public class TestAnswer implements Answer {
         this.correct = correct;
     }
 
-    public User getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 

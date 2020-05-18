@@ -1,44 +1,26 @@
 package com.question.list.list_answer;
 
-import javax.persistence.*;
-
-import com.question.Answer;
-import com.user.User;
-import io.swagger.annotations.ApiModelProperty;
+import com.question.AnswerDto;
+import com.user.UserDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-public class ListAnswer implements Answer {
+public class ListAnswerDto implements AnswerDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(notes = "The answer ID. It is unique",  required = true)
     protected long id;
-
-    @ApiModelProperty(notes = "The answer itself. It's a list of selected possible answers",  required = true)
-    @ElementCollection
     private List<String> answer;
-
-    @ApiModelProperty(notes = "It indicates if the answer is right or wrong")
     private boolean correct;
-
-    @ApiModelProperty(notes = "Unit to which the question belongs")
     private long unitId;
-    @ApiModelProperty(notes = "Block to which the question belongs")
     private long blockId;
-    @ApiModelProperty(notes = "Course to which the question belongs")
     private long courseId;
+    private UserDto user;
 
-    @OneToOne
-    private User user;
-
-    public ListAnswer() {
+    public ListAnswerDto() {
         this.answer = new ArrayList<>();
     }
 
-    public ListAnswer(List<String> answer, boolean correct) {
+    public ListAnswerDto(List<String> answer, boolean correct) {
         this.answer = answer;
         this.correct = correct;
     }
@@ -67,11 +49,11 @@ public class ListAnswer implements Answer {
         this.correct = correct;
     }
 
-    public User getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 

@@ -1,41 +1,26 @@
-package com.question.test.test_answer;
+package com.question.definition.definition_answer;
 
-import com.question.Answer;
-import com.user.User;
-import io.swagger.annotations.ApiModelProperty;
+import com.question.AnswerDto;
+import com.user.UserDto;
 
-import javax.persistence.*;
+public class DefinitionAnswerDto implements AnswerDto {
 
-@Entity
-public class TestAnswer implements Answer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(notes = "The answer ID. It is unique.",  required = true)
     protected long id;
-
-    @ApiModelProperty(notes = "The answer itself. It's the select answer from possible answers",  required = true)
     private String answerText;
-
-    @ApiModelProperty(notes = "It indicates if the answer is right or wrong")
     private boolean correct;
-
-    @ApiModelProperty(notes = "Unit to which the question belongs")
+    private boolean corrected;
+    private String justification;
     private long unitId;
-    @ApiModelProperty(notes = "Block to which the question belongs")
     private long blockId;
-    @ApiModelProperty(notes = "Course to which the question belongs")
     private long courseId;
+    private UserDto user;
 
-    @OneToOne
-    private User user;
+    public DefinitionAnswerDto(){}
 
-    public TestAnswer() {
-    }
-
-    public TestAnswer(String answerText, boolean correct) {
+    public DefinitionAnswerDto(String answerText){
         this.answerText = answerText;
-        this.correct = correct;
+        this.correct = false;
+        this.corrected = false;
     }
 
     public long getId() {
@@ -62,11 +47,27 @@ public class TestAnswer implements Answer {
         this.correct = correct;
     }
 
-    public User getUser() {
+    public boolean isCorrected() {
+        return corrected;
+    }
+
+    public void setCorrected(boolean corrected) {
+        this.corrected = corrected;
+    }
+
+    public String getJustification() {
+        return justification;
+    }
+
+    public void setJustification(String justification) {
+        this.justification = justification;
+    }
+
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 
@@ -94,4 +95,3 @@ public class TestAnswer implements Answer {
         this.courseId = courseId;
     }
 }
-

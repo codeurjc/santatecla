@@ -1,43 +1,22 @@
 package com.question;
 
-import com.itinerary.block.Block;
-import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.itinerary.block.BlockDto;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@ApiModel(description = "Question model")
-public class Question {
+public class QuestionDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SerializedName("questionId")
-    @ApiModelProperty(notes = "The question ID. It is unique",  required = true)
     protected long id;
-
-    @ApiModelProperty(notes = "The question subtype", required = true)
     protected String subtype;
-
-    @ApiModelProperty(notes = "The question itself", required = true)
     protected String questionText;
-
-    @ApiModelProperty(notes = "Total answers to a question")
     protected int totalAnswers;
-    @ApiModelProperty(notes = "Total correct answers to a question")
     protected int totalCorrectAnswers;
-    @ApiModelProperty(notes = "Total wrong answers to a question")
     protected int totalWrongAnswers;
+    protected Set<BlockDto> blocks;
 
-    @ApiModelProperty(notes = "List of blocks in which the question is found", required = true)
-    @ManyToMany(fetch = FetchType.EAGER)
-    protected Set<Block> blocks;
-
-    public Question() {
+    public QuestionDto() {
         this.subtype = this.getClass().getSimpleName();
         this.totalAnswers = 0;
         this.totalCorrectAnswers = 0;
@@ -45,7 +24,7 @@ public class Question {
         this.blocks = new HashSet<>();
     }
 
-    public Question(String questionText) {
+    public QuestionDto(String questionText) {
         this();
         this.questionText = questionText;
         this.blocks = new HashSet<>();
@@ -83,15 +62,15 @@ public class Question {
         return totalWrongAnswers;
     }
 
-    public Set<Block> getBlocks() {
+    public Set<BlockDto> getBlocks() {
         return blocks;
     }
 
-    public void addBlock(Block block){
+    public void addBlock(BlockDto block){
         this.blocks.add(block);
     }
 
-    public void deleteBlock(Block block){
+    public void deleteBlock(BlockDto block){
         this.blocks.remove(block);
     }
 
@@ -115,25 +94,15 @@ public class Question {
         this.totalWrongAnswers = totalWrongAnswers;
     }
 
-    public void setBlocks(Set<Block> blocks) {
+    public void setBlocks(Set<BlockDto> blocks) {
         this.blocks = blocks;
     }
 
-    public void addBlocks(List<Block> blocks) {
+    public void addBlocks(List<BlockDto> blocks) {
         this.blocks.addAll(blocks);
     }
 
-    public void deleteBlocks(List<Block> blocks) {
+    public void deleteBlocks(List<BlockDto> blocks) {
         this.blocks.removeAll(blocks);
-    }
-
-    public void increaseTotalCorrectAnswers() {
-        this.totalCorrectAnswers += 1;
-        this.totalAnswers += 1;
-    }
-
-    public void increaseTotalWrongAnswers() {
-        this.totalWrongAnswers += 1;
-        this.totalAnswers += 1;
     }
 }
