@@ -3,7 +3,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
 import {
   MatBottomSheet,
-  MatChipsModule,
+  MatChipsModule, MatDialog,
   MatDialogModule,
   MatExpansionModule,
   MatFormFieldModule,
@@ -16,12 +16,15 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CardComponent} from './card.component';
 import {CardService} from './card.service';
 import {UnitService} from '../unit/unit.service';
-import {Observable, from} from 'rxjs';
+import {Observable, from, of} from 'rxjs';
 import {Unit} from '../unit/unit.model';
 import {Card} from './card.model';
 import {ActivatedRoute} from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ImageService} from '../images/image.service';
+import {By} from '@angular/platform-browser';
+import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
+import {ConfirmActionComponent} from '../confirmAction/confirm-action.component';
 
 describe('Card component', () => {
 
@@ -40,13 +43,40 @@ describe('Card component', () => {
           if (this.error) {
             observer.error(new Error());
           } else {
-            let card1: Card = {name: 'Test Card 1', content: 'Content for card 1'};
-            let card2: Card = {name: 'Test Card 2', content: 'Content for card 2'};
+            let card1: Card = {id: 1, name: 'Test Card 1', content: 'Content for card 1'};
+            let card2: Card = {id: 2, name: 'Test Card 2', content: 'Content for card 2'};
             let unit: Unit = {name: 'Test Unit', cards: [card1, card2]};
             observer.next(unit);
           }
           observer.complete();
         });
+      }
+    }
+
+    class MockCardService extends CardService {
+      error = false;
+      deleteCard(unitId: number, id: number) {
+        if (id !== 1) {
+          this.error = true;
+        }
+
+        console.log(unitId);
+        console.log(id);
+
+        return Observable.create(observer => {
+          if (this.error) {
+            observer.error(new Error());
+          } else {
+            observer.next();
+          }
+          observer.complete();
+        });
+      }
+    }
+
+    class DialogMock extends MatDialog {
+      afterClosed() {
+        return of(1);
       }
     }
 
@@ -65,14 +95,18 @@ describe('Card component', () => {
         MatExpansionModule,
         MatChipsModule
       ],
-      providers: [CardService, ImageService, MatBottomSheet,
+      providers: [ImageService, MatBottomSheet,
         {provide: ActivatedRoute, useValue: {
-            params: from([{unitId: 1}]),
-          }},
-        {provide: UnitService, useClass: MockUnitService}],
+            params: from([{unitId: 1}])
+        }},
+        {provide: UnitService, useClass: MockUnitService},
+        {provide: CardService, useClass: MockCardService},
+        {provide: MatDialog, useClass: DialogMock}],
       declarations: [
-        CardComponent
+        CardComponent,
+        ConfirmActionComponent
       ],
+    }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ConfirmActionComponent] }
     }).compileComponents();
   }));
 
@@ -91,5 +125,21 @@ describe('Card component', () => {
     expect(component.unitId).toBe(1);
     expect(component.unit).not.toBeNull();
     expect(component.cards.length).toBe(2);
+  });
+
+  it('should create a new card', () => {
+    fixture.debugElement.query(By.css('#add-button')).triggerEventHandler('click', null);
+
+    expect(component.cards.length).toBe(3);
+  });
+
+  it('should delete a card', () => {
+    spyOn(component.dialog, 'open')
+      .and
+      .returnValue({afterClosed: () => of(1)});
+
+    component.deleteCard(1, 0);
+
+    expect(component.cards.length).toBe(1);
   });
 });
