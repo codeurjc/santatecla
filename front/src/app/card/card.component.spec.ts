@@ -60,9 +60,6 @@ describe('Card component', () => {
           this.error = true;
         }
 
-        console.log(unitId);
-        console.log(id);
-
         return Observable.create(observer => {
           if (this.error) {
             observer.error(new Error());
