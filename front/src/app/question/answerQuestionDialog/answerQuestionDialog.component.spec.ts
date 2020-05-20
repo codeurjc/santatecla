@@ -2,36 +2,38 @@ import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {UnitService} from "./unit.service";
 import {MatIconModule} from "@angular/material/icon";
-import {MatDialogModule} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatSelectModule} from "@angular/material/select";
 import {MatCardModule} from "@angular/material/card";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {LoginService} from "../auth/login.service";
+import {LoginService} from "../../auth/login.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatButtonModule} from "@angular/material/button";
-import {TabService} from "../tab/tab.service";
-import {UnitComponent} from "./unit.component";
-import {CardComponent} from "../card/card.component";
-import {LessonComponent} from "../itinerary/lesson/lesson.component";
-import {QuestionComponent} from "../question/question.component";
-import {ModuleComponent} from "../itinerary/module/module.component";
+import {QuestionComponent} from "../question.component";
+import {QuestionService} from "../question.service";
 import {DragDropModule} from "@angular/cdk/drag-drop";
-import {MatExpansionModule} from "@angular/material/expansion";
 import {MatChipsModule} from "@angular/material/chips";
+import {MatExpansionModule} from "@angular/material/expansion";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {AnswerQuestionDialogComponent} from "./answerQuestionDialog.component";
+import {MatListModule} from "@angular/material/list";
+import {MatRadioModule} from "@angular/material/radio";
+import {UnitService} from "../../unit/unit.service";
+import {DefinitionQuestionService} from "../definitionQuestion/definitionQuestion.service";
+import {ListQuestionService} from "../listQuestion/listQuestion.service";
+import {TestQuestionService} from "../testQuestion/testQuestion.service";
 
-describe('Unit component', () => {
+describe('AnswerQuestionDialog component', () => {
 
-  let component: UnitComponent;
-  let fixture: ComponentFixture<UnitComponent>;
+  let component: AnswerQuestionDialogComponent;
+  let fixture: ComponentFixture<AnswerQuestionDialogComponent>;
 
   beforeEach(async(() => {
 
@@ -56,22 +58,27 @@ describe('Unit component', () => {
         MatExpansionModule,
         MatMenuModule,
         MatTableModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatListModule,
+        MatRadioModule
       ],
       providers: [
-        TabService,
-        UnitService
+        LoginService,
+        QuestionService,
+        DefinitionQuestionService,
+        ListQuestionService,
+        TestQuestionService,
+        UnitService,
+        {provide: MAT_DIALOG_DATA, useValue: {}},
+        {provide: MatDialogRef, useValue: {}}
       ],
       declarations: [
-        UnitComponent,
-        CardComponent,
-        LessonComponent,
         QuestionComponent,
-        ModuleComponent
+        AnswerQuestionDialogComponent
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UnitComponent);
+    fixture = TestBed.createComponent(AnswerQuestionDialogComponent);
     component = fixture.componentInstance;
 
   }));
