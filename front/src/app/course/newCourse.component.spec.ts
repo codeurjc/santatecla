@@ -1,8 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {LoginService} from '../auth/login.service';
 import {CourseService} from './course.service';
-import {from, Observable, of} from 'rxjs';
-import {Course} from './course.model';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
 import {
@@ -18,10 +16,6 @@ import {
 } from '@angular/material';
 import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {CourseComponent} from './course.component';
-import {ActivatedRoute} from '@angular/router';
-import {TabService} from '../tab/tab.service';
-import {Tab} from '../tab/tab.model';
 import {ModuleProgressComponent} from '../progress/module-progress/module-progress.component';
 import {ClassProgressComponent} from '../progress/class-progress/class-progress.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';

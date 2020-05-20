@@ -11,7 +11,7 @@
       <h2>Seleccione una imagen para copiar su ruta</h2>
 
       <mat-form-field id="unitSearcher">
-        <input #input matInput (keyup)="applyFilterImages($event.target.value)" placeholder="Nombre de la imagen">
+        <input #input matInput id="image-name-search" (keyup)="applyFilterImages($event.target.value)" placeholder="Nombre de la imagen">
       </mat-form-field>
 
       <button mat-mini-fab class="image-input-btn" (click)="fileInput.click()" matTooltip="Añadir imagen" [matTooltipPosition]="'after'">
