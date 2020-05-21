@@ -22,11 +22,39 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {Observable} from "rxjs";
+import {Question} from "./question.model";
+import {ConfirmActionComponent} from "../confirmAction/confirm-action.component";
+import {By} from "@angular/platform-browser";
+import {BrowserDynamicTestingModule} from "@angular/platform-browser-dynamic/testing";
 
 describe('Question component', () => {
 
   let component: QuestionComponent;
   let fixture: ComponentFixture<QuestionComponent>;
+
+  class MockLoginService extends LoginService {
+    isAdmin = true;
+  }
+
+  class MockQuestionService extends QuestionService {
+    error = false;
+
+    getUnitQuestions(id: number) {
+      return Observable.create(observer => {
+        if (this.error) {
+          observer.error(new Error());
+        } else {
+          let question1: Question = {id: 1, questionText: 'Question One', subtype: 'DefinitionQuestion'};
+          let question2: Question = {id: 2, questionText: 'Question Two', subtype: 'DefinitionQuestion'};
+          let question3: Question = {id: 3, questionText: 'Question Three', subtype: 'DefinitionQuestion'};
+          let question4: Question = {id: 4, questionText: 'Question Four', subtype: 'DefinitionQuestion'};
+          observer.next([question1, question2, question3, question4]);
+        }
+        observer.complete();
+      });
+    }
+  }
 
   beforeEach(async(() => {
 
@@ -54,21 +82,33 @@ describe('Question component', () => {
         MatPaginatorModule
       ],
       providers: [
-        LoginService,
-        QuestionService
+        {provide: LoginService, useClass: MockLoginService},
+        {provide: QuestionService, useClass: MockQuestionService}
       ],
       declarations: [
-        QuestionComponent
+        QuestionComponent,
+        ConfirmActionComponent
       ]
+    }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ConfirmActionComponent] }
     }).compileComponents();
 
     fixture = TestBed.createComponent(QuestionComponent);
     component = fixture.componentInstance;
 
+    component.ngOnInit();
+
   }));
 
   it('should create', () => {
     expect(component).toBeDefined();
+  });
+
+  it('should show question list', () => {
+    const length = 4;
+    expect(component.questions.length).toBe(length);
+    expect(component.dataSource.data.length).toBe(length);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#question-table-content')).nativeElement.childNodes[2].childNodes[1].childNodes.length).toBe(length + 1);
   });
 
 });

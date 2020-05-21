@@ -25,6 +25,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {AddQuestionDialogComponent} from "./addQuestionDialog.component";
 import {MatListModule} from "@angular/material/list";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {By} from "@angular/platform-browser";
 
 describe('AddQuestionDialog component', () => {
 
@@ -77,6 +78,35 @@ describe('AddQuestionDialog component', () => {
 
   it('should create', () => {
     expect(component).toBeDefined();
+  });
+
+  it('should change the form type', () => {
+    fixture.detectChanges();
+    component.setQuestion('DefinitionQuestion');
+    expect(fixture.debugElement.query(By.css('#definition-question-form'))).toBeDefined();
+    expect(fixture.debugElement.query(By.css('#list-question-form'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('#test-question-form'))).toBeNull();
+    component.setQuestion('ListQuestion');
+    expect(fixture.debugElement.query(By.css('#list-question-form'))).toBeDefined();
+    expect(fixture.debugElement.query(By.css('#test-question-form'))).toBeNull();
+    component.setQuestion('TestQuestion');
+    expect(fixture.debugElement.query(By.css('#list-question-form'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('#test-question-form'))).toBeDefined();
+  });
+
+  it('should create possible list answers', () => {
+    fixture.detectChanges();
+    component.setQuestion('ListQuestion');
+    component.answerInput = 'a';
+    component.correct = true;
+    component.addPossibleTestAnswer();
+    component.answerInput = 'b';
+    component.correct = false;
+    component.addPossibleTestAnswer();
+    component.answerInput = 'c';
+    component.correct = true;
+    component.addPossibleTestAnswer();
+    expect(component.possibleAnswers.size).toBe(3);
   });
 
 });
