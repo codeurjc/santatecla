@@ -1,30 +1,32 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {LoginService} from '../../auth/login.service';
+import {UnitService} from '../../unit/unit.service';
 import {from, Observable, of} from 'rxjs';
+import {Unit} from '../../unit/unit.model';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
 import {
-  MatCardModule, MatDialog, MatDialogModule, MatDialogRef,
+  MatCardModule, MatDialog,
+  MatDialogModule, MatDialogRef,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule, MatMenuModule,
-  MatTabsModule, MatTooltipModule,
+  MatTabsModule,
+  MatTooltipModule
 } from '@angular/material';
 import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {LessonComponent} from './lesson.component';
-import {LoginService} from '../../auth/login.service';
-import {LessonService} from './lesson.service';
-import {UnitService} from '../../unit/unit.service';
-import {UnitLessonService} from './unit-lesson.service';
 import {ActivatedRoute} from '@angular/router';
-import {Unit} from '../../unit/unit.model';
-import {Lesson} from './lesson.model';
 import {By} from '@angular/platform-browser';
+import {ModuleComponent} from './module.component';
+import {Module} from './module.model';
+import {ModuleService} from './module.service';
+import {UnitModuleService} from './unit-module.service';
 
-describe('Lesson component', () => {
+describe('Module component', () => {
 
-  let component: LessonComponent;
-  let fixture: ComponentFixture<LessonComponent>;
+  let component: ModuleComponent;
+  let fixture: ComponentFixture<ModuleComponent>;
 
   beforeEach(async(() => {
 
@@ -32,12 +34,13 @@ describe('Lesson component', () => {
       isAdmin = true;
     }
 
-    class MockLessonService extends LessonService {
+    class MockModuleService extends ModuleService {
 
     }
 
     class MockUnitService extends UnitService {
       error = false;
+
       getUnit(id: number) {
         if (id !== 1) {
           this.error = true;
@@ -47,9 +50,9 @@ describe('Lesson component', () => {
           if (this.error) {
             observer.error(new Error());
           } else {
-            let lesson1: Lesson = {name: 'Test Lesson 1', slides: []};
-            let lesson2: Lesson = {name: 'Test Lesson 2', slides: []};
-            let unit: Unit = {id: '1', name: 'Test Unit', lessons: [lesson1, lesson2]};
+            let module1: Module = {name: 'Test Module 1', blocks: []};
+            let module2: Module = {name: 'Test Module 2', blocks: []};
+            let unit: Unit = {id: '1', name: 'Test Unit', modules: [module1, module2]};
             observer.next(unit);
           }
           observer.complete();
@@ -57,9 +60,10 @@ describe('Lesson component', () => {
       }
     }
 
-    class MockUnitLessonService extends UnitLessonService {
+    class MockUnitModuleService extends UnitModuleService {
       error = false;
-      addLesson(id: number, lesson: Lesson) {
+
+      addModule(id: number, module: Module) {
         if (id !== 1) {
           this.error = true;
         }
@@ -68,14 +72,14 @@ describe('Lesson component', () => {
           if (this.error) {
             observer.error(new Error());
           } else {
-            let lesson: Lesson = {id: 1, name: 'Test Lesson 3', slides: []};
-            observer.next(lesson);
+            let module: Module = {id: 1, name: 'Test Module 3', blocks: []};
+            observer.next(module);
           }
           observer.complete();
         });
       }
 
-      deleteLesson(unitId: number, lessonId: number) {
+      deleteModule(unitId: number, moduleId: number) {
         if (unitId !== 1) {
           this.error = true;
         }
@@ -107,20 +111,22 @@ describe('Lesson component', () => {
         MatMenuModule
       ],
       providers: [MatDialog,
-        {provide: ActivatedRoute, useValue: {
+        {
+          provide: ActivatedRoute, useValue: {
             params: from([{unitId: 1}])
-        }},
+          }
+        },
         {provide: LoginService, useClass: MockLoginService},
-        {provide: LessonService, useClass: MockLessonService},
-        {provide: UnitLessonService, useClass: MockUnitLessonService},
+        {provide: ModuleService, useClass: MockModuleService},
+        {provide: UnitModuleService, useClass: MockUnitModuleService},
         {provide: UnitService, useClass: MockUnitService},
         {provide: MatDialogRef, useValue: {}}],
-      declarations: [LessonComponent],
+      declarations: [ModuleComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LessonComponent);
+    fixture = TestBed.createComponent(ModuleComponent);
     component = fixture.componentInstance;
 
     component.ngOnInit();
@@ -128,40 +134,40 @@ describe('Lesson component', () => {
 
   it('should create', () => {
     expect(component).toBeDefined();
-    expect(component.lessons.length).toBe(2);
+    expect(component.modules.length).toBe(2);
   });
 
-  it('should add a new Lesson', () => {
-    let lesson: Lesson = {id: 1, name: 'Test Lesson 3', slides: []};
+  it('should add a new Module', () => {
+    let module: Module = {id: 1, name: 'Test Lesson 3', blocks: []};
     spyOn(component.dialog, 'open')
       .and
-      .returnValue({afterClosed: () => of(lesson)});
+      .returnValue({afterClosed: () => of(module)});
 
     fixture.detectChanges();
 
-    fixture.debugElement.query(By.css('.new-lesson-button')).triggerEventHandler('click', null);
+    fixture.debugElement.query(By.css('.new-module-button')).triggerEventHandler('click', null);
 
-    expect(component.newLesson).toBe(lesson);
+    expect(component.newModule).toBe(module);
   });
 
-  it('should delete a Lesson', () => {
+  it('should delete a Module', () => {
     spyOn(component, 'ngOnInit');
     spyOn(component.dialog, 'open')
       .and
       .returnValue({afterClosed: () => of(1)});
     fixture.detectChanges();
 
-    component.deleteLesson(1);
+    component.deleteModule(1);
 
     expect(component.ngOnInit).toHaveBeenCalled();
   });
 
-  it('should search a lesson', () => {
-    fixture.debugElement.query(By.css('#search-input')).nativeElement.value = 'Test Lesson 1';
+  it('should search a module', () => {
+    fixture.debugElement.query(By.css('#search-input')).nativeElement.value = 'Test Module 1';
     fixture.debugElement.query(By.css('#search-input')).triggerEventHandler('input', null);
 
-    component.searchLesson('Test Lesson 1');
+    component.searchModule('Test Module 1');
 
-    expect(component.lessonsResult.length).toBe(1);
+    expect(component.modulesResult.length).toBe(1);
   });
 });
