@@ -21,7 +21,7 @@
             <mat-card-content>
               <div>
                 <mat-form-field class="">
-                  <input matInput (keyup)="applyFilterStudent($event.target.value)" placeholder="Nombre del alumno">
+                  <input matInput id="student-search" (keyup)="applyFilterStudent($event.target.value)" placeholder="Nombre del alumno">
                 </mat-form-field>
                 <mat-icon>search</mat-icon>
               </div>
