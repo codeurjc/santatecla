@@ -1,11 +1,5 @@
-import {CourseComponent} from '../course/course.component';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {LoginService} from '../auth/login.service';
-import {CourseService} from '../course/course.service';
-import {from, Observable, of} from 'rxjs';
-import {Course} from '../course/course.model';
-import {TabService} from '../tab/tab.service';
-import {Tab} from '../tab/tab.model';
+import {Observable, of} from 'rxjs';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
 import {
@@ -22,10 +16,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {TreetableModule} from 'ng-material-treetable';
-import {UnitService} from '../unit/unit.service';
-import {ActivatedRoute} from '@angular/router';
-import {ModuleProgressComponent} from '../progress/module-progress/module-progress.component';
-import {ClassProgressComponent} from '../progress/class-progress/class-progress.component';
 import {ImageComponent} from './image.component';
 import {ClipboardService} from 'ngx-clipboard';
 import {ImageService} from './image.service';
@@ -96,12 +86,7 @@ describe('Image component', () => {
         MatInputModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        MatTreeModule,
         MatCardModule,
-        MatTabsModule,
-        NgxChartsModule,
-        TreetableModule,
-        MatTableModule,
         MatTooltipModule,
         MatDialogModule,
       ],

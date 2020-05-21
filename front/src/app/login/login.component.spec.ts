@@ -48,7 +48,9 @@ describe('Login component', () => {
         HttpClientModule,
         BrowserAnimationsModule
       ],
-      providers: [LoginService],
+      providers: [
+        {provide: LoginService, useClass: MockLoginService}
+        ],
       declarations: [
         LoginComponent,
         MenuComponent,
