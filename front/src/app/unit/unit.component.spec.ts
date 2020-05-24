@@ -10,7 +10,6 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatSelectModule} from "@angular/material/select";
 import {MatCardModule} from "@angular/material/card";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {LoginService} from "../auth/login.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";

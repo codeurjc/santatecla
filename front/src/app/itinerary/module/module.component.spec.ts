@@ -72,7 +72,7 @@ describe('Module component', () => {
           if (this.error) {
             observer.error(new Error());
           } else {
-            let module: Module = {id: 1, name: 'Test Module 3', blocks: []};
+            module = {id: 1, name: 'Test Module 3', blocks: []};
             observer.next(module);
           }
           observer.complete();

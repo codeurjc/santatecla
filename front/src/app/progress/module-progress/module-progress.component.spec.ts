@@ -1,11 +1,9 @@
-import {ClassProgressComponent} from '../class-progress/class-progress.component';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {LoginService} from '../../auth/login.service';
 import {CourseService} from '../../course/course.service';
 import {from, Observable} from 'rxjs';
 import {Course} from '../../course/course.model';
 import {ProgressService} from '../progress.service';
-import {StudentProgressItem} from '../items/studentProgressItem.model';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
 import {
@@ -22,7 +20,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {TreetableModule} from 'ng-material-treetable';
 import {ActivatedRoute} from '@angular/router';
-import {By} from '@angular/platform-browser';
 import {ModuleProgressComponent} from './module-progress.component';
 import {ProgressNode} from '../items/progressNode.model';
 

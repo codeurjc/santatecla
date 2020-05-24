@@ -47,9 +47,9 @@ describe('Lesson component', () => {
           if (this.error) {
             observer.error(new Error());
           } else {
-            let lesson1: Lesson = {name: 'Test Lesson 1', slides: []};
-            let lesson2: Lesson = {name: 'Test Lesson 2', slides: []};
-            let unit: Unit = {id: '1', name: 'Test Unit', lessons: [lesson1, lesson2]};
+            const lesson1: Lesson = {name: 'Test Lesson 1', slides: []};
+            const lesson2: Lesson = {name: 'Test Lesson 2', slides: []};
+            const unit: Unit = {id: '1', name: 'Test Unit', lessons: [lesson1, lesson2]};
             observer.next(unit);
           }
           observer.complete();
@@ -68,7 +68,7 @@ describe('Lesson component', () => {
           if (this.error) {
             observer.error(new Error());
           } else {
-            let lesson: Lesson = {id: 1, name: 'Test Lesson 3', slides: []};
+            lesson = {id: 1, name: 'Test Lesson 3', slides: []};
             observer.next(lesson);
           }
           observer.complete();
@@ -132,7 +132,7 @@ describe('Lesson component', () => {
   });
 
   it('should add a new Lesson', () => {
-    let lesson: Lesson = {id: 1, name: 'Test Lesson 3', slides: []};
+    const lesson: Lesson = {id: 1, name: 'Test Lesson 3', slides: []};
     spyOn(component.dialog, 'open')
       .and
       .returnValue({afterClosed: () => of(lesson)});

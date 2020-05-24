@@ -8,14 +8,10 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule, MatSnackBar,
-  MatTableModule,
-  MatTabsModule, MatTooltipModule,
-  MatTreeModule
+  MatTooltipModule
 } from '@angular/material';
 import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {TreetableModule} from 'ng-material-treetable';
 import {ImageComponent} from './image.component';
 import {ClipboardService} from 'ngx-clipboard';
 import {ImageService} from './image.service';
