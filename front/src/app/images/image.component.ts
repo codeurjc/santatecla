@@ -35,7 +35,7 @@ export class ImageComponent implements OnInit {
               private bottomSheetRef: MatBottomSheetRef<ImageComponent>,
               private clipboardService: ClipboardService,
               private snackBar: MatSnackBar,
-              private dialog: MatDialog,
+              public dialog: MatDialog,
               @Optional() @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
   ngOnInit() {

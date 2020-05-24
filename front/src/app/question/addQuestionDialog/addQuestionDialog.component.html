@@ -18,7 +18,7 @@
       </div>
 
       <!-- DEFINITION FORM -->
-      <div *ngIf="subtype == 'DefinitionQuestion'">
+      <div *ngIf="subtype == 'DefinitionQuestion'" id="definition-question-form">
         <form class="add-question-form">
           <mat-form-field>
             <textarea matInput name="question" (input)="changeTextArea($event)" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required>
@@ -28,7 +28,7 @@
       </div>
 
       <!--LIST FORM -->
-      <div *ngIf="subtype == 'ListQuestion'">
+      <div *ngIf="subtype == 'ListQuestion'" id="list-question-form">
         <form class="add-question-form">
           <div class="add-question-form-list">
             <mat-form-field>
@@ -51,7 +51,7 @@
       </div>
 
       <!-- TEST FORM -->
-      <div *ngIf="subtype == 'TestQuestion'">
+      <div *ngIf="subtype == 'TestQuestion'" id="test-question-form">
         <form class="add-question-form">
           <div class="add-question-form-list">
             <mat-form-field>

@@ -46,7 +46,7 @@ export class CardComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private cardService: CardService,
               private unitService: UnitService,
-              private dialog: MatDialog,
+              public dialog: MatDialog,
               private bottomSheet: MatBottomSheet,
               private imageService: ImageService) { }
 

@@ -36,7 +36,7 @@
 
   <div id="course-content" [ngClass]="showMenu ? 'with-menu' : 'without-menu'">
     <div *ngIf="this.activeBreadcrumb == 0">
-      <h1 class="tab-group">
+      <h1 class="tab-group" id="course-name">
         {{course?.name}}
         <div class="mat-button" (click)="openEditCourseDialog()">
           <mat-icon>edit</mat-icon>
