@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Add new slide bug fixed.
 - Code refactor to get better sonar measures (frontend and backend).
 
 
