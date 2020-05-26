@@ -75,17 +75,20 @@ public class LessonRestController extends GeneralRestController implements Lesso
                     if (!oldSlide.getName().equals(slide.getName())) {
                         this.slideService.updateAllSlidesSlideName(l.get().getName(), oldSlide.getName(), slide.getName(), lesson);
                     }
-                    this.slideService.save(slide);
                 }
+                this.slideService.save(slide);
             }
 
             List<Long> diferences = l.get().compareId(lesson.getSlides());
             for (long diferenceId : diferences) {
                 this.slideService.delete(diferenceId);
             }
+
+            this.lessonService.save(lesson);
+            return new ResponseEntity<>(lesson, HttpStatus.OK);
         }
-        this.lessonService.save(lesson);
-        return new ResponseEntity<>(lesson, HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     private Lesson convertToEntity(LessonDto dto) {
