@@ -1,0 +1,26 @@
+@startuml
+class Block{
+  name: String
+}
+
+class Itinerary{
+}
+
+class Lesson{
+}
+
+note top of Lesson: Use "===" to create a new Slide in a lesson
+note bottom of Itinerary: The itinerary contains other itineraries or lessons
+
+class Slide {
+  name: String
+  content: String
+}
+
+Block<|-down- Itinerary
+Block<|-down- Lesson
+
+Itinerary "*"-up-> "*" Block
+
+Lesson "1" *-down-> "*" Slide
+@enduml
