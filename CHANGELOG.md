@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Button to delete images
 - Swagger documentation
 - Front tests
+- Sort unit results alphabetically
 
 ### Changed
 
