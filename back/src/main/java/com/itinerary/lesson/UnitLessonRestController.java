@@ -1,29 +1,29 @@
 package com.itinerary.lesson;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.GeneralRestController;
 import com.slide.Slide;
 
+import com.slide.SlideDto;
 import com.unit.Unit;
-import com.unit.UnitService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/units")
-public class UnitLessonRestController extends GeneralRestController {
+public class UnitLessonRestController extends GeneralRestController implements UnitLessonController {
 
     @Autowired
-    protected UnitService unitService;
+    private ModelMapper modelMapper;
 
-    @RequestMapping(value = "/{unitId}/lessons/{lessonId}/slides/{slideId}", method = RequestMethod.GET)
+    @GetMapping(value = "/{unitId}/lessons/{lessonId}/slides/{slideId}")
     public ResponseEntity<Slide> getSlideFromLesson(@PathVariable long unitId, @PathVariable long lessonId, @PathVariable long slideId, HttpServletResponse response) {
         Optional<Unit> unit = unitService.findOne(unitId);
 
@@ -32,7 +32,7 @@ public class UnitLessonRestController extends GeneralRestController {
             if (lesson.isPresent()) {
                 Optional<Slide> slide = slideService.findOne(slideId);
                 if (slide.isPresent()) {
-                    return new ResponseEntity<Slide>(slide.get(), HttpStatus.OK);
+                    return new ResponseEntity<>(slide.get(), HttpStatus.OK);
                 }
             }
         }
@@ -41,17 +41,19 @@ public class UnitLessonRestController extends GeneralRestController {
     }
 
     @PostMapping(value = "/{unitId}/lessons")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Lesson addLesson(@RequestBody Lesson lesson, @PathVariable long unitId) {
-
+    public ResponseEntity<Lesson> addLesson(@RequestBody LessonDto lessonDto, @PathVariable long unitId) {
         Optional<Unit> unit = this.unitService.findOne(unitId);
 
-        this.lessonService.save(lesson);
+        Lesson lesson = convertToEntity(lessonDto);
 
-        unit.get().getLessons().add(lesson);
-        this.unitService.save(unit.get());
+        if (unit.isPresent()) {
+            this.lessonService.save(lesson);
+            unit.get().getLessons().add(lesson);
+            this.unitService.save(unit.get());
 
-        return lesson;
+            return new ResponseEntity<>(lesson, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/{unitId}/lessons/{lessonId}")
@@ -70,6 +72,18 @@ public class UnitLessonRestController extends GeneralRestController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+    }
+
+    private Lesson convertToEntity(LessonDto dto) {
+        Lesson lesson = modelMapper.map(dto, Lesson.class);
+        lesson.setSlides(dto.getSlides().stream()
+                .map(this::convertToSlideEntity)
+                .collect(Collectors.toList()));
+        return lesson;
+    }
+
+    private Slide convertToSlideEntity(SlideDto dto) {
+        return modelMapper.map(dto, Slide.class);
     }
 
 }

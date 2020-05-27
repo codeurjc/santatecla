@@ -13,14 +13,17 @@ import javax.persistence.OneToMany;
 import com.google.gson.annotations.SerializedName;
 import com.question.Question;
 import com.question.definition.definition_answer.DefinitionAnswer;
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 public class DefinitionQuestion extends Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("definitionQuestionId")
+    @ApiModelProperty(notes = "The definition question ID. It is unique",  required = true)
     private long id;
 
+    @ApiModelProperty(notes = "List of users answers to the question")
     @OneToMany(cascade = CascadeType.ALL)
     private List<DefinitionAnswer> definitionAnswers;
 
@@ -49,10 +52,12 @@ public class DefinitionQuestion extends Question {
      * Getters and Setters
      */
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }

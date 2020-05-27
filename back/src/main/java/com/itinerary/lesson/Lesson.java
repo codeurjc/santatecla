@@ -7,20 +7,24 @@ import javax.persistence.*;
 
 import com.itinerary.block.Block;
 import com.slide.*;
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 public class Lesson extends Block {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes = "The lesson name", required = true)
     protected long id;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @OrderColumn
+    @ApiModelProperty(notes = "A list with the slides inside the lesson", required = true)
     private List<Slide> slides;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @OrderColumn
+    @ApiModelProperty(notes = "A list with the ids of the questions inside the lesson", required = true)
     private List<Long> questionsIds;
 
     public Lesson(){
@@ -49,9 +53,9 @@ public class Lesson extends Block {
         for (Slide slide: slides) {
             inSlidesId.add(slide.getId());
         }
-        for (long id: slidesId) {
-            if (!(inSlidesId.contains(id))) {
-                diferences.add(id);
+        for (long slideId: slidesId) {
+            if (!(inSlidesId.contains(slideId))) {
+                diferences.add(slideId);
             }
         }
         return diferences;
@@ -62,8 +66,10 @@ public class Lesson extends Block {
      * GETTER AND SETTER *
      ********************/
 
+    @Override
     public long getId() { return id; }
 
+    @Override
     public String getName() { return name; }
 
     public List<Long> getQuestionsIds() {
@@ -72,8 +78,10 @@ public class Lesson extends Block {
 
     public List<Slide> getSlides() { return slides; }
 
+    @Override
     public void setId(long id) { this.id = id; }
 
+    @Override
     public void setName(String name) { this.name = name; }
 
     public void setQuestionsIds(List<Long> questionsIds) {

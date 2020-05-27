@@ -44,6 +44,11 @@ body {
   margin: 1rem 0 1rem 0;
 }
 
+.delete-image-icon{
+  margin-left: 4rem;
+  margin-top: 0.2rem;
+}
+
 ::ng-deep .mat-focused .mat-form-field-label {
   /*change color of label*/
   color: #7f6f92 !important;

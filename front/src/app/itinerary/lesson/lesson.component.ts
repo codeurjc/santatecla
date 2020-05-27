@@ -34,7 +34,7 @@ export class LessonComponent implements OnInit {
 
   constructor(public loginService: LoginService,
               private lessonService: LessonService,
-              private router: Router,
+              public router: Router,
               private activatedRoute: ActivatedRoute,
               private unitService: UnitService,
               private unitLessonService: UnitLessonService,

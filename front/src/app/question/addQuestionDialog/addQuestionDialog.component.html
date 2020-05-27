@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
+<head>
+  <title>add-question-dialog-component</title>
+</head>
+
   <body class="card-content">
     <h1 mat-dialog-title *ngIf="!data.isEditing">Añadir nueva pregunta</h1>
     <h1 mat-dialog-title *ngIf="data.isEditing">Editar pregunta</h1>
@@ -13,7 +18,7 @@
       </div>
 
       <!-- DEFINITION FORM -->
-      <div *ngIf="subtype == 'DefinitionQuestion'">
+      <div *ngIf="subtype == 'DefinitionQuestion'" id="definition-question-form">
         <form class="add-question-form">
           <mat-form-field>
             <textarea matInput name="question" (input)="changeTextArea($event)" placeholder="Pregunta" [(ngModel)]="questionInput" type="text" required>
@@ -23,7 +28,7 @@
       </div>
 
       <!--LIST FORM -->
-      <div *ngIf="subtype == 'ListQuestion'">
+      <div *ngIf="subtype == 'ListQuestion'" id="list-question-form">
         <form class="add-question-form">
           <div class="add-question-form-list">
             <mat-form-field>
@@ -46,7 +51,7 @@
       </div>
 
       <!-- TEST FORM -->
-      <div *ngIf="subtype == 'TestQuestion'">
+      <div *ngIf="subtype == 'TestQuestion'" id="test-question-form">
         <form class="add-question-form">
           <div class="add-question-form-list">
             <mat-form-field>
@@ -82,10 +87,9 @@
     </div>
 
     <div mat-dialog-actions>
-      <button mat-button (click)="onNoClick()">Cancelar</button>
-      <!--<button mat-button [mat-dialog-close]="true" cdkFocusInitial>
-        Responder
-      </button>-->
+      <button mat-button (click)="onNoClick()">
+        Cancelar
+      </button>
       <button (click)="sendQuestion()" [mat-dialog-close]="true" [ngClass]="loginService.isAdmin ? 'mat-button question-button tool admin-button' : 'mat-button question-button tool user-button'">
         Guardar
       </button>

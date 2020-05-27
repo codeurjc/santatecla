@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {QuestionService} from '../question.service';
 import {Question} from '../question.model';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatSort, MatTableDataSource} from '@angular/material';
 import {UnitService} from '../../unit/unit.service';
 import {DefinitionAnswer} from '../definitionQuestion/definitionAnswer.model';
 import {Tab} from '../../tab/tab.model';
@@ -26,7 +26,6 @@ export class QuestionTrackingComponent implements OnInit {
   displayedColumnsNotCorrected: string[] = ['answer', 'correct', 'wrong'];
   dataSourceNotCorrected;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   displayedColumnsCorrected: string[] = ['result', 'answer'];
   dataSourceCorrected;
@@ -62,10 +61,10 @@ export class QuestionTrackingComponent implements OnInit {
           }
         }, error => { console.log(error); });
 
-        this.questionService.getUnitTestQuestion(this.unitId, this.questionId).subscribe((data: any) => {
-          this.question = data;
-          this.unitService.getUnitName(this.unitId).subscribe((data: any) => {
-            this.unitName = data.response;
+        this.questionService.getUnitTestQuestion(this.unitId, this.questionId).subscribe((unitTestQuestion: any) => {
+          this.question = unitTestQuestion;
+          this.unitService.getUnitName(this.unitId).subscribe((unitName: any) => {
+            this.unitName = unitName.response;
             this.tabService.addTab(new Tab('Unidad', +this.unitId, this.unitName, '' + this.unitId, null, null));
             this.tabService.updateActiveTabLink('TestQuestion', this.questionId, '', '' + this.unitId, null, null);
           }, error => { console.log(error); });
@@ -78,22 +77,22 @@ export class QuestionTrackingComponent implements OnInit {
           }
         }, error => { console.log(error); });
 
-        this.questionService.getUnitListQuestion(this.unitId, this.questionId).subscribe((data: any) => {
-          this.question = data;
-          this.unitService.getUnitName(this.unitId).subscribe((data: any) => {
-            this.unitName = data.response;
+        this.questionService.getUnitListQuestion(this.unitId, this.questionId).subscribe((unitListQuestion: any) => {
+          this.question = unitListQuestion;
+          this.unitService.getUnitName(this.unitId).subscribe((unitName: any) => {
+            this.unitName = unitName.response;
             this.tabService.addTab(new Tab('Unidad', +this.unitId, this.unitName, '' + this.unitId, null, null));
             this.tabService.updateActiveTabLink('ListQuestion', this.questionId, '', '' + this.unitId, null, null);
           }, error => { console.log(error); });
         }, error => { console.log(error); });
       } else if (this.questionType === 'DefinitionQuestion') {
 
-        this.questionService.getQuestionCorrectCount(this.unitId, this.questionId).subscribe((data: number) => {
-          this.correctCount = data;
-          this.questionService.getQuestionWrongCount(this.unitId, this.questionId).subscribe((data: number) => {
-            this.wrongCount = data;
-            this.questionService.getUncorrectedDefinitionAnswers(this.unitId, this.questionId).subscribe((data: number) => {
-              this.uncorrectedCount = data;
+        this.questionService.getQuestionCorrectCount(this.unitId, this.questionId).subscribe((questionCorrectCount: number) => {
+          this.correctCount = questionCorrectCount;
+          this.questionService.getQuestionWrongCount(this.unitId, this.questionId).subscribe((questionWrongCount: number) => {
+            this.wrongCount = questionWrongCount;
+            this.questionService.getUncorrectedDefinitionAnswers(this.unitId, this.questionId).subscribe((uncorrectedDefinitionAnswers: number) => {
+              this.uncorrectedCount = uncorrectedDefinitionAnswers;
               this.buildCorrectWrongChart();
               this.resultsReady = true;
             }, error => { console.log(error); });
@@ -104,10 +103,10 @@ export class QuestionTrackingComponent implements OnInit {
         this.dataSourceNotCorrected = new MatTableDataSource<DefinitionAnswer>();
         this.dataSourceCorrected = new MatTableDataSource<DefinitionAnswer>();
 
-        this.questionService.getUnitDefinitionQuestion(this.unitId, this.questionId).subscribe((data: any) => {
-          this.question = data;
-          this.unitService.getUnitName(this.unitId).subscribe((data: any) => {
-            this.unitName = data.response;
+        this.questionService.getUnitDefinitionQuestion(this.unitId, this.questionId).subscribe((unitDefinitionQuestion: any) => {
+          this.question = unitDefinitionQuestion;
+          this.unitService.getUnitName(this.unitId).subscribe((unitName: any) => {
+            this.unitName = unitName.response;
             this.tabService.addTab(new Tab('Unidad', +this.unitId, this.unitName, '' + this.unitId, null, null));
             this.tabService.updateActiveTabLink('DefinitionQuestion', this.questionId, '', '' + this.unitId, null, null);
           }, error => { console.log(error); });
@@ -138,10 +137,10 @@ export class QuestionTrackingComponent implements OnInit {
   }
 
   getCorrectWrongAnswerCount() {
-    this.questionService.getQuestionCorrectCount(this.unitId, this.questionId).subscribe((data: number) => {
-      this.correctCount = data;
-      this.questionService.getQuestionWrongCount(this.unitId, this.questionId).subscribe((data: number) => {
-        this.wrongCount = data;
+    this.questionService.getQuestionCorrectCount(this.unitId, this.questionId).subscribe((questionCorrectCount: number) => {
+      this.correctCount = questionCorrectCount;
+      this.questionService.getQuestionWrongCount(this.unitId, this.questionId).subscribe((questionWrongCount: number) => {
+        this.wrongCount = questionWrongCount;
         this.resultsReady = true;
         this.buildCorrectWrongChart();
       }, error => { console.log(error); });

@@ -1,5 +1,7 @@
 package com.relation;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,16 +12,20 @@ public class Relation {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes = "The relation ID. It is unique.",  required = true)
     protected long id;
 
     public enum RelationType {
         ASSOCIATION, AGGREGATION, COMPOSITION, INHERITANCE, USE;
-    };
+    }
 
+    @ApiModelProperty(notes = "The type of the relation.",  required = true)
     private RelationType relationType;
 
+    @ApiModelProperty(notes = "The unit that the relation is going to.",  required = true)
     private Long incoming;
 
+    @ApiModelProperty(notes = "The unit that the relation comes from.",  required = true)
     private Long outgoing;
 
     public Relation() {}
@@ -93,7 +99,16 @@ public class Relation {
 
     @Override
     public boolean equals(Object object) {
-        return (((Relation)object).getId() == this.id);
+        if(object instanceof Relation) {
+            return (((Relation) object).getId() == this.id);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }

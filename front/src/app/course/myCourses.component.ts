@@ -18,7 +18,7 @@ export class MyCoursesComponent implements OnInit {
   showingCourses: Course[];
 
   constructor(public loginService: LoginService, private courseService: CourseService, private router: Router,
-              private dialogService: TdDialogService, public dialog: MatDialog) {
+              public dialogService: TdDialogService, public dialog: MatDialog) {
     this.courses = [];
     this.showingCourses = [];
   }

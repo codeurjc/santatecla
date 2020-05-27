@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.google.gson.annotations.SerializedName;
 import com.question.Question;
 import com.question.list.list_answer.ListAnswer;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -17,16 +18,20 @@ public class ListQuestion extends Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("listQuestionId")
+    @ApiModelProperty(notes = "The list question ID. It is unique",  required = true)
     private long id;
 
+    @ApiModelProperty(notes = "List of possible answers to the question")
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<String> possibleAnswers;
 
+    @ApiModelProperty(notes = "List of correct answers to the question")
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<String> correctAnswers;
 
+    @ApiModelProperty(notes = "List of users answers to the question")
     @OneToMany(cascade = CascadeType.ALL)
     private List<ListAnswer> listAnswers;
 
@@ -64,10 +69,12 @@ public class ListQuestion extends Question {
      * Getters and Setters
      */
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }

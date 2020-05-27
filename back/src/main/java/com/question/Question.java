@@ -2,6 +2,8 @@ package com.question;
 
 import com.itinerary.block.Block;
 import com.google.gson.annotations.SerializedName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -9,20 +11,29 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@ApiModel(description = "Question model")
 public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SerializedName("questionId")
+    @ApiModelProperty(notes = "The question ID. It is unique",  required = true)
     protected long id;
 
+    @ApiModelProperty(notes = "The question subtype", required = true)
     protected String subtype;
+
+    @ApiModelProperty(notes = "The question itself", required = true)
     protected String questionText;
 
+    @ApiModelProperty(notes = "Total answers to a question")
     protected int totalAnswers;
+    @ApiModelProperty(notes = "Total correct answers to a question")
     protected int totalCorrectAnswers;
+    @ApiModelProperty(notes = "Total wrong answers to a question")
     protected int totalWrongAnswers;
 
+    @ApiModelProperty(notes = "List of blocks in which the question is found", required = true)
     @ManyToMany(fetch = FetchType.EAGER)
     protected Set<Block> blocks;
 

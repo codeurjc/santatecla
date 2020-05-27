@@ -1,12 +1,17 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="es">
+
+<head>
+  <title>image-component</title>
+</head>
+
   <body>
 
     <div class="image-selector-header">
       <h2>Seleccione una imagen para copiar su ruta</h2>
 
       <mat-form-field id="unitSearcher">
-        <input #input matInput (keyup)="applyFilterImages($event.target.value)" placeholder="Nombre de la imagen">
+        <input #input matInput id="image-name-search" (keyup)="applyFilterImages($event.target.value)" placeholder="Nombre de la imagen">
       </mat-form-field>
 
       <button mat-mini-fab class="image-input-btn" (click)="fileInput.click()" matTooltip="Añadir imagen" [matTooltipPosition]="'after'">
@@ -16,15 +21,19 @@
     </div>
 
     <div id="spinner-container" *ngIf="showSpinner">
-      <img id="spinner" src="../../../../assets/img/spinner.gif">
+      <img alt="Spinner" id="spinner" src="../../../../assets/img/spinner.gif">
     </div>
 
     <div *ngFor="let image of imagesResult">
-      <mat-card class="image-card" (click)="getUrl(image.id)">
-        <img mat-card-image class="image" src="{{image.image}}" alt="{{image.name}}">
+      <mat-card class="image-card">
+        <img mat-card-image class="image" src="{{image.image}}" alt="{{image.name}}" (click)="getUrl(image.id)">
         <mat-card-content>
-          <div class="image-name">{{image.name}}</div>
+          <div>
+            <span class="image-name" (click)="getUrl(image.id)">{{image.name}}</span>
+            <mat-icon class="delete-image-icon" (click)="deleteImage(image.id)">delete</mat-icon>
+          </div>
         </mat-card-content>
+
       </mat-card>
     </div>
 
