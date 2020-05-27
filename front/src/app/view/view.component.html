@@ -39,7 +39,7 @@
       </button>
 
       <div class="result-list" *ngIf="results.length > 0">
-        <span *ngFor="let result of results">
+        <span *ngFor="let result of sortUnitsAlphabetically(results)">
           <div class="result" (click)="confirmSelectUnit(result)" *ngIf="!focusedUnitsService.focusedUnitIds.has(result.id.toString())">
             <span class="unit-prefix">{{unitService.getUnitPrefixName(result.name)}}</span>
             <span class="unit-name">{{unitService.getUnitRealName(result.name)}}</span>

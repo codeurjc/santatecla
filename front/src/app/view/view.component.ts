@@ -424,6 +424,10 @@ export class ViewComponent implements OnInit, AfterContentInit, OnDestroy {
     this.updateFocusedUnits();
   }
 
+  sortUnitsAlphabetically(units: Unit[]): Unit[] {
+    return units.sort((a, b) => a.name < b.name ? -1 : 1);
+  }
+
 
 
   // Uml
