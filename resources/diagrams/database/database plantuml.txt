@@ -15,7 +15,7 @@ class Block{
   name: String
 }
 
-class Module{
+class Itinerary{
 }
 
 class Lesson{
@@ -81,19 +81,19 @@ Answer<|.up. TestAnswer
 
 Relation "1" --> "1" Unit
 
-Block<|-down- Module
+Block<|-down- Itinerary
 Block<|-down- Lesson
 
-Module "*"-up-> "*" Block
+Itinerary "*"-up-> "*" Block
 
 Unit "1" *-down-> "*" Relation
 Unit "1" *-down-> "*" Card
-Unit "1" *-up-> "*" Module
+Unit "1" *-up-> "*" Itinerary
 Unit "1" *-up-> "*" Lesson
 Unit "1" *-up-> "*" Question
 
 Lesson "1" *-down-> "*" Slide
 
-Course "1" *-down-> "1" Module
+Course "1" *-down-> "1" Itinerary
 Course "1" *-right-> "*" User
 @enduml

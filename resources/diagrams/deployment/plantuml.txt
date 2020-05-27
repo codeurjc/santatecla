@@ -1,0 +1,12 @@
+
+http://www.plantuml.com
+
+@startuml
+node "Web Server" {
+  [API Rest] <--> [Back application]
+[Back application] <--> [MySQL Database]
+}
+node "Workstation" {
+  [Web browser] <--> [API Rest]
+}
+@enduml
