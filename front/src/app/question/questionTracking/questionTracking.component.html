@@ -41,14 +41,14 @@
             <input matInput (keyup)="applyFilterCorrected($event.target.value)" placeholder="Filtrar">
           </mat-form-field>
 
-          <table aria-describedby="corrected-questions-table" mat-table [dataSource]="dataSourceCorrected" class="mat-elevation-z8">
+          <table aria-describedby="corrected-questions-table" mat-table [dataSource]="dataSourceCorrected" class="mat-elevation-z8 " matSort>
             <ng-container matColumnDef="answer">
-              <th mat-header-cell *matHeaderCellDef id="answer"> Respuesta </th>
+              <th mat-header-cell *matHeaderCellDef id="answer" mat-sort-header> Respuesta </th>
               <td mat-cell *matCellDef="let answer"> {{answer.answerText}} </td>
             </ng-container>
 
             <ng-container matColumnDef="result">
-              <th mat-header-cell *matHeaderCellDef id="result"> Resultado </th>
+              <th mat-header-cell *matHeaderCellDef id="result" mat-sort-header> Resultado </th>
               <td mat-cell *matCellDef="let answer">
                 <mat-icon *ngIf="answer.correct" class="correct-icon">done</mat-icon>
                 <mat-icon *ngIf="!answer.correct"class="wrong-icon">clear</mat-icon>

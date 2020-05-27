@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {QuestionService} from '../question.service';
 import {Question} from '../question.model';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatSort, MatTableDataSource} from '@angular/material';
 import {UnitService} from '../../unit/unit.service';
 import {DefinitionAnswer} from '../definitionQuestion/definitionAnswer.model';
 import {Tab} from '../../tab/tab.model';
@@ -26,7 +26,6 @@ export class QuestionTrackingComponent implements OnInit {
   displayedColumnsNotCorrected: string[] = ['answer', 'correct', 'wrong'];
   dataSourceNotCorrected;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   displayedColumnsCorrected: string[] = ['result', 'answer'];
   dataSourceCorrected;
