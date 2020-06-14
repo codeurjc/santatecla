@@ -60,4 +60,9 @@ public class Module extends Block {
     public void setBlocks(List<Block> blocks) {
         this.blocks = blocks;
     }
+
+    public void removeBlock(Block block) {
+        this.blocks.remove(block);
+    }
+
 }

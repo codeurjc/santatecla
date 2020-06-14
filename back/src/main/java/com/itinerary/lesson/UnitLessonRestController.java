@@ -65,6 +65,9 @@ public class UnitLessonRestController extends GeneralRestController implements U
         if (unit.isPresent()) {
             Optional<Lesson> lesson = this.lessonService.findOne(lessonId);
             if (lesson.isPresent()) {
+                for (Long moduleId : lessonService.findModulesContainingBlock(lessonId)) {
+                    moduleService.findOne(moduleId).ifPresent(value -> value.removeBlock(lesson.get()));
+                }
                 unit.get().getLessons().remove(lesson.get());
                 this.lessonService.delete(lessonId);
                 return new ResponseEntity<>(lesson.get(), HttpStatus.OK);
