@@ -16,7 +16,7 @@
         <span *ngIf="moduleResultsReady">
           <mat-card>
             <mat-card-title>
-              Realización y media del módulo
+              Realización y media del itinerario
             </mat-card-title>
             <mat-card-content>
               <treetable [tree]="this.moduleResults" [options]="this.treeTableOptions" class="mat-elevation-z8 center-table">
@@ -28,7 +28,7 @@
 
       <div *ngIf="this.moduleResultsReady" class="bar-chart">
         <mat-card>
-          <mat-card-title>Media de cada sub-módulo</mat-card-title>
+          <mat-card-title>Media de cada sub-itinerario</mat-card-title>
           <mat-card-content>
             <ngx-charts-bar-vertical
               [results]="histogram"
