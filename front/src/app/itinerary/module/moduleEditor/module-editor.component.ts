@@ -48,7 +48,7 @@ export class ModuleEditorComponent implements OnInit {
   viewLessonPosition = 'after';
   optionInfoPosition = 'after';
 
-  confirmText = 'Se eliminará el modulo permanentemente';
+  confirmText = 'Se eliminará el itinerario permanentemente';
   confirmText2 = 'Se eliminará permanentemente';
   button1 = 'Cancelar';
   button2 = 'Borrar';

@@ -16,7 +16,7 @@
 
     <button [ngClass]="activeBreadcrumb == 1 ? 'breadcrumb activeBreadcrumb mat-button' : 'breadcrumb mat-button'" (click)="activateBreadcrumb(1)">
       <mat-icon [ngClass]="showMenu ? 'breadcrumb-icon' : 'breadcrumb-icon-without-menu'">bar_chart</mat-icon>
-      <span class="breadcrumb-text" *ngIf="showMenu">Seguimiento del módulo</span>
+      <span class="breadcrumb-text" *ngIf="showMenu">Seguimiento del itinerario</span>
     </button>
 
     <button [ngClass]="activeBreadcrumb == 2 ? 'breadcrumb activeBreadcrumb mat-button' : 'breadcrumb mat-button'" (click)="activateBreadcrumb(2)">
