@@ -51,12 +51,13 @@ export class MyCoursesComponent implements OnInit {
   }
 
   search() {
+    this.showingCourses = [];
     if (this.searchField !== '') {
-      this.courseService.searchByNameContaining(this.searchField).subscribe((data: Course[]) => {
-        this.showingCourses = data;
-      }, error => {
-        console.log(error);
-      });
+      for (let course of this.courses) {
+        if (course.name.toLowerCase().includes(this.searchField.toLowerCase())) {
+          this.showingCourses.push(course);
+        }
+      }
     } else {
       this.showingCourses = this.courses;
     }

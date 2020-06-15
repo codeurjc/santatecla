@@ -238,20 +238,16 @@ public class CourseRestController extends GeneralRestController implements Cours
                 for (Block b : questionBlocks) {
                     questions = this.questionService.findQuestionsByBlockId(b.getId());
                     questionCount += questions.size();
-                    size = questions.size();
                     sumQuestionAux = 0;
                     for (Question q : questions) {
                         userGrade = this.courseService.findUserQuestionGrade(u.getId(), b.getId(), courseId, q);
                         if (!Double.isNaN(userGrade)) {
-                            sumQuestionAux += this.courseService.findUserQuestionGrade(u.getId(), b.getId(), courseId, q);
+                            sumQuestionAux += userGrade;
                             answeredCount++;
-                        } else {
-                            size -= 1;
                         }
                     }
-                    gradeAux = sumQuestionAux / size;
-                    if (!Double.isNaN(gradeAux)) {
-                        sumModuleAux += gradeAux;
+                    if (!Double.isNaN(sumQuestionAux)) {
+                        sumModuleAux += sumQuestionAux;
                     }
                     sumRealization += this.courseService.findUserRealization(b.getId(), u.getId(), courseId);
                 }

@@ -52,7 +52,11 @@ public class CourseService {
         for (User u : students){
             sumRealization += (double)findUserRealization(blockId, u.getId(), courseId) / questionCount;
         }
-        return (sumRealization/students.size()) * 100;
+        if(students.size() == 0){
+            return 0.0;
+        } else {
+            return (sumRealization/students.size()) * 100;
+        }
     }
 
     private double findUserGrade(Long blockId, Long userId, Long courseId){
