@@ -29,7 +29,7 @@ export class ModuleComponent implements OnInit {
 
   optionInfoPosition = 'after';
 
-  confirmText = 'Se eliminará el modulo permanentemente';
+  confirmText = 'Se eliminará el itinerario permanentemente';
   button1 = 'Cancelar';
   button2 = 'Borrar';
 

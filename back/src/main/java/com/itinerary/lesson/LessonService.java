@@ -3,7 +3,9 @@ package com.itinerary.lesson;
 import java.util.List;
 import java.util.Optional;
 
+import com.itinerary.module.Module;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +27,11 @@ public class LessonService {
   	}
 
 	public void delete(long id) {
-		repository.deleteById(id);
+    	repository.deleteById(id);
 	}
+
+	public List<Long> findModulesContainingBlock(Long blockId) {
+    	return repository.findModulesContainingBlock(blockId);
+	}
+
 }
